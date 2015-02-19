@@ -1,1 +1,5 @@
+*.pyc
+*.pyo
+**/*.pyc
 offenesparlament/db.sqlite3
+
