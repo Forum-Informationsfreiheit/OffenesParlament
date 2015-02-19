@@ -3,7 +3,12 @@ import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from ansicolor import red
 from ansicolor import cyan
+from ansicolor import green
+from ansicolor import blue
+
+
 from scrapy import log
+import collections
 
 
 class LawsInitiativesSpider(scrapy.Spider):
@@ -37,20 +42,64 @@ class LawsInitiativesSpider(scrapy.Spider):
         docs = response.xpath(
             '//*[@id="content"]/div[3]/div[2]/div[2]/div/ul//li/a[1]/text()').extract()
 
-        logtext = u"Scraping {} with id {}".format(
-                red(title),
-                cyan(u"[{}]".format(id))
-                )
+        logtext = u"Scraping {} with id {} @ {}".format(
+            red(title),
+            cyan(u"[{}]".format(id)),
+            blue(response.url)
+        )
 
         if tags:
-            logtext += u"\n  Tags: {}".format(
-                u", ".join(tags),
-                )
+            logtext += u"\n  {} \n     * {}".format(
+                green(u"Tags:"),
+                u"\n     * ".join(tags),
+            )
 
         if docs:
-            logtext += u"\n  Available Documents: {}".format(
-                u"\n   * ".join(docs)
-                )
+            logtext += u"\n  {} \n     * {}".format(
+                green(u"Available Documents:"),
+                u"\n     * ".join(docs)
+            )
+
+        # is the tab 'Parlamentarisches Verfahren available?'
+        if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
+            url_postfix = response.xpath(
+                '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
+            req = scrapy.Request(response.url + url_postfix,
+                                 callback=self.parse_parliament_steps)
+            req.meta['logtext'] = logtext
+            return req
 
         log.msg(logtext, level=log.INFO)
+
+    def parse_parliament_steps(self, response):
+        """
+        Callback function to parse the additional 'Parlamentarisches Verfahren'
+        page
+        """
+        rows = response.xpath(
+            '//*[@id="content"]/div[3]/div[3]/table/tbody//tr[(@class!="historyHeader" and @class!="close") or not(@class)]')
+        steps = [
+            {'date': self._clean(row.xpath('string(td[1])').extract()),
+             'step': self._clean(row.xpath('string(td[2])').extract())}
+            for row in rows]
+
+        stepstring = u"\n     * ".join(
+            [u"{}: {}".format(s['date'], s['step']) for s in steps])
+        logtext = u"{}\n  {}\n     * ".format(
+            response.meta['logtext'],
+            green(u"Process in Parliament:"),
+            stepstring)
+        log.msg(logtext, level=log.INFO)
         pass
+
+    def _clean(self, to_clean):
+        """
+        Removes all \n and \t characters as well as trailing and leading
+        whitespace
+        """
+        if isinstance(to_clean, collections.Iterable):
+            to_clean = to_clean[0]
+
+        to_clean = to_clean.replace(
+            '\t', '').replace('\n', '').strip()
+        return to_clean
