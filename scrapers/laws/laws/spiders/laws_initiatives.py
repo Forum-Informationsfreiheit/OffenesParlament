@@ -82,10 +82,10 @@ class LawsInitiativesSpider(scrapy.Spider):
             {'date': self._clean(row.xpath('string(td[1])').extract()),
              'step': self._clean(row.xpath('string(td[2])').extract())}
             for row in rows]
-
+        # import ipdb; ipdb.set_trace()
         stepstring = u"\n     * ".join(
             [u"{}: {}".format(s['date'], s['step']) for s in steps])
-        logtext = u"{}\n  {}\n     * ".format(
+        logtext = u"{}\n  {}\n     * {}".format(
             response.meta['logtext'],
             green(u"Process in Parliament:"),
             stepstring)

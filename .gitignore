@@ -2,4 +2,5 @@
 *.pyo
 **/*.pyc
 offenesparlament/db.sqlite3
-
+*.sublime-project
+*.sublime-workspace
