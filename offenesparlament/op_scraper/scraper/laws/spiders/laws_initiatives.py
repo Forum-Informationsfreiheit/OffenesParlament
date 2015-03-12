@@ -1,64 +1,66 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy.contrib.linkextractors import LinkExtractor
+
+
 from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
 
-
 from scrapy import log
 import collections
+
+
+from laws.resources.djangoitems import *
+from laws.resources.extractors import *
+from laws.resources.rss import get_urls
 
 
 class LawsInitiativesSpider(scrapy.Spider):
     name = "laws_initiatives"
     allowed_domains = ["parlament.gv.at"]
-    start_urls = (
-        'http://www.parlament.gv.at/',
-    )
 
     DEBUG_URLS = [
         'http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml']
 
     def __init__(self, **kw):
         super(LawsInitiativesSpider, self).__init__(**kw)
+
         # add at least a default URL for testing
+        self.start_urls = get_urls() or self.DEBUG_URLS
 
-        self.start_urls = kw.get('urls') or self.DEBUG_URLS
-
-        for url in self.start_urls:
-            if not url.startswith('http://') and not url.startswith('https://'):
-                url = 'http://%s/' % url
-        self.link_extractor = LinkExtractor()
         self.cookies_seen = set()
 
     def parse(self, response):
-        title = response.xpath('//*[@id="inhalt"]/text()').extract()[0].strip()
-        id = response.xpath(
-            '//*[@id="inhalt"]/span/text()').extract()[0].strip()
-        tags = response.xpath(
-            '//*[@id="schlagwortBox"]/ul//li/a/text()').extract()
-        docs = response.xpath(
-            '//*[@id="content"]/div[3]/div[2]/div[2]/div/ul//li/a[1]/text()').extract()
+        law_item = LawItem()
+        title = TITLE.xt(response)
+        parl_id = PARL_ID.xt(response)
+
+        law_item['title'] = title
+        law_item['parl_id'] = parl_id
+
+        tags = TAGS.xt(response)
+        docs = DOCS.xt(response)
 
         logtext = u"Scraping {} with id {} @ {}".format(
             red(title),
-            cyan(u"[{}]".format(id)),
+            cyan(u"[{}]".format(parl_id)),
             blue(response.url)
         )
 
-        if tags:
-            logtext += u"\n  {} \n     * {}".format(
-                green(u"Tags:"),
-                u"\n     * ".join(tags),
-            )
+        # if tags:
+        #     logtext += u"\n  {} \n     * {}".format(
+        #         green(u"Tags:"),
+        #         u"\n     * ".join(tags),
+        #     )
 
-        if docs:
-            logtext += u"\n  {} \n     * {}".format(
-                green(u"Available Documents:"),
-                u"\n     * ".join(docs)
-            )
+        # if docs:
+        #     logtext += u"\n  {} \n     * {}".format(
+        #         green(u"Available Documents:"),
+        #         u"\n     * ".join(docs)
+        #     )
+
+        law_item.save()
 
         # is the tab 'Parlamentarisches Verfahren available?'
         if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
@@ -82,13 +84,15 @@ class LawsInitiativesSpider(scrapy.Spider):
             {'date': self._clean(row.xpath('string(td[1])').extract()),
              'step': self._clean(row.xpath('string(td[2])').extract())}
             for row in rows]
+
         # import ipdb; ipdb.set_trace()
-        stepstring = u"\n     * ".join(
-            [u"{}: {}".format(s['date'], s['step']) for s in steps])
-        logtext = u"{}\n  {}\n     * {}".format(
-            response.meta['logtext'],
-            green(u"Process in Parliament:"),
-            stepstring)
+        # stepstring = u"\n     * ".join(
+        #     [u"{}: {}".format(s['date'], s['step']) for s in steps])
+        # logtext = u"{}\n  {}\n     * {}".format(
+        #     response.meta['logtext'],
+        #     green(u"Process in Parliament:"),
+        #     stepstring)
+        logtext = response.meta['logtext']
         log.msg(logtext, level=log.INFO)
         pass
 

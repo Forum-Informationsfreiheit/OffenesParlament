@@ -8,10 +8,29 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
 
-BOT_NAME = 'laws'
+BOT_NAME = 'scraper'
 
 SPIDER_MODULES = ['laws.spiders']
 NEWSPIDER_MODULE = 'laws.spiders'
+
+BASE_URL = "http://www.parlament.gv.at/PAKT/RGES/filter.psp"
+
+# Gesetzgebungsperioden (legislation periods) to scrape
+# LLP = range(1, 26)
+LLP = [25]
+
+
+URLOPTIONS = {
+    'view': 'RSS',
+    'jsMode': 'RSS',
+    'xdocumentUri': '/PAKT/RGES/index.shtml',
+    'anwenden': 'Anwenden',
+    'RGES': 'ALLE',
+    'SUCH': ' ',
+    'listeId': '103',
+    'FBEZ': 'FP_003',
+}
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'laws (+http://www.yourdomain.com)'

@@ -82,3 +82,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Import scrapy settings
+from sys import path
+c = os.getcwd()
+os.chdir(str(c) + '/op_scraper/scraper')
+d = os.getcwd()
+path.append(d)
+os.chdir(c)
+d = os.getcwd()
+os.environ['SCRAPY_SETTINGS_MODULE'] = 'laws.settings'
