@@ -31,6 +31,7 @@ URLOPTIONS = {
     'FBEZ': 'FP_003',
 }
 
+LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'laws (+http://www.yourdomain.com)'

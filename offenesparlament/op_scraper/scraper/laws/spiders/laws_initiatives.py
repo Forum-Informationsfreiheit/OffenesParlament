@@ -11,9 +11,18 @@ from scrapy import log
 import collections
 
 
-from laws.resources.djangoitems import *
 from laws.resources.extractors import *
 from laws.resources.rss import get_urls
+
+from op_scraper.models import Phase
+from op_scraper.models import Entity
+from op_scraper.models import Document
+from op_scraper.models import PressRelease
+from op_scraper.models import Category
+from op_scraper.models import Keyword
+from op_scraper.models import Law
+from op_scraper.models import Step
+from op_scraper.models import Opinion
 
 
 class LawsInitiativesSpider(scrapy.Spider):
@@ -32,21 +41,51 @@ class LawsInitiativesSpider(scrapy.Spider):
         self.cookies_seen = set()
 
     def parse(self, response):
-        law_item = LawItem()
         title = TITLE.xt(response)
         parl_id = PARL_ID.xt(response)
-
-        law_item['title'] = title
-        law_item['parl_id'] = parl_id
-
-        tags = TAGS.xt(response)
+        keywords = KEYWORDS.xt(response)
         docs = DOCS.xt(response)
 
+        # Don't re-parse laws we already have
+        # FIXME: at some point, we need to be able to update laws, not just skip
+        # them if we already have them
+        if Law.objects.filter(parl_id=parl_id).exists():
+            log.msg(
+                u"{} with ID {} already exists, skipping import".format(
+                    red(title),
+                    cyan(u"[{}]".format(parl_id))),
+                level=log.INFO)
+            return
+
+        # Log our progress
         logtext = u"Scraping {} with id {} @ {}".format(
             red(title),
             cyan(u"[{}]".format(parl_id)),
             blue(response.url)
         )
+        log.msg(logtext, level=log.INFO)
+
+        # Create all keywords we don't yet have in the DB
+        keyword_items = []
+        for keyword in keywords:
+            kw, created = Keyword.objects.get_or_create(title=keyword)
+            if created:
+                log.msg(u"Created keyword {}".format(
+                    green(u'[{}]'.format(keyword))))
+            keyword_items.append(kw)
+
+        # Create all keywords we don't yet have in the DB
+        doc_items = []
+        for document in docs:
+            # TODO
+            pass
+
+        law_item = Law.objects.create(
+            title=title,
+            parl_id=parl_id,
+            source_link=response.url)
+        law_item.save()
+        law_item.keywords = keyword_items
 
         # if tags:
         #     logtext += u"\n  {} \n     * {}".format(
@@ -63,15 +102,13 @@ class LawsInitiativesSpider(scrapy.Spider):
         law_item.save()
 
         # is the tab 'Parlamentarisches Verfahren available?'
-        if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
-            url_postfix = response.xpath(
-                '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
-            req = scrapy.Request(response.url + url_postfix,
-                                 callback=self.parse_parliament_steps)
-            req.meta['logtext'] = logtext
-            return req
-
-        log.msg(logtext, level=log.INFO)
+        # if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
+        #     url_postfix = response.xpath(
+        #         '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
+        #     req = scrapy.Request(response.url + url_postfix,
+        #                          callback=self.parse_parliament_steps)
+        #     req.meta['logtext'] = logtext
+        #     return req
 
     def parse_parliament_steps(self, response):
         """

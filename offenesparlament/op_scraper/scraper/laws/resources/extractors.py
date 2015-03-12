@@ -10,7 +10,7 @@ class PARL_ID(SingleExtractor):
     XPATH = '//*[@id="inhalt"]/span/text()'
 
 
-class TAGS(MultiExtractor):
+class KEYWORDS(MultiExtractor):
     XPATH = '//*[@id="schlagwortBox"]/ul//li/a/text()'
 
 

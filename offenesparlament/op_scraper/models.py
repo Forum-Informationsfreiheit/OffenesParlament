@@ -63,7 +63,10 @@ class Keyword(models.Model):
     """
     A keyword assigned to laws and prelaws
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.title
 
 
 class Law(models.Model):
@@ -83,10 +86,11 @@ class Law(models.Model):
 
     # Relationships
     category = models.ForeignKey(Category, null=True, blank=True)
-    keywords = models.ManyToManyField(Keyword)
-    press_releases = models.ManyToManyField(PressRelease)
-    documents = models.ManyToManyField(Document)
-    references = models.OneToOneField("self", blank=True, null=True)
+    keywords = models.ManyToManyField(Keyword, related_name="laws")
+    press_releases = models.ManyToManyField(PressRelease, related_name="laws")
+    documents = models.ManyToManyField(Document, related_name="laws")
+    references = models.OneToOneField(
+        "self", blank=True, null=True, related_name="laws")
 
 
 class Step(models.Model):
@@ -104,6 +108,7 @@ class Step(models.Model):
 
 
 class Opinion(models.Model):
+
     """
     A comment in the pre-parliamentary process by an entity
     """
