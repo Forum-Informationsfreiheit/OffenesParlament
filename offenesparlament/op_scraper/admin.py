@@ -10,12 +10,16 @@ from op_scraper.models import Step
 from op_scraper.models import Opinion
 
 
+@admin.register(Law)
+class LawAdmin(admin.ModelAdmin):
+    list_display = ('legislative_period', 'parl_id', 'title')
+    pass
+
 admin.site.register(Phase)
 admin.site.register(Entity)
 admin.site.register(Document)
 admin.site.register(PressRelease)
 admin.site.register(Category)
 admin.site.register(Keyword)
-admin.site.register(Law)
 admin.site.register(Step)
 admin.site.register(Opinion)
