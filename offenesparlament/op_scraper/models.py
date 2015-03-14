@@ -10,6 +10,9 @@ class Phase(models.Model):
     """
     title = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return self.title
+
 
 class Entity(models.Model):
 
@@ -20,6 +23,9 @@ class Entity(models.Model):
     email = models.EmailField()
     phone = PhoneNumberField()
 
+    def __unicode__(self):
+        return self.title
+
 
 class Document(models.Model):
 
@@ -29,9 +35,12 @@ class Document(models.Model):
     Optionally with stripped html content of html-version
     """
     title = models.CharField(max_length=255)
-    pdf_link = models.URLField(max_length=200, null=True, blank=True)
-    html_link = models.URLField(max_length=200, null=True, blank=True)
-    stripped_html = models.TextField(null=True, blank=True)
+    pdf_link = models.URLField(max_length=200, null=True)
+    html_link = models.URLField(max_length=200, null=True)
+    stripped_html = models.TextField(null=True)
+
+    def __unicode__(self):
+        return self.title
 
 
 class PressRelease(models.Model):
@@ -49,13 +58,19 @@ class PressRelease(models.Model):
     format = models.CharField(max_length=255)
     tags = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return self.title
+
 
 class Category(models.Model):
 
     """
     A category for a law or prelaw
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.title
 
 
 class Keyword(models.Model):
@@ -83,6 +98,7 @@ class Law(models.Model):
     source_link = models.URLField(max_length=200, default="")
     parl_id = models.CharField(max_length=30, unique=True, default="")
     description = models.TextField(blank=True)
+    legislative_period = models.IntegerField(default=1)
 
     # Relationships
     category = models.ForeignKey(Category, null=True, blank=True)
@@ -91,6 +107,9 @@ class Law(models.Model):
     documents = models.ManyToManyField(Document, related_name="laws")
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
+
+    def __unicode__(self):
+        return self.title
 
 
 class Step(models.Model):
@@ -104,7 +123,10 @@ class Step(models.Model):
 
     # Relationships
     phase = models.ForeignKey(Phase)
-    law = models.ForeignKey(Law)
+    law = models.ForeignKey(Law, related_name='steps')
+
+    def __unicode__(self):
+        return self.title
 
 
 class Opinion(models.Model):
@@ -123,3 +145,6 @@ class Opinion(models.Model):
     entity = models.ForeignKey(Entity)
     steps = models.ManyToManyField(Step)
     prelaw = models.ForeignKey(Law)
+
+    def __unicode__(self):
+        return self.entity.title

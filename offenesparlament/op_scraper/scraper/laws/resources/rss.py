@@ -21,10 +21,10 @@ def get_laws(GP="XXV"):
 
 
 def get_urls():
+    urls = []
     for i in LLP:
         roman_numeral = roman.toRoman(i)
         rss = feedparser.parse(get_laws(roman_numeral))
         print "GP {}: {} laws".format(roman_numeral, len(rss['entries']))
-
-    urls = [entry['link'] for entry in rss['entries']]
+        urls = urls + [entry['link'] for entry in rss['entries']]
     return urls

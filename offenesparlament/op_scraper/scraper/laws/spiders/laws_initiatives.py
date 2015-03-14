@@ -7,12 +7,15 @@ from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
 
+from roman import fromRoman
+
 from scrapy import log
 import collections
 
 
 from laws.resources.extractors import *
 from laws.resources.rss import get_urls
+
 
 from op_scraper.models import Phase
 from op_scraper.models import Entity
@@ -41,14 +44,21 @@ class LawsInitiativesSpider(scrapy.Spider):
         self.cookies_seen = set()
 
     def parse(self, response):
+        # Extract fields
         title = TITLE.xt(response)
         parl_id = PARL_ID.xt(response)
+        status = STATUS.xt(response)
+        LLP = fromRoman(response.url.split('/')[-4])
+
+        # Extract foreign keys
         keywords = KEYWORDS.xt(response)
         docs = DOCS.xt(response)
+        category = CATEGORY.xt(response)
+        description = DESCRIPTION.xt(response)
 
         # Don't re-parse laws we already have
-        # FIXME: at some point, we need to be able to update laws, not just skip
-        # them if we already have them
+        # FIXME: at some point, we need to be able to update laws, not just
+        # skip them if we already have them
         if Law.objects.filter(parl_id=parl_id).exists():
             log.msg(
                 u"{} with ID {} already exists, skipping import".format(
@@ -74,18 +84,37 @@ class LawsInitiativesSpider(scrapy.Spider):
                     green(u'[{}]'.format(keyword))))
             keyword_items.append(kw)
 
-        # Create all keywords we don't yet have in the DB
+        # Create all docs we don't yet have in the DB
         doc_items = []
         for document in docs:
-            # TODO
-            pass
+            doc, created = Document.objects.get_or_create(
+                title=document['title'],
+                html_link=document['html_url'],
+                pdf_link=document['pdf_url'],
+                stripped_html=None
+            )
+            doc_items.append(doc)
 
+        # Create category if we don't have it yet
+        cat, created = Category.objects.get_or_create(title=category)
+        if created:
+            log.msg(u"Created category {}".format(
+                green(u'[{}]'.format(category))))
+
+        # Create and save Law
         law_item = Law.objects.create(
             title=title,
             parl_id=parl_id,
-            source_link=response.url)
+            source_link=response.url,
+            status=status,
+            description=description,
+            legislative_period=LLP)
         law_item.save()
+
+        # attach foreign keys
         law_item.keywords = keyword_items
+        law_item.category = cat
+        law_item.documents = doc_items
 
         # if tags:
         #     logtext += u"\n  {} \n     * {}".format(
