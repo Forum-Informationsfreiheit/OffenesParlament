@@ -16,8 +16,8 @@ NEWSPIDER_MODULE = 'laws.spiders'
 BASE_URL = "http://www.parlament.gv.at/PAKT/RGES/filter.psp"
 
 # Gesetzgebungsperioden (legislation periods) to scrape
-# LLP = range(1, 26)
-LLP = [25]
+LLP = range(24, 26)
+# LLP = [25]
 
 
 URLOPTIONS = {

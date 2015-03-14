@@ -96,9 +96,9 @@ class Law(models.Model):
     title = models.CharField(max_length=255)
     status = models.TextField(null=True, blank=True)
     source_link = models.URLField(max_length=200, default="")
-    parl_id = models.CharField(max_length=30, unique=True, default="")
-    description = models.TextField(blank=True)
+    parl_id = models.CharField(max_length=30, default="")
     legislative_period = models.IntegerField(default=1)
+    description = models.TextField(blank=True)
 
     # Relationships
     category = models.ForeignKey(Category, null=True, blank=True)
@@ -107,6 +107,9 @@ class Law(models.Model):
     documents = models.ManyToManyField(Document, related_name="laws")
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
+
+    class Meta:
+        unique_together = ("parl_id", "legislative_period")
 
     def __unicode__(self):
         return self.title
