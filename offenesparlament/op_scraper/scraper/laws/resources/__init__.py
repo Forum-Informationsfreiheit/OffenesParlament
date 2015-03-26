@@ -26,7 +26,10 @@ class SingleExtractor(BaseExtractor):
         """
         Extract the first element in class's xpath-expression
         """
-        value = cls._xt(response)[0].strip()
+        try:
+            value = cls._xt(response)[0].strip()
+        except IndexError:
+            value = ""
         return value
 
 

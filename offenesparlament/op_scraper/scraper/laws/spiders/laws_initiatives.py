@@ -100,21 +100,25 @@ class LawsInitiativesSpider(scrapy.Spider):
             legislative_period=LLP)
         law_item.save()
 
-        # attach foreign keys
+        # Attach foreign keys
         law_item.keywords = self.parse_keywords(response)
         law_item.category = cat
         law_item.documents = self.parse_docs(response)
 
         law_item.save()
 
+        callback_requests = []
+
         # is the tab 'Parlamentarisches Verfahren available?'
-        # if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
-        #     url_postfix = response.xpath(
-        #         '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
-        #     req = scrapy.Request(response.url + url_postfix,
-        #                          callback=self.parse_parliament_steps)
-        #     req.meta['logtext'] = logtext
-        #     return req
+        if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
+            url_postfix = response.xpath(
+                '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
+            req = scrapy.Request(response.url + url_postfix,
+                                 callback=self.parse_parliament_steps)
+            req.meta['law_item'] = law_item
+            callback_requests.append(req)
+
+        return callback_requests
 
     def parse_keywords(self, response):
 
@@ -152,23 +156,32 @@ class LawsInitiativesSpider(scrapy.Spider):
         Callback function to parse the additional 'Parlamentarisches Verfahren'
         page
         """
-        rows = response.xpath(
-            '//*[@id="content"]/div[3]/div[3]/table/tbody//tr[(@class!="historyHeader" and @class!="close") or not(@class)]')
-        steps = [
-            {'date': self._clean(row.xpath('string(td[1])').extract()),
-             'step': self._clean(row.xpath('string(td[2])').extract())}
-            for row in rows]
+        law_item = response.meta['law_item']
 
-        # import ipdb; ipdb.set_trace()
-        # stepstring = u"\n     * ".join(
-        #     [u"{}: {}".format(s['date'], s['step']) for s in steps])
-        # logtext = u"{}\n  {}\n     * {}".format(
-        #     response.meta['logtext'],
-        #     green(u"Process in Parliament:"),
-        #     stepstring)
-        logtext = response.meta['logtext']
-        log.msg(logtext, level=log.INFO)
-        pass
+        phases = PHASES.xt(response)
+
+        for phase in phases:
+            # Create phase if we don't have it yet
+            phase_item, created = Phase.objects.get_or_create(
+                title=phase['title'])
+            if created:
+                log.msg(u"Created Phase {}".format(
+                    green(u'[{}]'.format(phase_item.title))))
+
+            # Create steps
+            for step in phase['steps']:
+                step_item = Step.objects.create(
+                    title=step['title'],
+                    sortkey=step['sortkey'],
+                    date=step['date'],
+                    protocol_url=step['protocol_url'],
+                    law=law_item,
+                    phase=phase_item
+                )
+                step_item.save()
+                # Attach foreign keys
+                # step_item.law_item = law_item
+                # step_item.phase = phase_item
 
     def _clean(self, to_clean):
         """

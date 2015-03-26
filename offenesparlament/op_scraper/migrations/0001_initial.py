@@ -26,9 +26,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
-                ('pdf_link', models.URLField(null=True, blank=True)),
-                ('html_link', models.URLField(null=True, blank=True)),
-                ('stripped_html', models.TextField(null=True, blank=True)),
+                ('pdf_link', models.URLField(null=True)),
+                ('html_link', models.URLField(null=True)),
+                ('stripped_html', models.TextField(null=True)),
             ],
             options={
             },
@@ -53,6 +53,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(unique=True, max_length=255)),
             ],
             options={
+                'ordering': ['title'],
             },
             bases=(models.Model,),
         ),
@@ -63,7 +64,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255)),
                 ('status', models.TextField(null=True, blank=True)),
                 ('source_link', models.URLField(default=b'')),
-                ('parl_id', models.CharField(default=b'', unique=True, max_length=30)),
+                ('parl_id', models.CharField(default=b'', max_length=30)),
+                ('legislative_period', models.IntegerField(default=1)),
                 ('description', models.TextField(blank=True)),
                 ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
                 ('documents', models.ManyToManyField(related_name='laws', to='op_scraper.Document')),
@@ -123,8 +125,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
-                ('sortkey', models.IntegerField()),
+                ('sortkey', models.CharField(max_length=6)),
                 ('date', models.DateField()),
+                ('protocol_url', models.URLField(default=b'')),
                 ('law', models.ForeignKey(related_name='steps', to='op_scraper.Law')),
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
@@ -149,5 +152,9 @@ class Migration(migrations.Migration):
             name='references',
             field=models.OneToOneField(related_name='laws', null=True, blank=True, to='op_scraper.Law'),
             preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='law',
+            unique_together=set([('parl_id', 'legislative_period')]),
         ),
     ]

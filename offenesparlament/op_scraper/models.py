@@ -124,8 +124,9 @@ class Step(models.Model):
     A single step in the parliamentary process
     """
     title = models.CharField(max_length=255)
-    sortkey = models.IntegerField()
+    sortkey = models.CharField(max_length=6)
     date = models.DateField()
+    protocol_url = models.URLField(max_length=200, default="")
 
     # Relationships
     phase = models.ForeignKey(Phase)
