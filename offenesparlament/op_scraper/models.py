@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from annoying import fields
 
 
 class Phase(models.Model):
@@ -127,6 +128,7 @@ class Step(models.Model):
     sortkey = models.CharField(max_length=6)
     date = models.DateField()
     protocol_url = models.URLField(max_length=200, default="")
+    source_link = models.URLField(max_length=200, default="")
 
     # Relationships
     phase = models.ForeignKey(Phase)
@@ -164,8 +166,22 @@ class Function(models.Model):
     """
     title = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return self.title
     # Todo write method that scans function string for political party
     # shortform, e.g. ÖVP
+
+
+class Party(models.Model):
+
+    """
+    A political party, or 'Klub'
+    """
+    titles = fields.JSONField(blank=True, null=True, default=[])
+    short = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.short
 
 
 class Mandate(models.Model):
@@ -175,17 +191,16 @@ class Mandate(models.Model):
     end date
     """
     function = models.ForeignKey(Function)
+    party = models.ForeignKey(Party, null=True, blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
 
-
-class Party(models.Model):
-
-    """
-    A political party, or 'Klub'
-    """
-    title = models.CharField(max_length=255)
-    short = models.CharField(max_length=255)
+    def __unicode__(self):
+        return u"{} ({}): {} - {} ".format(
+            self.function,
+            self.party,
+            self.start_date,
+            self.end_date)
 
 
 class Person(models.Model):
@@ -194,13 +209,19 @@ class Person(models.Model):
     A single person in parliament, including Abgeordnete, Regierungsmitglieder,
     etc.
     """
+    parl_id = models.CharField(max_length=30, primary_key=True)
     source_link = models.URLField(max_length=200, default="")
     full_name = models.CharField(max_length=255)
     reversed_name = models.CharField(max_length=255)
-    birthday = models.DateField()
-    deathday = models.DateField(null=True, blank=True)
-    occupation = models.CharField(max_length=255)
+    birthdate = models.DateField(null=True, blank=True)
+    birthplace = models.CharField(max_length=255, null=True, blank=True)
+    deathdate = models.DateField(null=True, blank=True)
+    deathplace = models.CharField(max_length=255, null=True, blank=True)
+    occupation = models.CharField(max_length=255, null=True, blank=True)
 
     # Relationsships
     party = models.ForeignKey(Party)
     mandates = models.ManyToManyField(Mandate)
+
+    def __unicode__(self):
+        return self.full_name

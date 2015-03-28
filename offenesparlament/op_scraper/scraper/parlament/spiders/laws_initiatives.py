@@ -10,7 +10,6 @@ from ansicolor import blue
 from roman import fromRoman
 
 from scrapy import log
-import collections
 
 
 from parlament.resources.extractors import *
@@ -170,27 +169,13 @@ class LawsInitiativesSpider(scrapy.Spider):
 
             # Create steps
             for step in phase['steps']:
-                step_item = Step.objects.create(
+                step_item, created = Step.objects.update_or_create(
                     title=step['title'],
                     sortkey=step['sortkey'],
                     date=step['date'],
                     protocol_url=step['protocol_url'],
                     law=law_item,
-                    phase=phase_item
+                    phase=phase_item,
+                    source_link=response.url
                 )
                 step_item.save()
-                # Attach foreign keys
-                # step_item.law_item = law_item
-                # step_item.phase = phase_item
-
-    def _clean(self, to_clean):
-        """
-        Removes all \n and \t characters as well as trailing and leading
-        whitespace
-        """
-        if isinstance(to_clean, collections.Iterable):
-            to_clean = to_clean[0]
-
-        to_clean = to_clean.replace(
-            '\t', '').replace('\n', '').strip()
-        return to_clean

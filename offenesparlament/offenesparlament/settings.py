@@ -13,6 +13,13 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
+# Logging
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -36,7 +43,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'op_scraper'
+    'op_scraper',
+    'annoying'
 )
 
 MIDDLEWARE_CLASSES = (

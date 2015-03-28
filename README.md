@@ -51,10 +51,10 @@ And you're done!
 
 ## Resetting the database
 
-In case you need to reset the database (delete all migrations, flush the db content, etc.), run these commands in the django project folder 'offenesparlament':
+In case you need to reset the database (delete all migrations, flush the db content, recreate all objects etc.), run these commands in the django project folder 'offenesparlament':
 
 ```
-python remove_migrations.py && python manage.py flush --noinput
+python remove_migrations.py && rm db.sqlite3 && python manage.py makemigrations && python manage.py migrate
 ```
 
 ## Initial scraping
@@ -63,4 +63,10 @@ The current scraper for the laws and initiatives pages (for instance, [ÖBIB-Ges
 
 ```
 python manage.py scrape crawl laws_initiatives
+```
+
+The current scraper for Persons (including Parties, their mandates and functions and bio-data), for instance [Rudolf Anschober](http://www.parlament.gv.at/WWER/PAD_00024/index.shtml) can be run by doing this:
+
+```
+python manage.py scrape crawl persons
 ```

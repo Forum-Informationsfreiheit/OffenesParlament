@@ -1,4 +1,5 @@
 Django==1.7.4
+django-annoying==0.8.1
 Jinja2==2.7.2
 MarkupSafe==0.18
 PIL==1.1.7

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import phonenumber_field.modelfields
+import annoying.fields
 
 
 class Migration(migrations.Migration):
@@ -47,6 +48,16 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='Function',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=255)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Keyword',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -76,6 +87,18 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='Mandate',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start_date', models.DateField()),
+                ('end_date', models.DateField(null=True, blank=True)),
+                ('function', models.ForeignKey(to='op_scraper.Function')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Opinion',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -87,6 +110,36 @@ class Migration(migrations.Migration):
                 ('entity', models.ForeignKey(to='op_scraper.Entity')),
                 ('keywords', models.ManyToManyField(to='op_scraper.Keyword')),
                 ('prelaw', models.ForeignKey(to='op_scraper.Law')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Party',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('titles', annoying.fields.JSONField(default=[], null=True, blank=True)),
+                ('short', models.CharField(unique=True, max_length=255)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Person',
+            fields=[
+                ('parl_id', models.CharField(max_length=30, serialize=False, primary_key=True)),
+                ('source_link', models.URLField(default=b'')),
+                ('full_name', models.CharField(max_length=255)),
+                ('reversed_name', models.CharField(max_length=255)),
+                ('birthdate', models.DateField(null=True, blank=True)),
+                ('birthplace', models.CharField(max_length=255, null=True, blank=True)),
+                ('deathdate', models.DateField(null=True, blank=True)),
+                ('deathplace', models.CharField(max_length=255, null=True, blank=True)),
+                ('occupation', models.CharField(max_length=255, null=True, blank=True)),
+                ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
+                ('party', models.ForeignKey(to='op_scraper.Party')),
             ],
             options={
             },
@@ -128,6 +181,7 @@ class Migration(migrations.Migration):
                 ('sortkey', models.CharField(max_length=6)),
                 ('date', models.DateField()),
                 ('protocol_url', models.URLField(default=b'')),
+                ('source_link', models.URLField(default=b'')),
                 ('law', models.ForeignKey(related_name='steps', to='op_scraper.Law')),
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
@@ -139,6 +193,12 @@ class Migration(migrations.Migration):
             model_name='opinion',
             name='steps',
             field=models.ManyToManyField(to='op_scraper.Step'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='mandate',
+            name='party',
+            field=models.ForeignKey(blank=True, to='op_scraper.Party', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
