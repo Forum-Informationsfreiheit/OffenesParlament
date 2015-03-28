@@ -155,3 +155,52 @@ class Opinion(models.Model):
 
     def __unicode__(self):
         return self.entity.title
+
+
+class Function(models.Model):
+
+    """
+    A parliamentary function, like Abgeordnete or Mitglied des Bundesrates
+    """
+    title = models.CharField(max_length=255)
+
+    # Todo write method that scans function string for political party
+    # shortform, e.g. ÖVP
+
+
+class Mandate(models.Model):
+
+    """
+    A political Mandate for a certain function, with a start and possibly an
+    end date
+    """
+    function = models.ForeignKey(Function)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+
+
+class Party(models.Model):
+
+    """
+    A political party, or 'Klub'
+    """
+    title = models.CharField(max_length=255)
+    short = models.CharField(max_length=255)
+
+
+class Person(models.Model):
+
+    """
+    A single person in parliament, including Abgeordnete, Regierungsmitglieder,
+    etc.
+    """
+    source_link = models.URLField(max_length=200, default="")
+    full_name = models.CharField(max_length=255)
+    reversed_name = models.CharField(max_length=255)
+    birthday = models.DateField()
+    deathday = models.DateField(null=True, blank=True)
+    occupation = models.CharField(max_length=255)
+
+    # Relationsships
+    party = models.ForeignKey(Party)
+    mandates = models.ManyToManyField(Mandate)

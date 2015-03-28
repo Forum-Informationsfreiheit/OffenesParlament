@@ -91,4 +91,4 @@ d = os.getcwd()
 path.append(d)
 os.chdir(c)
 d = os.getcwd()
-os.environ['SCRAPY_SETTINGS_MODULE'] = 'laws.settings'
+os.environ['SCRAPY_SETTINGS_MODULE'] = 'parlament.settings'

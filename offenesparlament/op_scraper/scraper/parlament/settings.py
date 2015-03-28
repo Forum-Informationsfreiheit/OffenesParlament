@@ -10,8 +10,8 @@
 
 BOT_NAME = 'scraper'
 
-SPIDER_MODULES = ['laws.spiders']
-NEWSPIDER_MODULE = 'laws.spiders'
+SPIDER_MODULES = ['parlament.spiders']
+NEWSPIDER_MODULE = 'parlament.spiders'
 
 BASE_URL = "http://www.parlament.gv.at/PAKT/RGES/filter.psp"
 

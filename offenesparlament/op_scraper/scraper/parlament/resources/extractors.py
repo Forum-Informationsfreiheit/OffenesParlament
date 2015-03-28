@@ -2,8 +2,8 @@ import datetime
 from django.utils.html import remove_tags
 from scrapy import Selector
 
-from laws.resources import SingleExtractor
-from laws.resources import MultiExtractor
+from parlament.resources import SingleExtractor
+from parlament.resources import MultiExtractor
 
 
 class TITLE(SingleExtractor):

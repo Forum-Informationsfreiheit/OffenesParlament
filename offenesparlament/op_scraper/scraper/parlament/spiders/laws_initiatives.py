@@ -13,8 +13,8 @@ from scrapy import log
 import collections
 
 
-from laws.resources.extractors import *
-from laws.resources.rss import get_urls
+from parlament.resources.extractors import *
+from parlament.resources.rss import get_urls
 
 
 from op_scraper.models import Phase

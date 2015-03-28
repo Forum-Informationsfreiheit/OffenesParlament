@@ -8,7 +8,7 @@
 import scrapy
 
 
-class LawsItem(scrapy.Item):
+class ParlamentItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
