@@ -45,9 +45,9 @@ class LawsInitiativesSpider(scrapy.Spider):
 
     def parse(self, response):
         # Extract fields
-        title = TITLE.xt(response)
-        parl_id = PARL_ID.xt(response)
-        status = STATUS.xt(response)
+        title = LAW.TITLE.xt(response)
+        parl_id = LAW.PARL_ID.xt(response)
+        status = LAW.STATUS.xt(response)
         LLP = fromRoman(response.url.split('/')[-4])
 
         # save ids and stuff for internals
@@ -56,8 +56,8 @@ class LawsInitiativesSpider(scrapy.Spider):
         self.idlist[LLP][response.url] = [parl_id, LLP]
 
         # Extract foreign keys
-        category = CATEGORY.xt(response)
-        description = DESCRIPTION.xt(response)
+        category = LAW.CATEGORY.xt(response)
+        description = LAW.DESCRIPTION.xt(response)
 
         # Don't re-parse laws we already have
         # FIXME: at some point, we need to be able to update laws, not just
@@ -121,7 +121,7 @@ class LawsInitiativesSpider(scrapy.Spider):
 
     def parse_keywords(self, response):
 
-        keywords = KEYWORDS.xt(response)
+        keywords = LAW.KEYWORDS.xt(response)
 
         # Create all keywords we don't yet have in the DB
         keyword_items = []
@@ -136,7 +136,7 @@ class LawsInitiativesSpider(scrapy.Spider):
 
     def parse_docs(self, response):
 
-        docs = DOCS.xt(response)
+        docs = LAW.DOCS.xt(response)
 
         # Create all docs we don't yet have in the DB
         doc_items = []
@@ -157,7 +157,7 @@ class LawsInitiativesSpider(scrapy.Spider):
         """
         law_item = response.meta['law_item']
 
-        phases = PHASES.xt(response)
+        phases = LAW.PHASES.xt(response)
 
         for phase in phases:
             # Create phase if we don't have it yet
