@@ -1,4 +1,4 @@
-Django==1.7.4
+Django==1.8
 django-annoying==0.8.1
 Jinja2==2.7.2
 MarkupSafe==0.18
@@ -23,3 +23,4 @@ service_identity==14.0.0
 ansicolor
 django-phonenumber-field
 unipath
+django-reversion

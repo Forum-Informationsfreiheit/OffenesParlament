@@ -1,25 +1,69 @@
 from django.contrib import admin
 from op_scraper.models import *
+import reversion
 
 
 @admin.register(Law)
-class LawAdmin(admin.ModelAdmin):
+class LawAdmin(reversion.VersionAdmin):
     list_display = ('title', 'legislative_period', 'parl_id', 'category')
     pass
 
 
 @admin.register(Person)
-class PersonAdmint(admin.ModelAdmin):
+class PersonAdmin(reversion.VersionAdmin):
     filter_horizontal = ('mandates',)
 
-admin.site.register(Phase)
-admin.site.register(Entity)
-admin.site.register(Document)
-admin.site.register(PressRelease)
-admin.site.register(Category)
-admin.site.register(Keyword)
-admin.site.register(Step)
-admin.site.register(Opinion)
-admin.site.register(Party)
-admin.site.register(Function)
-admin.site.register(Mandate)
+
+@admin.register(Phase)
+class PhaseAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Entity)
+class EntityAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Document)
+class DocumentAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(PressRelease)
+class PressReleaseAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Category)
+class CategoryAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Keyword)
+class KeywordAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Step)
+class StepAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Opinion)
+class OpinionAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Party)
+class PartyAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Function)
+class FunctionAdmin(reversion.VersionAdmin):
+    pass
+
+
+@admin.register(Mandate)
+class MandateAdmin(reversion.VersionAdmin):
+    pass

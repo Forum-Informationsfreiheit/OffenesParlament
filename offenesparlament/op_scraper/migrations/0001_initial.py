@@ -18,9 +18,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(unique=True, max_length=255)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Document',
@@ -31,21 +28,15 @@ class Migration(migrations.Migration):
                 ('html_link', models.URLField(null=True)),
                 ('stripped_html', models.TextField(null=True)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Entity',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
-                ('email', models.EmailField(max_length=75)),
+                ('email', models.EmailField(max_length=254)),
                 ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Function',
@@ -53,9 +44,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Keyword',
@@ -66,7 +54,6 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ['title'],
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Law',
@@ -82,9 +69,6 @@ class Migration(migrations.Migration):
                 ('documents', models.ManyToManyField(related_name='laws', to='op_scraper.Document')),
                 ('keywords', models.ManyToManyField(related_name='laws', to='op_scraper.Keyword')),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Mandate',
@@ -94,9 +78,6 @@ class Migration(migrations.Migration):
                 ('end_date', models.DateField(null=True, blank=True)),
                 ('function', models.ForeignKey(to='op_scraper.Function')),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Opinion',
@@ -111,9 +92,6 @@ class Migration(migrations.Migration):
                 ('keywords', models.ManyToManyField(to='op_scraper.Keyword')),
                 ('prelaw', models.ForeignKey(to='op_scraper.Law')),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Party',
@@ -122,9 +100,6 @@ class Migration(migrations.Migration):
                 ('titles', annoying.fields.JSONField(default=[], null=True, blank=True)),
                 ('short', models.CharField(unique=True, max_length=255)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Person',
@@ -142,9 +117,6 @@ class Migration(migrations.Migration):
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
                 ('party', models.ForeignKey(to='op_scraper.Party')),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Phase',
@@ -152,9 +124,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='PressRelease',
@@ -170,9 +139,6 @@ class Migration(migrations.Migration):
                 ('format', models.CharField(max_length=255)),
                 ('tags', models.CharField(max_length=255)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Step',
@@ -186,33 +152,26 @@ class Migration(migrations.Migration):
                 ('law', models.ForeignKey(related_name='steps', to='op_scraper.Law')),
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='opinion',
             name='steps',
             field=models.ManyToManyField(to='op_scraper.Step'),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='mandate',
             name='party',
             field=models.ForeignKey(blank=True, to='op_scraper.Party', null=True),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='law',
             name='press_releases',
             field=models.ManyToManyField(related_name='laws', to='op_scraper.PressRelease'),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='law',
             name='references',
             field=models.OneToOneField(related_name='laws', null=True, blank=True, to='op_scraper.Law'),
-            preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
             name='law',
