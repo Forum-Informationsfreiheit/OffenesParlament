@@ -6,6 +6,8 @@ import reversion
 @admin.register(Law)
 class LawAdmin(reversion.VersionAdmin):
     list_display = ('title', 'legislative_period', 'parl_id', 'category')
+    list_filter = ('category',)
+    search_fields = ('parl_id', 'title')
     pass
 
 
