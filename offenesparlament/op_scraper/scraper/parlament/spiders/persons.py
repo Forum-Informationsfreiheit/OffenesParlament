@@ -12,7 +12,7 @@ from roman import fromRoman
 from scrapy import log
 import collections
 
-
+from parlament.settings import BASE_HOST
 from parlament.resources.extractors import *
 from parlament.resources.rss import get_urls
 from parlament.resources.util import _clean
@@ -91,9 +91,11 @@ class PersonsSpider(scrapy.Spider):
         full_name = PERSON.DETAIL.FULL_NAME.xt(response)
         bio_data = PERSON.DETAIL.BIO.xt(response)
         mandates = PERSON.DETAIL.MANDATES.xt(response)
+        profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
         try:
             person_item, created = Person.objects.update_or_create(
                 source_link=person['source_link'],
+                photo_link=profile_photo_url,
                 parl_id=person['parl_id'],
                 full_name=full_name,
                 reversed_name=person['reversed_name'],

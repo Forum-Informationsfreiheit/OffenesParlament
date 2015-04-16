@@ -12,8 +12,11 @@ BOT_NAME = 'scraper'
 
 SPIDER_MODULES = ['parlament.spiders']
 NEWSPIDER_MODULE = 'parlament.spiders'
+BASE_HOST = "http://www.parlament.gv.at"
 
-BASE_URL = "http://www.parlament.gv.at/PAKT/RGES/filter.psp"
+BASE_URL = "{}/{}".format(
+    BASE_HOST,
+    "PAKT/RGES/filter.psp")
 
 # Gesetzgebungsperioden (legislation periods) to scrape
 LLP = range(24, 26)

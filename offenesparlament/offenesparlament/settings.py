@@ -100,3 +100,11 @@ path.append(d)
 os.chdir(c)
 d = os.getcwd()
 os.environ['SCRAPY_SETTINGS_MODULE'] = 'parlament.settings'
+
+#ignore the following error when using ipython:
+#/django/db/backends/sqlite3/base.py:50: RuntimeWarning:
+#SQLite received a naive datetime [...] while time zone support is active.
+
+import warnings
+import exceptions
+warnings.filterwarnings("ignore", category=exceptions.RuntimeWarning, module='django.db.backends.sqlite3.base', lineno=53)

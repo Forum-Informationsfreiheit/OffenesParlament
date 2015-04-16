@@ -131,6 +131,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('parl_id', models.CharField(max_length=30, serialize=False, primary_key=True)),
                 ('source_link', models.URLField(default=b'')),
+                ('photo_link', models.URLField(default=b'')),
                 ('full_name', models.CharField(max_length=255)),
                 ('reversed_name', models.CharField(max_length=255)),
                 ('birthdate', models.DateField(null=True, blank=True)),

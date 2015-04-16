@@ -211,6 +211,7 @@ class Person(models.Model):
     """
     parl_id = models.CharField(max_length=30, primary_key=True)
     source_link = models.URLField(max_length=200, default="")
+    photo_link = models.URLField(max_length=200, default="")
     full_name = models.CharField(max_length=255)
     reversed_name = models.CharField(max_length=255)
     birthdate = models.DateField(null=True, blank=True)
