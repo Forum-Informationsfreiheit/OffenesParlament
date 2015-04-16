@@ -112,11 +112,17 @@ class LawsInitiativesSpider(scrapy.Spider):
         if response.xpath('//*[@id="ParlamentarischesVerfahren"]'):
             url_postfix = response.xpath(
                 '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
-            req = scrapy.Request(response.url + url_postfix,
-                                 callback=self.parse_parliament_steps)
-            req.meta['law_item'] = law_item
-            callback_requests.append(req)
-
+            post_req = scrapy.Request(response.url + url_postfix,
+                                      callback=self.parse_parliament_steps)
+            post_req.meta['law_item'] = law_item
+            callback_requests.append(post_req)
+        # if response.xpath('//*[@id="VorparlamentarischesVerfahren"]'):
+        #     url_postfix = response.xpath(
+        #         '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
+        #     pre_req = scrapy.Request(response.url + url_postfix,
+        #                              callback=self.parse_pre_parliament_steps)
+        #     pre_req.meta['law_item'] = law_item
+        #     callback_requests.append(pre_req)
         return callback_requests
 
     def parse_keywords(self, response):
@@ -149,6 +155,13 @@ class LawsInitiativesSpider(scrapy.Spider):
             )
             doc_items.append(doc)
         return doc_items
+
+    def parse_pre_parliament_steps(self, response):
+        """
+        Callback function to parse the additional
+        'Vorparlamentarisches Verfahren' page
+        """
+        pass
 
     def parse_parliament_steps(self, response):
         """
