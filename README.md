@@ -96,14 +96,21 @@ python remove_migrations.py && rm db.sqlite3 && python manage.py makemigrations 
 
 ## Initial scraping
 
-The current scraper for the laws and initiatives pages (for instance, [ÖBIB-Gesetz 2015 (458 d.B.)](http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml)) of the Austrian Parliament can be run by doing this:
+There are currently three available scrapers, which should initially run in this order:
+
+1. persons (for instance [Rudolf Anschober](http://www.parlament.gv.at/WWER/PAD_00024/index.shtml))
+2. pre_laws (for instance [Buchhaltungsagenturgesetz, Änderung (513/ME)](http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00513/index.shtml))
+3. laws_initiatives (for instance [ÖBIB-Gesetz 2015 (458 d.B.)](http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml))
+
+To run a scraper, use the following command:
 
 ```
-python manage.py scrape crawl laws_initiatives
+python manage.py scrape crawl <scraper_name>
 ```
 
-The current scraper for Persons (including Parties, their mandates and functions and bio-data), for instance [Rudolf Anschober](http://www.parlament.gv.at/WWER/PAD_00024/index.shtml) can be run by doing this:
+for instance:
 
 ```
 python manage.py scrape crawl persons
 ```
+
