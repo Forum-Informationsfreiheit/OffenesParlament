@@ -2,7 +2,44 @@
 
 An open-data framework for the public data of the Austrian Parliament
 
-## Quick-And-Dirty installation instructions
+## Installation instructions with Vagrant
+
+### Prerequisites
+
+- [Vagrant](https://docs.vagrantup.com/v2/installation/index.html)
+- [Virtualbox](https://www.virtualbox.org/)
+
+### Setup
+
+1. Clone the github repository (duh)
+2. Navigate into the project dir `cd OffenesParlament`
+3. Setup and run the vagrant VM `vagrant up`. All requirements will be
+   installed automatically inside the VM which may take a few minutes
+   the first time.
+4. The script might ask you for your password as it will add
+   offenesparlament.vm pointing to this VM to your hosts-file. It also
+   automatically creates a django superuser `admin` with password `admin`.
+5. Log in to the running VM with `vagrant ssh`
+6. For the initial scraping instructions see below
+7. Run the server inside the VM (0.0.0.0 lets the server respond to
+   requests from outside the VM - ie your physical machine where you
+   probably run your browser)
+
+ ```
+ cd offenesparlament
+ python manage.py runserver 0.0.0.0:8000
+ ```
+
+8. To exit and shutdown the VM run
+
+ ```
+ exit
+ vagrant halt
+ ```
+
+
+
+## Quick-And-Dirty installation instructions (on your own machine)
 
 Follow these instructions (updates pending!) to set up the project as is.
 

@@ -4,3 +4,5 @@
 offenesparlament/db.sqlite3
 *.sublime-project
 *.sublime-workspace
+.DS_Store
+/.vagrant/
