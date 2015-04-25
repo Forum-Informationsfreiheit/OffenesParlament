@@ -26,26 +26,28 @@ from op_scraper.models import Step
 from op_scraper.models import Opinion
 
 
-class LawsInitiativesSpider(BaseScraper):
-    BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/RGES/filter.psp")
+class PreLawsSpider(BaseScraper):
+    BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/MESN/filter.psp")
 
     LLP = range(24, 26)
 
     URLOPTIONS = {
         'view': 'RSS',
         'jsMode': 'RSS',
-        'xdocumentUri': '/PAKT/RGES/index.shtml',
+        'xdocumentUri': '/PAKT/MESN/index.shtml',
         'anwenden': 'Anwenden',
-        'RGES': 'ALLE',
-        'SUCH': ' ',
-        'listeId': '103',
-        'FBEZ': 'FP_003',
+        'MESN': 'ME',
+        'R_MESN': 'ME',
+        'MIN': 'ALLE',
+        'SUCH': '',
+        'listeId': '102',
+        'FBEZ': 'FP_002',
     }
 
-    name = "laws_initiatives"
+    name = "pre_laws"
 
     def __init__(self, **kw):
-        super(LawsInitiativesSpider, self).__init__(**kw)
+        super(PreLawsSpider, self).__init__(**kw)
 
         # add at least a default URL for testing
         self.start_urls = self.get_urls()
@@ -57,7 +59,6 @@ class LawsInitiativesSpider(BaseScraper):
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
-        status = LAW.STATUS.xt(response)
         LLP = fromRoman(response.url.split('/')[-4])
 
         # save ids and stuff for internals
@@ -67,7 +68,7 @@ class LawsInitiativesSpider(BaseScraper):
 
         # Extract foreign keys
         category = LAW.CATEGORY.xt(response)
-        description = LAW.DESCRIPTION.xt(response)
+        description = PRELAW.DESCRIPTION.xt(response)
 
         # Don't re-parse laws we already have
         # FIXME: at some point, we need to be able to update laws, not just
@@ -104,7 +105,6 @@ class LawsInitiativesSpider(BaseScraper):
             title=title,
             parl_id=parl_id,
             source_link=response.url,
-            status=status,
             description=description,
             legislative_period=LLP)
         law_item.save()
@@ -115,37 +115,6 @@ class LawsInitiativesSpider(BaseScraper):
         law_item.documents = self.parse_docs(response)
 
         law_item.save()
-        response.meta['law_item'] = law_item
-
-        callback_requests = []
-
-        # is the tab 'Parlamentarisches Verfahren available?'
-        if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
-            self.parse_parliament_steps(response)
-            # url_postfix = response.xpath(
-            #     '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
-            # post_req = scrapy.Request(response.url + url_postfix,
-            #                           callback=self.parse_parliament_steps,
-            #                           dont_filter=True)
-            # post_req.meta['law_item'] = law_item
-            # callback_requests.append(post_req)
-
-        if response.xpath('//h2[@id="tab-VorparlamentarischesVerfahren"]'):
-            self.parse_pre_parliament_steps(response)
-
-            # url_postfix = response.xpath(
-            #     '//*[@id="VorparlamentarischesVerfahren"]/a/@href').extract()[0]
-            # pre_req = scrapy.Request(response.url + url_postfix,
-            #                          callback=self.parse_pre_parliament_steps,
-            #                          dont_filter=True)
-            # pre_req.meta['law_item'] = law_item
-            # callback_requests.append(pre_req)
-            # log.msg(green("Pre-Law found: {}".format(pre_req)), level=log.INFO)
-
-        # log.msg(green("Open Callback requests: {}".format(
-        #     len(callback_requests))), level=log.INFO)
-
-        # return callback_requests
 
     def parse_keywords(self, response):
 
@@ -178,46 +147,33 @@ class LawsInitiativesSpider(BaseScraper):
             doc_items.append(doc)
         return doc_items
 
-    def parse_pre_parliament_steps(self, response):
+    def parse_steps(self, response):
         """
-        Callback function to parse the additional
-        'Vorparlamentarisches Verfahren' page
-        """
-        law_item = response.meta['law_item']
-        prelaw_id = LAW.PRELAW_ID.xt(response)
-        if Law.objects.filter(parl_id=prelaw_id, legislative_period=law_item.legislative_period):
-            prelaw = Law.objects.get(
-                parl_id=prelaw_id,
-                legislative_period=law_item.legislative_period)
-            law_item.references = prelaw
-            law_item.save()
-
-    def parse_parliament_steps(self, response):
-        """
-        Callback function to parse the additional 'Parlamentarisches Verfahren'
-        page
+        Parse the Pre-Law's steps
         """
         law_item = response.meta['law_item']
 
-        phases = LAW.PHASES.xt(response)
+        # Create phase if we don't have it yet
+        phase_item, created = Phase.objects.get_or_create(
+            title='default')
+        if created:
+            log.msg(u"Created Phase {}".format(
+                green(u'[{}]'.format(phase_item.title))))
 
-        for phase in phases:
-            # Create phase if we don't have it yet
-            phase_item, created = Phase.objects.get_or_create(
-                title=phase['title'])
-            if created:
-                log.msg(u"Created Phase {}".format(
-                    green(u'[{}]'.format(phase_item.title))))
+        steps = PRELAW.STEPS.xt(response)
+        if steps:
+            log.msg(u"Creating {} steps".format(
+                cyan(u'[{}]'.format(len(steps)))))
 
-            # Create steps
-            for step in phase['steps']:
-                step_item, created = Step.objects.update_or_create(
-                    title=step['title'],
-                    sortkey=step['sortkey'],
-                    date=step['date'],
-                    protocol_url=step['protocol_url'],
-                    law=law_item,
-                    phase=phase_item,
-                    source_link=response.url
-                )
-                step_item.save()
+        # Create steps
+        for step in steps:
+            step_item, created = Step.objects.update_or_create(
+                title=step['title'],
+                sortkey=step['sortkey'],
+                date=step['date'],
+                protocol_url=step['protocol_url'],
+                law=law_item,
+                phase=phase_item,
+                source_link=response.url
+            )
+            step_item.save()

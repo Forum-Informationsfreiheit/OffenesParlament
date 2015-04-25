@@ -13,6 +13,44 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class PRELAW:
+
+    class DESCRIPTION(SingleExtractor):
+        XPATH = "//div[contains(concat(' ', normalize-space(@class), ' '), ' c_2 ')]/h3/following-sibling::p/text()"
+
+        @classmethod
+        def xt(cls, response):
+            try:
+                description = response.xpath(cls.XPATH)[0].extract()[0]
+            except:
+                import ipdb
+                ipdb.set_trace()
+            return remove_tags(description, 'p')
+
+    class STEPS(MultiExtractor):
+        XPATH = '//table'
+
+        @classmethod
+        def xt(cls, response):
+            steps = []
+            raw_table = response.xpath('//table')[1]
+            raw_steps = Selector(text=raw_table.extract()).xpath('//tr')
+            for index, step in enumerate(raw_steps, start=1):
+                raw_step = Selector(text=step.extract())
+                title = LAW.PHASES.STEPS.TITLE.xt(step_selector)
+                date_str = LAW.PHASES.STEPS.DATE.xt(step_selector)
+                date = datetime.datetime.strptime(
+                    date_str, "%d.%m.%Y").date()
+                protocol_url = LAW.PHASES.STEPS.PROTOCOL.xt(step_selector)
+                steps.append({
+                    'date': date,
+                    'title': title,
+                    'sortkey': str(index).zfill(3),
+                    'protocol_url': protocol_url
+                })
+            return steps
+
+
 class LAW:
 
     class TITLE(SingleExtractor):
@@ -20,6 +58,16 @@ class LAW:
 
     class PARL_ID(SingleExtractor):
         XPATH = '//*[@id="inhalt"]/span/text()'
+
+    class PRELAW_ID(SingleExtractor):
+        XPATH = '//h2[@id="tab-VorparlamentarischesVerfahren"]/..'
+        XPATH_ID = "//h3[contains(concat(' ', normalize-space(@class), ' '), ' zeigeContentBlock ')]//span/text()"
+
+        @classmethod
+        def xt(cls, response):
+            raw_section = Selector(text=response.xpath(cls.XPATH).extract()[0])
+            prelaw_id = raw_section.xpath(cls.XPATH_ID).extract()[0]
+            return prelaw_id
 
     class KEYWORDS(MultiExtractor):
         XPATH = '//*[@id="schlagwortBox"]/ul//li/a/text()'
@@ -97,7 +145,6 @@ class LAW:
         class STEPS(MultiExtractor):
 
             XPATH = "/html/body/tbody/tr[not(contains(@class, 'close')) and not(contains(@class, 'historyHeader'))]"
-            STEP_TITLE = "//td[1]/text()"
 
             @classmethod
             def xt(cls, phase_index, selector):

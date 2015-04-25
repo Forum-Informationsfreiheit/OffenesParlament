@@ -7,14 +7,13 @@ from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
 
-from roman import fromRoman
+from urllib import urlencode
 
 from scrapy import log
-import collections
 
 from parlament.settings import BASE_HOST
+from parlament.spiders import BaseScraper
 from parlament.resources.extractors import *
-from parlament.resources.rss import get_urls
 from parlament.resources.util import _clean
 
 
@@ -24,23 +23,46 @@ from op_scraper.models import Function
 from op_scraper.models import Mandate
 
 
-class PersonsSpider(scrapy.Spider):
-    name = "persons"
-    allowed_domains = ["parlament.gv.at"]
+class PersonsSpider(BaseScraper):
+    BASE_URL = "{}/{}".format(BASE_HOST, "WWER/SUCHE/filter.psp")
 
-    start_urls = [
-        'http://www.parlament.gv.at/WWER/SUCHE/filter.psp?view=RSS&jsMode=RSS&xdocumentUri=%2FWWER%2FSUCHE%2Findex.shtml&NAME_TYP_ID=1201&NAME=&R_ZEIT=ALLE&listeId=1&LISTE=Suchen&FBEZ=FW_001']
+    URLOPTIONS = {
+        'view': 'RSS',
+        'jsMode': 'RSS',
+        'xdocumentUri': '/WWER/SUCHE/index.shtml',
+        'NAME_TYP_ID': '1201',
+        'NAME': '',
+        'R_ZEIT': 'ALLE',
+        'listeId': '1',
+        'LISTE': 'Suchen',
+        'FBEZ': 'FW_001',
+    }
+
+    name = "persons"
 
     def __init__(self, **kw):
         super(PersonsSpider, self).__init__(**kw)
 
+        self.start_urls = self.get_urls()
+
         self.cookies_seen = set()
         self.idlist = {}
+
+    def get_urls(self):
+        """
+        Overwritten from BaseSpider for non-LLP-based retrieval
+        """
+        url_options = urlencode(self.URLOPTIONS)
+        urls = ["{}?{}".format(self.BASE_URL, url_options)]
+
+        return urls
 
     def parse(self, response):
         rss = feedparser.parse(response.url)
 
         callback_requests = []
+
+        log.msg("Scraping {} persons".format(len(rss.entries)))
 
         # Iterate all persons
         for entry in rss.entries:
@@ -108,7 +130,7 @@ class PersonsSpider(scrapy.Spider):
             )
             person_item.save()
         except:
-            log.msg("Error saving Person {}".format(full_name))
+            log.msg(red("Error saving Person {}".format(full_name)))
             import ipdb
             ipdb.set_trace()
             return
@@ -129,7 +151,8 @@ class PersonsSpider(scrapy.Spider):
                     end_date=mandate['end_date']
                 )
             except:
-                log.msg("Error saving Mandate {}".format(mandate['function']))
+                log.msg(
+                    red("Error saving Mandate {}".format(mandate['function'])))
                 import ipdb
                 ipdb.set_trace()
             mandate_items.append(mandate_item)
