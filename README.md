@@ -7,7 +7,9 @@ An open-data framework for the public data of the Austrian Parliament
 ### Prerequisites
 
 - [Vagrant](https://docs.vagrantup.com/v2/installation/index.html)
+- [Vagrant Hostmanager Plugin](https://github.com/smdahlen/vagrant-hostmanager)
 - [Virtualbox](https://www.virtualbox.org/)
+
 
 ### Setup
 

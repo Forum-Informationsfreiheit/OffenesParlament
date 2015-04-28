@@ -6,7 +6,7 @@ sudo apt-get install -y python python-pip python-twisted vim
 
 # requirements for scrapy
 sudo apt-get update
-sudo apt-get install -y python-dev libxml2-dev libxslt-dev
+sudo apt-get install -y python-dev libxml2-dev libxslt-dev libffi-dev
 
 #django project requirements
 cd /vagrant
