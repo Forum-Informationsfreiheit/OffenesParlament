@@ -6,3 +6,6 @@ offenesparlament/db.sqlite3
 *.sublime-workspace
 .DS_Store
 /.vagrant/
+node_modules/*
+/offenesparlament/offenesparlament/static/build/*
+.sass-cache

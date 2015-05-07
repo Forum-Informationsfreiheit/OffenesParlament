@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Abgeordnete zum Nationalrat{% endblock %}
+
+{% block content %}
+  <h1>Abgeordnete zum Nationalrat</h1>
+  <ul class="person_list">
+    {% for p in person_list %}
+    <li><a href="{% url 'person_detail' parl_id=p.parl_id name=p.full_name %}">{{ p.full_name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
