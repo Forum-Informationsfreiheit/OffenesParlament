@@ -7,3 +7,6 @@ offenesparlament/db.sqlite3
 .DS_Store
 /.vagrant/
 ignore/
+node_modules/*
+/offenesparlament/offenesparlament/static/build/*
+.sass-cache

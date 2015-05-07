@@ -31,6 +31,12 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+
+TEMPLATE_DIRS = ( os.path.join(PROJECT_PATH, 'templates'), )
+
+STATICFILES_DIRS = ( os.path.join(PROJECT_PATH, 'static'), )
+
 ALLOWED_HOSTS = []
 
 

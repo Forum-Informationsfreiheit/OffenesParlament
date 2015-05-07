@@ -1,0 +1,40 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic)
+
+$menu_blue: rgb(39, 82, 116)
+$menu_blue_lighter: rgb(94, 148, 186)
+
+@mixin css3-prefix($property, $value)
+  -webkit-#{$property}: #{$value}
+  -khtml-#{$property}: #{$value}
+  -moz-#{$property}: #{$value}
+  -ms-#{$property}: #{$value}
+  -o-#{$property}: #{$value}
+  #{$property}: #{$value}
+
+
+body
+  font-family: 'Source Sans Pro', sans-serif
+
+h1
+  font-size: 30px
+  font-weight: bold
+  margin: 70px 0 55px 0
+
+.main_menu
+  width: 100%
+  background-color: $menu_blue
+  color: white
+  overflow: hidden
+  .logo
+  nav
+    a
+      color: white
+      &:hover
+        background-color: $menu_blue_lighter
+        color: white
+
+ul.person_list
+  @include css3-prefix('column-count', 3)
+  padding: 0
+  li
+    margin: 6px 0

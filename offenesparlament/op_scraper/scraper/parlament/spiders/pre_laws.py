@@ -197,7 +197,6 @@ class PreLawsSpider(BaseScraper):
         if entity['email'] and not entity_item.email:
             entity_item.email = entity['email']
 
-
         opinion_item, created = Opinion.objects.get_or_create(
             parl_id=parl_id,
             defaults={
@@ -218,10 +217,10 @@ class PreLawsSpider(BaseScraper):
         step_num = self.parse_op_steps(response)
 
         entity_str = u"{} / {} / {} [{}]".format(
-                green(entity_item.title_detail),
-                entity_item.phone,
-                entity_item.email,
-                'new' if created else 'updated')
+            green(entity_item.title_detail),
+            entity_item.phone,
+            entity_item.email,
+            'new' if created else 'updated')
 
         log.msg(
             u"{} opinion: {} by {}".format(
