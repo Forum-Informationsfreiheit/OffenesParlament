@@ -19,3 +19,9 @@ LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'laws (+http://www.yourdomain.com)'
+
+
+# CONCURRENT_REQUESTS_PER_DOMAIN = 4
+# CONCURRENT_REQUESTS = 8
+
+AUTOTHROTTLE_ENABLED = True

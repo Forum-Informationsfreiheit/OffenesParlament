@@ -1,3 +1,5 @@
+import re
+
 
 def _clean(to_clean, to_remove=[]):
     """
@@ -10,5 +12,7 @@ def _clean(to_clean, to_remove=[]):
             to_clean = to_clean.replace(remove, '')
     to_clean = to_clean.replace(
         '\t', '').replace('\n', '').strip()
+
+    re.sub(' +', ' ', to_clean)
 
     return to_clean

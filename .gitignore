@@ -6,3 +6,4 @@ offenesparlament/db.sqlite3
 *.sublime-workspace
 .DS_Store
 /.vagrant/
+ignore/

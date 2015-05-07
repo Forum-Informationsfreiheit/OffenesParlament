@@ -34,8 +34,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
-                ('email', models.EmailField(max_length=254)),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128)),
+                ('title_detail', models.CharField(max_length=255)),
+                ('email', models.EmailField(max_length=254, null=True, blank=True)),
+                ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128, null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -84,13 +85,14 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('parl_id', models.CharField(default=b'', unique=True, max_length=30)),
-                ('date', models.DateField()),
+                ('date', models.DateField(null=True)),
                 ('description', models.TextField(blank=True)),
+                ('source_link', models.URLField(default=b'')),
                 ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
                 ('documents', models.ManyToManyField(to='op_scraper.Document')),
-                ('entity', models.ForeignKey(to='op_scraper.Entity')),
+                ('entity', models.ForeignKey(related_name='opinions', to='op_scraper.Entity')),
                 ('keywords', models.ManyToManyField(to='op_scraper.Keyword')),
-                ('prelaw', models.ForeignKey(to='op_scraper.Law')),
+                ('prelaw', models.ForeignKey(related_name='opinions', to='op_scraper.Law')),
             ],
         ),
         migrations.CreateModel(
@@ -149,14 +151,10 @@ class Migration(migrations.Migration):
                 ('date', models.DateField()),
                 ('protocol_url', models.URLField(default=b'')),
                 ('source_link', models.URLField(default=b'')),
-                ('law', models.ForeignKey(related_name='steps', to='op_scraper.Law')),
+                ('law', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Law', null=True)),
+                ('opinion', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Opinion', null=True)),
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
-        ),
-        migrations.AddField(
-            model_name='opinion',
-            name='steps',
-            field=models.ManyToManyField(to='op_scraper.Step'),
         ),
         migrations.AddField(
             model_name='mandate',
@@ -172,6 +170,10 @@ class Migration(migrations.Migration):
             model_name='law',
             name='references',
             field=models.OneToOneField(related_name='laws', null=True, blank=True, to='op_scraper.Law'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='entity',
+            unique_together=set([('title', 'title_detail')]),
         ),
         migrations.AlterUniqueTogether(
             name='law',

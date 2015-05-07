@@ -36,11 +36,120 @@ class PRELAW:
             raw_table = response.xpath('//table')[1]
             raw_steps = Selector(text=raw_table.extract()).xpath('//tr')
             for index, step in enumerate(raw_steps, start=1):
-                raw_step = Selector(text=step.extract())
+                step_selector = Selector(text=step.extract())
                 title = LAW.PHASES.STEPS.TITLE.xt(step_selector)
                 date_str = LAW.PHASES.STEPS.DATE.xt(step_selector)
                 date = datetime.datetime.strptime(
                     date_str, "%d.%m.%Y").date()
+                protocol_url = LAW.PHASES.STEPS.PROTOCOL.xt(step_selector)
+                steps.append({
+                    'date': date,
+                    'title': title,
+                    'sortkey': str(index).zfill(3),
+                    'protocol_url': protocol_url
+                })
+            return steps
+
+    class OPINIONS(MultiExtractor):
+        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/table//tr'
+
+        @classmethod
+        def xt(cls, response):
+            ops = []
+            raw_ops = response.xpath(cls.XPATH).extract()
+            for raw_op in raw_ops[1:]:
+                op_sel = Selector(text=raw_op)
+
+                date = op_sel.xpath('//td[1]/text()').extract()
+                date = date[0]
+
+                url = op_sel.xpath('//td[2]/a/@href').extract()[0]
+                parl_id = u"({})".format(
+                    op_sel.xpath('//td[2]/a/text()').extract()[0])
+
+                title = op_sel.xpath('//td[3]/text()').extract()[0]
+                if title:
+                    title = _clean(title).replace("*", ", ")
+                else:
+                    title = None
+
+                email = op_sel.xpath('//td[3]/a/@href').extract()
+                if email:
+                    email = email[0].replace('mailto:', '')
+                    title = op_sel.xpath('//td[3]/a/text()').extract()[0]
+                else:
+                    email = None
+
+                try:
+                    date = datetime.datetime.strptime(
+                        _clean(date), "%d.%m.%Y").date()
+                except:
+                    date = None
+
+                ops.append({
+                    'date': date,
+                    'url': url,
+                    'email': email,
+                    'title': title,
+                    'parl_id': parl_id
+                })
+
+            return ops
+
+
+class OPINION:
+
+    class ENTITY:
+        XPATH = '//p[contains(text(),"Stellungnehmende(r):")]/text()'
+        XPATH_EMAIL = '//p[contains(text(),"Stellungnehmende(r):")]/a/@href'
+
+        @classmethod
+        def xt(cls, response):
+            entity_raw = response.xpath(cls.XPATH).extract()
+            if entity_raw:
+                entity_text = entity_raw[0].replace(
+                    u'Stellungnehmende(r):', '')
+            else:
+                entity_text = u""
+            entries = [entry.strip()
+                       for entry in entity_text.split(u'\n')
+                       if entry.strip()]
+            entity = {
+                'title_detail': u'',
+                'phone': None,
+                'email': None
+            }
+            for entry in entries:
+                if u"Tel.:" in entry:
+                    entity['phone'] = entry.replace(u'Tel.:', u'')
+                else:
+                    entity['title_detail'] = u"{} {}".format(
+                        entity['title_detail'], entry)
+            entity['title_detail'] = entity['title_detail'].replace("*", ", ")
+            emaiL_raw = response.xpath(cls.XPATH_EMAIL).extract()
+            if emaiL_raw:
+                entity['email'] = emaiL_raw[0].replace(u'mailto:', u'')
+
+            return entity
+
+    class STEPS(MultiExtractor):
+        XPATH = '//table'
+
+        @classmethod
+        def xt(cls, response):
+            steps = []
+            raw_table = response.xpath('//table')[0]
+            raw_steps = Selector(text=raw_table.extract()).xpath('//tr')
+            for index, step in enumerate(raw_steps[1:]):
+                step_selector = Selector(text=step.extract())
+                title = LAW.PHASES.STEPS.TITLE.xt(step_selector)
+                date_str = LAW.PHASES.STEPS.DATE.xt(step_selector)
+                try:
+                    date = datetime.datetime.strptime(
+                        date_str, "%d.%m.%Y").date()
+                except:
+                    import ipdb
+                    ipdb.set_trace()
                 protocol_url = LAW.PHASES.STEPS.PROTOCOL.xt(step_selector)
                 steps.append({
                     'date': date,
@@ -115,7 +224,11 @@ class LAW:
 
         @classmethod
         def xt(cls, response):
-            description = response.xpath(cls.XPATH).extract()[0]
+            description = response.xpath(cls.XPATH).extract()
+            if description:
+                description = description[0]
+            else:
+                description = u""
             return remove_tags(description, 'p')
 
     class PHASES(MultiExtractor):

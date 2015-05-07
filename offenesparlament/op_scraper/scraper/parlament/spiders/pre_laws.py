@@ -6,6 +6,7 @@ from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
+from ansicolor import magenta
 
 from roman import fromRoman
 
@@ -14,6 +15,7 @@ from scrapy import log
 from parlament.spiders import BaseScraper
 from parlament.resources.extractors import *
 from parlament.settings import BASE_HOST
+from parlament.resources.util import _clean
 
 from op_scraper.models import Phase
 from op_scraper.models import Entity
@@ -67,56 +69,63 @@ class PreLawsSpider(BaseScraper):
         self.idlist[LLP][response.url] = [parl_id, LLP]
 
         # Extract foreign keys
-        category = LAW.CATEGORY.xt(response)
+        category = self.parse_category(response)
         description = PRELAW.DESCRIPTION.xt(response)
-
-        # Don't re-parse laws we already have
-        # FIXME: at some point, we need to be able to update laws, not just
-        # skip them if we already have them
-        if Law.objects.filter(
-                parl_id=parl_id,
-                legislative_period=LLP).exists():
-            log.msg(
-                u"{} with ID {} in LLP {} already exists, skipping import"
-                .format(
-                    red(title),
-                    cyan(u"[{}]".format(parl_id)),
-                    LLP),
-                level=log.INFO)
-            return
 
         # Log our progress
         logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
             red(title),
-            cyan(u"[{}]".format(parl_id)),
+            magenta(u"[{}]".format(parl_id)),
             green(str(LLP)),
             blue(response.url)
         )
         log.msg(logtext, level=log.INFO)
 
-        # Create category if we don't have it yet
-        cat, created = Category.objects.get_or_create(title=category)
-        if created:
-            log.msg(u"Created category {}".format(
-                green(u'[{}]'.format(category))))
-
         # Create and save Law
-        law_item = Law.objects.create(
+        law_item, created = Law.objects.get_or_create(
             title=title,
             parl_id=parl_id,
             source_link=response.url,
             description=description,
             legislative_period=LLP)
-        law_item.save()
+
+        if not created:
+            law_item.save()
 
         # Attach foreign keys
         law_item.keywords = self.parse_keywords(response)
-        law_item.category = cat
+        law_item.category = category
         law_item.documents = self.parse_docs(response)
 
         law_item.save()
 
+        # Parse opinions
+        opinions = PRELAW.OPINIONS.xt(response)
+
+        callback_requests = []
+
+        # is the tab 'Parlamentarisches Verfahren available?'
+        if opinions:
+            for op in opinions:
+                if Opinion.objects.filter(parl_id=op['parl_id']).exists():
+                    continue
+                post_req = scrapy.Request("{}/{}".format(BASE_HOST, op['url']),
+                                          callback=self.parse_opinion,
+                                          dont_filter=True)
+                post_req.meta['law_item'] = law_item
+                post_req.meta['op_data'] = op
+
+                callback_requests.append(post_req)
+
+        log.msg(green("Open Callback requests: {}".format(
+            len(callback_requests))), level=log.INFO)
+
+        return callback_requests
+
     def parse_keywords(self, response):
+        """
+        Parse this pre-law's keywords
+        """
 
         keywords = LAW.KEYWORDS.xt(response)
 
@@ -132,6 +141,9 @@ class PreLawsSpider(BaseScraper):
         return keyword_items
 
     def parse_docs(self, response):
+        """
+        Parse the documents attached to this pre-law
+        """
 
         docs = LAW.DOCS.xt(response)
 
@@ -146,6 +158,77 @@ class PreLawsSpider(BaseScraper):
             )
             doc_items.append(doc)
         return doc_items
+
+    def parse_category(self, response):
+        category = LAW.CATEGORY.xt(response)
+
+        # Create category if we don't have it yet
+        cat, created = Category.objects.get_or_create(title=category)
+        if created:
+            log.msg(u"Created category {}".format(
+                green(u'[{}]'.format(category))))
+
+        return cat
+
+    def parse_opinion(self, response):
+        """
+        Parse one pre-law opinion
+        """
+        op_data = response.meta['op_data']
+
+        parl_id = LAW.PARL_ID.xt(response)
+
+        description = LAW.DESCRIPTION.xt(response)
+        docs = self.parse_docs(response)
+        category = self.parse_category(response)
+        keywords = self.parse_keywords(response)
+        entity = OPINION.ENTITY.xt(response)
+        entity['title'] = op_data['title'] or entity['title_detail']
+        entity['title_detail'] = entity['title_detail']
+        entity['email'] = entity['email'] or op_data['email']
+
+        entity_item, created = Entity.objects.get_or_create(
+            title=entity['title'],
+            title_detail=entity['title_detail']
+        )
+
+        if entity['phone'] and not entity_item.phone:
+            entity_item.phone = entity['phone']
+        if entity['email'] and not entity_item.email:
+            entity_item.email = entity['email']
+
+
+        opinion_item, created = Opinion.objects.get_or_create(
+            parl_id=parl_id,
+            defaults={
+                'date': op_data['date'],
+                'description': description,
+                'source_link': response.url,
+                'entity': entity_item,
+                'prelaw': response.meta['law_item'],
+                'category': category
+            }
+        )
+
+        # Foreign Keys
+        opinion_item.documents = docs
+        opinion_item.keywords = keywords
+
+        response.meta['opinion'] = opinion_item
+        step_num = self.parse_op_steps(response)
+
+        entity_str = u"{} / {} / {} [{}]".format(
+                green(entity_item.title_detail),
+                entity_item.phone,
+                entity_item.email,
+                'new' if created else 'updated')
+
+        log.msg(
+            u"{} opinion: {} by {}".format(
+                'Created' if created else 'Updated',
+                magenta(opinion_item.parl_id),
+                entity_str
+            ))
 
     def parse_steps(self, response):
         """
@@ -177,3 +260,34 @@ class PreLawsSpider(BaseScraper):
                 source_link=response.url
             )
             step_item.save()
+
+    def parse_op_steps(self, response):
+        """
+        Parse the Opinions's steps
+        """
+
+        opinion = response.meta['opinion']
+
+        # Create phase if we don't have it yet
+        phase_item, created = Phase.objects.get_or_create(
+            title='default_op')
+        if created:
+            log.msg(u"Created Phase {}".format(
+                green(u'[{}]'.format(phase_item.title))))
+
+        steps = OPINION.STEPS.xt(response)
+
+        # Create steps
+        for step in steps:
+            step_item, created = Step.objects.update_or_create(
+                title=step['title'],
+                sortkey=step['sortkey'],
+                date=step['date'],
+                protocol_url=step['protocol_url'],
+                opinion=opinion,
+                phase=phase_item,
+                source_link=response.url
+            )
+            step_item.save()
+
+        return len(steps)

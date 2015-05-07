@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 from op_scraper.models import *
 import reversion
 
@@ -24,6 +25,15 @@ class PhaseAdmin(reversion.VersionAdmin):
 
 @admin.register(Entity)
 class EntityAdmin(reversion.VersionAdmin):
+    list_display = ('title', 'show_op_count')
+    search_fields = ('parl_id', 'title', 'title_detail')
+
+    def get_queryset(self, request):
+        return Entity.objects.annotate(op_count=Count('opinions'))
+
+    def show_op_count(self, inst):
+        return inst.op_count
+    show_op_count.admin_order_field = 'op_count'
     pass
 
 

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import scrapy
-
 
 from ansicolor import red
 from ansicolor import cyan

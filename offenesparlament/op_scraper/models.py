@@ -21,8 +21,12 @@ class Entity(models.Model):
     An organisation or person commenting in a pre-parliamentary process (prelaw)
     """
     title = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone = PhoneNumberField()
+    title_detail = models.CharField(max_length=255)
+    email = models.EmailField(null=True, blank=True)
+    phone = PhoneNumberField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ("title", "title_detail")
 
     def __unicode__(self):
         return self.title
@@ -119,6 +123,27 @@ class Law(models.Model):
         return self.title
 
 
+class Opinion(models.Model):
+
+    """
+    A comment in the pre-parliamentary process by an entity
+    """
+    parl_id = models.CharField(max_length=30, unique=True, default="")
+    date = models.DateField(null=True)
+    description = models.TextField(blank=True)
+    source_link = models.URLField(max_length=200, default="")
+
+    # Relationships
+    documents = models.ManyToManyField(Document)
+    category = models.ForeignKey(Category, null=True, blank=True)
+    keywords = models.ManyToManyField(Keyword)
+    entity = models.ForeignKey(Entity, related_name='opinions')
+    prelaw = models.ForeignKey(Law, related_name='opinions')
+
+    def __unicode__(self):
+        return self.entity.title
+
+
 class Step(models.Model):
 
     """
@@ -132,31 +157,12 @@ class Step(models.Model):
 
     # Relationships
     phase = models.ForeignKey(Phase)
-    law = models.ForeignKey(Law, related_name='steps')
+    law = models.ForeignKey(Law, null=True, blank=True, related_name='steps')
+    opinion = models.ForeignKey(
+        Opinion, null=True, blank=True, related_name='steps')
 
     def __unicode__(self):
         return self.title
-
-
-class Opinion(models.Model):
-
-    """
-    A comment in the pre-parliamentary process by an entity
-    """
-    parl_id = models.CharField(max_length=30, unique=True, default="")
-    date = models.DateField()
-    description = models.TextField(blank=True)
-
-    # Relationships
-    documents = models.ManyToManyField(Document)
-    category = models.ForeignKey(Category, null=True, blank=True)
-    keywords = models.ManyToManyField(Keyword)
-    entity = models.ForeignKey(Entity)
-    steps = models.ManyToManyField(Step)
-    prelaw = models.ForeignKey(Law)
-
-    def __unicode__(self):
-        return self.entity.title
 
 
 class Function(models.Model):
