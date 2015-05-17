@@ -51,7 +51,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'op_scraper',
     'annoying',
-    'reversion'
+    'reversion',
+    'django_extensions'
 )
 
 MIDDLEWARE_CLASSES = (

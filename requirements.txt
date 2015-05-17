@@ -23,3 +23,5 @@ ansicolor
 django-phonenumber-field
 unipath
 django-reversion
+django-extensions
+Werkzeug
