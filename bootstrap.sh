@@ -8,6 +8,10 @@ sudo apt-get install -y python python-pip python-twisted vim
 sudo apt-get update
 sudo apt-get install -y python-dev libxml2-dev libxslt-dev libffi-dev
 
+# requirements for django extensions
+sudo apt-get update
+sudo apt-get install graphviz
+
 #django project requirements
 cd /vagrant
 sudo pip install -r requirements.txt
