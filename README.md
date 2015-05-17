@@ -93,8 +93,18 @@ And you're done!
 In case you need to reset the database (delete all migrations, flush the db content, recreate all objects etc.), run these commands in the django project folder 'offenesparlament':
 
 ```
-python remove_migrations.py && rm db.sqlite3 && python manage.py makemigrations && python manage.py migrate
+bin/clear_db.sh
 ```
+
+## Creating a Model-Diagram
+
+It's possible to view the current database model residing in the op_scraper app by calling:
+
+```
+bin/graph_models.sh
+```
+
+A png-image will be generated as ``ignore/models.png``.
 
 ## Initial scraping
 
