@@ -10,7 +10,7 @@ sudo apt-get install -y python-dev libxml2-dev libxslt-dev libffi-dev
 
 # requirements for django extensions
 sudo apt-get update
-sudo apt-get install graphviz
+sudo apt-get install -y graphviz
 
 # install node.js and NPM
 # install PPA first to get recent package
