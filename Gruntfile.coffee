@@ -18,15 +18,16 @@ module.exports = (grunt) ->
         bsFiles:
           src : [
             'offenesparlament/offenesparlament/**/*'
+            '!**/*.sqlite3'
+            '!**/*.map'
           ]
         options:
           watchTask: true
           proxy: 'offenesparlament.vm:8000'
           ghostMode: false
-          watchOptions:
-            debounceDelay: 1000
           open: false
           reloadOnRestart: false
+          reloadDebounce: 1000
     clean:
       build: src: 'offenesparlament/offenesparlament/static/build'
 
