@@ -32,7 +32,20 @@ An open-data framework for the public data of the Austrian Parliament
  python manage.py runserver 0.0.0.0:8000
  ```
 
-8. To exit and shutdown the VM run
+8. If you work on client files that have to be compiled (CSS, JS) you
+   have to run grunt as well. ATM we have the tasks `dev` and `reloading`.
+   `dev` watches and regenerates files when their sources change.
+   (Remember that sources also change when you do a git pull and
+   generated client files aren't commited to git) And `reloading` does
+   that and uses [Browsersync](http://www.browsersync.io/) to reload your browser when files
+   change.
+
+```
+cd /vagrant
+grunt dev
+```
+
+9. To exit and shutdown the VM run
 
  ```
  exit
