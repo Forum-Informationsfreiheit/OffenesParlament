@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
+from django.utils.html import remove_tags
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 
@@ -8,7 +9,7 @@ class ParlIDMixIn(object):
 
     @property
     def parl_id_urlsafe(self):
-        return self.parl_id.replace('/', '.').replace('(', '').replace(')', '')
+        return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
 class Phase(models.Model):
@@ -123,6 +124,18 @@ class Law(models.Model, ParlIDMixIn):
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
 
+    def steps_by_phases(self):
+        """
+        Returns a dict of phases containing the steps for display purposes
+        """
+        phases = {}
+        for step in self.steps.all():
+            if step.phase not in phases:
+                phases[step.phase] = []
+            phases[step.phase].append(step)
+
+        return phases
+
     class Meta:
         unique_together = ("parl_id", "legislative_period")
 
@@ -169,7 +182,7 @@ class Step(models.Model):
         Opinion, null=True, blank=True, related_name='steps')
 
     def __unicode__(self):
-        return self.title
+        return remove_tags(self.title, 'a')
 
 
 class Function(models.Model):

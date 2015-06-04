@@ -5,6 +5,7 @@ from scrapy import Selector
 from parlament.resources import SingleExtractor
 from parlament.resources import MultiExtractor
 from parlament.resources.util import _clean
+from parlament.settings import BASE_HOST
 
 # import the logging library
 import logging
@@ -191,7 +192,7 @@ class LAW:
                             remove_tags(
                                 step_selector.xpath(
                                     cls.XPATH).extract()[0],
-                                'td'))
+                                'td')).replace('<a href="', '<a href="{}'.format(BASE_HOST))
                         title = {'text': text}
                     return title
 
