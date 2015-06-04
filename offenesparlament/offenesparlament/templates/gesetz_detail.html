@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{ person.reversed_name }}{% endblock %}
+
+{% block content %}
+<h1>{{ gesetz.title }} <a href='{{gesetz.source_link}}'>[SOURCE]</a></h1>
+
+  <ul>
+  {% for step in gesetz.steps.all %}
+  <li>{{step.title}}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}
