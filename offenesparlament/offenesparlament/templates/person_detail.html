@@ -5,4 +5,18 @@
 {% block content %}
   <h1>{{ person.reversed_name }}</h1>
   <img src="{{person.photo_link}}" />
+  <h2>Statements</h2>
+  <ul>
+  {% for st in person.statements.all %}
+  <li>
+  {% if st.speech_type == "Pro" %}
+    👍
+  {% elif st.speech_type == "Contra" %}
+    👎
+  {% else %}
+    {{st.speech_type}}
+  {% endif %}
+  <a href="{% url 'gesetz_detail' parl_id=st.step.law.parl_id_urlsafe ggp=st.step.law.legislative_period %}">[{{st.step.date}}] {{st.step.law.title}}</a></li>
+  {% endfor %}
+  </ul>
 {% endblock %}
