@@ -10,10 +10,15 @@ from roman import fromRoman
 from scrapy import log
 
 from parlament.spiders import BaseScraper
-from parlament.resources.extractors import *
+from parlament.resources.extractors.law import *
+from parlament.resources.extractors.prelaw import *
+from parlament.resources.extractors.person import *
+from parlament.resources.extractors.opinion import *
 from parlament.settings import BASE_HOST
 
 from op_scraper.models import Phase
+from op_scraper.models import Person
+from op_scraper.models import Statement
 from op_scraper.models import Entity
 from op_scraper.models import Document
 from op_scraper.models import PressRelease
@@ -27,7 +32,7 @@ from op_scraper.models import Opinion
 class LawsInitiativesSpider(BaseScraper):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/RGES/filter.psp")
 
-    LLP = range(24, 26)
+    # LLP = range(24, 26)
 
     URLOPTIONS = {
         'view': 'RSS',
@@ -67,30 +72,6 @@ class LawsInitiativesSpider(BaseScraper):
         category = LAW.CATEGORY.xt(response)
         description = LAW.DESCRIPTION.xt(response)
 
-        # Don't re-parse laws we already have
-        # FIXME: at some point, we need to be able to update laws, not just
-        # skip them if we already have them
-        if Law.objects.filter(
-                parl_id=parl_id,
-                legislative_period=LLP).exists():
-            log.msg(
-                u"{} with ID {} in LLP {} already exists, skipping import"
-                .format(
-                    red(title),
-                    cyan(u"[{}]".format(parl_id)),
-                    LLP),
-                level=log.INFO)
-            return
-
-        # Log our progress
-        logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
-            red(title),
-            cyan(u"[{}]".format(parl_id)),
-            green(str(LLP)),
-            blue(response.url)
-        )
-        log.msg(logtext, level=log.INFO)
-
         # Create category if we don't have it yet
         cat, created = Category.objects.get_or_create(title=category)
         if created:
@@ -98,14 +79,16 @@ class LawsInitiativesSpider(BaseScraper):
                 green(u'[{}]'.format(category))))
 
         # Create and save Law
-        law_item = Law.objects.create(
-            title=title,
+        law_data = {
+            'title': title,
+            'status': status,
+            'description': description
+        }
+        law_item, law_created = Law.objects.update_or_create(
             parl_id=parl_id,
             source_link=response.url,
-            status=status,
-            description=description,
-            legislative_period=LLP)
-        law_item.save()
+            legislative_period=LLP,
+            defaults=law_data)
 
         # Attach foreign keys
         law_item.keywords = self.parse_keywords(response)
@@ -113,37 +96,29 @@ class LawsInitiativesSpider(BaseScraper):
         law_item.documents = self.parse_docs(response)
 
         law_item.save()
-        response.meta['law_item'] = law_item
 
-        callback_requests = []
+        # Log our progress
+        if law_created:
+            logtext = u"Created {} with id {}, LLP {} @ {}"
+        else:
+            logtext = u"Updated {} with id {}, LLP {} @ {}"
+
+        logtext = logtext.format(
+            red(title),
+            cyan(u"[{}]".format(parl_id)),
+            green(str(LLP)),
+            blue(response.url)
+        )
+        log.msg(logtext, level=log.INFO)
+
+        response.meta['law_item'] = law_item
 
         # is the tab 'Parlamentarisches Verfahren available?'
         if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
             self.parse_parliament_steps(response)
-            # url_postfix = response.xpath(
-            #     '//*[@id="ParlamentarischesVerfahren"]/a/@href').extract()[0]
-            # post_req = scrapy.Request(response.url + url_postfix,
-            #                           callback=self.parse_parliament_steps,
-            #                           dont_filter=True)
-            # post_req.meta['law_item'] = law_item
-            # callback_requests.append(post_req)
 
         if response.xpath('//h2[@id="tab-VorparlamentarischesVerfahren"]'):
             self.parse_pre_parliament_steps(response)
-
-            # url_postfix = response.xpath(
-            #     '//*[@id="VorparlamentarischesVerfahren"]/a/@href').extract()[0]
-            # pre_req = scrapy.Request(response.url + url_postfix,
-            #                          callback=self.parse_pre_parliament_steps,
-            #                          dont_filter=True)
-            # pre_req.meta['law_item'] = law_item
-            # callback_requests.append(pre_req)
-            # log.msg(green("Pre-Law found: {}".format(pre_req)), level=log.INFO)
-
-        # log.msg(green("Open Callback requests: {}".format(
-        #     len(callback_requests))), level=log.INFO)
-
-        # return callback_requests
 
     def parse_keywords(self, response):
 
@@ -210,7 +185,7 @@ class LawsInitiativesSpider(BaseScraper):
             # Create steps
             for step in phase['steps']:
                 step_item, created = Step.objects.update_or_create(
-                    title=step['title'],
+                    title=step['title']['text'],
                     sortkey=step['sortkey'],
                     date=step['date'],
                     protocol_url=step['protocol_url'],
@@ -219,3 +194,37 @@ class LawsInitiativesSpider(BaseScraper):
                     source_link=response.url
                 )
                 step_item.save()
+
+                # Save statements for this step, if applicable
+                if 'statements' in step['title']:
+                    for stmnt in step['title']['statements']:
+                        # Find the person
+                        pq = Person.objects.filter(
+                            source_link__endswith=stmnt['person_source_link'])
+                        if pq.exists() and pq.count() == 1:
+                            person_item = pq.first()
+                            st_data = {
+                                'speech_type': stmnt['statement_type'],
+                                'protocol_url': stmnt['protocol_link']
+                            }
+                            st_item, st_created = Statement.objects.update_or_create(
+                                index=stmnt['index'],
+                                person=person_item,
+                                step=step_item,
+                                defaults=st_data)
+                            if st_created:
+                                log.msg(u"Created Statement by {} on {}".format(
+                                    green(
+                                        u'[{}]'.format(person_item.full_name)),
+                                    step_item.date))
+                            else:
+                                log.msg(u"Updated Statement by {} on {}".format(
+                                    green(
+                                        u'[{}]'.format(person_item.full_name)),
+                                    step_item.date))
+                        else:
+                            # We can't save statements if we can't find the
+                            # Person
+                            log.msg(red(u"Skipping Statement by {}").format(
+                                    green(u'[{}]'.format(stmnt['person_name']))))
+                            continue

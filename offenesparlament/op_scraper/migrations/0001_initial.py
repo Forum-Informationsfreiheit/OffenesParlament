@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import phonenumber_field.modelfields
+import op_scraper.models
 import annoying.fields
 
 
@@ -70,6 +71,7 @@ class Migration(migrations.Migration):
                 ('documents', models.ManyToManyField(related_name='laws', to='op_scraper.Document')),
                 ('keywords', models.ManyToManyField(related_name='laws', to='op_scraper.Keyword')),
             ],
+            bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
             name='Mandate',
@@ -94,6 +96,7 @@ class Migration(migrations.Migration):
                 ('keywords', models.ManyToManyField(to='op_scraper.Keyword')),
                 ('prelaw', models.ForeignKey(related_name='opinions', to='op_scraper.Law')),
             ],
+            bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
             name='Party',
@@ -119,6 +122,7 @@ class Migration(migrations.Migration):
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
                 ('party', models.ForeignKey(to='op_scraper.Party')),
             ],
+            bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
             name='Phase',
@@ -141,6 +145,17 @@ class Migration(migrations.Migration):
                 ('format', models.CharField(max_length=255)),
                 ('tags', models.CharField(max_length=255)),
             ],
+            bases=(models.Model, op_scraper.models.ParlIDMixIn),
+        ),
+        migrations.CreateModel(
+            name='Statement',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('speech_type', models.CharField(max_length=255)),
+                ('protocol_url', models.URLField(default=b'')),
+                ('index', models.IntegerField(default=1)),
+                ('person', models.ForeignKey(related_name='statements', to='op_scraper.Person')),
+            ],
         ),
         migrations.CreateModel(
             name='Step',
@@ -155,6 +170,11 @@ class Migration(migrations.Migration):
                 ('opinion', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Opinion', null=True)),
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
+        ),
+        migrations.AddField(
+            model_name='statement',
+            name='step',
+            field=models.ForeignKey(related_name='statements', to='op_scraper.Step'),
         ),
         migrations.AddField(
             model_name='mandate',

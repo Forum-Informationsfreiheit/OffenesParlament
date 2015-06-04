@@ -16,6 +16,12 @@ class LawAdmin(reversion.VersionAdmin):
 @admin.register(Person)
 class PersonAdmin(reversion.VersionAdmin):
     filter_horizontal = ('mandates',)
+    search_fields = ('parl_id', 'full_name')
+
+
+@admin.register(Statement)
+class StatementAdmin(reversion.VersionAdmin):
+    pass
 
 
 @admin.register(Phase)

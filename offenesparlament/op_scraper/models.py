@@ -4,6 +4,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 
 
+class ParlIDMixIn(object):
+
+    @property
+    def parl_id_urlsafe(self):
+        return self.parl_id.replace('/', '.').replace('(', '').replace(')', '')
+
+
 class Phase(models.Model):
 
     """
@@ -48,7 +55,7 @@ class Document(models.Model):
         return self.title
 
 
-class PressRelease(models.Model):
+class PressRelease(models.Model, ParlIDMixIn):
 
     """
     A press release produced by the parliamentary staff
@@ -92,7 +99,7 @@ class Keyword(models.Model):
         ordering = ['title']
 
 
-class Law(models.Model):
+class Law(models.Model, ParlIDMixIn):
 
     """
     A single 'Verhandlungssache' or negotiable matter
@@ -123,7 +130,7 @@ class Law(models.Model):
         return self.title
 
 
-class Opinion(models.Model):
+class Opinion(models.Model, ParlIDMixIn):
 
     """
     A comment in the pre-parliamentary process by an entity
@@ -209,7 +216,7 @@ class Mandate(models.Model):
             self.end_date)
 
 
-class Person(models.Model):
+class Person(models.Model, ParlIDMixIn):
 
     """
     A single person in parliament, including Abgeordnete, Regierungsmitglieder,
@@ -232,3 +239,17 @@ class Person(models.Model):
 
     def __unicode__(self):
         return self.full_name
+
+
+class Statement(models.Model):
+
+    """
+    A Person's statemtn or comment as part of a Step
+    """
+    speech_type = models.CharField(max_length=255)
+    protocol_url = models.URLField(max_length=200, default="")
+    index = models.IntegerField(default=1)
+
+    # Relationships
+    person = models.ForeignKey(Person, related_name='statements')
+    step = models.ForeignKey(Step, related_name='statements')

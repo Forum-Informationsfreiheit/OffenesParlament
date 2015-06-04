@@ -13,7 +13,11 @@ from scrapy import log
 
 from parlament.settings import BASE_HOST
 from parlament.spiders import BaseScraper
-from parlament.resources.extractors import *
+from parlament.resources.extractors.law import *
+from parlament.resources.extractors.prelaw import *
+from parlament.resources.extractors.person import *
+from parlament.resources.extractors.opinion import *
+
 from parlament.resources.util import _clean
 
 
@@ -115,18 +119,21 @@ class PersonsSpider(BaseScraper):
         mandates = PERSON.DETAIL.MANDATES.xt(response)
         profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
         try:
-            person_item, created = Person.objects.update_or_create(
+            person_data = {
+                'photo_link': "{}{}".format(BASE_HOST, profile_photo_url),
+                'full_name': full_name,
+                'reversed_name': person['reversed_name'],
+                'birthdate': bio_data['birthdate'],
+                'birthplace': bio_data['birthplace'],
+                'deathdate': bio_data['deathdate'],
+                'deathplace': bio_data['deathplace'],
+                'occupation': bio_data['occupation'],
+                'party': person['party']}
+
+            person_item, created_person = Person.objects.update_or_create(
                 source_link=person['source_link'],
-                photo_link=profile_photo_url,
                 parl_id=person['parl_id'],
-                full_name=full_name,
-                reversed_name=person['reversed_name'],
-                birthdate=bio_data['birthdate'],
-                birthplace=bio_data['birthplace'],
-                deathdate=bio_data['deathdate'],
-                deathplace=bio_data['deathplace'],
-                occupation=bio_data['occupation'],
-                party=person['party']
+                defaults=person_data
             )
             person_item.save()
         except:
@@ -160,6 +167,10 @@ class PersonsSpider(BaseScraper):
         person_item.mandates = mandate_items
         person_item.save()
 
-        log.msg(u"Created Person {}".format(
-            green(u"[{}]".format(full_name))
-        ))
+        if created_person:
+            log.msg(u"Created Person {}".format(
+                green(u'[{}]'.format(full_name))))
+        else:
+            log.msg(u"Updated Person {}".format(
+                green(u"[{}]".format(full_name))
+            ))
