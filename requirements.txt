@@ -25,3 +25,4 @@ unipath
 django-reversion
 django-extensions
 Werkzeug
+gunicorn
