@@ -23,6 +23,9 @@ cd /vagrant
 npm install
 sudo npm install -g grunt-cli
 
+# install sass
+sudo gem install sass
+
 #django project requirements
 cd /vagrant
 sudo pip install -r requirements.txt

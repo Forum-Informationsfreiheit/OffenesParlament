@@ -40,10 +40,10 @@ An open-data framework for the public data of the Austrian Parliament
    that and uses [Browsersync](http://www.browsersync.io/) to reload your browser when files
    change.
 
-```
-cd /vagrant
-grunt dev
-```
+ ```
+ cd /vagrant
+ grunt dev
+ ```
 
 9. To exit and shutdown the VM run
 
