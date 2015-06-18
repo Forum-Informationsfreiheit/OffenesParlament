@@ -23,6 +23,9 @@ class PERSON:
         class PHOTO_URL(SingleExtractor):
             XPATH = "//div[contains(concat(' ', normalize-space(@class), ' '), ' teaserPortraitLarge ')]/a/img/@src"
 
+        class PHOTO_COPYRIGHT(SingleExtractor):
+            XPATH = "//div[contains(concat(' ', normalize-space(@class), ' '), ' teaserPortraitLarge ')]/a/span/@title"
+
         class MANDATES:
             XPATH = "//h4[text()='Politische Mandate']/following-sibling::ul[1]/li"
 

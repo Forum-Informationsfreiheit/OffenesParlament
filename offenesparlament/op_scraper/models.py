@@ -238,6 +238,7 @@ class Person(models.Model, ParlIDMixIn):
     parl_id = models.CharField(max_length=30, primary_key=True)
     source_link = models.URLField(max_length=200, default="")
     photo_link = models.URLField(max_length=200, default="")
+    photo_copyright = models.CharField(max_length=255, default="")
     full_name = models.CharField(max_length=255)
     reversed_name = models.CharField(max_length=255)
     birthdate = models.DateField(null=True, blank=True)
@@ -266,3 +267,6 @@ class Statement(models.Model):
     # Relationships
     person = models.ForeignKey(Person, related_name='statements')
     step = models.ForeignKey(Step, related_name='statements')
+
+    def __unicode__(self):
+        return u'{}: {}'.format(self.person.full_name, self.speech_type)
