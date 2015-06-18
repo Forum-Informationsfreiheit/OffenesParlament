@@ -44,6 +44,16 @@
 
     <div class="container">
     <div class="col-xs-12">
+    {% load django_bootstrap_breadcrumbs %}
+    {% block breadcrumbs %}
+      {% clear_breadcrumbs %}
+      {% breadcrumb "Startseite" "/" %}
+    {% endblock %}
+
+    <div class="top_bar">
+      {% render_breadcrumbs "breadcrumbs.html" %}
+    </div>
+
     {% block content %}
       <h1>Hello, parliament!</h1>
     {% endblock %}

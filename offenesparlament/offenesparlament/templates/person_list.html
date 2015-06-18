@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Parlamentarier" "person_list" %}
+{% endblock %}
+
 {% block title %}Abgeordnete zum Nationalrat{% endblock %}
 
 {% block content %}
