@@ -33,8 +33,6 @@ TEMPLATE_DEBUG = True
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
-TEMPLATE_DIRS = ( os.path.join(PROJECT_PATH, 'templates'), )
-
 STATICFILES_DIRS = ( os.path.join(PROJECT_PATH, 'static'), )
 
 ALLOWED_HOSTS = []
@@ -52,7 +50,8 @@ INSTALLED_APPS = (
     'op_scraper',
     'annoying',
     'reversion',
-    'django_extensions'
+    'django_extensions',
+    'django_bootstrap_breadcrumbs',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,6 +67,26 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'offenesparlament.urls'
 
 WSGI_APPLICATION = 'offenesparlament.wsgi.application'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(PROJECT_PATH, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': (
+                'django.contrib.auth.context_processors.auth',
+                'django.core.context_processors.debug',
+                'django.core.context_processors.i18n',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
+                'django.core.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request'
+            )
+        },
+    },
+]
 
 
 # Database
