@@ -118,9 +118,11 @@ class PersonsSpider(BaseScraper):
         bio_data = PERSON.DETAIL.BIO.xt(response)
         mandates = PERSON.DETAIL.MANDATES.xt(response)
         profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
+        profile_photo_copyright = PERSON.DETAIL.PHOTO_COPYRIGHT.xt(response)
         try:
             person_data = {
                 'photo_link': "{}{}".format(BASE_HOST, profile_photo_url),
+                'photo_copyright': profile_photo_copyright,
                 'full_name': full_name,
                 'reversed_name': person['reversed_name'],
                 'birthdate': bio_data['birthdate'],

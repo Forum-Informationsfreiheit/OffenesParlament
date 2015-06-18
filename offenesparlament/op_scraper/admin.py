@@ -32,7 +32,7 @@ class PhaseAdmin(reversion.VersionAdmin):
 @admin.register(Entity)
 class EntityAdmin(reversion.VersionAdmin):
     list_display = ('title', 'show_op_count')
-    search_fields = ('parl_id', 'title', 'title_detail')
+    search_fields = ('title', 'title_detail', 'email')
 
     def get_queryset(self, request):
         return Entity.objects.annotate(op_count=Count('opinions'))
