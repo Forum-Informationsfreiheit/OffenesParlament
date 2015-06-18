@@ -1,0 +1,9 @@
+import manage
+from manage import run
+import os
+
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE", "local_settings")
+os.environ.setdefault('DJANGO_CONFIGURATION', 'Production')
+
+run()

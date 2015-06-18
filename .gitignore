@@ -10,3 +10,5 @@ ignore/
 node_modules/*
 /offenesparlament/offenesparlament/static/build/*
 .sass-cache
+local_settings.py
+local_manage.py

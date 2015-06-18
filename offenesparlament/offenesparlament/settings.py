@@ -17,11 +17,11 @@ from sys import path
 from configurations import Configuration
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 logging.basicConfig(
     level=logging.INFO,
 )
 
-PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 class BaseConfig(Configuration):
     STATICFILES_DIRS = ( os.path.join(PROJECT_PATH, 'static'), )
@@ -114,6 +114,10 @@ class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
 
+class ProductionBase(BaseConfig):
+    DEBUG = False
+    SECRET_KEY = None
+    ALLOWED_HOSTS = ['*']
 
 # Import scrapy settings
 c = os.getcwd()
