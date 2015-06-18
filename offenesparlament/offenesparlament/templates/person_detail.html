@@ -3,8 +3,11 @@
 {% block title %}{{ person.reversed_name }}{% endblock %}
 
 {% block content %}
-  <h1>{{ person.reversed_name }}</h1>
+  <h1>{{ person.reversed_name }}<a href='{{person.source_link}}'>[SOURCE]</a></h1>
   <img src="{{person.photo_link}}" />
+  GebDt {{ person.birthdate}}<br />
+  DDt {{person.deathdate}}
+
   <h2>Statements</h2>
   <ul>
   {% for st in person.statements.all %}

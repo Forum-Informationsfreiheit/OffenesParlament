@@ -2,7 +2,7 @@
 
 #BASE
 sudo apt-get -qq update
-sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties
+sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties git
 
 # requirements for scrapy
 sudo apt-get -qq update
@@ -42,6 +42,7 @@ sudo gem install sass
 
 #django project requirements
 cd /vagrant
+sudo pip install pip --upgrade
 sudo pip install -r requirements.txt
 
 #set up django project with migrations and admin account

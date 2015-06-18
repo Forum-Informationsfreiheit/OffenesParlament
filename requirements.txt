@@ -26,3 +26,5 @@ django-reversion
 django-extensions
 Werkzeug
 gunicorn
+-e git+https://github.com/jezdez/django-configurations.git@5ece107044#egg=django-configurations-head
+
