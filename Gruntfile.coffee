@@ -7,8 +7,8 @@ module.exports = (grunt) ->
         options:
           sourcemap: 'inline'
         files:
-          'offenesparlament/offenesparlament/static/build/css/vendor.css': 'offenesparlament/offenesparlament/assets/styles/bootstrap.css'
-          'offenesparlament/offenesparlament/static/build/css/site.css': 'offenesparlament/offenesparlament/assets/styles/site.sass'
+          'offenesparlament/offenesparlament/static/css/vendor.css': 'offenesparlament/offenesparlament/assets/styles/bootstrap.css'
+          'offenesparlament/offenesparlament/static/css/site.css': 'offenesparlament/offenesparlament/assets/styles/site.sass'
     watch:
       styles:
         files: 'offenesparlament/offenesparlament/assets/styles/**/*'
@@ -29,7 +29,8 @@ module.exports = (grunt) ->
           reloadOnRestart: false
           reloadDebounce: 1000
     clean:
-      build: src: 'offenesparlament/offenesparlament/static/build'
+      build: src: ['offenesparlament/offenesparlament/static/css/vendor.css',
+                   'offenesparlament/offenesparlament/static/css/site.css']
 
 
   grunt.loadNpmTasks 'grunt-contrib-watch'

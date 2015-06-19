@@ -8,7 +8,7 @@ offenesparlament/db.sqlite3
 /.vagrant/
 ignore/
 node_modules/*
-/offenesparlament/offenesparlament/static/build/*
+*.map
 .sass-cache
 local_settings.py
 local_manage.py

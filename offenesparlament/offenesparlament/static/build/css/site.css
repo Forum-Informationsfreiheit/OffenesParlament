@@ -1,0 +1,48 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic);
+body {
+  font-family: "Source Sans Pro", sans-serif; }
+
+h1 {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 70px 0 55px 0; }
+
+.main_menu {
+  width: 100%;
+  background-color: #275274;
+  color: white;
+  overflow: hidden; }
+  .main_menu nav a {
+    color: white; }
+    .main_menu nav a:hover {
+      background-color: #5e94ba;
+      color: white; }
+
+ul.person_list {
+  -webkit-column-count: 3;
+  -khtml-column-count: 3;
+  -moz-column-count: 3;
+  -ms-column-count: 3;
+  -o-column-count: 3;
+  column-count: 3;
+  padding: 0; }
+  ul.person_list li {
+    margin: 6px 0; }
+
+.top_bar {
+  margin: 30px 0; }
+
+.breadcrumb.op_breadcrumb {
+  background: none;
+  margin: 0;
+  padding: 0; }
+  .breadcrumb.op_breadcrumb li {
+    font-weight: bold; }
+    .breadcrumb.op_breadcrumb li a {
+      font-weight: normal; }
+
+.breadcrumb > li + li:before {
+  content: "»";
+  color: black; }
+
+/*# sourceMappingURL=site.css.map */
