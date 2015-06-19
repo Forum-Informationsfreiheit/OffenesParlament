@@ -2,14 +2,25 @@ from django.contrib import admin
 from django.db.models import Count
 from op_scraper.models import *
 import reversion
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
 
+class LawResource(resources.ModelResource):
+
+    class Meta:
+        model = Law
+
+
+# FIXME why the heck does multiple inheritance not work in the django admin??
+#       --> probably need to so simple subclassing there :/
 @admin.register(Law)
-class LawAdmin(reversion.VersionAdmin):
+class LawAdmin(ImportExportModelAdmin, reversion.VersionAdmin):
     list_display = (
         'title', 'legislative_period', 'parl_id', 'category', 'references')
     list_filter = ('category', )
     search_fields = ('parl_id', 'title')
+    resource_class = LawResource
     pass
 
 

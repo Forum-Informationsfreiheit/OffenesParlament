@@ -161,7 +161,7 @@ class Opinion(models.Model, ParlIDMixIn):
     prelaw = models.ForeignKey(Law, related_name='opinions')
 
     def __unicode__(self):
-        return self.entity.title
+        return u'{} zu {}'.format(self.entity.title, self.prelaw.parl_id)
 
 
 class Step(models.Model):
@@ -269,4 +269,4 @@ class Statement(models.Model):
     step = models.ForeignKey(Step, related_name='statements')
 
     def __unicode__(self):
-        return u'{}: {}'.format(self.person.full_name, self.speech_type)
+        return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
