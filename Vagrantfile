@@ -7,6 +7,8 @@ Vagrant.configure("2") do |config|
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
 
+  config.vm.network :forwarded_port, host: 8000, guest: 8000
+
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 1024
     vb.cpus = 2
@@ -20,5 +22,6 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = 'offenesparlament.vm'
     node.vm.network :private_network, ip: '192.168.47.15'
     node.vm.provision :shell, path: "bootstrap.sh"
+
   end
 end
