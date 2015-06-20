@@ -24,7 +24,7 @@ logging.basicConfig(
 
 
 class BaseConfig(Configuration):
-    STATICFILES_DIRS = ( os.path.join(PROJECT_PATH, 'static'), )
+    STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
 
     SECRET_KEY = 'tk5l_92mqo3406we8^s*x%%=*7*m*!ce0^o^s7_t9lrg@f46_n'
     DEBUG = False
@@ -80,7 +80,6 @@ class BaseConfig(Configuration):
         },
     ]
 
-
     # Database
     # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
@@ -104,21 +103,28 @@ class BaseConfig(Configuration):
 
     USE_TZ = True
 
-
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
     STATIC_URL = '/static/'
 
+    # Django Celery
+    CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+    CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
+
 
 class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
+    BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
+
 
 class ProductionBase(BaseConfig):
     DEBUG = False
     SECRET_KEY = None
     ALLOWED_HOSTS = ['*']
+    BROKER_URL = 'amqp://production_user_rabbitmq:supersecretpw@rabbitmq_vhost:5672//'
+
 
 # Import scrapy settings
 c = os.getcwd()
@@ -130,10 +136,11 @@ d = os.getcwd()
 os.environ['SCRAPY_SETTINGS_MODULE'] = 'parlament.settings'
 
 
-#ignore the following error when using ipython:
+# ignore the following error when using ipython:
 #/django/db/backends/sqlite3/base.py:50: RuntimeWarning:
-#SQLite received a naive datetime [...] while time zone support is active.
+# SQLite received a naive datetime [...] while time zone support is active.
 
 import warnings
 import exceptions
-warnings.filterwarnings("ignore", category=exceptions.RuntimeWarning, module='django.db.backends.sqlite3.base', lineno=53)
+warnings.filterwarnings("ignore", category=exceptions.RuntimeWarning,
+                        module='django.db.backends.sqlite3.base', lineno=53)

@@ -7,7 +7,12 @@ Vagrant.configure("2") do |config|
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
 
+  # python manage.py runserver 0.0.0.0:8000 default port
   config.vm.network :forwarded_port, host: 8000, guest: 8000
+  # celery flower management interface default port
+  config.vm.network :forwarded_port, host: 5555, guest: 5555
+  # elasticsearch default port
+  config.vm.network :forwarded_port, host: 9200, guest: 9200
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 1024

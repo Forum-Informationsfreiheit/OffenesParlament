@@ -2,7 +2,7 @@
 
 #BASE
 sudo apt-get -qq update
-sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties git
+sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties git htop
 
 # requirements for scrapy
 sudo apt-get -qq update
@@ -11,6 +11,14 @@ sudo apt-get install -y python-dev libxml2-dev libxslt-dev libffi-dev
 # requirements for django extensions
 sudo apt-get -qq update
 sudo apt-get install -y graphviz
+
+# requirements for celery
+sudo apt-get -qq update
+sudo apt-get install -y rabbitmq-server
+sudo rabbitmqctl add_user offenesparlament op_dev_qwerty
+sudo rabbitmqctl add_vhost offenesparlament.vm
+sudo rabbitmqctl set_permissions -p offenesparlament.vm offenesparlament ".*" ".*" ".*"
+sudo rabbitmqctl set_permissions -p / offenesparlament ".*" ".*" ".*"
 
 # elasticsearch & requirements
 # open JDK 7
@@ -44,6 +52,9 @@ sudo gem install sass
 cd /vagrant
 sudo pip install pip --upgrade
 sudo pip install -r requirements.txt
+
+#django-configuration: set Dev environment variable on login
+echo 'DJANGO_CONFIGURATION="Dev"; export DJANGO_CONFIGURATION' >> ~/.profile
 
 #set up django project with migrations and admin account
 cd offenesparlament
