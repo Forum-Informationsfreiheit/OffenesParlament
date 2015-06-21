@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+import configurations
+configurations.setup()
 
 import os
 
