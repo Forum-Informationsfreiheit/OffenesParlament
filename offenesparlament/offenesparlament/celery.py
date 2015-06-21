@@ -11,7 +11,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'offenesparlament.settings')
 os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
 
 import configurations
-configurations.setup()
+if __name__=="__main__": # assume that already configured if imported
+    configurations.setup()
 
 app = Celery('offenesparlament')
 
