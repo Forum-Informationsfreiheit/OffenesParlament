@@ -1,17 +1,16 @@
 from __future__ import absolute_import
-
 import os
 
 from celery import Celery
-
-from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'offenesparlament.settings')
 os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
 
-import configurations
-configurations.setup()
+from configurations import importer
+importer.install()
+
+from django.conf import settings
 
 app = Celery('offenesparlament')
 
