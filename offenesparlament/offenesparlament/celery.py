@@ -1,6 +1,4 @@
 from __future__ import absolute_import
-import configurations
-configurations.setup()
 
 import os
 
@@ -10,6 +8,7 @@ from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'offenesparlament.settings')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
 
 import configurations
 configurations.setup()
