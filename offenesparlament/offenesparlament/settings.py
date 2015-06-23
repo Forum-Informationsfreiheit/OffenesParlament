@@ -150,6 +150,8 @@ class ProductionBase(BaseConfig):
     ALLOWED_HOSTS = ['*']
     BROKER_URL = 'amqp://production_user_rabbitmq:supersecretpw@rabbitmq_vhost:5672//'
 
+class StagingBase(ProductionBase):
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Import scrapy settings
 c = os.getcwd()
