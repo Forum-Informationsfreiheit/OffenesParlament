@@ -110,13 +110,38 @@ class BaseConfig(Configuration):
 
     # Django Celery
     CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
-    CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
 
 
 class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
+    CELERY_RESULT_BACKEND = 'amqp'
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': True,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+            'null': {
+                'level': 'DEBUG',
+                'class': 'django.utils.log.NullHandler',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['null'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            },
+            'django.db.backends': {
+                'handlers': ['null'],  # Quiet by default!
+                'propagate': False,
+                'level': 'DEBUG',
+            },
+        },
+    }
 
 
 class ProductionBase(BaseConfig):

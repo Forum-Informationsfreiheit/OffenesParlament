@@ -9,8 +9,6 @@ from ansicolor import blue
 
 from urllib import urlencode
 
-from scrapy import log
-
 from parlament.settings import BASE_HOST
 from parlament.spiders import BaseScraper
 from parlament.resources.extractors.law import *
@@ -52,6 +50,8 @@ class PersonsSpider(BaseScraper):
         self.cookies_seen = set()
         self.idlist = {}
 
+        import ipdb; ipdb.set_trace()
+
     def get_urls(self):
         """
         Overwritten from BaseSpider for non-LLP-based retrieval
@@ -66,7 +66,7 @@ class PersonsSpider(BaseScraper):
 
         callback_requests = []
 
-        log.msg("Scraping {} persons".format(len(rss.entries)))
+        self.logger.info("Scraping {} persons".format(len(rss.entries)))
 
         # Iterate all persons
         for entry in rss.entries:
@@ -87,7 +87,7 @@ class PersonsSpider(BaseScraper):
             party_item, created = Party.objects.get_or_create(
                 short=party[0])
             if created:
-                log.msg(u"Created party {}".format(
+                self.logger.info(u"Created party {}".format(
                     green(u'[{}]'.format(party_item.short))))
             titles = party_item.titles
             if party[1] not in titles:
@@ -139,7 +139,7 @@ class PersonsSpider(BaseScraper):
             )
             person_item.save()
         except:
-            log.msg(red("Error saving Person {}".format(full_name)))
+            self.logger.info(red("Error saving Person {}".format(full_name)))
             import ipdb
             ipdb.set_trace()
             return
@@ -160,7 +160,7 @@ class PersonsSpider(BaseScraper):
                     end_date=mandate['end_date']
                 )
             except:
-                log.msg(
+                self.logger.info(
                     red("Error saving Mandate {}".format(mandate['function'])))
                 import ipdb
                 ipdb.set_trace()
@@ -170,9 +170,9 @@ class PersonsSpider(BaseScraper):
         person_item.save()
 
         if created_person:
-            log.msg(u"Created Person {}".format(
+            self.logger.info(u"Created Person {}".format(
                 green(u'[{}]'.format(full_name))))
         else:
-            log.msg(u"Updated Person {}".format(
+            self.logger.info(u"Updated Person {}".format(
                 green(u"[{}]".format(full_name))
             ))
