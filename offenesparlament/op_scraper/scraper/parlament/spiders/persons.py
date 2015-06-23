@@ -50,8 +50,6 @@ class PersonsSpider(BaseScraper):
         self.cookies_seen = set()
         self.idlist = {}
 
-        import ipdb; ipdb.set_trace()
-
     def get_urls(self):
         """
         Overwritten from BaseSpider for non-LLP-based retrieval
@@ -62,6 +60,7 @@ class PersonsSpider(BaseScraper):
         return urls
 
     def parse(self, response):
+
         rss = feedparser.parse(response.url)
 
         callback_requests = []

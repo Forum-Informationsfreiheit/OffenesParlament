@@ -22,6 +22,13 @@ class BaseScraper(scrapy.Spider):
 
     allowed_domains = ["parlament.gv.at"]
 
+    def __init__(self, **kw):
+        super(BaseScraper, self).__init__(**kw)
+
+        # shut off annoying debug level core api messages
+        import scrapy
+        scrapy.core.engine.logger.setLevel('INFO')
+
     def get_urls(self):
         """
         Returns a list of URLs to scrape

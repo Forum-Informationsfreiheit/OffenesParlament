@@ -16,7 +16,8 @@ NEWSPIDER_MODULE = 'parlament.spiders'
 BASE_HOST = "http://www.parlament.gv.at"
 
 LOG_LEVEL = 'INFO'
-
+DOWNLOADER_STATS = False
+STATS_ENABLED = False
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'laws (+http://www.yourdomain.com)'
 
