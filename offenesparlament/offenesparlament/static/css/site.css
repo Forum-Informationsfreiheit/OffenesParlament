@@ -53,4 +53,26 @@ ul.person_list {
   content: "»";
   color: black; }
 
+.party_tag {
+  margin-left: 10px;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 5px;
+  font-size: 80%;
+  background-color: #cccccc; }
+  .party_tag.spoe {
+    background-color: #b40000; }
+  .party_tag.oevp {
+    background-color: black; }
+  .party_tag.gruene {
+    background-color: #32af00; }
+  .party_tag.neos, .party_tag.neos-lif {
+    background-color: #c800af; }
+  .party_tag.fpoe {
+    background-color: #0050c8; }
+  .party_tag.stronach {
+    background-color: #f0c800; }
+  .party_tag.bzoe {
+    background-color: #ff9600; }
+
 /*# sourceMappingURL=site.css.map */

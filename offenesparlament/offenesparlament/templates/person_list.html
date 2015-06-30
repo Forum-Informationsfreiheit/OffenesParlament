@@ -13,7 +13,12 @@
   <h1>Abgeordnete zum Nationalrat</h1>
   <ul class="person_list">
     {% for p in person_list %}
-    <li><a href="{% url 'person_detail' parl_id=p.parl_id name=p.full_name %}">{{ p.full_name }}</a></li>
+    <li>
+      <a href="{% url 'person_detail' parl_id=p.parl_id name=p.full_name_urlsafe %}">{{ p.full_name }}</a>
+      {% if p.party.short %}
+        <span class="party_tag {{ p.party.short_css_class }}">{{ p.party }}</span>
+      {% endif %}
+    </li>
     {% endfor %}
   </ul>
 {% endblock %}

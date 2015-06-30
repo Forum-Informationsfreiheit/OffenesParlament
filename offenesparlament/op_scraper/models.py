@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.html import remove_tags
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
+import re
 
 
 class ParlIDMixIn(object):
@@ -209,6 +210,10 @@ class Party(models.Model):
     def __unicode__(self):
         return self.short
 
+    @property
+    def short_css_class(self):
+        return self.short.lower().replace(u'ä', 'ae').replace(u'ö', 'oe').replace(u'ü', 'ue')
+
 
 class Mandate(models.Model):
 
@@ -253,6 +258,10 @@ class Person(models.Model, ParlIDMixIn):
 
     def __unicode__(self):
         return self.full_name
+
+    @property
+    def full_name_urlsafe(self):
+        return re.sub(u'[^a-zA-Z0-9ßöäüÖÄÜ]+', '-', self.full_name)
 
 
 class Statement(models.Model):
