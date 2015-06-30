@@ -12,7 +12,7 @@ module.exports = (grunt) ->
     watch:
       styles:
         files: 'offenesparlament/offenesparlament/assets/styles/**/*'
-        tasks: [ 'sass:dev' ]
+        tasks: [ 'clean:style_images', 'build_styles' ]
     browserSync:
       dev:
         bsFiles:
@@ -28,16 +28,25 @@ module.exports = (grunt) ->
           open: false
           reloadOnRestart: false
           reloadDebounce: 1000
+    copy:
+      images:
+        cwd: 'offenesparlament/offenesparlament/assets/styles/'
+        src: [ 'img/**/*' ]
+        dest: 'offenesparlament/offenesparlament/static/css/'
+        expand: true
     clean:
       build: src: ['offenesparlament/offenesparlament/static/css/vendor.css',
                    'offenesparlament/offenesparlament/static/css/site.css']
+      style_images: src: 'offenesparlament/offenesparlament/static/css/img'
 
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-browser-sync'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-sass'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
 
-  grunt.registerTask 'dev', ['clean', 'sass:dev', 'watch']
-  grunt.registerTask 'reloading', ['clean', 'sass:dev', 'browserSync', 'watch']
+  grunt.registerTask 'build_styles', ['sass:dev', 'copy:images']
+  grunt.registerTask 'dev', ['clean', 'build_styles', 'watch']
+  grunt.registerTask 'reloading', ['clean', 'build_styles', 'browserSync', 'watch']
 
