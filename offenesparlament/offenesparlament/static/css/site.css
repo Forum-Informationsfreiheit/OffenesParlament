@@ -83,4 +83,21 @@ ul.person_list {
   .person_info img {
     max-width: 150px; }
 
+.homepage {
+  margin-top: 110px; }
+  .homepage .main_search {
+    position: relative; }
+    .homepage .main_search i.glyphicon {
+      position: absolute;
+      left: 15px;
+      padding: 10px;
+      pointer-events: none; }
+    .homepage .main_search input {
+      padding-left: 30px; }
+  .homepage .help {
+    margin-top: 7px;
+    text-align: center; }
+    .homepage .help a {
+      margin: 0 10px; }
+
 /*# sourceMappingURL=site.css.map */

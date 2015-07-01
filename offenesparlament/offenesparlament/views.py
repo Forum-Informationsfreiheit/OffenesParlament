@@ -4,7 +4,7 @@ from op_scraper.models import Law
 
 
 def index(request):
-    return render(request, 'base.html')
+    return render(request, 'index.html')
 
 
 def person_list(request):
