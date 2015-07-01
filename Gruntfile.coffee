@@ -34,10 +34,16 @@ module.exports = (grunt) ->
         src: [ 'img/**/*' ]
         dest: 'offenesparlament/offenesparlament/static/css/'
         expand: true
+      fonts:
+        cwd: 'offenesparlament/offenesparlament/assets/styles/'
+        src: [ 'fonts/**/*' ]
+        dest: 'offenesparlament/offenesparlament/static/'
+        expand: true
     clean:
       build: src: ['offenesparlament/offenesparlament/static/css/vendor.css',
                    'offenesparlament/offenesparlament/static/css/site.css']
       style_images: src: 'offenesparlament/offenesparlament/static/css/img'
+      style_fonts: src: 'offenesparlament/offenesparlament/static/fonts'
 
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -46,7 +52,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-contrib-copy'
 
-  grunt.registerTask 'build_styles', ['sass:dev', 'copy:images']
+  grunt.registerTask 'build_styles', ['sass:dev', 'copy:images', 'copy:fonts']
   grunt.registerTask 'dev', ['clean', 'build_styles', 'watch']
   grunt.registerTask 'reloading', ['clean', 'build_styles', 'browserSync', 'watch']
 
