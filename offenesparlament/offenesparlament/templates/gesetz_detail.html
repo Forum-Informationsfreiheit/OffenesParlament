@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Gesetze" "laws_list" %}
+  {% breadcrumb gesetz.short_title "gesetz_detail" %}
+{% endblock %}
+
+{% block ggp_selector %}{% endblock %}
+
 {% block title %}{{ person.reversed_name }}{% endblock %}
 
 {% block content %}

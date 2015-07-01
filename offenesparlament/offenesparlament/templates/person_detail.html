@@ -1,25 +1,51 @@
 {% extends "base.html" %}
 
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Parlamentarier" "person_list" %}
+  {% breadcrumb person.full_name "person_detail" %}
+{% endblock %}
+
+{% block ggp_selector %}{% endblock %}
+
 {% block title %}{{ person.reversed_name }}{% endblock %}
 
 {% block content %}
   <h1>{{ person.reversed_name }}<a href='{{person.source_link}}'>[SOURCE]</a></h1>
-  <img src="{{person.photo_link}}" />
-  GebDt {{ person.birthdate}}<br />
-  DDt {{person.deathdate}}
+  <p>
+    {{ person.most_recent_function_or_occupation }}
+    {% include 'partials/party_tag.html' with party=person.party %}
+  </p>
 
-  <h2>Statements</h2>
-  <ul>
-  {% for st in person.statements.all %}
-  <li>
-  {% if st.speech_type == "Pro" %}
-    👍
-  {% elif st.speech_type == "Contra" %}
-    👎
-  {% else %}
-    {{st.speech_type}}
-  {% endif %}
-  <a href="{% url 'gesetz_detail' parl_id=st.step.law.parl_id_urlsafe ggp=st.step.law.legislative_period %}">[{{st.step.date}}] {{st.step.law.title}}</a></li>
-  {% endfor %}
-  </ul>
+  <div class="person_info row">
+    <div class="col-md-2">
+      <img src="{{person.photo_link}}" />
+    </div>
+    <div class="col-md-10">
+      Geboren: {{ person.birthdate}}<br />
+      {% if person.deathdate %}
+        Gestorben: {{person.deathdate}}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-2">
+      <h2>Statements</h2>
+      <ul>
+      {% for st in person.statements.all %}
+        <li>
+        {% if st.speech_type == "Pro" %}
+          👍
+        {% elif st.speech_type == "Contra" %}
+          👎
+        {% else %}
+          {{st.speech_type}}
+        {% endif %}
+        <a href="{% url 'gesetz_detail' parl_id=st.step.law.parl_id_urlsafe ggp=st.step.law.legislative_period %}">[{{st.step.date}}] {{st.step.law.title}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

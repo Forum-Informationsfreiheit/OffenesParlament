@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Gesetze" "gesetze_list" %}
+{% endblock %}
+
 {% block title %}Abgeordnete zum Nationalrat{% endblock %}
 
 {% block content %}

@@ -140,6 +140,10 @@ class Law(models.Model, ParlIDMixIn):
     class Meta:
         unique_together = ("parl_id", "legislative_period")
 
+    @property
+    def short_title(self):
+        return (self.title[:100] + '...') if len(self.title) > 100 else self.title
+
     def __unicode__(self):
         return self.title
 
@@ -262,6 +266,18 @@ class Person(models.Model, ParlIDMixIn):
     @property
     def full_name_urlsafe(self):
         return re.sub(u'[^a-zA-Z0-9ßöäüÖÄÜ]+', '-', self.full_name)
+
+    @property
+    def most_recent_function_or_occupation(self):
+        mandates = self.mandates.filter(end_date=None).order_by('-start_date')
+        if mandates and len(mandates) > 0:
+            return mandates[0].function
+        else:
+            mandates = self.mandates.order_by('-end_date')
+            if mandates and len(mandates) > 0:
+                return mandates[0].function
+            else:
+                return self.occupation
 
 
 class Statement(models.Model):
