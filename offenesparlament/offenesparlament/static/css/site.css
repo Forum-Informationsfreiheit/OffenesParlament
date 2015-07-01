@@ -39,11 +39,14 @@ ul.person_list {
 
 .top_bar {
   margin: 30px 0; }
+  .top_bar .ggp_selector {
+    float: right; }
 
 .breadcrumb.op_breadcrumb {
   background: none;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  display: inline-block; }
   .breadcrumb.op_breadcrumb li {
     font-weight: bold; }
     .breadcrumb.op_breadcrumb li a {
