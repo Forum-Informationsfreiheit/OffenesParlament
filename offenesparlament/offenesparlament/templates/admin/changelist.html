@@ -1,0 +1,18 @@
+{% extends "admin/change_list.html" %}
+
+{% load i18n %}
+
+{% block object-tools %}
+  {% if has_add_permission %}
+    <ul class="object-tools ">
+      {% block object-tools-items %}
+        {% if not is_popup %}
+          <li><a href="import/" class="import_link">{% trans "Import" %}</a></li>
+          <li><a href="export/{{ cl.get_query_string }}" class="export_link">{% trans "Export" %}</a></li>
+          <li><a href="{{recoverlist_url}}" class="recoverlink">{% blocktrans with cl.opts.verbose_name_plural|escape as name %}Recover deleted {{name}}{% endblocktrans %}</a></li>
+        {% endif %}
+       <li><a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">{% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}</a></li>
+     {% endblock %}
+   </ul>
+ {% endif %}
+{% endblock %}

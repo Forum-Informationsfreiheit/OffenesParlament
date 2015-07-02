@@ -3,7 +3,7 @@ from django.db.models import Count
 from op_scraper.models import *
 import reversion
 from import_export import resources
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportMixin
 
 
 class LawResource(resources.ModelResource):
@@ -12,10 +12,12 @@ class LawResource(resources.ModelResource):
         model = Law
 
 
-# FIXME why the heck does multiple inheritance not work in the django admin??
-#       --> probably need to so simple subclassing there :/
+class BaseAdmin(ImportExportMixin, reversion.VersionAdmin):
+    change_list_template = "admin/changelist.html"
+
+
 @admin.register(Law)
-class LawAdmin(ImportExportModelAdmin, reversion.VersionAdmin):
+class LawAdmin(BaseAdmin):
     list_display = (
         'title', 'legislative_period', 'parl_id', 'category', 'references')
     list_filter = ('category', )
@@ -25,23 +27,23 @@ class LawAdmin(ImportExportModelAdmin, reversion.VersionAdmin):
 
 
 @admin.register(Person)
-class PersonAdmin(reversion.VersionAdmin):
+class PersonAdmin(BaseAdmin):
     filter_horizontal = ('mandates',)
     search_fields = ('parl_id', 'full_name')
 
 
 @admin.register(Statement)
-class StatementAdmin(reversion.VersionAdmin):
+class StatementAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Phase)
-class PhaseAdmin(reversion.VersionAdmin):
+class PhaseAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Entity)
-class EntityAdmin(reversion.VersionAdmin):
+class EntityAdmin(BaseAdmin):
     list_display = ('title', 'show_op_count')
     search_fields = ('title', 'title_detail', 'email')
 
@@ -55,45 +57,45 @@ class EntityAdmin(reversion.VersionAdmin):
 
 
 @admin.register(Document)
-class DocumentAdmin(reversion.VersionAdmin):
+class DocumentAdmin(BaseAdmin):
     pass
 
 
 @admin.register(PressRelease)
-class PressReleaseAdmin(reversion.VersionAdmin):
+class PressReleaseAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Category)
-class CategoryAdmin(reversion.VersionAdmin):
+class CategoryAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Keyword)
-class KeywordAdmin(reversion.VersionAdmin):
+class KeywordAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Step)
-class StepAdmin(reversion.VersionAdmin):
+class StepAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Opinion)
-class OpinionAdmin(reversion.VersionAdmin):
+class OpinionAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Party)
-class PartyAdmin(reversion.VersionAdmin):
+class PartyAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Function)
-class FunctionAdmin(reversion.VersionAdmin):
+class FunctionAdmin(BaseAdmin):
     pass
 
 
 @admin.register(Mandate)
-class MandateAdmin(reversion.VersionAdmin):
+class MandateAdmin(BaseAdmin):
     pass
