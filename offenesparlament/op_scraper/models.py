@@ -13,6 +13,18 @@ class ParlIDMixIn(object):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
+class LegislativePeriod(models.Model):
+
+    """
+    A single legislative Period or 'Legislaturperiode'
+    """
+
+    number = models.IntegerField()
+    roman_numeral = models.CharField(unique=True, max_length=255, default="")
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+
+
 class Phase(models.Model):
 
     """
