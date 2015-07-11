@@ -30,4 +30,4 @@ Werkzeug
 -e git+https://github.com/jezdez/django-configurations.git@5ece107044#egg=django-configurations-head
 django-bootstrap-breadcrumbs
 django-import-export
-django-grapelli==2.6.5
+django-grappelli==2.6.5
