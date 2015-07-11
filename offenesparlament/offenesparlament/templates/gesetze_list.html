@@ -12,7 +12,7 @@
   <h1>Gesetze</h1>
   <ul class="laws_list">
     {% for law in gesetze_list %}
-    <li><a href="{% url 'gesetz_detail' parl_id=law.parl_id_urlsafe ggp=law.legislative_period %}">{{ law.title }}</a></li>
+    <li><a href="{% url 'gesetz_detail' parl_id=law.parl_id_urlsafe ggp=law.legislative_period.roman_numeral %}">{{ law.title }}</a></li>
     {% endfor %}
   </ul>
 {% endblock %}

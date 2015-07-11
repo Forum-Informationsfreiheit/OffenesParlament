@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from op_scraper.models import Person
 from op_scraper.models import Law
+from op_scraper.models import LegislativePeriod
 
 
 def index(request):
@@ -28,6 +29,7 @@ def person_detail(request, parl_id, name):
 def gesetz_detail(request, parl_id, ggp):
     parl_id_restored = '({})'.format(
         parl_id.replace('-', '/').replace('_', ' '))
-    gesetz = Law.objects.get(parl_id=parl_id_restored, legislative_period=ggp)
+    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
+    gesetz = Law.objects.get(parl_id=parl_id_restored, legislative_period=llp)
     context = {'gesetz': gesetz}
     return render(request, 'gesetz_detail.html', context)
