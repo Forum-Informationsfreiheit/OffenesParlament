@@ -29,6 +29,7 @@ from op_scraper.models import Category
 from op_scraper.models import Keyword
 from op_scraper.models import Law
 from op_scraper.models import Step
+from op_scraper.models import LegislativePeriod
 from op_scraper.models import Opinion
 
 
@@ -65,7 +66,8 @@ class PreLawsSpider(BaseScraper):
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
-        LLP = fromRoman(response.url.split('/')[-4])
+        LLP = LegislativePeriod.objects.get(
+            roman_numeral=response.url.split('/')[-4])
 
         # save ids and stuff for internals
         if LLP not in self.idlist:

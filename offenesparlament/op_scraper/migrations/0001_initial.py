@@ -65,13 +65,22 @@ class Migration(migrations.Migration):
                 ('status', models.TextField(null=True, blank=True)),
                 ('source_link', models.URLField(default=b'')),
                 ('parl_id', models.CharField(default=b'', max_length=30)),
-                ('legislative_period', models.IntegerField(default=1)),
                 ('description', models.TextField(blank=True)),
                 ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
                 ('documents', models.ManyToManyField(related_name='laws', to='op_scraper.Document')),
                 ('keywords', models.ManyToManyField(related_name='laws', to='op_scraper.Keyword')),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
+        ),
+        migrations.CreateModel(
+            name='LegislativePeriod',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('number', models.IntegerField()),
+                ('roman_numeral', models.CharField(default=b'', unique=True, max_length=255)),
+                ('start_date', models.DateField()),
+                ('end_date', models.DateField(null=True, blank=True)),
+            ],
         ),
         migrations.CreateModel(
             name='Mandate',
@@ -112,6 +121,7 @@ class Migration(migrations.Migration):
                 ('parl_id', models.CharField(max_length=30, serialize=False, primary_key=True)),
                 ('source_link', models.URLField(default=b'')),
                 ('photo_link', models.URLField(default=b'')),
+                ('photo_copyright', models.CharField(default=b'', max_length=255)),
                 ('full_name', models.CharField(max_length=255)),
                 ('reversed_name', models.CharField(max_length=255)),
                 ('birthdate', models.DateField(null=True, blank=True)),
@@ -180,6 +190,11 @@ class Migration(migrations.Migration):
             model_name='mandate',
             name='party',
             field=models.ForeignKey(blank=True, to='op_scraper.Party', null=True),
+        ),
+        migrations.AddField(
+            model_name='law',
+            name='legislative_period',
+            field=models.ForeignKey(to='op_scraper.LegislativePeriod'),
         ),
         migrations.AddField(
             model_name='law',

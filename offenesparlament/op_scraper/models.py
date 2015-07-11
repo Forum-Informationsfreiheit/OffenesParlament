@@ -24,6 +24,19 @@ class LegislativePeriod(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
 
+    def __unicode__(self):
+        if self.end_date:
+            rep_str = "{} ({} - {})".format(
+                self.roman_numeral,
+                self.start_date,
+                self.end_date)
+        else:
+            rep_str = "{} (since {})".format(
+                self.roman_numeral,
+                self.start_date)
+
+        return rep_str
+
 
 class Phase(models.Model):
 
@@ -126,7 +139,7 @@ class Law(models.Model, ParlIDMixIn):
     status = models.TextField(null=True, blank=True)
     source_link = models.URLField(max_length=200, default="")
     parl_id = models.CharField(max_length=30, default="")
-    legislative_period = models.IntegerField(default=1)
+
     description = models.TextField(blank=True)
 
     # Relationships
@@ -134,6 +147,7 @@ class Law(models.Model, ParlIDMixIn):
     keywords = models.ManyToManyField(Keyword, related_name="laws")
     press_releases = models.ManyToManyField(PressRelease, related_name="laws")
     documents = models.ManyToManyField(Document, related_name="laws")
+    legislative_period = models.ForeignKey(LegislativePeriod)
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
 

@@ -27,6 +27,7 @@ from op_scraper.models import Keyword
 from op_scraper.models import Law
 from op_scraper.models import Step
 from op_scraper.models import Opinion
+from op_scraper.models import LegislativePeriod
 
 
 class LawsInitiativesSpider(BaseScraper):
@@ -54,19 +55,15 @@ class LawsInitiativesSpider(BaseScraper):
         self.start_urls = self.get_urls()
 
         self.cookies_seen = set()
-        self.idlist = {}
 
     def parse(self, response):
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
         status = LAW.STATUS.xt(response)
-        LLP = fromRoman(response.url.split('/')[-4])
 
-        # save ids and stuff for internals
-        if LLP not in self.idlist:
-            self.idlist[LLP] = {}
-        self.idlist[LLP][response.url] = [parl_id, LLP]
+        LLP = LegislativePeriod.objects.get(
+            roman_numeral=response.url.split('/')[-4])
 
         # Extract foreign keys
         category = LAW.CATEGORY.xt(response)
@@ -86,8 +83,8 @@ class LawsInitiativesSpider(BaseScraper):
         }
         law_item, law_created = Law.objects.update_or_create(
             parl_id=parl_id,
-            source_link=response.url,
             legislative_period=LLP,
+            source_link=response.url,
             defaults=law_data)
 
         # Attach foreign keys
