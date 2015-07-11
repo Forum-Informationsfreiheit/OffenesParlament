@@ -18,13 +18,3 @@ def scrape(spider):
     # the script will block here until the crawling is finished
     process.start()
     return
-
-
-@shared_task
-def mul(x, y):
-    return x * y
-
-
-@shared_task
-def xsum(numbers):
-    return sum(numbers)
