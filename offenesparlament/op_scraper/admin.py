@@ -20,7 +20,7 @@ class BaseAdmin(ImportExportMixin, reversion.VersionAdmin):
 class LawAdmin(BaseAdmin):
     list_display = (
         'title', 'legislative_period', 'parl_id', 'category', 'references')
-    list_filter = ('category', )
+    list_filter = ('category', 'legislative_period')
     search_fields = ('parl_id', 'title')
     resource_class = LawResource
     pass

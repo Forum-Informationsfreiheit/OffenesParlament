@@ -1,15 +1,19 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from . import views
+from op_scraper import admin_views
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^blog/', include('blog.urls')),
-
+urlpatterns = patterns(
+    '',
     url(r'^$', views.index, name='home'),
     url(r'^parlamentarier/$', views.person_list, name='person_list'),
-    url(r'^parlamentarier/(?P<parl_id>.{1,30})/(?P<name>.+)/$', views.person_detail, name='person_detail'),
+    url(r'^parlamentarier/(?P<parl_id>.{1,30})/(?P<name>.+)/$',
+        views.person_detail, name='person_detail'),
     url(r'^gesetze/$', views.gesetze_list, name='laws_list'),
-    url(r'^gesetze/(?P<ggp>.{1,30})/(?P<parl_id>.{1,30})/$', views.gesetz_detail, name='gesetz_detail'),
+    url(r'^gesetze/(?P<ggp>.{1,30})/(?P<parl_id>.{1,30})/$',
+        views.gesetz_detail, name='gesetz_detail'),
+    url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
+    url(r'^admin/scrape/(?P<spider_name>.{1,30})',
+        admin_views.trigger_llp_scrape, name='scrape_llp'),
     url(r'^admin/', include(admin.site.urls)),
 )

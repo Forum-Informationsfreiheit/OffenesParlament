@@ -4,7 +4,7 @@
 
 {% block object-tools %}
   {% if has_add_permission %}
-    <ul class="object-tools ">
+    <ul class="grp-object-tools">
       {% block object-tools-items %}
         {% if not is_popup %}
           <li><a href="import/" class="import_link">{% trans "Import" %}</a></li>

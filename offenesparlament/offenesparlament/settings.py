@@ -32,6 +32,8 @@ class BaseConfig(Configuration):
     ALLOWED_HOSTS = []
 
     INSTALLED_APPS = (
+        'grappelli.dashboard',
+        'grappelli',
         'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
@@ -55,6 +57,12 @@ class BaseConfig(Configuration):
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
+
+    # GRAPPELLI_INDEX_DASHBOARD = {  # alternative method
+    # #     'op_scraper.admin.admin_site': 'offenesparlament.op_scraper.op_scraper_dashboard.CustomIndexDashboard',
+    # }
+
+    GRAPPELLI_INDEX_DASHBOARD = 'op_scraper.op_scraper_dashboard.CustomIndexDashboard'
 
     ROOT_URLCONF = 'offenesparlament.urls'
 
