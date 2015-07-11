@@ -42,6 +42,11 @@ class PhaseAdmin(BaseAdmin):
     pass
 
 
+@admin.register(LegislativePeriod)
+class PhaseAdmin(BaseAdmin):
+    pass
+
+
 @admin.register(Entity)
 class EntityAdmin(BaseAdmin):
     list_display = ('title', 'show_op_count')

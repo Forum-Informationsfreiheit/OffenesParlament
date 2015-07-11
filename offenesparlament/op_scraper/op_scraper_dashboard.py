@@ -111,7 +111,7 @@ class CustomIndexDashboard(Dashboard):
         #     ]
         # ))
 
-        # append a feed module
+        #append a feed module
         # self.children.append(modules.Feed(
         #     _('Latest Django News'),
         #     column=2,
@@ -123,6 +123,6 @@ class CustomIndexDashboard(Dashboard):
         self.children.append(modules.RecentActions(
             _('Recent Actions'),
             limit=5,
-            collapsible=False,
-            column=3,
+            collapsible=True,
+            column=2,
         ))

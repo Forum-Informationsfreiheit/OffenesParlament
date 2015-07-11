@@ -58,10 +58,6 @@ class BaseConfig(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
-    # GRAPPELLI_INDEX_DASHBOARD = {  # alternative method
-    # #     'op_scraper.admin.admin_site': 'offenesparlament.op_scraper.op_scraper_dashboard.CustomIndexDashboard',
-    # }
-
     GRAPPELLI_INDEX_DASHBOARD = 'op_scraper.op_scraper_dashboard.CustomIndexDashboard'
 
     ROOT_URLCONF = 'offenesparlament.urls'
@@ -125,6 +121,8 @@ class Dev(BaseConfig):
     TEMPLATE_DEBUG = True
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
     CELERY_RESULT_BACKEND = 'amqp'
+
+    CELERYD_MAX_TASKS_PER_CHILD = 1
 
     LOGGING = {
         'version': 1,
