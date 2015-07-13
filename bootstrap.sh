@@ -33,6 +33,11 @@ sudo update-rc.d elasticsearch defaults 95 10
 sudo /usr/share/elasticsearch/bin/plugin --install lmenezes/elasticsearch-kopf
 sudo /etc/init.d/elasticsearch restart
 
+# supervisor
+sudo pip install pip --upgrade
+sudo pip install supervisor
+sudo cp /vagrant/provision/supervisord.conf /etc/
+sudo supervisord
 
 # install node.js and NPM
 # install PPA first to get recent package
@@ -50,7 +55,6 @@ sudo gem install sass
 
 #django project requirements
 cd /vagrant
-sudo pip install pip --upgrade
 sudo pip install -r requirements.txt
 
 #django-configuration: set Dev environment variable on login
