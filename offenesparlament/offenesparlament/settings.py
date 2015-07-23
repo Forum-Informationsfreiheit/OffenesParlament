@@ -40,6 +40,7 @@ class BaseConfig(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'haystack',
         'op_scraper',
         'annoying',
         'reversion',
@@ -58,7 +59,19 @@ class BaseConfig(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
+    # Grappelli Configuration
+
     GRAPPELLI_INDEX_DASHBOARD = 'op_scraper.op_scraper_dashboard.CustomIndexDashboard'
+
+    # Haystack Configuration
+
+    HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://localhost:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
 
     ROOT_URLCONF = 'offenesparlament.urls'
 

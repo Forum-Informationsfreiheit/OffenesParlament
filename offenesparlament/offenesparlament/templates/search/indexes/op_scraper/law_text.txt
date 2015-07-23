@@ -1,0 +1,5 @@
+{{ object.parl_id }}
+{{ object.title }}
+{{ object.description }}
+{{ object.category.title }}
+{{ object.keywords }}

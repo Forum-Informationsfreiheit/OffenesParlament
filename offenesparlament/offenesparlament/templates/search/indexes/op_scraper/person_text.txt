@@ -1,0 +1,6 @@
+{{ object.parl_id }}
+{{ object.full_name }}
+{{ object.reversed_name }}
+{{ object.birthplace }}
+{{ object.deathplace }}
+{{ object.occupation }}
