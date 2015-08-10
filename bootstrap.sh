@@ -56,6 +56,7 @@ sudo gem install sass
 #django project requirements
 cd /vagrant
 sudo pip install -r requirements.txt
+sudo pip install -r requirements.dev.txt
 
 #django-configuration: set Dev environment variable on login
 echo 'DJANGO_CONFIGURATION="Dev"; export DJANGO_CONFIGURATION' >> ~/.profile
