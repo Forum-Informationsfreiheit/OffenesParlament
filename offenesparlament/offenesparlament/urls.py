@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from . import views
 from op_scraper import admin_views
+from django.conf import settings
 
 urlpatterns = patterns(
     '',
@@ -18,3 +19,9 @@ urlpatterns = patterns(
         admin_views.trigger_llp_scrape, name='scrape_llp'),
     url(r'^admin/', include(admin.site.urls)),
 )
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
