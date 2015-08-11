@@ -9,7 +9,7 @@ def index(request):
 
 
 def person_list(request):
-    person_list = Person.objects.order_by('reversed_name')
+    person_list = Person.objects.select_related('party').order_by('reversed_name')
     context = {'person_list': person_list}
     return render(request, 'person_list.html', context)
 
