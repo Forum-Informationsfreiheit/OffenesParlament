@@ -1,28 +1,63 @@
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic)
+@import 'vendor/bourbon/bourbon'
 
-$menu_blue: rgb(39, 82, 116)
-$menu_blue_lighter: rgb(94, 148, 186)
+// screensizes for breakpoints
+$break_large: 1200px
+$break_medium: 940px
+$break_small: 500px
+$min_margin: 30px
 
-@mixin css3-prefix($property, $value)
-  -webkit-#{$property}: #{$value}
-  -khtml-#{$property}: #{$value}
-  -moz-#{$property}: #{$value}
-  -ms-#{$property}: #{$value}
-  -o-#{$property}: #{$value}
-  #{$property}: #{$value}
+// colors
+$menu_dark_blue: rgb(31, 69, 99)
+$dark_blue: rgb(42, 79, 107)
+$light_blue: rgb(129, 183, 234)
+$middle_blue: rgb(3, 111, 213)
+$red: rgb(245, 95, 87)
+$dark_gray: rgb(38, 38, 38)
+$dirty_white: rgb(191, 191, 191)
 
 
 body
   font-family: 'Source Sans Pro', sans-serif
+  font-size: 14px
 
 h1
   font-size: 30px
   font-weight: bold
   margin: 50px 0 35px 0
+  @media screen and (max-width: $break_small)
+    font-size: 25px
+    margin: 30px 0 15px 0
 
-.main_menu
+a, a:active, a:focus, a:visited
+  color: $middle_blue
+  text-decoration: none
+
+a:hover
+  color: $light_blue
+  text-decoration: none
+
+
+.content
+  margin-bottom: 70px
+
+
+.container
+  width: $break_large - $min_margin
+  margin: 0 auto
+  overflow: hidden
+  @media screen and (max-width: $break_large)
+    width: $break_medium - $min_margin
+  @media screen and (max-width: $break_medium)
+    width: initial
+    margin: 0 30px
+  @media screen and (max-width: $break_small)
+    margin: 0 10px
+
+
+.menu_bar
   width: 100%
-  background-color: $menu_blue
+  background-color: $menu_dark_blue
   color: white
   overflow: hidden
   .logo
@@ -32,38 +67,62 @@ h1
     text-indent: -4000px
     width: 200px
     height: 50px
+    display: inline-block
   nav
-    a
-      color: white
-      &:hover
-        background-color: $menu_blue_lighter
-        color: white
+    float: right
+    ul.menu_bar_items
+      list-style: none
+      padding: 0
+      li
+        display: inline-block
+        margin-left: 30px
+        a
+          color: white
+          text-decoration: none
+          font-size: 13px
+          &:hover
+            color: $light_blue
+            background-color: initial
+
 
 ul.person_list
-  @include css3-prefix('column-count', 3)
+  @include column-count(3)
   padding: 0
+  @media screen and (max-width: $break_medium)
+    @include column-count(2)
+  @media screen and (max-width: $break_small)
+    @include column-count(1)
   li
     margin: 6px 0
+    @media screen and (max-width: $break_medium)
+      margin: 10px 0
 
 .top_bar
   margin: 30px 0
+  @media screen and (max-width: $break_small)
+    margin: 10px 0
 
   .ggp_selector
     float: right
 
-.breadcrumb.op_breadcrumb
+ul.breadcrumbs
   background: none
   margin: 0
   padding: 0
   display: inline-block
-
+  font-size: 13px
+  list-style: none
+  padding: 0
   li
     font-weight: bold
+    display: inline
+    margin-right: 5px
     a
       font-weight: normal
 
-.breadcrumb > li + li:before
+.breadcrumbs > li + li:before
   content: "\00bb"
+  margin-right: 5px
   color: black
 
 .party_tag
@@ -93,20 +152,135 @@ ul.person_list
   img
     max-width: 150px
 
-.homepage
-  margin-top: 110px
-  .main_search
+.homepage_content
+  background-color: $dark_blue
+  margin-top: 0
+
+.homepage_search
+  margin: 100px 0 100px 0
+  .searchbar
     position: relative
+    width: 100%
+    background-color: white
+    padding-left:  30px
     i.glyphicon
       position: absolute
-      left:  15px
-      padding: 10px
+      margin: 0
+      // padding: 10px
       pointer-events: none
     input
-      padding-left:  30px
+      margin: 0
+      width: 100%
+      line-height: 47px
+      font-size: 16px
+      outline: none
+      border: none
   .help
-    margin-top: 7px
+    margin-top: 15px
     text-align: center
     a
       margin: 0 10px
+      color: white
+      &:hover
+        color: $light_blue
+
+
+.projectintro
+  background-color: $red
+  .container
+    width: $break_large + 200px
+    @include linear-gradient(90deg, $red, $red 66.666666666%, white 66.666666666%, white 100%)
+    @media screen and (max-width: $break_large + 200px)
+      width: 100%
+    @media screen and (max-width: $break_medium)
+      margin: 0
+      background: $red
+  .projectintro_item, .projectintro_item_inverse
+    color: white
+    display: inline-block
+    width: 33.333333333%
+    vertical-align: top
+    overflow: hidden
+    @media screen and (max-width: $break_medium)
+      width: 100%
+      display: block
+    .projectintro_item_border_inlay
+      margin: 20px 0
+      overflow: hidden
+      @media screen and (max-width: $break_medium)
+        margin: 0 30px
+      .projectintro_item_content
+        margin: 20px 40px
+        @media screen and (max-width: $break_medium)
+          margin: 30px 0
+    h2
+      font-weight: bold
+      font-size: 16px
+  .projectintro_item_inverse
+    color: $red
+    @media screen and (max-width: $break_medium)
+      background-color: white
+  .projectintro_item:first-child .projectintro_item_border_inlay
+    border-right: 1px solid white
+    @media screen and (max-width: $break_medium)
+      border-right: none
+      border-bottom: 1px solid rgba(white, 0.5)
+
+
+.footer
+  width: 100%
+  background-color: $dark_gray
+  color: $dirty_white
+  font-size: 13px
+  overflow: hidden
+  a
+    color: white
+    line-height: 200%
+    &:hover
+      color: $light_blue
+      text-decoration: none
+
+.footer_content
+  margin: 20px auto 50px auto
+  @media screen and (max-width: $break_medium)
+    margin: 20px auto
+
+.footer_left
+  width: 60%
+  @media screen and (max-width: $break_medium)
+    margin-top: 20px
+
+.footer_right
+  width: 40%
+  text-align: right
+  @media screen and (max-width: $break_medium)
+    margin-top: 20px
+
+.footer_left, .footer_right
+  display: inline-block
+  @media screen and (max-width: $break_medium)
+    width: 100%
+    display: block
+    text-align: left
+  @media screen and (max-width: $break_small)
+    text-align: left
+
+.footer_menu
+  margin-top: 0
+  list-style: none
+  display: inline-block
+  padding: 0
+  vertical-align: top
+  text-align: left
+
+.footer_usermenu
+  margin-left: 80px
+
+.footer_menu
+  @media screen and (max-width: $break_small)
+    margin: 0
+    width: 50%
+    display: inline-block
+    text-align: left
+
 

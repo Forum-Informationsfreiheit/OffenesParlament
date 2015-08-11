@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "base_content.html" %}
 
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
   {{ block.super }}
-  {% breadcrumb "Parlamentarier" "person_list" %}
+  {% breadcrumb "Personen" "person_list" %}
   {% breadcrumb person.full_name "person_detail" %}
 {% endblock %}
 
@@ -18,11 +18,11 @@
     {% include 'partials/party_tag.html' with party=person.party %}
   </p>
 
-  <div class="person_info row">
-    <div class="col-md-2">
+  <div class="person_info">
+    <div class="">
       <img src="{{person.photo_link}}" />
     </div>
-    <div class="col-md-10">
+    <div class="">
       Geboren: {{ person.birthdate}}<br />
       {% if person.deathdate %}
         Gestorben: {{person.deathdate}}
@@ -30,8 +30,8 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-10 col-md-offset-2">
+  <div class="">
+    <div class="">
       <h2>Statements</h2>
       <ul>
       {% for st in person.statements.all %}
@@ -42,6 +42,7 @@
           👎
         {% else %}
           {{st.speech_type}}
+          {{st.protocol_url}}
         {% endif %}
         <a href="{% url 'gesetz_detail' parl_id=st.step.law.parl_id_urlsafe ggp=st.step.law.legislative_period %}">[{{st.step.date}}] {{st.step.law.title}}</a></li>
       {% endfor %}

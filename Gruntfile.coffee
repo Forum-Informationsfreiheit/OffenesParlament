@@ -7,7 +7,7 @@ module.exports = (grunt) ->
         options:
           sourcemap: 'inline'
         files:
-          'offenesparlament/offenesparlament/static/css/vendor.css': 'offenesparlament/offenesparlament/assets/styles/bootstrap.css'
+          'offenesparlament/offenesparlament/static/css/vendor.css': 'offenesparlament/offenesparlament/assets/styles/vendor/vendor.sass'
           'offenesparlament/offenesparlament/static/css/site.css': 'offenesparlament/offenesparlament/assets/styles/site.sass'
     watch:
       styles:

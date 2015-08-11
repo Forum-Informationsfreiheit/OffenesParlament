@@ -4,16 +4,53 @@
 {% block ggp_selector %}{% endblock %}
 {% block breadcrumbs %}{% endblock %}
 
-{% block content %}
+{% block container %}
 
-<div class="homepage row">
-  <div class="main_search col-sm-8 col-sm-offset-2 col-xs-12">
-    <i class="glyphicon glyphicon-search"></i>
-    <input type="text" class="form-control" placeholder="Wonach möchten Sie suchen?" />
+<div class="homepage_content">
+  <div class="container">
+    <div class="homepage_search">
+      <div class="searchbar">
+        <i class="glyphicon glyphicon-search"></i>
+        <input type="text" class="form-control" placeholder="Wonach möchten Sie suchen?" />
+      </div>
+      <div class="help">
+        <a href="#">Beispielsuche ansehen</a>
+        <a href="#">Detailsuche</a>
+      </div>
+    </div>
   </div>
-  <div class="help col-sm-8 col-sm-offset-2 col-xs-12">
-    <a href="#">Beispielsuche ansehen</a>
-    <a href="#">Detailsuche</a>
+</div>
+<div class="projectintro">
+  <div class="container">
+    <div class="projectintro_item">
+      <div class="projectintro_item_border_inlay">
+        <div class="projectintro_item_content">
+          <h2>Suchen & analysieren</h2>
+          <p>Hier können Sie vom österreichischen Parlament veröffentlichte
+          Dokumente einfach durchsuchen, analysieren und mit handelnden
+          Personen verknüpfen.</p>
+        </div>
+      </div>
+    </div><!--
+    --><div class="projectintro_item">
+      <div class="projectintro_item_border_inlay">
+        <div class="projectintro_item_content">
+          <h2>Direkt in Ihr Postfach</h2>
+          <p>Wenn Sie ein Thema besonders interessiert, können Sie sich über neue
+          Beiträge benachrichtigen lassen. Sie können auch Suchabfragen
+          abonnieren.</p>
+        </div>
+      </div>
+    </div><!--
+    --><div class="projectintro_item_inverse">
+      <div class="projectintro_item_border_inlay">
+        <div class="projectintro_item_content">
+          <h2>Über uns</h2>
+          <p>[Blindtext] Dieses Projekt wird durch die Internet Foundation
+          Austria (IPA) / netidee.at gefördert.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -20,13 +20,13 @@
   </head>
   <body>
 
-    <div class="main_menu">
+    <div class="menu_bar">
       <div class="container">
         <a href="/" class="logo navbar-brand">offenesparlament.at</a>
         <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right">
-          <ul class="nav navbar-nav">
+          <ul class="menu_bar_items nav navbar-nav">
             <li>
-              <a href="/parlamentarier">Abgeordnete zum Nationalrat</a>
+              <a href="/personen">Personen</a>
             </li>
             <li>
               <a href="/gesetze">Gesetze</a>
@@ -42,31 +42,47 @@
       </div>
     </div>
 
-    <div class="container">
-    <div class="col-xs-12">
-    {% load django_bootstrap_breadcrumbs %}
-    {% block breadcrumbs %}
-      {% clear_breadcrumbs %}
-      {% breadcrumb "Startseite" "/" %}
+    {% block container %}
     {% endblock %}
 
-    <div class="top_bar">
-      {% render_breadcrumbs "breadcrumbs.html" %}
-      {% block ggp_selector %}
-        <div class="ggp_selector">
-          <select>
-            <option>Aktuell, seit 2013 (25.)</option>
-            <option>2008-2013 (24.)</option>
-            <option>2006-2008 (23.)</option>
-          </select>
+    <div class="footer">
+      <div class="container">
+        <div class="footer_content">
+          <div class="footer_left">
+            <p>offenesparlament.at wird durch die Internet Foundation
+            Austria (IPA) / netidee.at gefördert.</p>
+            <div class="footer_logos">
+            </div>
+          </div><!--
+          --><div class="footer_right">
+            <ul class="footer_menu footer_mainmenu">
+              <li>
+                <a href="/personen">Personen</a>
+              </li>
+              <li>
+                <a href="/gesetze">Gesetze</a>
+              </li>
+              <li>
+                <a href="/schlagworte">Schlagworte</a>
+              </li>
+              <li>
+                <a href="/wir">Über uns</a>
+              </li>
+            </ul><!--
+            --><ul class="footer_menu footer_usermenu">
+              <li>
+                <a href="/abos">Abos verwalten</a>
+              </li>
+              <li>
+                <a href="/engagieren">Engagieren</a>
+              </li>
+              <li>
+                <a href="/kontakt">Kontakt & Impressum</a>
+              </li>
+            </ul>
+          </div>
         </div>
-      {% endblock %}
-    </div>
-
-    {% block content %}
-      <h1>Hello, parliament!</h1>
-    {% endblock %}
-    </div>
+      </div>
     </div>
   </body>
 </html>
