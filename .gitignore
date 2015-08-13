@@ -12,3 +12,4 @@ node_modules/*
 .sass-cache
 local_settings.py
 local_manage.py
+db.sqlite2

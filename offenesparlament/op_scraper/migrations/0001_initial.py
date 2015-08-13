@@ -86,9 +86,8 @@ class Migration(migrations.Migration):
             name='Mandate',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField(null=True, blank=True)),
                 ('function', models.ForeignKey(to='op_scraper.Function')),
+                ('legislative_period', models.ForeignKey(to='op_scraper.LegislativePeriod')),
             ],
         ),
         migrations.CreateModel(
@@ -130,7 +129,6 @@ class Migration(migrations.Migration):
                 ('deathplace', models.CharField(max_length=255, null=True, blank=True)),
                 ('occupation', models.CharField(max_length=255, null=True, blank=True)),
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
-                ('party', models.ForeignKey(to='op_scraper.Party')),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
@@ -156,6 +154,14 @@ class Migration(migrations.Migration):
                 ('tags', models.CharField(max_length=255)),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
+        ),
+        migrations.CreateModel(
+            name='State',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=255)),
+            ],
         ),
         migrations.CreateModel(
             name='Statement',
@@ -190,6 +196,11 @@ class Migration(migrations.Migration):
             model_name='mandate',
             name='party',
             field=models.ForeignKey(blank=True, to='op_scraper.Party', null=True),
+        ),
+        migrations.AddField(
+            model_name='mandate',
+            name='state',
+            field=models.ForeignKey(to='op_scraper.State'),
         ),
         migrations.AddField(
             model_name='law',

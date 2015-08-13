@@ -167,3 +167,42 @@ class PERSON:
                 except IndexError:
                     pass
             return parties
+
+    class LIST(SingleExtractor):
+        XPATH = '//*[@id="filterListeFW_008"]/table//tbody//tr'
+
+        @classmethod
+        def xt(cls, response):
+            persons = []
+            raw_persons = response.xpath(cls.XPATH).extract()
+            for raw_person in raw_persons:
+                source_link = Selector(text=raw_person).xpath(
+                    '//td//a/@href').extract()[0]
+                reversed_name = _clean(
+                    Selector(text=raw_person).xpath('//td//a/text()').extract()[0])
+                if ' siehe ' in reversed_name:
+                    reversed_name = reversed_name.split(' siehe ')[1]
+
+                mandates = []
+                party_spans = Selector(text=raw_person).xpath(
+                    '//td[2]//span').extract()
+                for party_span in party_spans:
+                    party_short = Selector(text=party_span).xpath(
+                        '//span/text()').extract()[0]
+                    party_title = Selector(text=party_span).xpath(
+                        '//span/@title').extract()[0]
+                    mandates.append(
+                        {'short': party_short, 'title': party_title})
+
+                electoral_state = {
+                    'short': Selector(text=raw_person).xpath('//td[4]//span/text()').extract()[0],
+                    'long': Selector(text=raw_person).xpath('//td[4]//span/@title').extract()[0]}
+
+                persons.append({
+                    'source_link': source_link,
+                    'reversed_name': reversed_name,
+                    'mandates': mandates,
+                    'electoral_state': electoral_state,
+                })
+
+            return persons

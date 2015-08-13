@@ -245,6 +245,15 @@ class Party(models.Model):
         return self.short.lower().replace(u'ä', 'ae').replace(u'ö', 'oe').replace(u'ü', 'ue')
 
 
+class State(models.Model):
+
+    """
+    A state or wahlkreis in Austria
+    """
+    name = models.CharField(max_length=255)
+    title = title = models.CharField(max_length=255)
+
+
 class Mandate(models.Model):
 
     """
@@ -253,15 +262,19 @@ class Mandate(models.Model):
     """
     function = models.ForeignKey(Function)
     party = models.ForeignKey(Party, null=True, blank=True)
-    start_date = models.DateField()
-    end_date = models.DateField(null=True, blank=True)
+
+    # start_date = models.DateField()
+    # end_date = models.DateField(null=True, blank=True)
+
+    # Relationsships
+    legislative_period = models.ForeignKey(LegislativePeriod)
+    state = models.ForeignKey(State)
 
     def __unicode__(self):
-        return u"{} ({}): {} - {} ".format(
+        return u"{} ({}), {} ".format(
             self.function,
             self.party,
-            self.start_date,
-            self.end_date)
+            self.legislative_period)
 
 
 class Person(models.Model, ParlIDMixIn):
@@ -283,11 +296,30 @@ class Person(models.Model, ParlIDMixIn):
     occupation = models.CharField(max_length=255, null=True, blank=True)
 
     # Relationsships
-    party = models.ForeignKey(Party)
+    # party = models.ForeignKey(Party) ## Removed, party is always the last
+    # mandate they have/had
     mandates = models.ManyToManyField(Mandate)
 
     def __unicode__(self):
         return self.full_name
+
+    @property
+    def party(self):
+        if self.latest_mandate is not None:
+            return self.latest_mandate.party
+        return None
+
+    @property
+    def latest_mandate(self):
+        mandates = self.mandates.order_by('-legislative_period__end_date')
+        if mandates:
+            return mandates[0]
+        else:
+            mandates = self.mandates.order_by(
+                '-legislative_period__start_date')
+            if mandates:
+                return mandates[0]
+        return None
 
     @property
     def full_name_urlsafe(self):
@@ -295,15 +327,7 @@ class Person(models.Model, ParlIDMixIn):
 
     @property
     def most_recent_function_or_occupation(self):
-        mandates = self.mandates.filter(end_date=None).order_by('-start_date')
-        if mandates and len(mandates) > 0:
-            return mandates[0].function
-        else:
-            mandates = self.mandates.order_by('-end_date')
-            if mandates and len(mandates) > 0:
-                return mandates[0].function
-            else:
-                return self.occupation
+        return self.latest_mandate or self.occupation
 
 
 class Statement(models.Model):
