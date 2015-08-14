@@ -26,7 +26,6 @@ urlpatterns = patterns(
     url(r'^admin/scrape/(?P<spider_name>.{1,30})',
         admin_views.trigger_llp_scrape, name='scrape_llp'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^docs/', include('sphinxdoc.urls')),
 )
 
 if settings.DEBUG:
