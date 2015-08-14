@@ -52,54 +52,15 @@ An open-data framework for the public data of the Austrian Parliament
  vagrant halt
  ```
 
+## Documentation
 
+Documentation is available via Sphinx. To generate cd to the `docs` directory and run:
 
-## Quick-And-Dirty installation instructions (on your own machine)
+```
+make html
+```
 
-Follow these instructions (updates pending!) to set up the project as is.
-
-1. Clone the github repository (duh)
-2. Install python [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) and [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/) (if you don't have it yet):
-
- ```
- pip install virtualenv
- pip install virtualenvwrapper
- ```
- Depending on your operating system, you might have to do some additional setup as explained [here](https://virtualenvwrapper.readthedocs.org/en/latest/#introduction).
-3. Create a new python virtualenv for your project:
-
- ```
- mkvirtualenv openparliament
- ```
- If all went well, your shell should have activated the environment already.
-4. Install the projects dependencies:
-
- ```
- pip install -r requirements.txt
- ```
-5. Have django create the DB-models:
-
- ```
- cd offenesparlament
- python manage.py makemigrations
- python manage.py migrate
- ```
-
-6. Create a superuser to log in to the backend with
-
- ```
- python manage.py createsuperuser
- ```
-
-7. Try it out!
-
- ```
- python manage.py runserver
- ```
-
-  Navigate to the [Django Admin Tool](http://127.0.0.1:8000/admin/) and check out your sweet, sweet models!
-
-And you're done!
+The documentation will then be available at ``docs/build/html/index.html``
 
 ## Resetting the database
 
