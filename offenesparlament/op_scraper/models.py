@@ -198,7 +198,7 @@ class Opinion(models.Model, ParlIDMixIn):
     """
     A comment in the pre-parliamentary process by an entity
     """
-    parl_id = models.CharField(max_length=30, unique=True, default="")
+    parl_id = models.CharField(max_length=120, unique=True, default="")
     date = models.DateField(null=True)
     description = models.TextField(blank=True)
     source_link = models.URLField(max_length=255, default="")
