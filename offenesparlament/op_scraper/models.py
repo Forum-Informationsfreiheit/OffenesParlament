@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
 from django.utils.html import remove_tags
+from django.core.urlresolvers import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 import re
@@ -163,12 +164,30 @@ class Law(models.Model, ParlIDMixIn):
 
         return phases
 
+    @property
+    def llp_roman(self):
+        return self.legislative_period.roman_numeral
+
+    @property
+    def keyword_titles(self):
+        return [kw.title for kw in self.keywords.all()]
+
     class Meta:
         unique_together = ("parl_id", "legislative_period")
 
     @property
     def short_title(self):
         return (self.title[:100] + '...') if len(self.title) > 100 else self.title
+
+    @property
+    def url(self):
+        return reverse(
+            'gesetz_detail',
+            kwargs={
+                'parl_id': self.parl_id_urlsafe,
+                'ggp': self.llp_roman
+            }
+        )
 
     def __unicode__(self):
         return self.title
@@ -310,6 +329,16 @@ class Person(models.Model, ParlIDMixIn):
         return None
 
     @property
+    def llps(self):
+        return [
+            m.legislative_period
+            for m in self.mandates.order_by('-legislative_period__end_date')]
+
+    @property
+    def llps_roman(self):
+        return [llp.roman_numeral for llp in self.llps]
+
+    @property
     def latest_mandate(self):
         mandates = self.mandates.order_by('-legislative_period__end_date')
         if mandates:
@@ -328,6 +357,16 @@ class Person(models.Model, ParlIDMixIn):
     @property
     def most_recent_function_or_occupation(self):
         return self.latest_mandate or self.occupation
+
+    @property
+    def url(self):
+        return reverse(
+            'person_detail',
+            kwargs={
+                'parl_id': self.parl_id_urlsafe,
+                'name': self.full_name_urlsafe
+            }
+        )
 
 
 class Statement(models.Model):

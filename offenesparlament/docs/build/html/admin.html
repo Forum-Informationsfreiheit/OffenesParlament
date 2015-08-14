@@ -1,0 +1,213 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Django Admin Interface &mdash; Offenes Parlament 1.0.0b1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Offenes Parlament 1.0.0b1 documentation" href="index.html"/>
+        <link rel="next" title="Scraping: Scrapy Spiders and Extractors" href="scraping.html"/>
+        <link rel="prev" title="Installation Notes" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> Offenes Parlament
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-instructions-with-vagrant">Installation instructions with Vagrant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#setup">Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#resetting-the-database">Resetting the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#creating-a-model-diagram">Creating a Model-Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#initial-scraping">Initial scraping</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Django Admin Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#import-export">Import-Export</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="scraping.html">Scraping: Scrapy Spiders and Extractors</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Offenes Parlament</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Django Admin Interface</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/admin.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="django-admin-interface">
+<h1>Django Admin Interface<a class="headerlink" href="#django-admin-interface" title="Permalink to this headline">¶</a></h1>
+<p>The Django Administration Interface has been extended with a few vital functions to make maintainance easier.</p>
+<p>Besides the usual CRUD-Interfaces, which should only be used for debugging purposes, given that the site&#8217;s entire data should be automatically scraped from the parliament website, a new block called <cite>Scraping Management</cite> has been added, which allows manually triggering one of the following spiders:</p>
+<ol class="arabic simple">
+<li>Legislative Periods</li>
+<li>Persons</li>
+<li>Pre-Laws</li>
+<li>Laws</li>
+</ol>
+<p>The order of the scrapers above represents their dependencies on each other; for instance, scanning laws includes votes and speeches by Persons, and relies on the Person in question having been scraped before. To be sure, the order above should be maintained in all scraping processes.</p>
+<div class="section" id="import-export">
+<h2>Import-Export<a class="headerlink" href="#import-export" title="Permalink to this headline">¶</a></h2>
+<p>To allow import-export, the <cite>import_export</cite> django module is being used, overwriting the <code class="docutils literal"><span class="pre">templates/admin/changelist.html</span></code> admin template to be compatible with <cite>django_reversion</cite>.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scraping.html" class="btn btn-neutral float-right" title="Scraping: Scrapy Spiders and Extractors" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation Notes" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Ben Freundorfer, Florian Cech.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0b1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

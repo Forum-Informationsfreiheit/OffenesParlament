@@ -140,3 +140,18 @@ for instance:
 python manage.py scrape crawl persons
 ```
 
+## ElasticSearch and Re-Indexing
+
+For now, reindexing (or updating the index, for that matter), is only done manually. To have all data indexed, just run:
+
+```
+python manage.py rebuild_index
+```
+
+for a full rebuild (wipes the indices first), or::
+
+```
+python manage.py update_index
+```
+
+to perform a simple update. For this to succeed, make sure ElasticSearch is up and running.

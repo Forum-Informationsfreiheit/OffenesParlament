@@ -2,4 +2,4 @@
 {{ object.title }}
 {{ object.description }}
 {{ object.category.title }}
-{{ object.keywords }}
+{{ object.keyword_titles }}
