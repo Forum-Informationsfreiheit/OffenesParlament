@@ -44,7 +44,7 @@ class Phase(models.Model):
     """
     A phase in the process of a law, grouping steps together
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1023)
 
     def __unicode__(self):
         return self.title
@@ -55,8 +55,8 @@ class Entity(models.Model):
     """
     An organisation or person commenting in a pre-parliamentary process (prelaw)
     """
-    title = models.CharField(max_length=255)
-    title_detail = models.CharField(max_length=255)
+    title = models.CharField(max_length=1023)
+    title_detail = models.CharField(max_length=1023)
     email = models.EmailField(null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
 
@@ -74,9 +74,9 @@ class Document(models.Model):
 
     Optionally with stripped html content of html-version
     """
-    title = models.CharField(max_length=255)
-    pdf_link = models.URLField(max_length=200, null=True)
-    html_link = models.URLField(max_length=200, null=True)
+    title = models.CharField(max_length=1023)
+    pdf_link = models.URLField(max_length=255, null=True)
+    html_link = models.URLField(max_length=255, null=True)
     stripped_html = models.TextField(null=True)
 
     def __unicode__(self):
@@ -88,11 +88,11 @@ class PressRelease(models.Model, ParlIDMixIn):
     """
     A press release produced by the parliamentary staff
     """
-    title = models.CharField(max_length=255)
-    subtitle = models.CharField(max_length=255)
+    title = models.CharField(max_length=1023)
+    subtitle = models.CharField(max_length=1023)
     full_text = models.TextField()
     release_date = models.DateField()
-    source_link = models.URLField(max_length=200, default="")
+    source_link = models.URLField(max_length=255, default="")
     parl_id = models.CharField(max_length=30, unique=True, default="")
     topics = models.CharField(max_length=255)
     format = models.CharField(max_length=255)
@@ -136,9 +136,9 @@ class Law(models.Model, ParlIDMixIn):
         i.e. Ministerialentwurf)
 
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1023)
     status = models.TextField(null=True, blank=True)
-    source_link = models.URLField(max_length=200, default="")
+    source_link = models.URLField(max_length=255, default="")
     parl_id = models.CharField(max_length=30, default="")
 
     description = models.TextField(blank=True)
@@ -201,7 +201,7 @@ class Opinion(models.Model, ParlIDMixIn):
     parl_id = models.CharField(max_length=30, unique=True, default="")
     date = models.DateField(null=True)
     description = models.TextField(blank=True)
-    source_link = models.URLField(max_length=200, default="")
+    source_link = models.URLField(max_length=255, default="")
 
     # Relationships
     documents = models.ManyToManyField(Document)
@@ -219,11 +219,11 @@ class Step(models.Model):
     """
     A single step in the parliamentary process
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1023)
     sortkey = models.CharField(max_length=6)
     date = models.DateField()
-    protocol_url = models.URLField(max_length=200, default="")
-    source_link = models.URLField(max_length=200, default="")
+    protocol_url = models.URLField(max_length=255, default="")
+    source_link = models.URLField(max_length=255, default="")
 
     # Relationships
     phase = models.ForeignKey(Phase)
@@ -240,7 +240,7 @@ class Function(models.Model):
     """
     A parliamentary function, like Abgeordnete or Mitglied des Bundesrates
     """
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1023)
 
     def __unicode__(self):
         return self.title
@@ -270,7 +270,7 @@ class State(models.Model):
     A state or wahlkreis in Austria
     """
     name = models.CharField(max_length=255)
-    title = title = models.CharField(max_length=255)
+    title = title = models.CharField(max_length=1023)
 
 
 class Mandate(models.Model):
@@ -303,8 +303,8 @@ class Person(models.Model, ParlIDMixIn):
     etc.
     """
     parl_id = models.CharField(max_length=30, primary_key=True)
-    source_link = models.URLField(max_length=200, default="")
-    photo_link = models.URLField(max_length=200, default="")
+    source_link = models.URLField(max_length=255, default="")
+    photo_link = models.URLField(max_length=255, default="")
     photo_copyright = models.CharField(max_length=255, default="")
     full_name = models.CharField(max_length=255)
     reversed_name = models.CharField(max_length=255)
@@ -375,7 +375,7 @@ class Statement(models.Model):
     A Person's statemtn or comment as part of a Step
     """
     speech_type = models.CharField(max_length=255)
-    protocol_url = models.URLField(max_length=200, default="")
+    protocol_url = models.URLField(max_length=255, default="")
     index = models.IntegerField(default=1)
 
     # Relationships

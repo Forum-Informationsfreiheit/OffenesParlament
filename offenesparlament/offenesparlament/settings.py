@@ -66,12 +66,12 @@ class BaseConfig(Configuration):
     # Haystack Configuration
 
     HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://localhost:9200/',
-        'INDEX_NAME': 'haystack',
-    },
-}
+        'default': {
+            'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+            'URL': 'http://localhost:9200/',
+            'INDEX_NAME': 'haystack',
+        },
+    }
 
     ROOT_URLCONF = 'offenesparlament.urls'
 
@@ -169,10 +169,11 @@ class Dev(BaseConfig):
         'template_timings_panel'
     )
 
-    #configure debug toolbar explicitly
+    # configure debug toolbar explicitly
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-    MIDDLEWARE_CLASSES = BaseConfig.MIDDLEWARE_CLASSES + ( 'debug_toolbar.middleware.DebugToolbarMiddleware', )
+    MIDDLEWARE_CLASSES = BaseConfig.MIDDLEWARE_CLASSES + \
+        ('debug_toolbar.middleware.DebugToolbarMiddleware', )
 
     INTERNAL_IPS = ('127.0.0.1', '10.0.2.2')
 
