@@ -82,12 +82,13 @@ A png-image will be generated as ``ignore/models.png``.
 
 ## Initial scraping
 
-There are currently four available scrapers, which should initially run in this order:
+There are currently five available scrapers, which should initially run in this order:
 
 1. llp (legislative periods)
 2. persons (for instance [Rudolf Anschober](http://www.parlament.gv.at/WWER/PAD_00024/index.shtml))
-3. pre_laws (for instance [Buchhaltungsagenturgesetz, Änderung (513/ME)](http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00513/index.shtml))
-4. laws_initiatives (for instance [ÖBIB-Gesetz 2015 (458 d.B.)](http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml))
+3. administration (also persons, but those that are/were in a a Regierung)
+4. pre_laws (for instance [Buchhaltungsagenturgesetz, Änderung (513/ME)](http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00513/index.shtml))
+5. laws_initiatives (for instance [ÖBIB-Gesetz 2015 (458 d.B.)](http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml))
 
 To run a scraper, use the following command:
 

@@ -128,6 +128,11 @@ class LAW:
                     date = datetime.datetime.strptime(
                         date_str, "%d.%m.%Y").date()
                     protocol_url = LAW.PHASES.STEPS.PROTOCOL.xt(step_selector)
+                    if protocol_url:
+                        protocol_url = "{}{}".format(
+                            BASE_HOST,
+                            protocol_url
+                        )
                     step = {
                         'sortkey': step_sortkey,
                         'title': title,
@@ -197,4 +202,4 @@ class LAW:
                     return title
 
             class PROTOCOL(SingleExtractor):
-                XPATH = "//td[3]/text()"
+                XPATH = "//td[3]//a/@href"

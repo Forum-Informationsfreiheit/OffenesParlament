@@ -222,6 +222,17 @@ class LawsInitiativesSpider(BaseScraper):
                         else:
                             # We can't save statements if we can't find the
                             # Person
-                            log.msg(red(u"Skipping Statement by {}").format(
-                                    green(u'[{}]'.format(stmnt['person_name']))))
+                            log.msg(
+                                red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
+                                    green(
+                                        u'[{}]'.format(stmnt['person_name'])),
+                                    blue(
+                                        "[{}]".format(stmnt['person_source_link'])),
+                                    red("{}").format(
+                                        "" if pq.exists() else " not"),
+                                    "" if pq.count() > 1 else ", but {} persons matching found!".format(
+                                        pq.count())
+                                ))
+                            import ipdb
+                            ipdb.set_trace()
                             continue

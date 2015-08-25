@@ -235,15 +235,32 @@ class Step(models.Model):
         return remove_tags(self.title, 'a')
 
 
+class Administration(models.Model):
+
+    """
+    An administration ('Regierung')
+    """
+    title = models.CharField(max_length=255, default="", unique=True)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True,blank=True)
+
+
 class Function(models.Model):
 
     """
     A parliamentary function, like Abgeordnete or Mitglied des Bundesrates
     """
     title = models.CharField(max_length=1023)
+    short = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = ("title", "short")
 
     def __unicode__(self):
+        if self.title:
+            return u"{} ({})".format(self.short, self.title)
         return self.title
+
     # Todo write method that scans function string for political party
     # shortform, e.g. ÖVP
 
@@ -282,12 +299,18 @@ class Mandate(models.Model):
     function = models.ForeignKey(Function)
     party = models.ForeignKey(Party, null=True, blank=True)
 
-    # start_date = models.DateField()
-    # end_date = models.DateField(null=True, blank=True)
+    # optional start_date and end_date
+    # sometimes the mandates do not run as long as their legislative period
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
 
     # Relationsships
-    legislative_period = models.ForeignKey(LegislativePeriod)
-    state = models.ForeignKey(State)
+    legislative_period = models.ForeignKey(
+        LegislativePeriod, blank=True, null=True)
+    state = models.ForeignKey(State, blank=True, null=True)
+    # regierung, for instance, Faymann II
+    administration = models.ForeignKey(Administration, blank=True, null=True)
+
 
     def __unicode__(self):
         return u"{} ({}), {} ".format(

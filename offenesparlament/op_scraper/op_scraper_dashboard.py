@@ -76,6 +76,11 @@ class CustomIndexDashboard(Dashboard):
                     'external': False,
                 },
                 {
+                    'title': _('Scrape Persons/Administrations'),
+                    'url': '/admin/scrape/administrations',
+                    'external': False,
+                },
+                {
                     'title': _('Scrape Pre-Laws'),
                     'url': '/admin/scrape/pre_laws',
                     'external': False,

@@ -14,6 +14,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Administration',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(default=b'', unique=True, max_length=255)),
+                ('start_date', models.DateField()),
+                ('end_date', models.DateField()),
+            ],
+        ),
+        migrations.CreateModel(
             name='Category',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -24,9 +33,9 @@ class Migration(migrations.Migration):
             name='Document',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
-                ('pdf_link', models.URLField(null=True)),
-                ('html_link', models.URLField(null=True)),
+                ('title', models.CharField(max_length=1023)),
+                ('pdf_link', models.URLField(max_length=255, null=True)),
+                ('html_link', models.URLField(max_length=255, null=True)),
                 ('stripped_html', models.TextField(null=True)),
             ],
         ),
@@ -34,8 +43,8 @@ class Migration(migrations.Migration):
             name='Entity',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
-                ('title_detail', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
+                ('title_detail', models.CharField(max_length=1023)),
                 ('email', models.EmailField(max_length=254, null=True, blank=True)),
                 ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128, null=True, blank=True)),
             ],
@@ -44,7 +53,8 @@ class Migration(migrations.Migration):
             name='Function',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
+                ('short', models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
@@ -61,9 +71,9 @@ class Migration(migrations.Migration):
             name='Law',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
                 ('status', models.TextField(null=True, blank=True)),
-                ('source_link', models.URLField(default=b'')),
+                ('source_link', models.URLField(default=b'', max_length=255)),
                 ('parl_id', models.CharField(default=b'', max_length=30)),
                 ('description', models.TextField(blank=True)),
                 ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
@@ -86,18 +96,21 @@ class Migration(migrations.Migration):
             name='Mandate',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start_date', models.DateField(null=True, blank=True)),
+                ('end_date', models.DateField(null=True, blank=True)),
+                ('administration', models.ForeignKey(blank=True, to='op_scraper.Administration', null=True)),
                 ('function', models.ForeignKey(to='op_scraper.Function')),
-                ('legislative_period', models.ForeignKey(to='op_scraper.LegislativePeriod')),
+                ('legislative_period', models.ForeignKey(blank=True, to='op_scraper.LegislativePeriod', null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Opinion',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('parl_id', models.CharField(default=b'', unique=True, max_length=30)),
+                ('parl_id', models.CharField(default=b'', unique=True, max_length=120)),
                 ('date', models.DateField(null=True)),
                 ('description', models.TextField(blank=True)),
-                ('source_link', models.URLField(default=b'')),
+                ('source_link', models.URLField(default=b'', max_length=255)),
                 ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
                 ('documents', models.ManyToManyField(to='op_scraper.Document')),
                 ('entity', models.ForeignKey(related_name='opinions', to='op_scraper.Entity')),
@@ -118,8 +131,8 @@ class Migration(migrations.Migration):
             name='Person',
             fields=[
                 ('parl_id', models.CharField(max_length=30, serialize=False, primary_key=True)),
-                ('source_link', models.URLField(default=b'')),
-                ('photo_link', models.URLField(default=b'')),
+                ('source_link', models.URLField(default=b'', max_length=255)),
+                ('photo_link', models.URLField(default=b'', max_length=255)),
                 ('photo_copyright', models.CharField(default=b'', max_length=255)),
                 ('full_name', models.CharField(max_length=255)),
                 ('reversed_name', models.CharField(max_length=255)),
@@ -136,18 +149,18 @@ class Migration(migrations.Migration):
             name='Phase',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
             ],
         ),
         migrations.CreateModel(
             name='PressRelease',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
-                ('subtitle', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
+                ('subtitle', models.CharField(max_length=1023)),
                 ('full_text', models.TextField()),
                 ('release_date', models.DateField()),
-                ('source_link', models.URLField(default=b'')),
+                ('source_link', models.URLField(default=b'', max_length=255)),
                 ('parl_id', models.CharField(default=b'', unique=True, max_length=30)),
                 ('topics', models.CharField(max_length=255)),
                 ('format', models.CharField(max_length=255)),
@@ -160,7 +173,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
-                ('title', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
             ],
         ),
         migrations.CreateModel(
@@ -168,7 +181,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('speech_type', models.CharField(max_length=255)),
-                ('protocol_url', models.URLField(default=b'')),
+                ('protocol_url', models.URLField(default=b'', max_length=255)),
                 ('index', models.IntegerField(default=1)),
                 ('person', models.ForeignKey(related_name='statements', to='op_scraper.Person')),
             ],
@@ -177,11 +190,11 @@ class Migration(migrations.Migration):
             name='Step',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('title', models.CharField(max_length=255)),
+                ('title', models.CharField(max_length=1023)),
                 ('sortkey', models.CharField(max_length=6)),
                 ('date', models.DateField()),
-                ('protocol_url', models.URLField(default=b'')),
-                ('source_link', models.URLField(default=b'')),
+                ('protocol_url', models.URLField(default=b'', max_length=255)),
+                ('source_link', models.URLField(default=b'', max_length=255)),
                 ('law', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Law', null=True)),
                 ('opinion', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Opinion', null=True)),
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
@@ -200,7 +213,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mandate',
             name='state',
-            field=models.ForeignKey(to='op_scraper.State'),
+            field=models.ForeignKey(blank=True, to='op_scraper.State', null=True),
         ),
         migrations.AddField(
             model_name='law',
@@ -216,6 +229,10 @@ class Migration(migrations.Migration):
             model_name='law',
             name='references',
             field=models.OneToOneField(related_name='laws', null=True, blank=True, to='op_scraper.Law'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='function',
+            unique_together=set([('title', 'short')]),
         ),
         migrations.AlterUniqueTogether(
             name='entity',

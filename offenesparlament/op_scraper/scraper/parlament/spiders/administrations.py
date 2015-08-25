@@ -15,6 +15,7 @@ from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
 from parlament.resources.extractors.opinion import *
+from parlament.resources.extractors.administration import *
 
 from parlament.resources.util import _clean
 
@@ -25,44 +26,30 @@ from op_scraper.models import Person
 from op_scraper.models import Function
 from op_scraper.models import Mandate
 from op_scraper.models import LegislativePeriod
+from op_scraper.models import Administration
 
 
-class PersonsSpider(BaseScraper):
-    BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filter.psp")
+class AdministrationsSpider(BaseScraper):
+    BASE_URL = "{}/{}".format(BASE_HOST, "WWER/BREG/REG/filter.psp")
 
-    RSS_TO_FUNCTION = {
-        'NR': 'Abgeordnete(r) zum Nationalrat',
-        'BR': 'Abgeordnete(r) zum Bundesrat'
-    }
-
-    URLOPTIONS_NR = {
-        'xdocumentUri': '/WWER/PARL/index.shtml',
-        'PR': '',
-        'R_BW': 'BL',
-        'anwenden': 'Anwenden',
-        'GP': '',
-        'BL': 'ALLE',
-        'STEP': ' ',
-        'FR': 'ALLE',
-        'M': 'M',
-        'NRBR': '',
-        'FBEZ': 'FW_008',
-        'view': '',
-        'WK': 'ALLE',
+    URLOPTIONS_ADMIN = {
         'jsMode': '',
-        'LISTE': '',
-        'W': 'W',
-        'letter': '',
-        'WP': 'ALLE',
-        'listeId': '8',
-        'R_WF': 'WP'
+        'xdocumentUri': '/WWER/BREG/REG/index.shtml',
+        'REG': '0',
+        'anwenden': 'Anwenden',
+        'FUNK': 'ALLE',
+        'RESS': 'ALLE',
+        'SUCH': '',
+        'listeId': '16',
+        'FBEZ': 'FW_016',
+        'pageNumber': '',
     }
 
-    name = "persons"
+    name = "administration"
     persons_scraped = []
 
     def __init__(self, **kw):
-        super(PersonsSpider, self).__init__(**kw)
+        super(AdministrationsSpider, self).__init__(**kw)
 
         self.start_urls = self.get_urls()
 
@@ -74,41 +61,18 @@ class PersonsSpider(BaseScraper):
         Overwritten from BaseSpider for non-LLP-based retrieval
         """
         urls = []
-        for llp in LegislativePeriod.objects.all():
-            for nrbr in ['NR', 'BR']:
-                urloptions = self.URLOPTIONS_NR.copy()
-                urloptions['GP'] = llp.roman_numeral
-                urloptions['NRBR'] = nrbr
-                url_options = urlencode(urloptions)
-                url = "{}?{}".format(self.BASE_URL, url_options)
-                urls.append(url)
+        url_options = urlencode(self.URLOPTIONS_ADMIN)
+        url = "{}?{}".format(self.BASE_URL, url_options)
+        urls.append(url)
 
         return urls
 
     def parse(self, response):
-
-        # rss = feedparser.parse(response.url)
-
-        persons = PERSON.LIST.xt(response)
-
+        persons = ADMINISTRATION.LIST.xt(response)
         callback_requests = []
 
-        # which llp are we in?
-        urloptions = response.url.split('?')[1]
-
-        llp_roman = [opt.split('=')[1]
-                     for opt in urloptions.split('&') if opt.split('=')[0] == 'GP']
-        llp_item = LegislativePeriod.objects.get(roman_numeral=llp_roman[0])
-
-        # function string
-        function = [opt.split('=')[1]
-                    for opt in urloptions.split('&') if opt.split('=')[0] == 'NRBR']
-        function_str = self.RSS_TO_FUNCTION[function[0]]
-        function_item, f_created = Function.objects.get_or_create(
-            title=function_str)
-
         self.logger.info(
-            "Scraping {} persons for LLP {}".format(len(persons), llp_roman))
+            "Scraping {} persons".format(len(persons)))
 
         # Iterate all persons
         for p in persons:
@@ -133,21 +97,27 @@ class PersonsSpider(BaseScraper):
                     green(u"[{}]".format(p['reversed_name']))
                 ))
 
-            for mandate in p['mandates']:
-                party_item = self.get_party_item(mandate)
-                state_item = self.get_state_item(p['electoral_state'])
-                # Create and append mandate
-                try:
-                    mandate_item, m_created = Mandate.objects.update_or_create(
-                        function=function_item,
-                        legislative_period=llp_item,
-                        party=party_item,
-                        state=state_item)
-                except:
-                    self.logger.info(
-                        red("Error saving Mandate {} ({})".format(function_item, party_item)))
-                    import ipdb
-                    ipdb.set_trace()
+            mandate = p['mandate']
+            administration_item = self.get_administration_item(mandate)
+
+            function_item, f_created = Function.objects.get_or_create(
+                short=mandate['short'],
+                title=mandate['title'])
+
+            if f_created:
+                self.logger.info(u"Created function {}".format(
+                    green(u'[{}]'.format(function_item.short))))
+
+            # Create and append mandate
+            try:
+                mandate_item, m_created = Mandate.objects.update_or_create(
+                    function=function_item,
+                    administration=administration_item)
+            except:
+                self.logger.info(
+                    red("Error saving Mandate {} ({})".format(function_item, administration_item)))
+                import ipdb
+                ipdb.set_trace()
 
             person_item.mandates.add(mandate_item)
             person_item.save()
@@ -167,37 +137,22 @@ class PersonsSpider(BaseScraper):
                 self.persons_scraped.append(parl_id)
         return callback_requests
 
-    def get_party_item(self, mandate):
-        # Do we have this party already?
-        party_item, created = Party.objects.update_or_create(
-            short=mandate['short'])
-
-        titles = party_item.titles
-        if mandate['title'] not in titles:
-            titles.append(mandate['title'])
-            party_item.titles = titles
-            party_item.save()
-
-        if created:
-            self.logger.info(u"Created party {}".format(
-                green(u'[{}]'.format(party_item.short))))
-
-        return party_item
-
-    def get_state_item(self, state):
-        # Do we have this party already?
-        state_item, created = State.objects.update_or_create(
-            name=state['short'],
-            title=state['long'])
+    def get_administration_item(self, mandate):
+        # Do we have this administration already?
+        admin_data = {
+            'start_date': mandate['administration']['start_date'],
+            'end_date': mandate['administration']['end_date']
+        }
+        admin_item, created = Administration.objects.update_or_create(
+            title=mandate['administration']['title'],
+            defaults=admin_data)
 
         if created:
-            state_item.save()
+            admin_item.save()
+            self.logger.info(u"Created administration {}".format(
+                green(u'[{}]'.format(admin_item.title))))
 
-            self.logger.info(u"Created state {}: '{}'".format(
-                green(u'[{}]'.format(state_item.name)),
-                state_item.title))
-
-        return state_item
+        return admin_item
 
     def parse_person_detail(self, response):
         """
