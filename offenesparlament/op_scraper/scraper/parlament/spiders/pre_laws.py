@@ -229,8 +229,7 @@ class PreLawsSpider(BaseScraper):
             'new' if created else 'updated')
 
         log.msg(
-            u"{} opinion: {} by {}".format(
-                'Created' if created else 'Updated',
+            u"Opinion: {} by {}".format(
                 magenta(opinion_item.parl_id),
                 entity_str
             ))

@@ -232,7 +232,13 @@ class Step(models.Model):
         Opinion, null=True, blank=True, related_name='steps')
 
     def __unicode__(self):
-        return remove_tags(self.title, 'a')
+        try:
+            if self.title:
+                return remove_tags(self.title, 'a')
+            else:
+                return self.title
+        except:
+            import ipdb; ipdb.set_trace()
 
 
 class Administration(models.Model):
