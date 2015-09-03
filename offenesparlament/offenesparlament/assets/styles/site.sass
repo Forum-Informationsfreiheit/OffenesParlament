@@ -8,12 +8,13 @@ $break_small: 500px
 $min_margin: 30px
 
 // colors
-$menu_dark_blue: rgb(31, 69, 99)
+$menu_dark_blue: rgb(30, 69, 99)
 $dark_blue: rgb(42, 79, 107)
 $light_blue: rgb(129, 183, 234)
 $middle_blue: rgb(3, 111, 213)
 $red: rgb(245, 95, 87)
 $dark_gray: rgb(38, 38, 38)
+$light_gray: rgb(229, 229, 229)
 $dirty_white: rgb(191, 191, 191)
 
 
@@ -73,17 +74,27 @@ a:hover
     ul.menu_bar_items
       list-style: none
       padding: 0
+      margin: 0
       li
         display: inline-block
-        margin-left: 30px
         a
           color: white
           text-decoration: none
           font-size: 13px
+          display: inline-block
+          line-height: 50px
+          padding: 0 15px
           &:hover
             color: $light_blue
             background-color: initial
 
+
+.search_bar
+  width: 100%
+  height: 50px
+  background-color: $light_gray
+  .visual_search
+    margin: 9px 0
 
 ul.person_list
   @include column-count(3)

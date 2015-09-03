@@ -10,6 +10,8 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <script src="{% static 'scripts/vendor.js' %}"></script>
+    <script src="{% static 'scripts/app.js' %}"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,6 +43,13 @@
         </nav>
       </div>
     </div>
+    {% block search_bar %}
+      <div class="search_bar">
+        <div class="container">
+          <div class="visual_search"></div>
+        </div>
+      </div>
+    {% endblock %}
 
     {% block container %}
     {% endblock %}

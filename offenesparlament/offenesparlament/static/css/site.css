@@ -41,7 +41,7 @@ a:hover {
 
 .menu_bar {
   width: 100%;
-  background-color: #1f4563;
+  background-color: #1e4563;
   color: white;
   overflow: hidden; }
   .menu_bar .logo {
@@ -56,17 +56,27 @@ a:hover {
     float: right; }
     .menu_bar nav ul.menu_bar_items {
       list-style: none;
-      padding: 0; }
+      padding: 0;
+      margin: 0; }
       .menu_bar nav ul.menu_bar_items li {
-        display: inline-block;
-        margin-left: 30px; }
+        display: inline-block; }
         .menu_bar nav ul.menu_bar_items li a {
           color: white;
           text-decoration: none;
-          font-size: 13px; }
+          font-size: 13px;
+          display: inline-block;
+          line-height: 50px;
+          padding: 0 15px; }
           .menu_bar nav ul.menu_bar_items li a:hover {
             color: #81b7ea;
             background-color: initial; }
+
+.search_bar {
+  width: 100%;
+  height: 50px;
+  background-color: #e5e5e5; }
+  .search_bar .visual_search {
+    margin: 9px 0; }
 
 ul.person_list {
   -webkit-column-count: 3;
