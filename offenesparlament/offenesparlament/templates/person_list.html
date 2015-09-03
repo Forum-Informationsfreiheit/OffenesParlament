@@ -15,9 +15,9 @@
     {% for p in person_list %}
     <li>
       <a href="{% url 'person_detail' parl_id=p.parl_id name=p.full_name_urlsafe %}">{{ p.full_name }}</a>
-      {% if p.party.short %}
-        <span class="party_tag {{ p.party.short_css_class }}">{{ p.party.short }}</span>
-      {% endif %}
+      {# {% if p.party.short %} #}
+      {#   <span class="party_tag {{ p.party.short_css_class }}">{{ p.party.short }}</span> #}
+      {# {% endif %} #}
       {# not using the partial party_tag.html here cause it was just to slow to repeatedly include the partial. caching was as slow #}
     </li>
     {% endfor %}
