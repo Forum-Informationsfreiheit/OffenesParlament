@@ -241,7 +241,7 @@ ul.breadcrumbs
       text-decoration: none
 
 .footer_content
-  margin: 20px auto 50px auto
+  margin: 20px auto 100px auto
   @media screen and (max-width: $break_medium)
     margin: 20px auto
 
@@ -253,11 +253,13 @@ ul.breadcrumbs
 .footer_right
   width: 40%
   text-align: right
+  margin-top: 1em
   @media screen and (max-width: $break_medium)
-    margin-top: 20px
+    margin-top: 70px
 
 .footer_left, .footer_right
   display: inline-block
+  vertical-align: top
   @media screen and (max-width: $break_medium)
     width: 100%
     display: block
@@ -284,3 +286,22 @@ ul.breadcrumbs
     text-align: left
 
 
+.footer_logos
+  a
+    display: inline-block
+    background-repeat: no-repeat
+    margin-right: 20px
+    vertical-align: middle
+    opacity: 0.8
+    &:hover
+      opacity: 1.0
+  .netidee
+    width: 100px
+    height: 60px
+    background-image: url('img/netidee_logo.png')
+    background-size: auto 60px
+  .foi
+    width: 230px
+    height: 43px
+    background-image: url('img/foi_logo.png')
+    background-size: auto 43px

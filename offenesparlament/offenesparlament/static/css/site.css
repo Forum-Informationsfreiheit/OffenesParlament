@@ -239,7 +239,7 @@ ul.breadcrumbs {
       text-decoration: none; }
 
 .footer_content {
-  margin: 20px auto 50px auto; }
+  margin: 20px auto 100px auto; }
   @media screen and (max-width: 940px) {
     .footer_content {
       margin: 20px auto; } }
@@ -252,13 +252,15 @@ ul.breadcrumbs {
 
 .footer_right {
   width: 40%;
-  text-align: right; }
+  text-align: right;
+  margin-top: 1em; }
   @media screen and (max-width: 940px) {
     .footer_right {
-      margin-top: 20px; } }
+      margin-top: 70px; } }
 
 .footer_left, .footer_right {
-  display: inline-block; }
+  display: inline-block;
+  vertical-align: top; }
   @media screen and (max-width: 940px) {
     .footer_left, .footer_right {
       width: 100%;
@@ -285,5 +287,24 @@ ul.breadcrumbs {
     width: 50%;
     display: inline-block;
     text-align: left; } }
+
+.footer_logos a {
+  display: inline-block;
+  background-repeat: no-repeat;
+  margin-right: 20px;
+  vertical-align: middle;
+  opacity: 0.8; }
+  .footer_logos a:hover {
+    opacity: 1; }
+.footer_logos .netidee {
+  width: 100px;
+  height: 60px;
+  background-image: url("img/netidee_logo.png");
+  background-size: auto 60px; }
+.footer_logos .foi {
+  width: 230px;
+  height: 43px;
+  background-image: url("img/foi_logo.png");
+  background-size: auto 43px; }
 
 /*# sourceMappingURL=site.css.map */
