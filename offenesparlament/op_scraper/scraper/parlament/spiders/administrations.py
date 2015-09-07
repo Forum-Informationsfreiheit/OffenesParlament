@@ -162,7 +162,9 @@ class AdministrationsSpider(BaseScraper):
         self.logger.info(u"Updating Person Detail {}".format(
             green(u"[{}]".format(person['reversed_name']))
         ))
-
+        if 'Bielka' in person['reversed_name']:
+            import ipdb
+            ipdb.set_trace()
         full_name = PERSON.DETAIL.FULL_NAME.xt(response)
         bio_data = PERSON.DETAIL.BIO.xt(response)
 

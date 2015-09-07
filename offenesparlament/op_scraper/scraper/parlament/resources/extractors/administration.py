@@ -67,7 +67,6 @@ class ADMINISTRATION:
                     ).xpath('//td//a/text()').extract()[0])
                 if ' siehe ' in reversed_name:
                     reversed_name = reversed_name.split(' siehe ')[1]
-
                 admin_title = person.xpath(
                     '//td[1]/span/text()').extract()
 
