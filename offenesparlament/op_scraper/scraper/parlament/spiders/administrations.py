@@ -50,7 +50,6 @@ class AdministrationsSpider(BaseScraper):
 
     def __init__(self, **kw):
         super(AdministrationsSpider, self).__init__(**kw)
-
         self.start_urls = self.get_urls()
 
         self.cookies_seen = set()

@@ -51,6 +51,12 @@ class LawsInitiativesSpider(BaseScraper):
     def __init__(self, **kw):
         super(LawsInitiativesSpider, self).__init__(**kw)
 
+        if 'llp' in kw:
+            try:
+                self.LLP = [int(kw['llp'])]
+            except:
+                pass
+
         # add at least a default URL for testing
         self.start_urls = self.get_urls()
 
@@ -233,6 +239,4 @@ class LawsInitiativesSpider(BaseScraper):
                                     "" if pq.count() > 1 else ", but {} persons matching found!".format(
                                         pq.count())
                                 ))
-                            import ipdb
-                            ipdb.set_trace()
                             continue
