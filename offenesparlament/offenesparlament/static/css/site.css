@@ -14,12 +14,19 @@ h1 {
       margin: 30px 0 15px 0; } }
 
 a, a:active, a:focus, a:visited {
-  color: #036fd5;
+  color: #006fd5;
   text-decoration: none; }
 
 a:hover {
-  color: #81b7ea;
+  color: #7fb7ea;
   text-decoration: none; }
+
+ul {
+  list-style-position: outside;
+  padding-left: 20px; }
+  ul li {
+    margin-bottom: 10px;
+    text-indent: 10px; }
 
 .content {
   margin-bottom: 70px; }
@@ -68,7 +75,7 @@ a:hover {
           line-height: 50px;
           padding: 0 15px; }
           .menu_bar nav ul.menu_bar_items li a:hover {
-            color: #81b7ea;
+            color: #7fb7ea;
             background-color: initial; }
 
 .search_bar {
@@ -135,24 +142,48 @@ ul.breadcrumbs {
   font-size: 80%;
   background-color: #cccccc; }
   .party_tag.spoe {
-    background-color: #b40000; }
+    background-color: #ec3733; }
   .party_tag.oevp {
-    background-color: black; }
+    background-color: #413c4d; }
   .party_tag.gruene {
-    background-color: #32af00; }
+    background-color: #3f925b; }
   .party_tag.neos, .party_tag.neos-lif {
-    background-color: #c800af; }
+    background-color: #d74c6b; }
   .party_tag.fpoe {
-    background-color: #0050c8; }
-  .party_tag.stronach {
-    background-color: #f0c800; }
+    background-color: #5e94ba; }
+  .party_tag.stronach, .party_tag.strona {
+    background-color: #f3bc40; }
   .party_tag.bzoe {
-    background-color: #ff9600; }
+    background-color: #f3783e; }
 
 .person_info {
-  margin-top: 30px; }
-  .person_info img {
-    max-width: 150px; }
+  margin-top: 30px;
+  margin-bottom: 60px; }
+  .person_info .person_info_photo {
+    display: inline-block;
+    width: 150px;
+    margin-right: 25px; }
+    .person_info .person_info_photo figure {
+      padding: 0;
+      margin: 0; }
+      .person_info .person_info_photo figure figcaption {
+        font-size: 10px;
+        text-align: center; }
+    .person_info .person_info_photo img {
+      width: 100%; }
+  .person_info .person_info_text {
+    display: inline-block;
+    vertical-align: top; }
+    .person_info .person_info_text .person_info_section {
+      margin-bottom: 30px; }
+      .person_info .person_info_text .person_info_section h3 {
+        margin-bottom: 5px; }
+      .person_info .person_info_text .person_info_section ul {
+        margin: 0; }
+    .person_info .person_info_text .person_info_buttons {
+      margin-top: 60px; }
+      .person_info .person_info_text .person_info_buttons a {
+        margin-right: 20px; }
 
 .homepage_content {
   background-color: #2a4f6b;
@@ -183,7 +214,7 @@ ul.breadcrumbs {
       margin: 0 10px;
       color: white; }
       .homepage_search .help a:hover {
-        color: #81b7ea; }
+        color: #7fb7ea; }
 
 .projectintro {
   background-color: #f55f57; }
@@ -245,7 +276,7 @@ ul.breadcrumbs {
     color: white;
     line-height: 200%; }
     .footer a:hover {
-      color: #81b7ea;
+      color: #7fb7ea;
       text-decoration: none; }
 
 .footer_content {
@@ -316,5 +347,102 @@ ul.breadcrumbs {
   height: 43px;
   background-image: url("img/foi_logo.png");
   background-size: auto 43px; }
+
+.button {
+  background-color: white;
+  border: 1px solid #f55f57;
+  padding: 8px 35px 8px 65px;
+  color: #f55f57;
+  text-decoration: none;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 35px 7px;
+  display: inline-block; }
+  .button:active, .button:visited {
+    color: #f55f57; }
+  .button:hover, .button:focus {
+    color: white;
+    background-color: #f55f57;
+    text-decoration: none; }
+
+.button_source {
+  background-image: url("img/icons/parliament_red.svg");
+  background-position-y: 6px; }
+  .button_source:hover, .button_source:focus {
+    background-image: url("img/icons/parliament_white.svg"); }
+
+.button_notifications {
+  background-image: url("img/icons/notification_red.svg");
+  background-position-y: 8px; }
+  .button_notifications:hover, .button_notifications:focus {
+    background-image: url("img/icons/notification_white.svg"); }
+
+.keyword_box {
+  padding: 40px;
+  border: 1px solid #cfe4d6;
+  background-color: #ebf4ee; }
+  .keyword_box h2 {
+    margin: 0 0 25px 0; }
+  .keyword_box .columned_wrapper {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2; }
+  .keyword_box ul {
+    margin: 0; }
+
+.speech_type_Pro, .speech_type_Contra {
+  width: 70px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: 15px;
+  overflow: hidden;
+  text-indent: -5000px;
+  background-position: 14px 3px; }
+
+.speech_type_Pro {
+  background-image: url("img/icons/thumb_up.svg"); }
+
+.speech_type_Contra {
+  background-image: url("img/icons/thumb_down.svg"); }
+
+table {
+  font-size: 13px; }
+  table th {
+    text-align: left;
+    padding: 10px; }
+  table tbody {
+    border-top: 1px solid #d9d9d9; }
+    table tbody tr {
+      border-bottom: 1px solid #d9d9d9; }
+      table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2; }
+      table tbody tr td {
+        padding: 10px;
+        vertical-align: top; }
+
+.statement_links {
+  margin-top: 8px; }
+  .statement_links a {
+    height: 15px;
+    line-height: 15px; }
+  .statement_links a.icon_parliament {
+    border-right: 1px solid #d9d9d9;
+    padding-right: 8px;
+    margin-right: 5px; }
+
+.icon_link {
+  text-indent: 20px;
+  height: 20px;
+  display: inline-block;
+  background-repeat: no-repeat; }
+  .icon_link.icon_parliament {
+    background-image: url("img/icons/parliament.svg");
+    background-size: 15px; }
+  .icon_link.icon_law {
+    background-image: url("img/icons/law.svg");
+    background-size: 12px; }
+
+.section {
+  margin-top: 70px; }
 
 /*# sourceMappingURL=site.css.map */

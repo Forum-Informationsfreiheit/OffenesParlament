@@ -2,6 +2,8 @@ from django.shortcuts import render
 from op_scraper.models import Person
 from op_scraper.models import Law
 from op_scraper.models import LegislativePeriod
+from op_scraper.models import Keyword
+from django.db.models import Count, Max
 
 
 def index(request):
@@ -10,7 +12,7 @@ def index(request):
 
 def person_list(request):
     # select_related('party').order_by('reversed_name')
-    person_list = Person.objects.all()
+    person_list = Person.objects.all()[:200]
     context = {'person_list': person_list}
     return render(request, 'person_list.html', context)
 
@@ -23,7 +25,15 @@ def gesetze_list(request):
 
 def person_detail(request, parl_id, name):
     person = Person.objects.get(parl_id=parl_id)
-    context = {'person': person}
+    keywords = Keyword.objects \
+            .filter(laws__steps__statements__person=person) \
+            .annotate(num_steps=Count('laws__steps')) \
+            .order_by('-num_steps')[:10]
+    laws = Law.objects \
+            .filter(steps__statements__person=person) \
+            .annotate(last_update=Max('steps__date')) \
+            .order_by('-last_update')
+    context = {'person': person, 'keywords': keywords, 'laws': laws}
     return render(request, 'person_detail.html', context)
 
 

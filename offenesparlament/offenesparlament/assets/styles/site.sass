@@ -10,8 +10,8 @@ $min_margin: 30px
 // colors
 $menu_dark_blue: rgb(30, 69, 99)
 $dark_blue: rgb(42, 79, 107)
-$light_blue: rgb(129, 183, 234)
-$middle_blue: rgb(3, 111, 213)
+$light_blue: rgb(127, 183, 234)
+$middle_blue: rgb(0, 111, 213)
 $red: rgb(245, 95, 87)
 $dark_gray: rgb(38, 38, 38)
 $light_gray: rgb(229, 229, 229)
@@ -38,6 +38,12 @@ a:hover
   color: $light_blue
   text-decoration: none
 
+ul
+  list-style-position: outside
+  padding-left: 20px
+  li
+    margin-bottom: 10px
+    text-indent: 10px
 
 .content
   margin-bottom: 70px
@@ -144,24 +150,48 @@ ul.breadcrumbs
   font-size: 80%
   background-color: hsl(0, 0, 80)
   &.spoe
-    background-color: rgb(180, 0, 0)
+    background-color: rgb(236, 55, 51)
   &.oevp
-    background-color: rgb(0, 0, 0)
+    background-color: rgb(65, 60, 77)
   &.gruene
-    background-color: rgb(50, 175, 0)
+    background-color: rgb(63, 146, 91)
   &.neos, &.neos-lif
-    background-color: rgb(200, 0, 175)
+    background-color: rgb(215, 76, 107)
   &.fpoe
-    background-color: rgb(0, 80, 200)
-  &.stronach
-    background-color: rgb(240, 200, 0)
+    background-color: rgb(94, 148, 186)
+  &.stronach, &.strona
+    background-color: rgb(243, 188, 64)
   &.bzoe
-    background-color: rgb(255, 150, 0)
+    background-color: rgb(243, 120, 62)
 
 .person_info
   margin-top: 30px
-  img
-    max-width: 150px
+  margin-bottom: 60px
+  .person_info_photo
+    display: inline-block
+    width: 150px
+    margin-right: 25px
+    figure
+      padding: 0
+      margin: 0
+      figcaption
+        font-size: 10px
+        text-align: center
+    img
+      width: 100%
+  .person_info_text
+    display: inline-block
+    vertical-align: top
+    .person_info_section
+      margin-bottom: 30px
+      h3
+        margin-bottom: 5px
+      ul
+        margin: 0
+    .person_info_buttons
+      margin-top: 60px
+      a
+        margin-right: 20px
 
 .homepage_content
   background-color: $dark_blue
@@ -316,3 +346,103 @@ ul.breadcrumbs
     height: 43px
     background-image: url('img/foi_logo.png')
     background-size: auto 43px
+
+.button
+  background-color: white
+  border: 1px solid $red
+  padding: 8px 35px 8px 65px
+  color: $red
+  text-decoration: none
+  background-repeat: no-repeat
+  background-size: 20px 20px
+  background-position: 35px 7px
+  display: inline-block
+  &:active, &:visited
+    color: $red
+  &:hover, &:focus
+    color: white
+    background-color: $red
+    text-decoration: none
+
+.button_source
+  background-image: url('img/icons/parliament_red.svg')
+  background-position-y: 6px
+  &:hover, &:focus
+    background-image: url('img/icons/parliament_white.svg')
+
+.button_notifications
+  background-image: url('img/icons/notification_red.svg')
+  background-position-y: 8px
+  &:hover, &:focus
+    background-image: url('img/icons/notification_white.svg')
+
+.keyword_box
+  padding: 40px
+  border: 1px solid rgb(207, 228, 214)
+  background-color: rgb(235, 244, 238)
+  h2
+    margin: 0 0 25px 0
+  .columned_wrapper
+    @include column-count(2)
+  ul
+    margin: 0
+
+
+.speech_type_Pro, .speech_type_Contra
+  width: 70px
+  height: 20px
+  background-repeat: no-repeat
+  background-size: 15px
+  overflow: hidden
+  text-indent: -5000px
+  background-position: 14px 3px
+
+.speech_type_Pro
+  background-image: url('img/icons/thumb_up.svg')
+
+.speech_type_Contra
+  background-image: url('img/icons/thumb_down.svg')
+
+
+table
+  font-size: 13px
+  th
+    text-align: left
+    padding: 10px
+  tbody
+    border-top: 1px solid rgb(217, 217, 217)
+    tr
+      border-bottom: 1px solid rgb(217, 217, 217)
+      &:nth-child(odd)
+        background-color: rgb(242, 242, 242)
+      td
+        padding: 10px
+        vertical-align: top
+
+.statement_links
+  margin-top: 8px
+  a
+    height: 15px
+    line-height: 15px
+  a.icon_parliament
+    border-right: 1px solid rgb(217, 217, 217)
+    padding-right: 8px
+    margin-right: 5px
+
+.icon_link
+  text-indent: 20px
+  height: 20px
+  display: inline-block
+  background-repeat: no-repeat
+
+  &.icon_parliament
+    background-image: url('img/icons/parliament.svg')
+    background-size: 15px
+
+  &.icon_law
+    background-image: url('img/icons/law.svg')
+    background-size: 12px
+
+
+.section
+  margin-top: 70px

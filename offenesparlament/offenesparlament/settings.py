@@ -116,9 +116,11 @@ class BaseConfig(Configuration):
 
     USE_I18N = True
 
-    USE_L10N = True
+    USE_L10N = False
 
     USE_TZ = True
+
+    DATE_FORMAT = "j.n.Y"
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -175,7 +177,7 @@ class Dev(BaseConfig):
     MIDDLEWARE_CLASSES = BaseConfig.MIDDLEWARE_CLASSES + \
         ('debug_toolbar.middleware.DebugToolbarMiddleware', )
 
-    INTERNAL_IPS = ('127.0.0.1', '10.0.2.2')
+    INTERNAL_IPS = ('127.0.0.1', '10.0.2.2', '192.168.47.1')
 
     DEBUG_TOOLBAR_PANELS = [
         # 'debug_toolbar.panels.versions.VersionsPanel',
