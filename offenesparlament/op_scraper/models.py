@@ -32,7 +32,7 @@ class LegislativePeriod(models.Model):
                 self.start_date,
                 self.end_date)
         else:
-            rep_str = "{} (since {})".format(
+            rep_str = "{} (seit {})".format(
                 self.roman_numeral,
                 self.start_date)
 
@@ -365,14 +365,19 @@ class Person(models.Model, ParlIDMixIn):
 
     @property
     def latest_mandate(self):
-        mandates = self.mandates.order_by('-legislative_period__end_date')
+        mandates = self.mandates.filter(legislative_period__end_date__isnull=True) \
+                .order_by('-legislative_period__start_date')
         if mandates:
             return mandates[0]
         else:
-            mandates = self.mandates.order_by(
-                '-legislative_period__start_date')
+            mandates = self.mandates.order_by('-legislative_period__end_date')
             if mandates:
                 return mandates[0]
+            else:
+                mandates = self.mandates.order_by(
+                    '-legislative_period__start_date')
+                if mandates:
+                    return mandates[0]
         return None
 
     @property
@@ -381,7 +386,7 @@ class Person(models.Model, ParlIDMixIn):
 
     @property
     def most_recent_function_or_occupation(self):
-        return self.latest_mandate or self.occupation
+        return self.latest_mandate.function.title or self.occupation
 
     @property
     def url(self):
