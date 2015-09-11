@@ -105,7 +105,7 @@ class PressRelease(models.Model, ParlIDMixIn):
 class Category(models.Model):
 
     """
-    A category for a law or prelaw
+    A category for a law, prelaw, anfrage, beantwortung, etc.
     """
     title = models.CharField(max_length=255, unique=True)
 

@@ -10,7 +10,7 @@ from ansicolor import blue
 from urllib import urlencode
 
 from parlament.settings import BASE_HOST
-from parlament.spiders import BaseScraper
+from parlament.spiders import BaseSpider
 from parlament.resources.extractors.llp import *
 
 from parlament.resources.util import _clean
@@ -19,7 +19,7 @@ from parlament.resources.util import _clean
 from op_scraper.models import LegislativePeriod
 
 
-class LegislativePeriodSpider(BaseScraper):
+class LegislativePeriodSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "/WWER/PARL/")
 
     name = "llp"

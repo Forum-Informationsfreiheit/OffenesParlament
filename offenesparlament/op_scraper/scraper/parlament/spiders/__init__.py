@@ -5,7 +5,7 @@ import roman
 from urllib import urlencode
 
 
-class BaseScraper(scrapy.Spider):
+class BaseSpider(scrapy.Spider):
 
     """
     Base class for scraping parliamentary sites
@@ -23,7 +23,7 @@ class BaseScraper(scrapy.Spider):
     allowed_domains = ["parlament.gv.at"]
 
     def __init__(self, **kw):
-        super(BaseScraper, self).__init__(**kw)
+        super(BaseSpider, self).__init__(**kw)
 
         # shut off annoying debug level core api messages
         import scrapy
