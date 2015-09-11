@@ -1,0 +1,10 @@
+<div class="keyword_box">
+  <h2>Top {{ keywords|length }} Schlagworte</h2>
+  <div class="columned_wrapper">
+    <ul>
+      {% for kw in keywords %}
+      <li>{{ kw }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

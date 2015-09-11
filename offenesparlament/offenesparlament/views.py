@@ -4,6 +4,7 @@ from op_scraper.models import Law
 from op_scraper.models import LegislativePeriod
 from op_scraper.models import Keyword
 from django.db.models import Count, Max
+import datetime
 
 
 def index(request):
@@ -18,9 +19,24 @@ def person_list(request):
 
 
 def gesetze_list(request):
-    gesetze_list = Law.objects.order_by('parl_id')
-    context = {'gesetze_list': gesetze_list}
+    laws = Law.objects \
+            .annotate(last_update=Max('steps__date')) \
+            .order_by('-last_update')
+    context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
+
+def keyword_list(request):
+    today = datetime.date.today()
+    eight_weeks_ago = today - datetime.timedelta(weeks=8)
+    top10_keywords = Keyword.objects \
+            .filter(laws__steps__date__gte=eight_weeks_ago) \
+            .annotate(num_steps=Count('laws__steps')) \
+            .annotate(last_update=Max('laws__steps__date')) \
+            .order_by('-num_steps')[:10]
+    keywords = Keyword.objects.all() \
+            .order_by('title')
+    context = {'top10_keywords': top10_keywords, 'keywords': keywords}
+    return render(request, 'keyword_list.html', context)
 
 
 def person_detail(request, parl_id, name):
@@ -44,3 +60,15 @@ def gesetz_detail(request, parl_id, ggp):
     gesetz = Law.objects.get(parl_id=parl_id_restored, legislative_period=llp)
     context = {'gesetz': gesetz}
     return render(request, 'gesetz_detail.html', context)
+
+
+def keyword_detail(request, keyword):
+    title_restored = u'{}'.format(keyword.replace('-', '/').replace('_', ' '))
+    keyword = Keyword.objects.get(title=title_restored)
+    laws = keyword.laws \
+            .annotate(last_update=Max('steps__date')) \
+            .order_by('-last_update')
+    context = {'keyword': keyword, 'laws': laws}
+    return render(request, 'keyword_detail.html', context)
+
+

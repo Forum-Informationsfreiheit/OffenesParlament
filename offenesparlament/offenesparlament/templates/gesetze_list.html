@@ -6,13 +6,15 @@
   {% breadcrumb "Gesetze" "gesetze_list" %}
 {% endblock %}
 
-{% block title %}Abgeordnete zum Nationalrat{% endblock %}
+{% block title %}Regierungsvorlagen &amp; Gesetzesinitiativen{% endblock %}
 
 {% block content %}
-  <h1>Gesetze</h1>
-  <ul class="laws_list">
-    {% for law in gesetze_list %}
-    <li><a href="{% url 'gesetz_detail' parl_id=law.parl_id_urlsafe ggp=law.legislative_period.roman_numeral %}">{{ law.title }}</a></li>
-    {% endfor %}
-  </ul>
+  <h1>Regierungsvorlagen &amp; Gesetzesinitiativen</h1>
+  <p class="explanation">
+    Hier finden Sie eine Übersicht über alle Regierungsvorlagen und
+    Gesetzesinitiativen der aktuellen Gesetzgebungsperiode (XXV.). Sie können
+    über die Suchleiste eine andere Legislaturperiode wählen oder die
+    Ergebnisse verfeinern.
+  </p>
+  {% include 'partials/lawlist.html' with laws=laws %}
 {% endblock %}

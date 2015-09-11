@@ -7,11 +7,16 @@
   {% breadcrumb "Personen" "person_list" %}
 {% endblock %}
 
-{% block title %}Abgeordnete zum Nationalrat{% endblock %}
+{% block title %}Personen{% endblock %}
 
 {% block content %}
   <h1>Abgeordnete zum Nationalrat</h1>
-  <ul class="person_list">
+  <p class="explanation">
+    Hier finden Sie eine Übersicht über alle Abgeordneten zum Nationalrat in
+    der aktuellen Gesetzgebungsperiode (XXV.). Um eine genauere Auswahl zu
+    treffen, benutzen Sie die Suche.
+  </p>
+  <ul class="columned_linklist">
     {% for p in person_list %}
     <li>
       <a href="{% url 'person_detail' parl_id=p.parl_id name=p.full_name_urlsafe %}">{{ p.full_name }}</a>

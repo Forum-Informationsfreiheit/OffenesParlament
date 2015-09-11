@@ -57,16 +57,7 @@
     </div>
   </div>
 
-  <div class="keyword_box">
-    <h2>Top {{ keywords|length }} Schlagworte</h2>
-    <div class="columned_wrapper">
-      <ul>
-        {% for kw in keywords %}
-        <li>{{ kw }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
+  {% include 'partials/keywordbox.html' with keywords=keywords %}
 
   <div class="section">
     <h2>Redebeiträge</h2>
@@ -103,26 +94,6 @@
 
   <div class="section">
     <h2>Verhandlungsgegenstände</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Aktualisierung</th>
-          <th>Art</th>
-          <th>Betreff</th>
-          <th>Nummer</th>
-          <th>Status</th>
-      </thead>
-      <tbody>
-        {% for law in laws %}
-        <tr>
-          <td>{{ law.last_update }}</td>
-          <td>{{ law.category.title }}</td>
-          <td><a href="{{ law.url }}">{{ law.title }}</a></td>
-          <td>{{ law.parl_id }}</td>
-          <td></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    {% include 'partials/lawlist.html' with laws=laws %}
   </div>
 {% endblock %}

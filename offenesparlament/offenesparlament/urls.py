@@ -15,6 +15,8 @@ urlpatterns = patterns(
     url(r'^gesetze/$', views.gesetze_list, name='laws_list'),
     url(r'^gesetze/(?P<ggp>.{1,30})/(?P<parl_id>.{1,30})/$',
         views.gesetz_detail, name='gesetz_detail'),
+    url(r'^schlagworte/$', views.keyword_list, name='keyword_list'),
+    url(r'^schlagworte/(?P<keyword>.+)/$', views.keyword_detail, name='keyword_detail'),
     # Search Urls
     url(r'^search/?$',
         JsonSearchView.as_view()),

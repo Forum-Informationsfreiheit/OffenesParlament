@@ -7,11 +7,20 @@ body {
 h1 {
   font-size: 30px;
   font-weight: bold;
-  margin: 50px 0 35px 0; }
+  margin: 50px 0 0 0; }
   @media screen and (max-width: 500px) {
     h1 {
       font-size: 25px;
       margin: 30px 0 15px 0; } }
+
+p.explanation {
+  font-size: 18px;
+  margin: 25px 0 45px 0;
+  line-height: 170%; }
+  @media screen and (max-width: 500px) {
+    p.explanation {
+      font-size: 14px;
+      margin: 15px 0 25px 0; } }
 
 a, a:active, a:focus, a:visited {
   color: #006fd5;
@@ -26,7 +35,7 @@ ul {
   padding-left: 20px; }
   ul li {
     margin-bottom: 10px;
-    text-indent: 10px; }
+    padding-right: 10px; }
 
 .content {
   margin-bottom: 70px; }
@@ -66,7 +75,8 @@ ul {
       padding: 0;
       margin: 0; }
       .menu_bar nav ul.menu_bar_items li {
-        display: inline-block; }
+        display: inline-block;
+        margin: 0; }
         .menu_bar nav ul.menu_bar_items li a {
           color: white;
           text-decoration: none;
@@ -85,26 +95,23 @@ ul {
   .search_bar .visual_search {
     margin: 9px 0; }
 
-ul.person_list {
+ul.columned_linklist {
   -webkit-column-count: 3;
   -moz-column-count: 3;
   column-count: 3;
   padding: 0; }
   @media screen and (max-width: 940px) {
-    ul.person_list {
+    ul.columned_linklist {
       -webkit-column-count: 2;
       -moz-column-count: 2;
       column-count: 2; } }
   @media screen and (max-width: 500px) {
-    ul.person_list {
+    ul.columned_linklist {
       -webkit-column-count: 1;
       -moz-column-count: 1;
       column-count: 1; } }
-  ul.person_list li {
-    margin: 6px 0; }
-    @media screen and (max-width: 940px) {
-      ul.person_list li {
-        margin: 10px 0; } }
+  ul.columned_linklist li {
+    margin: 13px 0; }
 
 .top_bar {
   margin: 30px 0; }
@@ -125,7 +132,8 @@ ul.breadcrumbs {
   ul.breadcrumbs li {
     font-weight: bold;
     display: inline;
-    margin-right: 5px; }
+    margin-right: 5px;
+    padding-right: 0; }
     ul.breadcrumbs li a {
       font-weight: normal; }
 
@@ -158,11 +166,15 @@ ul.breadcrumbs {
 
 .person_info {
   margin-top: 30px;
-  margin-bottom: 60px; }
+  margin-bottom: 40px; }
   .person_info .person_info_photo {
     display: inline-block;
     width: 150px;
     margin-right: 25px; }
+    @media screen and (max-width: 500px) {
+      .person_info .person_info_photo {
+        width: 100%;
+        margin-bottom: 30px; } }
     .person_info .person_info_photo figure {
       padding: 0;
       margin: 0; }
@@ -174,6 +186,9 @@ ul.breadcrumbs {
   .person_info .person_info_text {
     display: inline-block;
     vertical-align: top; }
+    @media screen and (max-width: 500px) {
+      .person_info .person_info_text {
+        display: block; } }
     .person_info .person_info_text .person_info_section {
       margin-bottom: 30px; }
       .person_info .person_info_text .person_info_section h3 {
@@ -181,9 +196,12 @@ ul.breadcrumbs {
       .person_info .person_info_text .person_info_section ul {
         margin: 0; }
     .person_info .person_info_text .person_info_buttons {
-      margin-top: 60px; }
+      margin-top: 40px; }
       .person_info .person_info_text .person_info_buttons a {
-        margin-right: 20px; }
+        margin: 10px 20px 10px 0; }
+        @media screen and (max-width: 500px) {
+          .person_info .person_info_text .person_info_buttons a {
+            margin: 10px 0; } }
 
 .homepage_content {
   background-color: #2a4f6b;
@@ -297,7 +315,7 @@ ul.breadcrumbs {
   margin-top: 1em; }
   @media screen and (max-width: 940px) {
     .footer_right {
-      margin-top: 70px; } }
+      margin-top: 40px; } }
 
 .footer_left, .footer_right {
   display: inline-block;
@@ -335,6 +353,9 @@ ul.breadcrumbs {
   margin-right: 20px;
   vertical-align: middle;
   opacity: 0.8; }
+  @media screen and (max-width: 500px) {
+    .footer_logos a {
+      margin: 10px 20px 10px 0; } }
   .footer_logos a:hover {
     opacity: 1; }
 .footer_logos .netidee {
@@ -358,6 +379,10 @@ ul.breadcrumbs {
   background-size: 20px 20px;
   background-position: 35px 7px;
   display: inline-block; }
+  @media screen and (max-width: 500px) {
+    .button {
+      padding-right: 10px;
+      display: block; } }
   .button:active, .button:visited {
     color: #f55f57; }
   .button:hover, .button:focus {
@@ -387,6 +412,13 @@ ul.breadcrumbs {
     -webkit-column-count: 2;
     -moz-column-count: 2;
     column-count: 2; }
+  @media screen and (max-width: 500px) {
+    .keyword_box {
+      padding: 20px; }
+      .keyword_box .columned_wrapper {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1; } }
   .keyword_box ul {
     margin: 0; }
 
@@ -406,7 +438,8 @@ ul.breadcrumbs {
   background-image: url("img/icons/thumb_down.svg"); }
 
 table {
-  font-size: 13px; }
+  font-size: 13px;
+  width: 100%; }
   table th {
     text-align: left;
     padding: 10px; }

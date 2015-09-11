@@ -126,6 +126,10 @@ class Keyword(models.Model):
     class Meta:
         ordering = ['title']
 
+    @property
+    def title_urlsafe(self):
+        return self.title.replace('/', '-').replace(' ', '_')
+
 
 class Law(models.Model, ParlIDMixIn):
 
@@ -188,6 +192,19 @@ class Law(models.Model, ParlIDMixIn):
                 'ggp': self.llp_roman
             }
         )
+
+    @property
+    def simple_status(self):
+        if self.status is None:
+            return 'offen'
+        elif self.status.startswith('Beschlossen'):
+            return 'abgeschlossen'
+        elif self.status.startswith('Gesetzesantrag abgelehnt'):
+            return 'abgelehnt'
+        elif self.status.startswith(u'Zurückgezogen'):
+            return 'zurückgezogen'
+        else:
+            return 'offen'
 
     def __unicode__(self):
         return self.title

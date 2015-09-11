@@ -25,10 +25,18 @@ body
 h1
   font-size: 30px
   font-weight: bold
-  margin: 50px 0 35px 0
+  margin: 50px 0 0 0
   @media screen and (max-width: $break_small)
     font-size: 25px
     margin: 30px 0 15px 0
+
+p.explanation
+  font-size: 18px
+  margin: 25px 0 45px 0
+  line-height: 170%
+  @media screen and (max-width: $break_small)
+    font-size: 14px
+    margin: 15px 0 25px 0
 
 a, a:active, a:focus, a:visited
   color: $middle_blue
@@ -43,7 +51,7 @@ ul
   padding-left: 20px
   li
     margin-bottom: 10px
-    text-indent: 10px
+    padding-right: 10px
 
 .content
   margin-bottom: 70px
@@ -83,6 +91,7 @@ ul
       margin: 0
       li
         display: inline-block
+        margin: 0
         a
           color: white
           text-decoration: none
@@ -102,7 +111,7 @@ ul
   .visual_search
     margin: 9px 0
 
-ul.person_list
+ul.columned_linklist
   @include column-count(3)
   padding: 0
   @media screen and (max-width: $break_medium)
@@ -110,9 +119,7 @@ ul.person_list
   @media screen and (max-width: $break_small)
     @include column-count(1)
   li
-    margin: 6px 0
-    @media screen and (max-width: $break_medium)
-      margin: 10px 0
+    margin: 13px 0
 
 .top_bar
   margin: 30px 0
@@ -134,6 +141,7 @@ ul.breadcrumbs
     font-weight: bold
     display: inline
     margin-right: 5px
+    padding-right: 0
     a
       font-weight: normal
 
@@ -166,11 +174,14 @@ ul.breadcrumbs
 
 .person_info
   margin-top: 30px
-  margin-bottom: 60px
+  margin-bottom: 40px
   .person_info_photo
     display: inline-block
     width: 150px
     margin-right: 25px
+    @media screen and (max-width: $break_small)
+      width: 100%
+      margin-bottom: 30px
     figure
       padding: 0
       margin: 0
@@ -182,6 +193,8 @@ ul.breadcrumbs
   .person_info_text
     display: inline-block
     vertical-align: top
+    @media screen and (max-width: $break_small)
+      display: block
     .person_info_section
       margin-bottom: 30px
       h3
@@ -189,9 +202,11 @@ ul.breadcrumbs
       ul
         margin: 0
     .person_info_buttons
-      margin-top: 60px
+      margin-top: 40px
       a
-        margin-right: 20px
+        margin: 10px 20px 10px 0
+        @media screen and (max-width: $break_small)
+          margin: 10px 0
 
 .homepage_content
   background-color: $dark_blue
@@ -296,7 +311,7 @@ ul.breadcrumbs
   text-align: right
   margin-top: 1em
   @media screen and (max-width: $break_medium)
-    margin-top: 70px
+    margin-top: 40px
 
 .footer_left, .footer_right
   display: inline-block
@@ -334,6 +349,8 @@ ul.breadcrumbs
     margin-right: 20px
     vertical-align: middle
     opacity: 0.8
+    @media screen and (max-width: $break_small)
+      margin: 10px 20px 10px 0
     &:hover
       opacity: 1.0
   .netidee
@@ -357,6 +374,9 @@ ul.breadcrumbs
   background-size: 20px 20px
   background-position: 35px 7px
   display: inline-block
+  @media screen and (max-width: $break_small)
+    padding-right: 10px
+    display: block
   &:active, &:visited
     color: $red
   &:hover, &:focus
@@ -384,6 +404,10 @@ ul.breadcrumbs
     margin: 0 0 25px 0
   .columned_wrapper
     @include column-count(2)
+  @media screen and (max-width: $break_small)
+    padding: 20px
+    .columned_wrapper
+      @include column-count(1)
   ul
     margin: 0
 
@@ -406,6 +430,7 @@ ul.breadcrumbs
 
 table
   font-size: 13px
+  width: 100%
   th
     text-align: left
     padding: 10px

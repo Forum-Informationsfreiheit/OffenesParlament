@@ -14,6 +14,11 @@
 {% block content %}
 <h1>{{ gesetz.title }} <a href='{{gesetz.source_link}}'>[SOURCE]</a></h1>
 
+<h2>Steps</h2>
+{% for step in gesetz.steps.all %}
+<p>{{step.date}}: {{ step.title }}</p>
+{% endfor %}
+
 
   {% for phase, steps in gesetz.steps_by_phases.items %}
   <h2>{{phase.title}}</h2>

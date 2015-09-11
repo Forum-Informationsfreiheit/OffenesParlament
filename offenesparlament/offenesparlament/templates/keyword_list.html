@@ -1,0 +1,30 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Schlagworte" "keyword_list" %}
+{% endblock %}
+
+{% block title %}Schlagworte{% endblock %}
+
+{% block content %}
+  <h1>Schlagworte</h1>
+  <p class="explanation">
+    Alle Gesetzesvorschläge werden vom Parlament mit Schlagworten versehen. Diese stehen für Themenbereiche.
+  </p>
+
+  {% include 'partials/keywordbox.html' with keywords=top10_keywords %}
+
+  <div class="section">
+    <ul class="columned_linklist">
+      {% for kw in keywords %}
+      <li>
+        <a href="{% url 'keyword_detail' keyword=kw.title_urlsafe %}">{{ kw.title }}</a>
+        {# <a href="#">{{ kw.title }}</a> #}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
