@@ -1,20 +1,9 @@
 # -*- coding: utf-8 -*-
-import scrapy
-import feedparser
-
-from ansicolor import red
-from ansicolor import cyan
 from ansicolor import green
-from ansicolor import blue
-
-from urllib import urlencode
 
 from parlament.settings import BASE_HOST
 from parlament.spiders import BaseSpider
 from parlament.resources.extractors.llp import *
-
-from parlament.resources.util import _clean
-
 
 from op_scraper.models import LegislativePeriod
 
@@ -28,9 +17,6 @@ class LegislativePeriodSpider(BaseSpider):
         super(LegislativePeriodSpider, self).__init__(**kw)
 
         self.start_urls = [self.BASE_URL]
-
-        self.cookies_seen = set()
-        self.idlist = {}
 
     def parse(self, response):
 

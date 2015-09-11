@@ -17,7 +17,7 @@ SPIDERS = {
 }
 
 
-def trigger_llp_scrape(request, spider_name):
+def trigger_scrape(request, spider_name):
     messages.success(
         request, 'Scraping of {} triggered. Awesomeness ensues.'.format(spider_name))
     scrape.delay(SPIDERS[spider_name])
