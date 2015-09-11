@@ -18,7 +18,6 @@ Installation/Rollout Instructions
    :maxdepth: 2
 
    Installation Notes <installation.rst>
-   Django Admin Interface <admin.rst>
 
 Technical Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,9 +25,10 @@ Technical Documentation
 .. toctree::
    :maxdepth: 2
 
-
+   General Information <general.rst>
    Scraping: Scrapy Spiders and Extractors <scraping.rst>
    Search Provider: Haystack, Elasticsearch <searching.rst>
+   Admin-Interface <admin.rst>
 
 
 
