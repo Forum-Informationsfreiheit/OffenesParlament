@@ -198,7 +198,7 @@ class Law(models.Model, ParlIDMixIn):
         if self.status is None:
             return 'offen'
         elif self.status.startswith('Beschlossen'):
-            return 'abgeschlossen'
+            return 'beschlossen'
         elif self.status.startswith('Gesetzesantrag abgelehnt'):
             return 'abgelehnt'
         elif self.status.startswith(u'Zurückgezogen'):
