@@ -12,7 +12,7 @@ from roman import fromRoman
 
 from scrapy import log
 
-from parlament.spiders import BaseScraper
+from parlament.spiders import BaseSpider
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
@@ -33,7 +33,7 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Opinion
 
 
-class PreLawsSpider(BaseScraper):
+class PreLawsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/MESN/filter.psp")
 
     # LLP = range(24, 26)

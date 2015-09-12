@@ -2,8 +2,7 @@ import datetime
 from django.utils.html import remove_tags
 from scrapy import Selector
 
-from parlament.resources import SingleExtractor
-from parlament.resources import MultiExtractor
+from parlament.resources.extractors import SingleExtractor
 from parlament.resources.util import _clean
 
 # import the logging library
@@ -67,7 +66,6 @@ class ADMINISTRATION:
                     ).xpath('//td//a/text()').extract()[0])
                 if ' siehe ' in reversed_name:
                     reversed_name = reversed_name.split(' siehe ')[1]
-
                 admin_title = person.xpath(
                     '//td[1]/span/text()').extract()
 

@@ -10,7 +10,7 @@ from ansicolor import blue
 from urllib import urlencode
 
 from parlament.settings import BASE_HOST
-from parlament.spiders import BaseScraper
+from parlament.spiders import BaseSpider
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
@@ -29,7 +29,7 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Administration
 
 
-class AdministrationsSpider(BaseScraper):
+class AdministrationsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "WWER/BREG/REG/filter.psp")
 
     URLOPTIONS_ADMIN = {
@@ -50,7 +50,6 @@ class AdministrationsSpider(BaseScraper):
 
     def __init__(self, **kw):
         super(AdministrationsSpider, self).__init__(**kw)
-
         self.start_urls = self.get_urls()
 
         self.cookies_seen = set()
@@ -162,7 +161,6 @@ class AdministrationsSpider(BaseScraper):
         self.logger.info(u"Updating Person Detail {}".format(
             green(u"[{}]".format(person['reversed_name']))
         ))
-
         full_name = PERSON.DETAIL.FULL_NAME.xt(response)
         bio_data = PERSON.DETAIL.BIO.xt(response)
 

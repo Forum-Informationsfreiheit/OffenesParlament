@@ -48,8 +48,9 @@ Setup
     cd /vagrant
     grunt dev
 
-9. To exit and shutdown the VM run:
+9. To exit and shutdown the VM run
   ::
+
     exit
     vagrant halt
 
@@ -77,8 +78,9 @@ There are currently four available scrapers, which should initially run in this 
 
 1. llp (legislative periods)
 2. persons (for instance `Rudolf Anschober <http://www.parlament.gv.at/WWER/PAD_00024/index.shtml>`)
-3. pre_laws (for instance `Buchhaltungsagenturgesetz, Änderung (513/ME) <http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00513/index.shtml>`_)
-4. laws_initiatives (for instance `ÖBIB-Gesetz 2015 (458 d.B.) <http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml>`_)
+3. administration (for instance, 'Faymann II' and all the Persons having a mandate for that administration)
+4. pre_laws (for instance `Buchhaltungsagenturgesetz, Änderung (513/ME) <http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00513/index.shtml>`_)
+5. laws_initiatives (for instance `ÖBIB-Gesetz 2015 (458 d.B.) <http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml>`_)
 
 To run a scraper, use the following command::
 
@@ -88,4 +90,23 @@ for instance::
 
   python manage.py scrape crawl persons
 
+The law_initiatives scraper also has an additional parameter to define, which legislative period to scan; per default, it scrapes the periods from XX to XV. This can be overriden this way::
 
+  python manage.py scrape crawl -a llp=21 laws_initiatives
+
+to only scrape that period. Careful though: scraping of periods before the 20th legislative period is not possible as of yet (since there are no machine-readable documents available).
+
+ElasticSearch and Re-Indexing
+=============================
+
+For now, reindexing (or updating the index, for that matter), is only done manually.
+To have all data indexed, just run::
+
+  python manage.py rebuild_index
+
+
+for a full rebuild (wipes the indices first), or::
+
+  python manage.py update_index
+
+to perform a simple update. For this to succeed, make sure ElasticSearch is up and running.

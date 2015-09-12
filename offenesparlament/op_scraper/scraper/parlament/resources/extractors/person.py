@@ -2,8 +2,8 @@ import datetime
 from django.utils.html import remove_tags
 from scrapy import Selector
 
-from parlament.resources import SingleExtractor
-from parlament.resources import MultiExtractor
+from parlament.resources.extractors import SingleExtractor
+from parlament.resources.extractors import MultiExtractor
 from parlament.resources.util import _clean
 
 # import the logging library

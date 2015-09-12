@@ -10,7 +10,7 @@ from ansicolor import blue
 from urllib import urlencode
 
 from parlament.settings import BASE_HOST
-from parlament.spiders import BaseScraper
+from parlament.spiders import BaseSpider
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
@@ -27,7 +27,7 @@ from op_scraper.models import Mandate
 from op_scraper.models import LegislativePeriod
 
 
-class PersonsSpider(BaseScraper):
+class PersonsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filter.psp")
 
     RSS_TO_FUNCTION = {

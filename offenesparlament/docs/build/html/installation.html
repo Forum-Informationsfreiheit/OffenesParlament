@@ -31,6 +31,7 @@
 
   
     <link rel="top" title="Offenes Parlament 1.0.0b1 documentation" href="index.html"/>
+        <link rel="next" title="General Information" href="general.html"/>
         <link rel="prev" title="Welcome to the documentation for Offenes Parlament" href="index.html"/> 
 
   
@@ -80,10 +81,38 @@
 <li class="toctree-l2"><a class="reference internal" href="#resetting-the-database">Resetting the database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-model-diagram">Creating a Model-Diagram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#initial-scraping">Initial scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#elasticsearch-and-re-indexing">ElasticSearch and Re-Indexing</a></li>
 </ul>
 </li>
 </ul>
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="general.html">General Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="general.html#structure-what-is-where">Structure - What is Where?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scraping.html">Scraping: Scrapy Spiders and Extractors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scraping.html#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scraping.html#spiders">Spiders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="scraping.html#saving-updating-the-models">Saving/Updating the models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="scraping.html#extractors">Extractors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="searching.html">Search Provider: Haystack, Elasticsearch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#re-indexing">Re-Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#searchviews">SearchViews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#indices">Indices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin-Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="admin.html#manually-trigger-scraping">Manually trigger scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin.html#import-export">Import-Export</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -174,14 +203,13 @@ grunt dev
 </div>
 </div></blockquote>
 <ol class="arabic simple" start="9">
-<li>To exit and shutdown the VM run:</li>
+<li>To exit and shutdown the VM run</li>
 </ol>
 <blockquote>
-<div><dl class="docutils">
-<dt>::</dt>
-<dd>exit
-vagrant halt</dd>
-</dl>
+<div><div class="highlight-python"><div class="highlight"><pre>exit
+vagrant halt
+</pre></div>
+</div>
 </div></blockquote>
 </div>
 </div>
@@ -206,6 +234,7 @@ vagrant halt</dd>
 <ol class="arabic simple">
 <li>llp (legislative periods)</li>
 <li>persons (for instance <cite>Rudolf Anschober &lt;http://www.parlament.gv.at/WWER/PAD_00024/index.shtml&gt;</cite>)</li>
+<li>administration (for instance, &#8216;Faymann II&#8217; and all the Persons having a mandate for that administration)</li>
 <li>pre_laws (for instance <a class="reference external" href="http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00513/index.shtml">Buchhaltungsagenturgesetz, Änderung (513/ME)</a>)</li>
 <li>laws_initiatives (for instance <a class="reference external" href="http://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00458/index.shtml">ÖBIB-Gesetz 2015 (458 d.B.)</a>)</li>
 </ol>
@@ -217,6 +246,24 @@ vagrant halt</dd>
 <div class="highlight-python"><div class="highlight"><pre>python manage.py scrape crawl persons
 </pre></div>
 </div>
+<p>The law_initiatives scraper also has an additional parameter to define, which legislative period to scan; per default, it scrapes the periods from XX to XV. This can be overriden this way:</p>
+<div class="highlight-python"><div class="highlight"><pre>python manage.py scrape crawl -a llp=21 laws_initiatives
+</pre></div>
+</div>
+<p>to only scrape that period. Careful though: scraping of periods before the 20th legislative period is not possible as of yet (since there are no machine-readable documents available).</p>
+</div>
+<div class="section" id="elasticsearch-and-re-indexing">
+<h2>ElasticSearch and Re-Indexing<a class="headerlink" href="#elasticsearch-and-re-indexing" title="Permalink to this headline">¶</a></h2>
+<p>For now, reindexing (or updating the index, for that matter), is only done manually.
+To have all data indexed, just run:</p>
+<div class="highlight-python"><div class="highlight"><pre>python manage.py rebuild_index
+</pre></div>
+</div>
+<p>for a full rebuild (wipes the indices first), or:</p>
+<div class="highlight-python"><div class="highlight"><pre>python manage.py update_index
+</pre></div>
+</div>
+<p>to perform a simple update. For this to succeed, make sure ElasticSearch is up and running.</p>
 </div>
 </div>
 
@@ -225,6 +272,8 @@ vagrant halt</dd>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="general.html" class="btn btn-neutral float-right" title="General Information" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Welcome to the documentation for Offenes Parlament" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

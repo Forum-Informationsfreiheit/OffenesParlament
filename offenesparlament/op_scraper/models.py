@@ -105,7 +105,7 @@ class PressRelease(models.Model, ParlIDMixIn):
 class Category(models.Model):
 
     """
-    A category for a law or prelaw
+    A category for a law, prelaw, anfrage, beantwortung, etc.
     """
     title = models.CharField(max_length=255, unique=True)
 
@@ -254,6 +254,7 @@ class Step(models.Model):
         else:
             return self.title
 
+
 class Administration(models.Model):
 
     """
@@ -261,7 +262,7 @@ class Administration(models.Model):
     """
     title = models.CharField(max_length=255, default="", unique=True)
     start_date = models.DateField()
-    end_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True, blank=True)
 
 
 class Function(models.Model):
@@ -330,7 +331,6 @@ class Mandate(models.Model):
     # regierung, for instance, Faymann II
     administration = models.ForeignKey(Administration, blank=True, null=True)
 
-
     def __unicode__(self):
         return u"{} ({}), {} ".format(
             self.function,
@@ -374,7 +374,7 @@ class Person(models.Model, ParlIDMixIn):
     def llps(self):
         return [
             m.legislative_period
-            for m in self.mandates.order_by('-legislative_period__end_date')]
+            for m in self.mandates.order_by('-legislative_period__end_date') if m.legislative_period]
 
     @property
     def llps_roman(self):

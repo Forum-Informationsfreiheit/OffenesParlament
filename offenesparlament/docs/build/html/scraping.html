@@ -31,7 +31,8 @@
 
   
     <link rel="top" title="Offenes Parlament 1.0.0b1 documentation" href="index.html"/>
-        <link rel="prev" title="Django Admin Interface" href="admin.html"/> 
+        <link rel="next" title="Search Provider: Haystack, Elasticsearch" href="searching.html"/>
+        <link rel="prev" title="General Information" href="general.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -80,15 +81,39 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#resetting-the-database">Resetting the database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#creating-a-model-diagram">Creating a Model-Diagram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#initial-scraping">Initial scraping</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="admin.html">Django Admin Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="admin.html#import-export">Import-Export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#elasticsearch-and-re-indexing">ElasticSearch and Re-Indexing</a></li>
 </ul>
 </li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Scraping: Scrapy Spiders and Extractors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">General Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="general.html#structure-what-is-where">Structure - What is Where?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Scraping: Scrapy Spiders and Extractors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spiders">Spiders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#saving-updating-the-models">Saving/Updating the models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#keyword-parameters">Keyword parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#extractors">Extractors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="searching.html">Search Provider: Haystack, Elasticsearch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#re-indexing">Re-Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#searchviews">SearchViews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#indices">Indices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">Admin-Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="admin.html#manually-trigger-scraping">Manually trigger scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin.html#import-export">Import-Export</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -129,6 +154,154 @@
   <div class="section" id="scraping-scrapy-spiders-and-extractors">
 <h1>Scraping: Scrapy Spiders and Extractors<a class="headerlink" href="#scraping-scrapy-spiders-and-extractors" title="Permalink to this headline">¶</a></h1>
 <p>This section describes the scraping setup and processes.</p>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>The scraper is located in the subfolder <code class="docutils literal"><span class="pre">/offenesparlament/op_scraper</span></code>. It contains the
+Django models (cf. <code class="docutils literal"><span class="pre">/offenesparlament/op_scraper/models.py</span></code>), some <cite>admin views</cite> and <cite>admin dashboard</cite> adaptations, as well as the <a class="reference external" href="http://www.parlament.gv.at/">Austrian Parliament</a> scaper itself, situated at <code class="docutils literal"><span class="pre">/offenesparlament/op_scraper/scraper/parlament</span></code>.</p>
+<p>A scrapy scraper consists of a set of <cite>spiders</cite> - a single process capable of scanning, parsing and in injecting data from a website into a database. Currently, the following spiders exist:</p>
+<ul class="simple">
+<li><strong>laws_initiatives</strong>: Scrapes the Laws and Government Initiatives as found on <a class="reference external" href="http://www.parlament.gv.at/PAKT/RGES/">this page</a></li>
+<li><strong>pre_laws</strong>: Scrapes laws that are still in the pre-parliamentary process, as shown on <a class="reference external" href="http://www.parlament.gv.at/PAKT/MESN/">this list</a></li>
+<li><strong>llp</strong>: Scrapes the list of available legislative periods</li>
+<li><strong>persons</strong>: Scans &#8216;Parlamentarier&#8217; as found <a class="reference external" href="http://www.parlament.gv.at/WWER/SUCHE/">here</a></li>
+<li><strong>administrations</strong>: A secondary spider that also scans Persons, this time focused on their mandates as part of specific administrations, as shown <a class="reference external" href="http://www.parlament.gv.at/WWER/BREG/REG/">in here</a></li>
+</ul>
+<p>Each of those spiders inherits from <cite>BaseSpider</cite> (cf. <code class="docutils literal"><span class="pre">/offenesparlament/op_scraper/scraper/parlament/spiders/__init__.py</span></code>), which offers some generic methods to be used by different spiders.</p>
+<p>Besides the spiders themselves, which handle getting the response from the subsite of <cite>parlament.gv.at</cite> and creating the django objects based on the scraped data, the <cite>Extractors</cite> (to be found at <code class="docutils literal"><span class="pre">/offenesparlament/op_scraper/scraper/parlament/resources/extractors</span></code>) do the actual heavy lifting of translating the raw html data into meaningful, structured data (mostly in the form of dictionaries and lists) by using XPATH expressions.</p>
+<div class="section" id="spiders">
+<h3>Spiders<a class="headerlink" href="#spiders" title="Permalink to this headline">¶</a></h3>
+<p>Spiders are the managing part of the scraping process. At the bare minimum, a spider consists of an Constructor (the <cite>__init__</cite> method), which is responsible for populating the <code class="docutils literal"><span class="pre">self.start_urls</span></code> list with all the web-adresses to be scanned, as well as a parse method, which gets to be called with the response from each of the entries in the <code class="docutils literal"><span class="pre">self.start_urls</span></code> list. Furthermore, each spider <strong>must</strong> have a member variable <code class="docutils literal"><span class="pre">name</span></code> set, which will identify it for the command line calls.</p>
+<p>The following is a simple example or code skeleton of a spider:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">parlament.settings</span> <span class="kn">import</span> <span class="n">BASE_HOST</span>
+<span class="kn">from</span> <span class="nn">parlament.spiders</span> <span class="kn">import</span> <span class="n">BaseSpider</span>
+<span class="kn">from</span> <span class="nn">parlament.resources.extractors.example</span> <span class="kn">import</span> <span class="n">EXAMPLE_EXTRACTOR</span>
+<span class="kn">from</span> <span class="nn">ansicolor</span> <span class="kn">import</span> <span class="n">green</span>
+
+<span class="kn">from</span> <span class="nn">op_scraper.models</span> <span class="kn">import</span> <span class="n">ExampleObject</span>
+
+
+<span class="k">class</span> <span class="nc">ExampleSpider</span><span class="p">(</span><span class="n">BaseSpider</span><span class="p">):</span>
+    <span class="n">BASE_URL</span> <span class="o">=</span> <span class="s">&quot;{}/{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">BASE_HOST</span><span class="p">,</span> <span class="s">&quot;/WWER/PARL/&quot;</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;example&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExampleSpider</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">BASE_URL</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+
+        <span class="n">data_sets</span> <span class="o">=</span> <span class="n">EXAMPLE_EXTRACTOR</span><span class="o">.</span><span class="n">xt</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">data_set</span> <span class="ow">in</span> <span class="n">data_sets</span><span class="p">:</span>
+            <span class="n">item</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">ExampleObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">data_set</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span>
+                <span class="n">defaults</span><span class="o">=</span><span class="n">data_set</span>
+            <span class="p">)</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">u&quot;Created ExampleObject {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">green</span><span class="p">(</span><span class="s">u&#39;[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_set</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]))))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">u&quot;Updated Legislative Period {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">green</span><span class="p">(</span><span class="s">u&quot;[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_set</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]))</span>
+                <span class="p">))</span>
+</pre></div>
+</div>
+<p>Not all database/django objects can be fully extracted through a single page.
+For instance, the <cite>Person</cite> objects need to be discovered through one of the
+abovementioned lists, but their details can only be extracted from a secondary
+person detail page. To accomodate this, scrapy&#8217;s callback functions can be used
+like this person spider skeleton:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+
+    <span class="c"># Parse person list</span>
+    <span class="c"># [...]</span>
+
+    <span class="n">callback_requests</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">person_list</span><span class="p">:</span>
+        <span class="c"># Create Detail Page request</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">person_detail_page_url</span><span class="p">,</span>
+                             <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_person_detail</span><span class="p">)</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s">&#39;person&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;reversed_name&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;reversed_name&#39;</span><span class="p">],</span>
+            <span class="s">&#39;source_link&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;source_link&#39;</span><span class="p">],</span>
+            <span class="s">&#39;parl_id&#39;</span><span class="p">:</span> <span class="n">parl_id</span>
+        <span class="p">}</span>
+    <span class="n">callback_requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+
+<span class="k">return</span> <span class="n">callback_requests</span>
+
+<span class="k">def</span> <span class="nf">parse_person_detail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+
+    <span class="n">person</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s">&#39;person&#39;</span><span class="p">]</span>
+
+    <span class="c"># Parse Person detail page</span>
+    <span class="c"># [...]</span>
+</pre></div>
+</div>
+<p>In the above example, the spider will start making secondary requests to retrieve
+the detail pages, and call the parse_person_detail with the responses. As shown above,
+the request for the secondary page contains a member variable <cite>meta</cite> that can be
+used to transfer already created data to the secondary response to continue working
+with the same person and provide some continuity.</p>
+<div class="section" id="saving-updating-the-models">
+<h4>Saving/Updating the models<a class="headerlink" href="#saving-updating-the-models" title="Permalink to this headline">¶</a></h4>
+<p>Currently, the spiders do not need to take care of versioning the changes they scrape;
+since the page needs to be requested and scraped already to be able to determine
+if there were any changes, the spiders should simply update existing objects or
+create new ones where necessary. Since the OffenesParlament.at app also employs <cite>django.reversion</cite>
+to version the changes to the database, it can be possible to trace changes to the objects
+via versions rather than during the scraping process itself, although this is
+not yet implemented due to the fact that the email-subscription service hasn&#8217;t
+been realized yet.</p>
+</div>
+<div class="section" id="keyword-parameters">
+<h4>Keyword parameters<a class="headerlink" href="#keyword-parameters" title="Permalink to this headline">¶</a></h4>
+<p>To specify additional (optional) keyword parameters for the spiders,
+the <cite>__init__</cite> method accepts a <cite>kw</cite> parameter, which contains a dictionary of
+keys and values supplied from the commandline. For instance, the <cite>laws_initiatives</cite>
+spider accepts an additional <cite>llp</cite> parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre>python manage.py scrape crawl -a llp=21 laws_initiatives
+</pre></div>
+</div>
+<p>In the spider itself, this parameter can be extracted like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">(</span><span class="n">LawsInitiativesSpider</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;llp&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LLP</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s">&#39;llp&#39;</span><span class="p">])]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="c"># [...]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="extractors">
+<h3>Extractors<a class="headerlink" href="#extractors" title="Permalink to this headline">¶</a></h3>
+<p>Extractors take over the heavy lifting - by translating the raw html source code they are
+handed into organized data, ready for insertion into the database.</p>
+<p>The simplest extractor just inherits from <code class="docutils literal"><span class="pre">parlament.resources.extractors.SingleExtractor</span></code>, which provides an <cite>xt</cite> method and utilizes a simple class variable containing the XPath expression to extract, expecting it to evaluate to exactly one result. For instance, the <cite>title</cite> of a <cite>law</cite> detail page might be extracted by the following class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">parlament.resources.extractors</span> <span class="kn">import</span> <span class="n">SingleExtractor</span>
+
+<span class="k">class</span> <span class="nc">LAW</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">TITLE</span><span class="p">(</span><span class="n">SingleExtractor</span><span class="p">):</span>
+        <span class="n">XPATH</span> <span class="o">=</span> <span class="s">&#39;//*[@id=&quot;inhalt&quot;]/text()&#39;</span>
+</pre></div>
+</div>
+<p>Similarly, to simply extract a list of items based on an XPath expression, the following code could be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">LAW</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">KEYWORDS</span><span class="p">(</span><span class="n">MultiExtractor</span><span class="p">):</span>
+        <span class="n">XPATH</span> <span class="o">=</span> <span class="s">&#39;//*[@id=&quot;schlagwortBox&quot;]/ul//li/a/text()&#39;</span>
+</pre></div>
+</div>
+<p>In reality, many of the extractors overwrite the <cite>xt</cite> method to implement more complex extractions.</p>
+</div>
+</div>
 </div>
 
 
@@ -137,8 +310,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="searching.html" class="btn btn-neutral float-right" title="Search Provider: Haystack, Elasticsearch" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="admin.html" class="btn btn-neutral" title="Django Admin Interface" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="general.html" class="btn btn-neutral" title="General Information" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

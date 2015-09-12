@@ -31,8 +31,7 @@
 
   
     <link rel="top" title="Offenes Parlament 1.0.0b1 documentation" href="index.html"/>
-        <link rel="next" title="Scraping: Scrapy Spiders and Extractors" href="scraping.html"/>
-        <link rel="prev" title="Installation Notes" href="installation.html"/> 
+        <link rel="prev" title="Search Provider: Haystack, Elasticsearch" href="searching.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -71,7 +70,7 @@
         
           
           
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installation-instructions-with-vagrant">Installation instructions with Vagrant</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
@@ -83,13 +82,35 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#initial-scraping">Initial scraping</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Django Admin Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#import-export">Import-Export</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">General Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="general.html#structure-what-is-where">Structure - What is Where?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scraping.html">Scraping: Scrapy Spiders and Extractors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scraping.html#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scraping.html#spiders">Spiders</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="scraping.html#saving-updating-the-models">Saving/Updating the models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="scraping.html#extractors">Extractors</a></li>
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="scraping.html">Scraping: Scrapy Spiders and Extractors</a></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="searching.html">Search Provider: Haystack, Elasticsearch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#re-indexing">Re-Indexing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#searchviews">SearchViews</a></li>
+<li class="toctree-l2"><a class="reference internal" href="searching.html#indices">Indices</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Admin-Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#manually-trigger-scraping">Manually trigger scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#import-export">Import-Export</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -130,14 +151,19 @@
   <div class="section" id="django-admin-interface">
 <h1>Django Admin Interface<a class="headerlink" href="#django-admin-interface" title="Permalink to this headline">¶</a></h1>
 <p>The Django Administration Interface has been extended with a few vital functions to make maintainance easier.</p>
+<div class="section" id="manually-trigger-scraping">
+<h2>Manually trigger scraping<a class="headerlink" href="#manually-trigger-scraping" title="Permalink to this headline">¶</a></h2>
 <p>Besides the usual CRUD-Interfaces, which should only be used for debugging purposes, given that the site&#8217;s entire data should be automatically scraped from the parliament website, a new block called <cite>Scraping Management</cite> has been added, which allows manually triggering one of the following spiders:</p>
 <ol class="arabic simple">
 <li>Legislative Periods</li>
 <li>Persons</li>
+<li>Administrations</li>
 <li>Pre-Laws</li>
 <li>Laws</li>
 </ol>
 <p>The order of the scrapers above represents their dependencies on each other; for instance, scanning laws includes votes and speeches by Persons, and relies on the Person in question having been scraped before. To be sure, the order above should be maintained in all scraping processes.</p>
+<p>Behind the scenes, the scraping view <cite>offenesparlament.op_scraper.admin_views.trigger_scrape</cite> calls the celery task <cite>offenesparlament.op_scraper.tasks.scrape</cite>, which in turn finds and executes the requested scraper, but wraps this in a <cite>django-reversion</cite> block to create new revisions of all affected database objects.</p>
+</div>
 <div class="section" id="import-export">
 <h2>Import-Export<a class="headerlink" href="#import-export" title="Permalink to this headline">¶</a></h2>
 <p>To allow import-export, the <cite>import_export</cite> django module is being used, overwriting the <code class="docutils literal"><span class="pre">templates/admin/changelist.html</span></code> admin template to be compatible with <cite>django_reversion</cite>.</p>
@@ -150,10 +176,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="scraping.html" class="btn btn-neutral float-right" title="Scraping: Scrapy Spiders and Extractors" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="installation.html" class="btn btn-neutral" title="Installation Notes" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="searching.html" class="btn btn-neutral" title="Search Provider: Haystack, Elasticsearch" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

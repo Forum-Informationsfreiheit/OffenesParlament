@@ -102,6 +102,14 @@ for instance:
 python manage.py scrape crawl persons
 ```
 
+The law_initiatives scraper also has an additional parameter to define, which legislative period to scan; per default, it scrapes the periods from XX to XV. This can be overriden this way:
+
+```
+python manage.py scrape crawl -a llp=21 laws_initiatives
+```
+
+to only scrape that period. Careful though: scraping of periods before the 20th legislative period is not possible as of yet (since there are no machine-readable documents available).
+
 ## ElasticSearch and Re-Indexing
 
 For now, reindexing (or updating the index, for that matter), is only done manually. To have all data indexed, just run:
