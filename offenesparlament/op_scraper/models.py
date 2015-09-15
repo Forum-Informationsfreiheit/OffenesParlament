@@ -425,5 +425,5 @@ class Inquiry(models.Model):
 
     #Relationships
     documents = models.ManyToManyField(Document, related_name='inquiries')
-    sender = models.ManyToManyField(Person, related_name='inquiries')
-    receiver = models.ManyToManyField(Person, related_name='inquiries')
+    sender = models.ManyToManyField(Person, related_name='inquiries_sent')
+    receiver = models.ManyToManyField(Person, related_name='inquiries_received')
