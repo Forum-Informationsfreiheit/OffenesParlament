@@ -7,10 +7,12 @@ from op_scraper.scraper.parlament.spiders.administrations import Administrations
 from op_scraper.scraper.parlament.spiders.laws_initiatives import LawsInitiativesSpider
 from op_scraper.scraper.parlament.spiders.pre_laws import PreLawsSpider
 from op_scraper.scraper.parlament.spiders.persons import PersonsSpider
+from op_scraper.scraper.parlament.spiders.inquiries import InquiriesSpider
 
 SPIDERS = {
     'llp': LegislativePeriodSpider,
     'administrations': AdministrationsSpider,
+    'inquiries': InquiriesSpider,
     'persons': PersonsSpider,
     'pre_laws': PreLawsSpider,
     'laws': LawsInitiativesSpider
