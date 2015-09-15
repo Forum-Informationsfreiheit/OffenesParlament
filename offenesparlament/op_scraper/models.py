@@ -471,15 +471,13 @@ class Statement(models.Model):
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
+
 class Petition(models.Model, ParlIDMixIn):
 
     """
     "Beteiligung der BürgerInnen"
     Either a "Bürgerinitiative" or a "Petition" (started by members of the parliament)
     """
-    parl_id = models.CharField(max_length=30, primary_key=True)
-    title = models.CharField(max_length=1023)
-    source_link = models.URLField(max_length=255, default="")
 
     # Relationships
-    legislative_period = models.ForeignKey(LegislativePeriod)
+    law = models.ForeignKey(Law)
