@@ -409,3 +409,6 @@ class Statement(models.Model):
 
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
+
+
+    #Relationships
