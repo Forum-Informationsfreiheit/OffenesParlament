@@ -410,5 +410,20 @@ class Statement(models.Model):
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
+class Inquiry(models.Model):
+    """
+    An inquiry to the members of government
+    """
+    parl_id = models.CharField(max_length=31)
+    last_update = models.DateField()
+    inquiry_type = models.CharField(max_length=31)
+    link = models.URLField(max_length=255)
+    answer_parl_id = models.CharField(max_length=31)
+    subject = models.CharField(max_length=511)
+    number = models.CharField(max_length=31)
+    status = models.CharField(max_length=255)
 
     #Relationships
+    documents = models.ManyToManyField(Document, related_name='inquiries')
+    sender = models.ManyToManyField(Person, related_name='inquiries')
+    receiver = models.ManyToManyField(Person, related_name='inquiries')
