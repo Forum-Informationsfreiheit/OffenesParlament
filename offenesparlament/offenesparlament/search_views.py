@@ -94,9 +94,9 @@ class JsonSearchView(SearchView):
 
         # Get results and return them
         if 'only_facets' in query_args:
-            result = qs.all()
-        else:
             result = {}
+        else:
+            result = qs.all()
 
         return (result, facet_counts)
 

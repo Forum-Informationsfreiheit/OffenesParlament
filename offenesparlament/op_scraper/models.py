@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from datetime import date
 from django.db import models
 from django.utils.html import remove_tags
 from django.core.urlresolvers import reverse
@@ -143,6 +144,9 @@ class Law(models.Model, ParlIDMixIn):
 
     description = models.TextField(blank=True)
 
+    # Interna, Utilities
+    _slug = models.CharField(max_length=255, default="")
+
     # Relationships
     category = models.ForeignKey(Category, null=True, blank=True)
     keywords = models.ManyToManyField(Keyword, related_name="laws")
@@ -180,14 +184,18 @@ class Law(models.Model, ParlIDMixIn):
         return (self.title[:100] + '...') if len(self.title) > 100 else self.title
 
     @property
-    def url(self):
-        return reverse(
-            'gesetz_detail',
-            kwargs={
-                'parl_id': self.parl_id_urlsafe,
-                'ggp': self.llp_roman
-            }
-        )
+    def slug(self):
+        if not self._slug:
+            self._slug = reverse(
+                'gesetz_detail',
+                kwargs={
+                    'parl_id': self.parl_id_urlsafe,
+                    'ggp': self.llp_roman
+                }
+            )
+            self.save()
+
+        return self._slug
 
     def __unicode__(self):
         return self.title
@@ -320,6 +328,19 @@ class Mandate(models.Model):
             self.party,
             self.legislative_period)
 
+    def latest_end_date(self):
+
+        if self.end_date:
+            return self.end_date
+
+        if self.legislative_period and self.legislative_period.end_date:
+            return self.legislative_period.end_date
+
+        if self.administration and self.administration.end_date:
+            return self.administration.end_date
+
+        return None
+
 
 class Person(models.Model, ParlIDMixIn):
 
@@ -339,10 +360,13 @@ class Person(models.Model, ParlIDMixIn):
     deathplace = models.CharField(max_length=255, null=True, blank=True)
     occupation = models.CharField(max_length=255, null=True, blank=True)
 
+    # Interna, Utilities
+    _slug = models.CharField(max_length=255, default="")
+
     # Relationsships
-    # party = models.ForeignKey(Party) ## Removed, party is always the last
-    # mandate they have/had
     mandates = models.ManyToManyField(Mandate)
+    latest_mandate = models.ForeignKey(
+        Mandate, related_name='latest_mandate', null=True, blank=True)
 
     def __unicode__(self):
         return self.full_name
@@ -357,23 +381,27 @@ class Person(models.Model, ParlIDMixIn):
     def llps(self):
         return [
             m.legislative_period
-            for m in self.mandates.order_by('-legislative_period__end_date') if m.legislative_period]
+            for m in self.mandates.order_by('-legislative_period__end_date')
+            if m.legislative_period]
 
     @property
     def llps_roman(self):
         return [llp.roman_numeral for llp in self.llps]
 
-    @property
-    def latest_mandate(self):
-        mandates = self.mandates.order_by('-legislative_period__end_date')
-        if mandates:
-            return mandates[0]
+    def get_latest_mandate(self):
+        """
+        Returns the most recent mandate a person had.
+
+        WARNING: This is a costly function and should only be used during
+        scraping, not during list display of persons!
+        """
+
+        if self.mandates:
+            return max(
+                self.mandates.all(),
+                key=lambda m: m.latest_end_date() or date(3000, 1, 1))
         else:
-            mandates = self.mandates.order_by(
-                '-legislative_period__start_date')
-            if mandates:
-                return mandates[0]
-        return None
+            return None
 
     @property
     def full_name_urlsafe(self):
@@ -384,14 +412,18 @@ class Person(models.Model, ParlIDMixIn):
         return self.latest_mandate or self.occupation
 
     @property
-    def url(self):
-        return reverse(
-            'person_detail',
-            kwargs={
-                'parl_id': self.parl_id_urlsafe,
-                'name': self.full_name_urlsafe
-            }
-        )
+    def slug(self):
+        if not self._slug:
+            self._slug = reverse(
+                'person_detail',
+                kwargs={
+                    'parl_id': self.parl_id_urlsafe,
+                    'name': self.full_name_urlsafe
+                }
+            )
+            self.save()
+
+        return self._slug
 
 
 class Statement(models.Model):
