@@ -29,6 +29,7 @@ Technical Documentation
    Scraping: Scrapy Spiders and Extractors <scraping.rst>
    Search Provider: Haystack, Elasticsearch <searching.rst>
    Admin-Interface <admin.rst>
+   Frontend <frontend.rst>
 
 
 

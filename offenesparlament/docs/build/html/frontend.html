@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>General Information &mdash; Offenes Parlament 1.0.0b1 documentation</title>
+  <title>Frontend &mdash; Offenes Parlament 1.0.0b1 documentation</title>
   
 
   
@@ -31,8 +31,7 @@
 
   
     <link rel="top" title="Offenes Parlament 1.0.0b1 documentation" href="index.html"/>
-        <link rel="next" title="Scraping: Scrapy Spiders and Extractors" href="scraping.html"/>
-        <link rel="prev" title="Installation Notes" href="installation.html"/> 
+        <link rel="prev" title="Django Admin Interface" href="admin.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -86,9 +85,9 @@
 </li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">General Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#structure-what-is-where">Structure - What is Where?</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#frontend-code">Frontend Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">General Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="general.html#structure-what-is-where">Structure - What is Where?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="general.html#frontend-code">Frontend Code</a></li>
 </ul>
 </li>
 </ul>
@@ -117,8 +116,12 @@
 <li class="toctree-l2"><a class="reference internal" href="admin.html#import-export">Import-Export</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="frontend.html#structure-what-is-where">Structure - What is Where?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Frontend</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tech">Tech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building">Building</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#grunt-too-slow">Grunt too slow?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -145,11 +148,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>General Information</li>
+    <li>Frontend</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/general.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/frontend.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -158,24 +161,40 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="general-information">
-<h1>General Information<a class="headerlink" href="#general-information" title="Permalink to this headline">¶</a></h1>
-<p>This section outlines the general setup of OffenesParlament.at.</p>
-<div class="section" id="structure-what-is-where">
-<h2>Structure - What is Where?<a class="headerlink" href="#structure-what-is-where" title="Permalink to this headline">¶</a></h2>
-<p>OffenesParlament.at is a (set of) Django applications. It&#8217;s roughly divided into
-two parts: the <cite>Scraping</cite> part, which takes care of data aggregation and parsing of the website of the <a class="reference external" href="http://www.parlament.gv.at/">Austrian Parliament</a>, and the <cite>Presentation</cite> part, which presents the collected data in the form of a searchable web application.</p>
-<p>The <cite>Scraping</cite> part can be found in the subfolder <code class="docutils literal"><span class="pre">offenesparlament/op_scraper</span></code>, wheras the <cite>Presentation</cite> part is largely gathered in the folder <code class="docutils literal"><span class="pre">offenesparlament/offenesparlament</span></code>.</p>
-<p>The search engine parts transcend each of those projects, with the search views being located in <code class="docutils literal"><span class="pre">/offenesparlament/offenesparlament/search_views.py</span></code>, but the <cite>search_indexes</cite> being located in <code class="docutils literal"><span class="pre">/offenesparlament/op_scraper/search_indexes.py</span></code>.</p>
-<p>In future, the Email-Subscription service will also be located in both parts, given that we will have to offer a subscription logic in the webapp itself (with a set of views to faciliate that), but also trigger the sending of those emails via the scraper upon changing the database.</p>
-<div class="section" id="frontend-code">
-<h3>Frontend Code<a class="headerlink" href="#frontend-code" title="Permalink to this headline">¶</a></h3>
-<p>All sources for the frontend code (JS and CSS) are located in
-<code class="docutils literal"><span class="pre">offenesparlament/offenesparlament/assets</span></code> and split between <code class="docutils literal"><span class="pre">scripts</span></code> and
-<code class="docutils literal"><span class="pre">styles</span></code>. We use CoffeeScript and the React framework for client code. To
-generate JS and CSS from the sources we use grunt (<code class="docutils literal"><span class="pre">Gruntfile.coffee</span></code> is in
-the root dir).</p>
-<p>All generated files are put in <code class="docutils literal"><span class="pre">offenesparlament/offenesparlament/static/</span></code> by grunt.</p>
+  <div class="section" id="frontend">
+<h1>Frontend<a class="headerlink" href="#frontend" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the frontend code and how to build it</p>
+<div class="section" id="tech">
+<h2>Tech<a class="headerlink" href="#tech" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://facebook.github.io/react/">React</a></li>
+<li><a class="reference external" href="https://documentcloud.github.io/visualsearch/">VisualSearch</a></li>
+</ul>
+</div>
+<div class="section" id="building">
+<h2>Building<a class="headerlink" href="#building" title="Permalink to this headline">¶</a></h2>
+<p>We use grunt to build our frontend code. It is generated from the sources in <code class="docutils literal"><span class="pre">offenesparlament/offenesparlament/assets/</span></code> and is output to <code class="docutils literal"><span class="pre">offenesparlament/offenesparlament/static/</span></code>.</p>
+<p>We commit all generated files to git.</p>
+<p>Grunt is already installed in the vagrant VM, so you should be able to run the
+build task from the VM right away in the dir <code class="docutils literal"><span class="pre">/vagrant</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>grunt dev
+</pre></div>
+</div>
+<p>This task watches all source files and rebuilds if necessary.</p>
+<p>To use BrowserSync and have the browser reload every time frontend files change, run:</p>
+<div class="highlight-python"><div class="highlight"><pre>grunt reloading
+</pre></div>
+</div>
+<div class="section" id="grunt-too-slow">
+<h3>Grunt too slow?<a class="headerlink" href="#grunt-too-slow" title="Permalink to this headline">¶</a></h3>
+<p>If grunt is too slow running inside the VM (Probably due to file-watching on the host system)
+you&#8217;ll have to install the following on your computer:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://docs.npmjs.com/getting-started/installing-node">Node.js and npm</a> (Make sure you run recent versions of both)</li>
+<li><a class="reference external" href="https://github.com/gruntjs/grunt-cli">grunt-CLI</a></li>
+<li><a class="reference external" href="http://sass-lang.com/install">Sass</a> (You might need to install Ruby first)</li>
+</ul>
+<p>Then you can run grunt tasks on your computer from the project dir <code class="docutils literal"><span class="pre">OffenesParlament</span></code> (where the <code class="docutils literal"><span class="pre">Gruntfile.coffee</span></code> is located)</p>
 </div>
 </div>
 </div>
@@ -186,10 +205,8 @@ the root dir).</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="scraping.html" class="btn btn-neutral float-right" title="Scraping: Scrapy Spiders and Extractors" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="installation.html" class="btn btn-neutral" title="Installation Notes" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="admin.html" class="btn btn-neutral" title="Django Admin Interface" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

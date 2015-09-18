@@ -87,13 +87,17 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="general.html">General Information</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="general.html#structure-what-is-where">Structure - What is Where?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="general.html#structure-what-is-where">Structure - What is Where?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="general.html#frontend-code">Frontend Code</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scraping.html">Scraping: Scrapy Spiders and Extractors</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scraping.html#structure">Structure</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="scraping.html#spiders">Spiders</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="scraping.html#saving-updating-the-models">Saving/Updating the models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scraping.html#keyword-parameters">Keyword parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="scraping.html#extractors">Extractors</a></li>
@@ -111,6 +115,10 @@
 <li class="toctree-l1"><a class="reference internal" href="admin.html">Admin-Interface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="admin.html#manually-trigger-scraping">Manually trigger scraping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="admin.html#import-export">Import-Export</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="frontend.html">Frontend</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="frontend.html#building">Building</a></li>
 </ul>
 </li>
 </ul>
@@ -193,8 +201,8 @@ have to run grunt as well. ATM we have the tasks <cite>dev</cite> and <cite>relo
 <cite>dev</cite> watches and regenerates files when their sources change.
 (Remember that sources also change when you do a git pull and
 generated client files aren&#8217;t commited to git) And <cite>reloading</cite> does
-that and uses [Browsersync](<a class="reference external" href="http://www.browsersync.io/">http://www.browsersync.io/</a>) to reload your browser when files
-change</li>
+that and uses <a class="reference external" href="http://www.browsersync.io/">Browsersync</a> to reload your
+browser when files change</li>
 </ol>
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre>cd /vagrant
