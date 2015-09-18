@@ -12,8 +12,7 @@ def index(request):
 
 
 def person_list(request):
-    # select_related('party').order_by('reversed_name')
-    person_list = Person.objects.all()[:200]
+    person_list = Person.objects.all().select_related('latest_mandate__party')[:200]
     context = {'person_list': person_list}
     return render(request, 'person_list.html', context)
 
@@ -21,7 +20,8 @@ def person_list(request):
 def gesetze_list(request):
     laws = Law.objects \
             .annotate(last_update=Max('steps__date')) \
-            .order_by('-last_update')
+            .order_by('-last_update') \
+            .select_related('category')
     context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
 
