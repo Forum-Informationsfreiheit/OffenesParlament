@@ -37,7 +37,7 @@ The views all inherit from ``JsonSearchView``, an adaptation of Haystack's ``Sea
 Each accepts a query parameter, `q`, and a list of `facet filters`, named like the facets available for that view:
 
 Main Search
-    * No Facets
+    * party: A person's party, for instance, SPÖ
 
 Persons
     * party: A person's party, for instance, SPÖ
@@ -189,6 +189,24 @@ and would return the following JSON data::
         }
      ]
   }
+
+Facet Only Search
+-----------------
+
+Besides the normal, query-based search, it is possible to retrieve only the
+facets (for and empty query, for instance). This is necessary to allow filling of
+dropdown/selection boxes before the first search. A typical request might then
+look like this::
+
+  http://offenesparlament.vm:8000/personen/search?q=&only_facets=true
+
+But this facet-only search also works with a query, should that be necessary::
+
+  http://offenesparlament.vm:8000/personen/search?q=Mayer&only_facets=true
+
+The result looks like the above-mentioned search result, but always contains an
+empty list in the 'results' field.
+
 
 Indices
 =======

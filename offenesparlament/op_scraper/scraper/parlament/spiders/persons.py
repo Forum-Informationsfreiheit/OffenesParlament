@@ -2,6 +2,8 @@
 import scrapy
 import feedparser
 
+from django.core.urlresolvers import reverse
+
 from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
@@ -149,8 +151,18 @@ class PersonsSpider(BaseSpider):
                     import ipdb
                     ipdb.set_trace()
 
-            person_item.mandates.add(mandate_item)
+                person_item.mandates.add(mandate_item)
+
+            # Do a save to update the db models
             person_item.save()
+
+            # In case we added/modified a mandate now,
+            if p['mandates']:
+                latest_mandate_item = person_item.get_latest_mandate()
+                person_item.latest_mandate = latest_mandate_item
+                self.logger.info(
+                    cyan("Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
+                person_item.save()
 
             # First time we encounter a person, we scan her detail page too
             if not parl_id in self.persons_scraped:
@@ -213,6 +225,7 @@ class PersonsSpider(BaseSpider):
 
         profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
         profile_photo_copyright = PERSON.DETAIL.PHOTO_COPYRIGHT.xt(response)
+
         try:
             person_data = {
                 'photo_link': "{}{}".format(BASE_HOST, profile_photo_url),
@@ -231,6 +244,10 @@ class PersonsSpider(BaseSpider):
                 defaults=person_data
             )
             person_item.save()
+
+            # Instatiate slug
+            person_item.slug
+
         except:
             self.logger.info(red("Error saving Person {}".format(full_name)))
             import ipdb

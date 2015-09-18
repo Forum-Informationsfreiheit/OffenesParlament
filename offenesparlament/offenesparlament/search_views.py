@@ -67,7 +67,7 @@ class JsonSearchView(SearchView):
         qs = SearchQuerySet()
 
         # Are we searching all models or just a specific one (depends on
-        # parameter set in View instatiation)
+        # parameter set in View instantiation)
         if self.search_model is not None:
             qs = qs.models(self.search_model)
 
@@ -93,7 +93,11 @@ class JsonSearchView(SearchView):
             facet_counts = facets.facet_counts()
 
         # Get results and return them
-        result = qs.all()
+        if 'only_facets' in query_args:
+            result = {}
+        else:
+            result = qs.all()
+
         return (result, facet_counts)
 
     def get_context_data(self, *args, **kwargs):
