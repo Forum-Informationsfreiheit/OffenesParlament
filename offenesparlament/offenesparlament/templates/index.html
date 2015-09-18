@@ -5,6 +5,11 @@
 {% block breadcrumbs %}{% endblock %}
 {% block search_bar %}{% endblock %}
 
+{% load staticfiles%}
+{% block js_files %}
+  <script src="{% static 'scripts/homepage.js' %}"></script>
+{% endblock %}
+
 {% block container %}
 
 <div class="homepage_content">

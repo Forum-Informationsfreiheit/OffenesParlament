@@ -12,6 +12,7 @@ module.exports = (grunt) ->
           alias: ['react:']  # Make React available externally for dev tools
         files:
           'offenesparlament/offenesparlament/static/scripts/app.js': 'offenesparlament/offenesparlament/assets/scripts/app.coffee'
+          'offenesparlament/offenesparlament/static/scripts/homepage.js': 'offenesparlament/offenesparlament/assets/scripts/homepage.coffee'
     concat:
       vendor:
         src: ['offenesparlament/offenesparlament/assets/scripts/vendor/visualsearch/dependencies.js', 'offenesparlament/offenesparlament/assets/scripts/vendor/visualsearch/visualsearch.js']
