@@ -421,6 +421,8 @@ ul.breadcrumbs {
         column-count: 1; } }
   .keyword_box ul {
     margin: 0; }
+  .keyword_box a {
+    color: #40925b; }
 
 .speech_type_Pro, .speech_type_Contra {
   width: 70px;
