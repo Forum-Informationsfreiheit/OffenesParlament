@@ -12,6 +12,7 @@
     "grunt-contrib-sass": "^0.9.2",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-favicons": "benfreu/grunt-favicons",
     "jquery": "^2.1.4",
     "react": "^0.13.3"
   }

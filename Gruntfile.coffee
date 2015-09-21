@@ -64,13 +64,26 @@ module.exports = (grunt) ->
         expand: true
     clean:
       build: src: [
-        'offenesparlament/offenesparlament/static/css/vendor.css'
-        'offenesparlament/offenesparlament/static/css/site.css'
+        'offenesparlament/offenesparlament/static/css'
         'offenesparlament/offenesparlament/static/scripts/app.js'
       ]
       style_images: src: 'offenesparlament/offenesparlament/static/css/img'
       style_fonts: src: 'offenesparlament/offenesparlament/static/fonts'
       scripts: src: 'offenesparlament/offenesparlament/static/scripts'
+      favicons: src: 'offenesparlament/offenesparlament/static/favicons'
+    favicons:
+      options:
+        androidHomescreen: true
+        trueColor: true
+        precomposed: true
+        appleTouchBackgroundColor: "#ffffff"
+        coast: true
+        windowsTile: true
+        tileBlackWhite: false
+        tileColor: "#ffffff"
+      icons:
+        src: 'offenesparlament/offenesparlament/assets/styles/img/favicon.png'
+        dest: 'offenesparlament/offenesparlament/static/favicons/'
 
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -80,8 +93,9 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-browserify'
+  grunt.loadNpmTasks 'grunt-favicons'
 
   grunt.registerTask 'build_styles', ['sass:dev', 'copy:images', 'copy:fonts']
-  grunt.registerTask 'dev', ['clean', 'build_styles', 'browserify:dev', 'concat:vendor', 'watch']
-  grunt.registerTask 'reloading', ['clean', 'build_styles', 'browserify:dev', 'concat:vendor', 'browserSync', 'watch']
+  grunt.registerTask 'dev', ['clean', 'build_styles', 'favicons:icons', 'browserify:dev', 'concat:vendor', 'watch']
+  grunt.registerTask 'reloading', ['clean', 'build_styles', 'favicons:icons', 'browserify:dev', 'concat:vendor', 'browserSync', 'watch']
 
