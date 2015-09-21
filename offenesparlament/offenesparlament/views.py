@@ -63,8 +63,7 @@ def gesetz_detail(request, parl_id, ggp):
 
 
 def keyword_detail(request, keyword):
-    title_restored = u'{}'.format(keyword.replace('-', '/').replace('_', ' '))
-    keyword = Keyword.objects.get(title=title_restored)
+    keyword = Keyword.objects.get(_title_urlsafe=keyword)
     laws = keyword.laws \
             .annotate(last_update=Max('steps__date')) \
             .order_by('-last_update')

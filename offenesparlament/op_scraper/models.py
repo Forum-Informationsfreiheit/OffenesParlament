@@ -120,6 +120,7 @@ class Keyword(models.Model):
     A keyword assigned to laws and prelaws
     """
     title = models.CharField(max_length=255, unique=True)
+    _title_urlsafe = models.CharField(max_length=255, default="")
 
     def __unicode__(self):
         return self.title
@@ -129,7 +130,11 @@ class Keyword(models.Model):
 
     @property
     def title_urlsafe(self):
-        return self.title.replace('/', '-').replace(' ', '_')
+        if not self._title_urlsafe:
+            result = re.sub(r'[\.(), -]+', '-', self.title)
+            self._title_urlsafe = re.sub(r'^-|-$', '', result)
+            self.save()
+        return self._title_urlsafe
 
 
 class Law(models.Model, ParlIDMixIn):
