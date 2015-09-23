@@ -473,3 +473,42 @@ table
 
 .section
   margin-top: 70px
+
+
+.about_goal_box
+  margin-top: 33px
+  overflow: hidden
+  div
+    width: 33%
+    display: inline-block
+    color: white
+    line-height: 170%
+    vertical-align: top
+    overflow: hidden
+    padding-bottom: 500px
+    margin-bottom: -500px
+    @media screen and (max-width: $break_medium)
+      width: 100%
+      display: block
+      padding: initial
+      margin: initial
+    h3
+      background-repeat: no-repeat
+      padding: 0 0 0 37px
+      margin: 27px 30px 17px 30px
+    p
+      margin: 17px 30px 26px 30px
+  .about_goal_box_improvedcontent
+    background-color: $red
+    h3
+      background-image: url('img/icons/database_white.svg')
+  .about_goal_box_usability
+    background-color: $dark_blue
+    h3
+      background-image: url('img/icons/heart_white.svg')
+  .about_goal_box_alerts
+    background-color: $green
+    h3
+      background-image: url('img/icons/paperplane_white.svg')
+
+

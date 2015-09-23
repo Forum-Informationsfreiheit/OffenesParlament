@@ -480,4 +480,41 @@ table {
 .section {
   margin-top: 70px; }
 
+.about_goal_box {
+  margin-top: 33px;
+  overflow: hidden; }
+  .about_goal_box div {
+    width: 33%;
+    display: inline-block;
+    color: white;
+    line-height: 170%;
+    vertical-align: top;
+    overflow: hidden;
+    padding-bottom: 500px;
+    margin-bottom: -500px; }
+    @media screen and (max-width: 940px) {
+      .about_goal_box div {
+        width: 100%;
+        display: block;
+        padding: initial;
+        margin: initial; } }
+    .about_goal_box div h3 {
+      background-repeat: no-repeat;
+      padding: 0 0 0 37px;
+      margin: 27px 30px 17px 30px; }
+    .about_goal_box div p {
+      margin: 17px 30px 26px 30px; }
+  .about_goal_box .about_goal_box_improvedcontent {
+    background-color: #f55f57; }
+    .about_goal_box .about_goal_box_improvedcontent h3 {
+      background-image: url("img/icons/database_white.svg"); }
+  .about_goal_box .about_goal_box_usability {
+    background-color: #2a4f6b; }
+    .about_goal_box .about_goal_box_usability h3 {
+      background-image: url("img/icons/heart_white.svg"); }
+  .about_goal_box .about_goal_box_alerts {
+    background-color: #40925b; }
+    .about_goal_box .about_goal_box_alerts h3 {
+      background-image: url("img/icons/paperplane_white.svg"); }
+
 /*# sourceMappingURL=site.css.map */

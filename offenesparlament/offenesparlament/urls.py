@@ -9,6 +9,7 @@ from op_scraper.models import Person, Law
 urlpatterns = patterns(
     '',
     url(r'^$', views.index, name='home'),
+    url(r'^wir/$', views.about, name='about'),
     url(r'^personen/$', views.person_list, name='person_list'),
     url(r'^personen/(?P<parl_id>.{1,30})/(?P<name>.+)/$',
         views.person_detail, name='person_detail'),

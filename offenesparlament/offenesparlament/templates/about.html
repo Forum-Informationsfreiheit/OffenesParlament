@@ -1,0 +1,55 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Über uns" "about" %}
+{% endblock %}
+
+{% block title %}Über uns{% endblock %}
+
+{% block content %}
+  <h1>Über uns</h1>
+  <p class="explanation">
+    Hier könnte Ihre Erklärung stehen.
+  </p>
+
+  <h2>Unsere Ziele</h2>
+  <div class="about_goal_box">
+    <div class="about_goal_box_improvedcontent">
+      <h3>Verbesserung Inhalte</h3>
+      <p>TODO Inhalte wie Reden, Anfragen und Beantwortungen etc werden
+      regelmäßig und automatisch von parlament.gv.at importiert und
+      angereichert und verbessert neu publiziert.</p>
+    </div><!--
+    --><div class="about_goal_box_usability">
+      <h3>Benutzer_innenfreundlich</h3>
+      <p>TODO Inhalte wie Reden, Anfragen und Beantwortungen etc werden
+      angereichert und verbessert neu publiziert.</p>
+    </div><!--
+    --><div class="about_goal_box_alerts">
+      <h3>Benachrichtigungen</h3>
+      <p>TODO Inhalte wie Reden, Anfragen und Beantwortungen etc werden
+      regelmäßig lorem ipsum dolor sit amet und automatisch von
+      parlament.gv.at importiert und angereichert und verbessert neu
+      publiziert.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Team</h2>
+    <p>Blindtext hier</p>
+  </div>
+
+  <div class="section">
+    <h2 id="engagieren">Engagieren</h2>
+    <p>Blindtext hier</p>
+  </div>
+
+  <div class="section">
+    <h2 id="impressum">Kontakt & Impressum</h2>
+    <p>Blindtext hier</p>
+  </div>
+
+{% endblock %}

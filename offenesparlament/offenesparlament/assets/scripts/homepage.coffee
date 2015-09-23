@@ -6,7 +6,6 @@ $ = require 'jquery'
 padding = 0
 
 expand_search_container_to_viewport = () ->
-  console.log 'resize'
   body_height = $('body').height()
   viewport_height = $(window).height()
   content_box = $('.homepage_content')

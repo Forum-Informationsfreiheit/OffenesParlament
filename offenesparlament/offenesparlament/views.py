@@ -11,6 +11,10 @@ def index(request):
     return render(request, 'index.html')
 
 
+def about(request):
+    return render(request, 'about.html')
+
+
 def person_list(request):
     person_list = Person.objects.all().select_related('latest_mandate__party')[:200]
     context = {'person_list': person_list}
@@ -24,6 +28,7 @@ def gesetze_list(request):
             .select_related('category')
     context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
+
 
 def keyword_list(request):
     today = datetime.date.today()
