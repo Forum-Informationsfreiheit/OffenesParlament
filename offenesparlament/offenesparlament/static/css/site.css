@@ -269,9 +269,15 @@ ul.breadcrumbs {
         @media screen and (max-width: 940px) {
           .projectintro .projectintro_item .projectintro_item_border_inlay .projectintro_item_content, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay .projectintro_item_content {
             margin: 30px 0; } }
-    .projectintro .projectintro_item h2, .projectintro .projectintro_item_inverse h2 {
-      font-weight: bold;
-      font-size: 16px; }
+    .projectintro .projectintro_item h3, .projectintro .projectintro_item_inverse h3 {
+      background-repeat: no-repeat;
+      padding: 0 0 0 37px; }
+    .projectintro .projectintro_item .projectintro_item_icon_parliament, .projectintro .projectintro_item_inverse .projectintro_item_icon_parliament {
+      background-image: url("img/icons/parliament_white.svg"); }
+    .projectintro .projectintro_item .projectintro_item_icon_paperplane, .projectintro .projectintro_item_inverse .projectintro_item_icon_paperplane {
+      background-image: url("img/icons/paperplane_white.svg"); }
+    .projectintro .projectintro_item .projectintro_item_icon_personsearch, .projectintro .projectintro_item_inverse .projectintro_item_icon_personsearch {
+      background-image: url("img/icons/personsearch_red.svg"); }
   .projectintro .projectintro_item_inverse {
     color: #f55f57; }
     @media screen and (max-width: 940px) {
