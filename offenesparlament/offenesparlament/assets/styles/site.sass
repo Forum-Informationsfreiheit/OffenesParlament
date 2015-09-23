@@ -14,8 +14,10 @@ $light_blue: rgb(127, 183, 234)
 $middle_blue: rgb(0, 111, 213)
 $red: rgb(245, 95, 87)
 $dark_gray: rgb(38, 38, 38)
+$gray: rgb(127, 127, 127)
 $light_gray: rgb(229, 229, 229)
 $dirty_white: rgb(191, 191, 191)
+$green: rgb(64, 146, 91)
 
 
 body
@@ -536,3 +538,12 @@ table
 .lawlist
   td
     vertical-align: middle
+
+#react_tooltip_container
+  .__react_component_tooltip
+    max-width: 300px
+    -webkit-box-shadow: 1px 1px 21px -4px rgba(0,0,0,0.31)
+    -moz-box-shadow: 1px 1px 21px -4px rgba(0,0,0,0.31)
+    box-shadow: 1px 1px 21px -4px rgba(0,0,0,0.31)
+    &.type-light
+      color: $gray
