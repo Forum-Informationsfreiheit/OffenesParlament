@@ -397,10 +397,10 @@ ul.breadcrumbs {
     text-decoration: none; }
 
 .button_source {
-  background-image: url("img/icons/parliament_red.svg");
+  background-image: url("img/icons/flagged_parliament_red.svg");
   background-position-y: 6px; }
   .button_source:hover, .button_source:focus {
-    background-image: url("img/icons/parliament_white.svg"); }
+    background-image: url("img/icons/flagged_parliament_white.svg"); }
 
 .button_notifications {
   background-image: url("img/icons/notification_red.svg");
@@ -522,5 +522,23 @@ table {
     background-color: #40925b; }
     .about_goal_box .about_goal_box_alerts h3 {
       background-image: url("img/icons/paperplane_white.svg"); }
+
+.law_status {
+  background-repeat: no-repeat;
+  padding: 0 0 0 25px; }
+
+.law_status_offen {
+  background-image: url("img/icons/status_open.svg"); }
+
+.law_status_beschlossen {
+  color: #40925b;
+  background-image: url("img/icons/status_completed.svg"); }
+
+.law_status_zurückgezogen, .law_status_abgelehnt {
+  color: #f55f57;
+  background-image: url("img/icons/status_negative.svg"); }
+
+.lawlist td {
+  vertical-align: middle; }
 
 /*# sourceMappingURL=site.css.map */

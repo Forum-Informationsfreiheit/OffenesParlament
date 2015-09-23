@@ -1,4 +1,4 @@
-<table>
+<table class="lawlist">
   <thead>
     <tr>
       <th>Aktualisierung</th>
@@ -10,11 +10,11 @@
   <tbody>
     {% for law in laws %}
     <tr>
-      <td>{{ law.last_update }}</td>
-      <td>{{ law.category.title }}</td>
-      <td><a href="{{ law.slug }}">{{ law.title }}</a></td>
-      <td>{{ law.parl_id }}</td>
-      <td>{{ law.simple_status }}</td>
+      <td class="lawlist_date">{{ law.last_update }}</td>
+      <td class="lawlist_category">{{ law.category.title }}</td>
+      <td class="lawlist_title"><a href="{{ law.slug }}">{{ law.title }}</a></td>
+      <td class="lawlist_parl_id">{{ law.parl_id }}</td>
+      <td class="lawlist_status"><span class="law_status law_status_{{ law.simple_status }}">{{ law.simple_status }}</span></td>
     </tr>
     {% endfor %}
   </tbody>
