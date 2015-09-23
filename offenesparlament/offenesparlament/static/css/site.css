@@ -195,13 +195,16 @@ ul.breadcrumbs {
         margin-bottom: 5px; }
       .person_info .person_info_text .person_info_section ul {
         margin: 0; }
-    .person_info .person_info_text .person_info_buttons {
-      margin-top: 40px; }
-      .person_info .person_info_text .person_info_buttons a {
-        margin: 10px 20px 10px 0; }
-        @media screen and (max-width: 500px) {
-          .person_info .person_info_text .person_info_buttons a {
-            margin: 10px 0; } }
+
+.info_buttons {
+  margin-top: 40px; }
+  .info_buttons.law_info_buttons {
+    text-align: center; }
+  .info_buttons a {
+    margin: 10px 20px 10px 0; }
+    @media screen and (max-width: 500px) {
+      .info_buttons a {
+        margin: 10px 0; } }
 
 .homepage_content {
   background-color: #2a4f6b;
@@ -482,6 +485,14 @@ table {
   .icon_link.icon_law {
     background-image: url("img/icons/law.svg");
     background-size: 12px; }
+  .icon_link.icon_html {
+    background-image: url("img/icons/html.svg");
+    background-size: 11px;
+    background-position: 0px 2px; }
+  .icon_link.icon_pdf {
+    background-image: url("img/icons/pdf.svg");
+    background-size: 11px;
+    background-position: 0px 2px; }
 
 .section {
   margin-top: 70px; }
@@ -548,5 +559,47 @@ table {
   box-shadow: 1px 1px 21px -4px rgba(0, 0, 0, 0.31); }
   #react_tooltip_container .__react_component_tooltip.type-light {
     color: #7f7f7f; }
+
+.law_details_box {
+  background-color: #f4f6f7;
+  border: 1px solid #dde3e8;
+  padding: 40px 40px 20px 40px;
+  margin: 40px 0; }
+  .law_details_box h2 {
+    margin: 0 0 27px 0; }
+  .law_details_box h3 {
+    margin: 0 0 5px 0; }
+  .law_details_box .column {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top; }
+    .law_details_box .column p {
+      margin: 0 50px 28px 0; }
+
+.keyword_list a {
+  margin-right: 15px; }
+
+table.phases_list tr:nth-child(odd) {
+  background-color: white; }
+table.phases_list tr.phase {
+  background-color: #f4f6f7;
+  color: #1f4563;
+  font-weight: bold; }
+table.phases_list tr .date {
+  padding-right: 50px;
+  padding-left: 15px; }
+
+.linklist_oneline a {
+  margin-right: 5px;
+  padding-right: 5px;
+  border-right: 1px solid #cccccc; }
+  .linklist_oneline a:last-child {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none; }
+
+.innerpage_menu {
+  font-size: 13px;
+  margin-top: 10px; }
 
 /*# sourceMappingURL=site.css.map */

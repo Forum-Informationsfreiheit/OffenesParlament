@@ -50,6 +50,10 @@ class Phase(models.Model):
     def __unicode__(self):
         return self.title
 
+    @property
+    def title_extended(self):
+        return self.title.replace('NR', 'Nationalrat').replace('BR', 'Bundesrat')
+
 
 class Entity(models.Model):
 
@@ -239,6 +243,9 @@ class Opinion(models.Model, ParlIDMixIn):
     keywords = models.ManyToManyField(Keyword)
     entity = models.ForeignKey(Entity, related_name='opinions')
     prelaw = models.ForeignKey(Law, related_name='opinions')
+
+    class Meta:
+        ordering = ['date']
 
     def __unicode__(self):
         return u'{} zu {}'.format(self.entity.title, self.prelaw.parl_id)

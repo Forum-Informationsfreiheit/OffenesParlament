@@ -18,6 +18,8 @@ $gray: rgb(127, 127, 127)
 $light_gray: rgb(229, 229, 229)
 $dirty_white: rgb(191, 191, 191)
 $green: rgb(64, 146, 91)
+$background_light_gray: rgb(244, 246, 247)
+$border_light_gray: rgb(221, 227, 232)
 
 
 body
@@ -203,12 +205,15 @@ ul.breadcrumbs
         margin-bottom: 5px
       ul
         margin: 0
-    .person_info_buttons
-      margin-top: 40px
-      a
-        margin: 10px 20px 10px 0
-        @media screen and (max-width: $break_small)
-          margin: 10px 0
+
+.info_buttons
+  margin-top: 40px
+  &.law_info_buttons
+    text-align: center
+  a
+    margin: 10px 20px 10px 0
+    @media screen and (max-width: $break_small)
+      margin: 10px 0
 
 .homepage_content
   background-color: $dark_blue
@@ -480,6 +485,16 @@ table
     background-image: url('img/icons/law.svg')
     background-size: 12px
 
+  &.icon_html
+    background-image: url('img/icons/html.svg')
+    background-size: 11px
+    background-position: 0px 2px
+
+  &.icon_pdf
+    background-image: url('img/icons/pdf.svg')
+    background-size: 11px
+    background-position: 0px 2px
+
 
 .section
   margin-top: 70px
@@ -547,3 +562,51 @@ table
     box-shadow: 1px 1px 21px -4px rgba(0,0,0,0.31)
     &.type-light
       color: $gray
+
+
+.law_details_box
+  background-color: $background_light_gray
+  border: 1px solid $border_light_gray
+  padding: 40px 40px 20px 40px
+  margin: 40px 0
+  h2
+    margin: 0 0 27px 0
+  h3
+    margin: 0 0 5px 0
+  .column
+    width: 50%
+    display: inline-block
+    vertical-align: top
+    p
+      margin: 0 50px 28px 0
+
+
+.keyword_list
+  a
+    margin-right: 15px
+
+table.phases_list
+  tr
+    &:nth-child(odd)
+      background-color: white
+    &.phase
+      background-color: $background_light_gray
+      color: rgb(31, 69, 99)
+      font-weight: bold
+    .date
+      padding-right: 50px
+      padding-left: 15px
+
+.linklist_oneline
+  a
+    margin-right: 5px
+    padding-right: 5px
+    border-right: 1px solid rgb(204, 204, 204)
+    &:last-child
+      margin-right: 0
+      padding-right: 0
+      border-right: none
+
+.innerpage_menu
+  font-size: 13px
+  margin-top: 10px

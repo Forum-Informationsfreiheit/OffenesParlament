@@ -63,7 +63,7 @@ def gesetz_detail(request, parl_id, ggp):
         parl_id.replace('-', '/').replace('_', ' '))
     llp = LegislativePeriod.objects.get(roman_numeral=ggp)
     gesetz = Law.objects.get(parl_id=parl_id_restored, legislative_period=llp)
-    context = {'gesetz': gesetz}
+    context = {'law': gesetz}
     return render(request, 'gesetz_detail.html', context)
 
 
