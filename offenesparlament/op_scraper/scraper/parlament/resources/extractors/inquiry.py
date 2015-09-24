@@ -6,6 +6,7 @@ import re
 from parlament.resources.extractors import SingleExtractor
 from parlament.resources.extractors import MultiExtractor
 from parlament.resources.util import _clean
+from parlament.settings import BASE_HOST
 
 # import the logging library
 import logging
@@ -114,3 +115,61 @@ class INQUIRY:
         def xt(cls, response):
             receiver_link = response.xpath(cls.XPATH).extract()
             return receiver_link[0].split('/')[-2]
+
+    class STEPS(MultiExtractor):
+        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr'
+
+        @classmethod
+        def xt(cls, response):
+            steps = []
+            raw_steps = response.xpath(cls.XPATH)
+            for raw_step in raw_steps:
+                step_selector = Selector(text=raw_step.extract())
+                title = INQUIRY.STEPS.TITLE.xt(step_selector)
+                title_link = INQUIRY.STEPS.TITLE_LINK.xt(step_selector)
+                if title_link:
+                    title_link = "{}{}".format(
+                        BASE_HOST,
+                        title_link
+                    )
+                date_str = INQUIRY.STEPS.DATE.xt(step_selector).strip()
+                date = datetime.datetime.strptime(
+                    date_str, "%d.%m.%Y").date()
+                protocol_url = INQUIRY.STEPS.PROTOCOL.xt(step_selector)
+                if protocol_url:
+                    protocol_url = "{}{}".format(
+                        BASE_HOST,
+                        protocol_url
+                    )
+                step = {
+                    'title': title,
+                    'date': date,
+                    'protocol_url': protocol_url,
+                    'title_link': title_link
+
+                }
+
+                steps.append(step)
+            return steps
+
+
+        class DATE(SingleExtractor):
+            XPATH = "//td[1]/text()"
+        
+        class TITLE(SingleExtractor):
+            XPATH = "//td[2]/text()"
+            XPATH_LINK_TEXT = "//td[2]/a/text()"
+            XPATH_LINK = "//td[2]/a/@href"
+
+            @classmethod
+            def xt(cls, step_selector):
+                title_selector = step_selector.xpath('//td[2]')[0].extract()
+                full_title = re.sub('<[^>]*>', '', title_selector).strip()
+                print full_title
+                return full_title
+
+        class TITLE_LINK(SingleExtractor):
+            XPATH = "//td[2]/a/@href"
+
+        class PROTOCOL(SingleExtractor):
+            XPATH = "//td[3]/a/@href"

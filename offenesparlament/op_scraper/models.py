@@ -226,7 +226,7 @@ class Step(models.Model):
     source_link = models.URLField(max_length=255, default="")
 
     # Relationships
-    phase = models.ForeignKey(Phase)
+    phase = models.ForeignKey(Phase)    
     law = models.ForeignKey(Law, null=True, blank=True, related_name='steps')
     opinion = models.ForeignKey(
         Opinion, null=True, blank=True, related_name='steps')
@@ -410,6 +410,21 @@ class Statement(models.Model):
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
+class InquiryStep(models.Model):
+    """
+    A single step in the parliamentary process
+    """
+    title = models.CharField(max_length=1023)
+    date = models.DateField()
+    protocol_url = models.URLField(max_length=255, default="")
+    title_link = models.URLField(max_length=255, default="")
+
+    def __unicode__(self):
+        if self.title:
+            return remove_tags(self.title, 'a')
+        else:
+            return self.title
+
 class Inquiry(models.Model):
     """
     An inquiry to the members of government
@@ -428,9 +443,10 @@ class Inquiry(models.Model):
     sender = models.ForeignKey(Person, related_name='inquiries_sent', default="")
     receiver = models.ForeignKey(Person, related_name='inquiries_received', default="")
     keywords = models.ManyToManyField(Keyword, related_name='inquiries')
-
     legislative_period = models.ForeignKey(LegislativePeriod)
+    steps = models.ManyToManyField(InquiryStep, related_name='inquiries')
 
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
+

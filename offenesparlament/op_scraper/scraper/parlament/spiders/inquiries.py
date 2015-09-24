@@ -29,6 +29,7 @@ from op_scraper.models import Function
 from op_scraper.models import Keyword
 from op_scraper.models import Mandate
 from op_scraper.models import LegislativePeriod
+from op_scraper.models import InquiryStep
 from op_scraper.models import Inquiry
 
 
@@ -65,7 +66,7 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        urls = ["http://www.parlament.gv.at/PAKT/VHG/XXV/J/J_05068/index.shtml"]
+        urls = ["http://www.parlament.gv.at/PAKT/VHG/XXIV/J/J_06220/index.shtml"]
         """if self.LLP:
             for i in self.LLP:
                 roman_numeral = roman.toRoman(i)
@@ -127,7 +128,7 @@ class InquiriesSpider(BaseSpider):
         #Attach foreign keys
         inquiry_item.keywords = self.parse_keywords(response)
         inquiry_item.documents = self.parse_docs(response)
-
+        inquiry_item.steps = self.parse_steps(response)
 
         inquiry_item.save()
         if inquiry_created:
@@ -177,3 +178,17 @@ class InquiriesSpider(BaseSpider):
             )
             doc_items.append(doc)
         return doc_items
+
+    def parse_steps(self, response):
+        
+        steps = INQUIRY.STEPS.xt(response)
+        step_items = []
+        for step in steps:
+            step_item, created = InquiryStep.objects.update_or_create(
+                date = step['date'],
+                title = step['title'],
+                protocol_url = step['protocol_url'],
+                title_link = step['title_link']
+                )
+
+        return step_items
