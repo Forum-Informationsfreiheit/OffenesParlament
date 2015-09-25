@@ -39,6 +39,9 @@ class JsonSearchView(SearchView):
         if 'q' in request.GET and request.GET['q']:
             query_args['q'] = request.GET['q']
 
+        if 'only_facets' in request.GET:
+            query_args['only_facets'] = True
+
         for facet_field in self.facet_fields:
             if facet_field in request.GET and request.GET[facet_field]:
                 query_args['facet_filters'][
