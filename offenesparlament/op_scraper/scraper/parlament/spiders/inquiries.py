@@ -42,8 +42,6 @@ class InquiriesSpider(BaseSpider):
         'xdocumentUri':'/PAKT/JMAB/index.shtml',
         'NRBR':'NR',
         'anwenden':'Anwenden',
-#        'GP':'',
-#        'ZEIT':'J',
         'JMAB':'J_JPR_M',
         'VHG2':'ALLE',
         'SUCH':'',
@@ -58,7 +56,6 @@ class InquiriesSpider(BaseSpider):
         super(InquiriesSpider, self).__init__(**kw)
 
         self.start_urls = self.get_urls()
-        self.logger.info(green(u'test init'))
         self.cookies_seen = set()
         self.idlist = {}
 
@@ -66,31 +63,28 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        urls = ["http://www.parlament.gv.at/PAKT/VHG/XXIV/J/J_06220/index.shtml"]
-        """if self.LLP:
+        urls = []
+        
+        if self.LLP:
             for i in self.LLP:
-                roman_numeral = roman.toRoman(i)
-                options = self.URLOPTIONS.copy()
-                options['GP'] = roman_numeral
-                url_options = urlencode(options)
-                url_llp = "{}?{}".format(self.BASE_URL, url_options)
-                rss = feedparser.parse(url_llp)
+                for nrbr in ['NR', 'BR']:
+                    roman_numeral = roman.toRoman(i)
+                    options = self.URLOPTIONS.copy()
+                    options['GP'] = roman_numeral
+                    options['NRBR'] = nrbr
+                    url_options = urlencode(options)
+                    url_llp = "{}?{}".format(self.BASE_URL, url_options)
+                    rss = feedparser.parse(url_llp)
 
-                print "GP {}: {} inquiries".format(
-                    roman_numeral, len(rss['entries']))
-                urls = urls + [entry['link'] for entry in rss['entries']]
-                #print urls[0:20]"""
+                    print "GP {}: {} inquiries from {}".format(
+                        roman_numeral, len(rss['entries']), nrbr)
+                    urls = urls + [entry['link'] for entry in rss['entries']]
+            
 
         return urls
 
 
     def parse(self, response):
-    #        inquiries = INQUIRY.LIST.xt(response)
-    #        self.logger.info(green(u'test parse'))
-    #       for i in inquiries:
-    #          parl_id = i['link'].split('/')[-2]
-    #         self.logger.info(u"Created Inquiry {}".format(
-    #            green(u'[{}]'.format(i[parl_id]))))
         url = response.url
         inquiry_type = response.url.split('/')[-3]
         LLP = LegislativePeriod.objects.get(
@@ -104,15 +98,10 @@ class InquiriesSpider(BaseSpider):
         receiver_object = Person.objects.get(
             parl_id=INQUIRY.RECEIVER.xt(response))
 
-        self.logger.info(u"Inquiry {}/{}: {}".format(green(u'{}'.format(parl_id)), cyan(u'{}'.format(LLP.roman_numeral)), subject))
+        #self.logger.info(u"Inquiry {}/{}: {}".format(green(u'{}'.format(parl_id)), cyan(u'{}'.format(LLP.roman_numeral)), subject))
         inquiry_data = {
             'parl_id': parl_id
         }
-    #     callback_requests = []
-    # which llp are we in?
-    #       llp_roman = [opt.split('=')[1]
-    #          for opt in url_options.split('&') if opt.split('=')[0] == 'GP']
-    #     llp_item = LegislativePeriod.objects.get(roman_numeral=llp_roman[0])
         
         inquiry_item, inquiry_created = Inquiry.objects.update_or_create(
             parl_id=parl_id,
@@ -125,10 +114,17 @@ class InquiriesSpider(BaseSpider):
             sender=sender_object,
             receiver=receiver_object
             )
+
         #Attach foreign keys
         inquiry_item.keywords = self.parse_keywords(response)
         inquiry_item.documents = self.parse_docs(response)
-        inquiry_item.steps = self.parse_steps(response)
+        
+        response.meta['inquiry_item'] = inquiry_item
+        if any("Dringliche" in '{}'.format(s) for s in inquiry_item.keywords.all()):
+            #inquiry_item.steps = self.parse_steps_urgent(response)
+            print green("Dringliche Anfrage, Steps werden noch nicht gescraped")
+        else:    
+            inquiry_item.steps = self.parse_steps(response)
 
         inquiry_item.save()
         if inquiry_created:
@@ -150,11 +146,10 @@ class InquiriesSpider(BaseSpider):
     def parse_keywords(self, response):
 
         keywords = INQUIRY.KEYWORDS.xt(response)
-        log.msg(green(u"Keywords:"))
+
         # Create all keywords we don't yet have in the DB
         keyword_items = []
         for keyword in keywords:
-            log.msg(u"{}".format(keyword))
             kw, created = Keyword.objects.get_or_create(title=keyword)
             if created:
                 log.msg(u"Created keyword {}".format(
