@@ -65,7 +65,7 @@ class INQUIRY:
             return remove_tags(description_nowhitespace, 'p').strip()
 
     class SENDER(SingleExtractor):
-        XPATH = '//*[@class="c_2"]/p[2]/a/@href'
+        XPATH = '//*[@class="c_2"]/p[contains(text(), "Eingebracht von")]/a/@href'
 
         @classmethod
         def xt(cls, response):
@@ -73,7 +73,7 @@ class INQUIRY:
             return sender_link[0].split('/')[-2]
 
     class RECEIVER(SingleExtractor):
-        XPATH = '//*[@class="c_2"]/p[3]/a/@href'
+        XPATH = '//*[@class="c_2"]/p[last()]/a/@href'
 
         @classmethod
         def xt(cls, response):
