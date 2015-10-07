@@ -16,9 +16,25 @@ logger = logging.getLogger(__name__)
 
 class PETITION:
 
+    class SIGNING:
+
+        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/ul/li/a'
+
+        @classmethod
+        def xt(cls, response):
+            raw_url_list = response.xpath(cls.XPATH).extract()
+            if len(raw_url_list) > 0:
+                raw_url = raw_url_list[0]
+                url_sel = Selector(text=raw_url)
+                text = url_sel.xpath('//text()').extract()
+                if text[0] == u'Hier k\xf6nnen Sie zustimmen':
+                    signing_url = url_sel.xpath('//@href').extract()
+                    return signing_url, True
+            return '', False
+
     class OPINIONS(MultiExtractor):
 
-        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/h4[1]/following-sibling::ul[1]/li'
+        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/h4[text()="Stellungnahmen"]/following-sibling::ul[1]/li'
 
         @classmethod
         def xt(cls, response):

@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(default=b'', unique=True, max_length=255)),
                 ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
+                ('end_date', models.DateField(null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -142,6 +142,16 @@ class Migration(migrations.Migration):
                 ('deathplace', models.CharField(max_length=255, null=True, blank=True)),
                 ('occupation', models.CharField(max_length=255, null=True, blank=True)),
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
+            ],
+            bases=(models.Model, op_scraper.models.ParlIDMixIn),
+        ),
+        migrations.CreateModel(
+            name='Petition',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('signable', models.BooleanField()),
+                ('signing_url', models.URLField(default=b'', max_length=255)),
+                ('law', models.ForeignKey(to='op_scraper.Law')),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),

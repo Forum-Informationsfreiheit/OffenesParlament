@@ -110,7 +110,7 @@ class PetitionsSpider(BaseSpider):
 
         # Extract foreign keys
         category = self.parse_category(response)
-        description = PRELAW.DESCRIPTION.xt(response)
+        description = LAW.DESCRIPTION.xt(response)
 
         # Log our progress
         logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
@@ -139,9 +139,13 @@ class PetitionsSpider(BaseSpider):
 
         law_item.save()
 
+        signing_url, signable = PETITION.SIGNING.xt(response)
+
         # Create and save Petition
         petition_item, petition_item_created = Petition.objects.get_or_create(
-            law=law_item
+            law=law_item,
+            signable=signable,
+            signing_url=signing_url,
         )
 
         if not petition_item_created:
