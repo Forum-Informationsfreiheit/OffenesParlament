@@ -483,3 +483,4 @@ class Petition(models.Model, ParlIDMixIn):
     law = models.ForeignKey(Law)
     signable = models.BooleanField()
     signing_url = models.URLField(max_length=255, default="")
+

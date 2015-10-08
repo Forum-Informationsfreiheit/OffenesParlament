@@ -16,7 +16,28 @@ logger = logging.getLogger(__name__)
 
 class PETITION:
 
-    class SIGNING:
+    class CREATORS(MultiExtractor):
+
+        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/p[starts-with(text(),"{}")]'
+
+        @classmethod
+        def xt(cls, response):
+            XPATH_BI_creator = cls.XPATH.format("Erstunterzeichner")
+            XPATH_PET_creator = cls.XPATH.format("eine Petition")
+
+            creators = []
+
+            #TODO: diffentiate between members of parliament and other persons
+            raw_creators_list = response.xpath(XPATH_PET_creator).extract()
+            if len(raw_creators_list) > 0:
+                #started by members of parliament
+                raw_creators_list = raw_creators_list[0]
+            else:
+                raw_creators_list = response.xpath(XPATH_BI_creator).extract()
+
+            return raw_creators_list
+
+    class SIGNING(MultiExtractor):
 
         XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/ul/li/a'
 

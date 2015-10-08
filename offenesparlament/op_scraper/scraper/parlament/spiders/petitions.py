@@ -23,6 +23,8 @@ from parlament.settings import BASE_HOST
 from parlament.resources.util import _clean
 
 from op_scraper.models import LegislativePeriod
+from op_scraper.models import Person
+from op_scraper.models import Statement
 from op_scraper.models import Petition
 from op_scraper.models import Law
 from op_scraper.models import Category
@@ -157,6 +159,11 @@ class PetitionsSpider(BaseSpider):
         callback_requests = []
 
         # is the tab 'Parlamentarisches Verfahren available?'
+        if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
+            response.meta['law_item'] = law_item
+            self.parse_parliament_steps(response)
+
+        # is the tab 'Parlamentarisches Verfahren available?'
         if opinions:
             for op in opinions:
                 if Opinion.objects.filter(parl_id=op['parl_id']).exists():
@@ -279,36 +286,79 @@ class PetitionsSpider(BaseSpider):
                 entity_str
             ))
 
-    def parse_steps(self, response):
+    def parse_parliament_steps(self, response):
         """
-        Parse the Pre-Law's steps
+        Callback function to parse the additional 'Parlamentarisches Verfahren'
+        page
         """
         law_item = response.meta['law_item']
 
-        # Create phase if we don't have it yet
-        phase_item, created = Phase.objects.get_or_create(
-            title='default')
-        if created:
-            log.msg(u"Created Phase {}".format(
-                green(u'[{}]'.format(phase_item.title))))
+        phases = LAW.PHASES.xt(response)
 
-        steps = PRELAW.STEPS.xt(response)
-        if steps:
-            log.msg(u"Creating {} steps".format(
-                cyan(u'[{}]'.format(len(steps)))))
+        for phase in phases:
+            # Create phase if we don't have it yet
+            phase_item, created = Phase.objects.get_or_create(
+                title=phase['title'])
+            if created:
+                log.msg(u"Created Phase {}".format(
+                    green(u'[{}]'.format(phase_item.title))))
 
-        # Create steps
-        for step in steps:
-            step_item, created = Step.objects.update_or_create(
-                title=step['title'],
-                sortkey=step['sortkey'],
-                date=step['date'],
-                protocol_url=step['protocol_url'],
-                law=law_item,
-                phase=phase_item,
-                source_link=response.url
-            )
-            step_item.save()
+            # Create steps
+            for step in phase['steps']:
+                step_item, created = Step.objects.update_or_create(
+                    title=step['title']['text'],
+                    sortkey=step['sortkey'],
+                    date=step['date'],
+                    protocol_url=step['protocol_url'],
+                    law=law_item,
+                    phase=phase_item,
+                    source_link=response.url
+                )
+                step_item.save()
+
+                # Save statements for this step, if applicable
+                if 'statements' in step['title']:
+                    for stmnt in step['title']['statements']:
+                        # Find the person
+                        pq = Person.objects.filter(
+                            source_link__endswith=stmnt['person_source_link'])
+                        if pq.exists() and pq.count() == 1:
+                            person_item = pq.first()
+                            st_data = {
+                                'speech_type': stmnt['statement_type'],
+                                'protocol_url': stmnt['protocol_link']
+                            }
+                            st_item, st_created = Statement.objects.update_or_create(
+                                index=stmnt['index'],
+                                person=person_item,
+                                step=step_item,
+                                defaults=st_data)
+                            if st_created:
+                                log.msg(u"Created Statement by {} on {}".format(
+                                    green(
+                                        u'[{}]'.format(person_item.full_name)),
+                                    step_item.date))
+                            else:
+                                log.msg(u"Updated Statement by {} on {}".format(
+                                    green(
+                                        u'[{}]'.format(person_item.full_name)),
+                                    step_item.date))
+                        else:
+                            # We can't save statements if we can't find the
+                            # Person
+                            log.msg(
+                                red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
+                                    green(
+                                        u'[{}]'.format(stmnt['person_name'])),
+                                    blue(
+                                        "[{}]".format(stmnt['person_source_link'])),
+                                    red("{}").format(
+                                        "" if pq.exists() else " not"),
+                                    "" if pq.count() > 1 else ", but {} persons matching found!".format(
+                                        pq.count())
+                                ))
+                            continue
+
 
     def parse_op_steps(self, response):
         """
