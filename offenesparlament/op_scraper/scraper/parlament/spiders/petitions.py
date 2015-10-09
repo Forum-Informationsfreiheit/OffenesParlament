@@ -102,6 +102,8 @@ class PetitionsSpider(BaseSpider):
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
+        status = LAW.STATUS.xt(response)
+
         LLP = LegislativePeriod.objects.get(
             roman_numeral=response.url.split('/')[-4])
 
@@ -127,6 +129,7 @@ class PetitionsSpider(BaseSpider):
         law_item, created = Law.objects.get_or_create(
             title=title,
             parl_id=parl_id,
+            status=status,
             source_link=response.url,
             description=description,
             legislative_period=LLP)
