@@ -2,10 +2,9 @@ import datetime
 from django.utils.html import remove_tags
 from scrapy import Selector
 
-from parlament.resources.extractors import SingleExtractor
 from parlament.resources.extractors import MultiExtractor
-from parlament.resources.util import _clean
-from parlament.settings import BASE_HOST
+
+import re
 
 # import the logging library
 import logging
@@ -15,6 +14,21 @@ logger = logging.getLogger(__name__)
 
 
 class PETITION:
+
+    class SIGNATURE_COUNT(MultiExtractor):
+
+        XPATH = '//*[@id="content"]/div[3]/div[4]/p[2]/span'
+
+        @classmethod
+        def xt(cls, response):
+            raw_signature_count=response.xpath(cls.XPATH).extract()
+            if len(raw_signature_count) > 0:
+                # sometimes there can be signatures also in the next llp, find all numbers in text
+                signature_count_list = [int(number) for number in re.findall(r'\d+', raw_signature_count[0])]
+                return sum(signature_count_list)
+
+            return 0
+
 
     class CREATORS(MultiExtractor):
 

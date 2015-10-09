@@ -151,6 +151,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('signable', models.BooleanField()),
                 ('signing_url', models.URLField(default=b'', max_length=255)),
+                ('signature_count', models.IntegerField(default=0)),
                 ('law', models.ForeignKey(to='op_scraper.Law')),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),

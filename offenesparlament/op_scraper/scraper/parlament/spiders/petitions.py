@@ -143,11 +143,14 @@ class PetitionsSpider(BaseSpider):
 
         signing_url, signable = PETITION.SIGNING.xt(response)
 
+        signature_count = PETITION.SIGNATURE_COUNT.xt(response)
+
         # Create and save Petition
         petition_item, petition_item_created = Petition.objects.get_or_create(
             law=law_item,
             signable=signable,
             signing_url=signing_url,
+            signature_count=signature_count,
         )
 
         if not petition_item_created:
@@ -163,7 +166,6 @@ class PetitionsSpider(BaseSpider):
             response.meta['law_item'] = law_item
             self.parse_parliament_steps(response)
 
-        # is the tab 'Parlamentarisches Verfahren available?'
         if opinions:
             for op in opinions:
                 if Opinion.objects.filter(parl_id=op['parl_id']).exists():
