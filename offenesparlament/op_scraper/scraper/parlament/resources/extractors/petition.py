@@ -3,6 +3,7 @@ from django.utils.html import remove_tags
 from scrapy import Selector
 
 from parlament.resources.extractors import MultiExtractor
+from parlament.resources.util import _clean
 
 import re
 
@@ -41,15 +42,23 @@ class PETITION:
 
             creators = []
 
-            #TODO: diffentiate between members of parliament and other persons
             raw_creators_list = response.xpath(XPATH_PET_creator).extract()
             if len(raw_creators_list) > 0:
-                #started by members of parliament
-                raw_creators_list = raw_creators_list[0]
+                # PET started by members of parliament
+                for raw_creator in raw_creators_list:
+                    creator_sel = Selector(text=raw_creator)
+                    parl_id = creator_sel.xpath("//a/@href").extract()[0].split("/")[2]
+                    name = creator_sel.xpath("//a/text()").extract()[0]
+                    creators.append((parl_id, name))
             else:
                 raw_creators_list = response.xpath(XPATH_BI_creator).extract()
+                if len(raw_creators_list) > 0:
+                    # BI first signed by a person
+                    name = _clean(raw_creators_list[0].split("\t")[1])
+                    creators.append(("", name))
+                # VBG seem to have no visible "starter"
 
-            return raw_creators_list
+            return creators
 
     class SIGNING(MultiExtractor):
 

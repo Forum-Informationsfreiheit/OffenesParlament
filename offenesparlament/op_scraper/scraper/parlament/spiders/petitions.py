@@ -26,6 +26,7 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Person
 from op_scraper.models import Statement
 from op_scraper.models import Petition
+from op_scraper.models import PetitionCreator
 from op_scraper.models import Law
 from op_scraper.models import Category
 from op_scraper.models import Phase
@@ -132,7 +133,8 @@ class PetitionsSpider(BaseSpider):
             status=status,
             source_link=response.url,
             description=description,
-            legislative_period=LLP)
+            legislative_period=LLP
+        )
 
         if not created:
             law_item.save()
@@ -159,8 +161,11 @@ class PetitionsSpider(BaseSpider):
         if not petition_item_created:
             petition_item.save()
 
-        # Parse opinions
-        opinions = PETITION.OPINIONS.xt(response)
+        # Parse creators
+        petition_creators = self.parse_creators(response)
+
+        for petition_creator in petition_creators:
+            petition_creator.created_petitions.add(petition_item)
 
         callback_requests = []
 
@@ -168,6 +173,9 @@ class PetitionsSpider(BaseSpider):
         if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
             response.meta['law_item'] = law_item
             self.parse_parliament_steps(response)
+
+        # Parse opinions
+        opinions = PETITION.OPINIONS.xt(response)
 
         if opinions:
             for op in opinions:
@@ -395,3 +403,22 @@ class PetitionsSpider(BaseSpider):
             step_item.save()
 
         return len(steps)
+
+    def parse_creators(self, response):
+        """
+        Parse the creator(s) of the opinion
+        """
+        creators = PETITION.CREATORS.xt(response)
+        petition_creators = []
+
+        for creator in creators:
+            parl_id = creator[0]
+            name = creator[1]
+            person = None
+            if len(parl_id) != 0:
+                person = Person.objects.get(parl_id=parl_id)
+
+            petition_creator, created = PetitionCreator.objects.get_or_create(full_name=name,person=person)
+            petition_creators.append(petition_creator)
+
+        return petition_creators

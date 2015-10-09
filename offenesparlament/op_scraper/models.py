@@ -472,15 +472,27 @@ class Statement(models.Model):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
 
-class Petition(models.Model, ParlIDMixIn):
+class Petition(models.Model):
 
     """
     "Beteiligung der BürgerInnen"
     Either a "Bürgerinitiative" or a "Petition" (started by members of the parliament)
     """
-
-    # Relationships
-    law = models.ForeignKey(Law)
     signable = models.BooleanField()
     signing_url = models.URLField(max_length=255, default="")
     signature_count = models.IntegerField(default=0)
+
+    # Relationships
+    law = models.ForeignKey(Law)
+
+
+class PetitionCreator(models.Model):
+    """
+    Creator of a "Bürgerinitiative" or "Petition".
+    Can be a member of the parliament.
+    """
+    full_name = models.CharField(max_length=255)
+
+    # Relationships
+    created_petitions = models.ManyToManyField(Petition, related_name='creators')
+    person = models.OneToOneField(Person, null=True)
