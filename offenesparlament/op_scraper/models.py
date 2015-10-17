@@ -483,7 +483,24 @@ class Petition(models.Model):
     signature_count = models.IntegerField(default=0)
 
     # Relationships
-    law = models.ForeignKey(Law)
+    law = models.OneToOneField(Law, related_name='petition')
+    reference = models.OneToOneField(
+        "self", blank=True, null=True, related_name='redistribution')
+
+    def __unicode__(self):
+        return u'{} eingebracht von {}'.format(self.law,self.creators.all())
+
+    @property
+    def full_signature_count(self):
+        """
+        Return the signature count including the count in the previous period
+        (if this Petition is a "Neuverteilung")
+        """
+        full_count = self.signature_count
+        if self.reference is not None:
+            full_count = full_count + self.reference.signature_count
+
+        return full_count
 
 
 class PetitionCreator(models.Model):
@@ -495,4 +512,10 @@ class PetitionCreator(models.Model):
 
     # Relationships
     created_petitions = models.ManyToManyField(Petition, related_name='creators')
-    person = models.OneToOneField(Person, null=True)
+    person = models.OneToOneField(Person, null=True, related_name='petitions_created')
+
+    def __unicode__(self):
+        if not self.person is None:
+            return u'{}'.format(self.person)
+        else:
+            return u'{}'.format(self.full_name)

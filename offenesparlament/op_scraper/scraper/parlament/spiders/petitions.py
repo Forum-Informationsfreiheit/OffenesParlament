@@ -40,8 +40,6 @@ from op_scraper.models import Step
 class PetitionsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/BB/filter.psp")
 
-    #http://www.parlament.gv.at/PAKT/BB/filter.psp?xdocumentUri=%2FPAKT%2FBB%2Findex.shtml&NRBR=NR&anwenden=Anwenden&GP=XXV&BBET=ALLE&SUCH=&listeId=104&FBEZ=FP_004&pageNumber=
-
     URLOPTIONS = {
         'view': 'RSS',
         'jsMode': 'RSS',
@@ -68,9 +66,6 @@ class PetitionsSpider(BaseSpider):
         # add at least a default URL for testing
         self.start_urls = self.get_urls()
 
-        #import ipdb
-        #ipdb.set_trace()
-
         self.cookies_seen = set()
         self.idlist = {}
 
@@ -96,13 +91,17 @@ class PetitionsSpider(BaseSpider):
                             roman_numeral, nrbr, len(rss['entries']), bbet)
                         urls = urls + [entry['link'] for entry in rss['entries']]
 
-        # urls = ['http://www.parlament.gv.at/PAKT/VHG/XXIV/PET/PET_00030/index.shtml']
         return urls
 
     def parse(self, response):
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
+
+        if not (u'BI' in parl_id or u'PET' in parl_id):
+            # VBG have their parl_id only in the url
+            parl_id = response.url.split('/')[-2]
+
         status = LAW.STATUS.xt(response)
 
         LLP = LegislativePeriod.objects.get(
@@ -150,12 +149,18 @@ class PetitionsSpider(BaseSpider):
 
         signature_count = PETITION.SIGNATURE_COUNT.xt(response)
 
+        # Parse reference
+        reference = self.parse_reference(response)
+
         # Create and save Petition
-        petition_item, petition_item_created = Petition.objects.get_or_create(
+        petition_item, petition_item_created = Petition.objects.update_or_create(
             law=law_item,
-            signable=signable,
-            signing_url=signing_url,
-            signature_count=signature_count,
+            defaults={
+                'signable': signable,
+                'signing_url': signing_url,
+                'signature_count': signature_count,
+                'reference': reference,
+            }
         )
 
         if not petition_item_created:
@@ -417,8 +422,26 @@ class PetitionsSpider(BaseSpider):
             person = None
             if len(parl_id) != 0:
                 person = Person.objects.get(parl_id=parl_id)
-
-            petition_creator, created = PetitionCreator.objects.get_or_create(full_name=name,person=person)
+                petition_creator, created = PetitionCreator.objects.get_or_create(person=person,
+                                                                                  defaults={'full_name': name})
+            else:
+                petition_creator, created = PetitionCreator.objects.get_or_create(full_name=name,person=person)
             petition_creators.append(petition_creator)
 
         return petition_creators
+
+    def parse_reference(self, response):
+        """
+        Parse if and which this petition references
+        (if this petition is a "Neuverteilung")
+        """
+        reference = PETITION.REFERENCE.xt(response)
+
+        if not reference is None:
+            llp = LegislativePeriod.objects.get(
+                roman_numeral=reference[0])
+            ref = Petition.objects.filter(law__legislative_period=llp,law__parl_id=reference[1])
+            if len(ref) == 1:
+                return ref[0]
+
+        return None

@@ -18,15 +18,17 @@ class PETITION:
 
     class SIGNATURE_COUNT(MultiExtractor):
 
-        XPATH = '//*[@id="content"]/div[3]/div[4]/p[2]/span'
+        XPATH = '//*[@id="content"]/div[3]/div[4]/p[2]/span/text()'
 
         @classmethod
         def xt(cls, response):
             raw_signature_count=response.xpath(cls.XPATH).extract()
             if len(raw_signature_count) > 0:
                 # sometimes there can be signatures also in the next llp, find all numbers in text
-                signature_count_list = [int(number) for number in re.findall(r'\d+', raw_signature_count[0])]
-                return sum(signature_count_list)
+                raw_count = re.findall(r'\d+', raw_signature_count[0])
+                if len(raw_count) > 0:
+                    count = int(raw_count[0])
+                    return count
 
             return 0
 
@@ -113,3 +115,22 @@ class PETITION:
 
             return ops
 
+    class REFERENCE(MultiExtractor):
+
+        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/p[starts-with(text(),"Neuverteilung")]/a/@href'
+
+        @classmethod
+        def xt(cls, response):
+            raw_reference = response.xpath(cls.XPATH).extract()
+            if len(raw_reference) > 0:
+                ref_url = raw_reference[0]
+                splitted_url = ref_url.split('/')
+                llp = splitted_url[3]
+                raw_parl_id = splitted_url[5].split('_')
+                type = raw_parl_id[0]
+                number = int(raw_parl_id[1])
+                parl_id = u'({}/{})'.format(number, type)
+
+                return llp, parl_id
+
+            return None

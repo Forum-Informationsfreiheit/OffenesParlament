@@ -18,7 +18,8 @@ class Migration(migrations.Migration):
                 ('signable', models.BooleanField()),
                 ('signing_url', models.URLField(default=b'', max_length=255)),
                 ('signature_count', models.IntegerField(default=0)),
-                ('law', models.ForeignKey(to='op_scraper.Law')),
+                ('law', models.OneToOneField(related_name='petition', to='op_scraper.Law')),
+                ('reference', models.OneToOneField(related_name='redistribution', null=True, blank=True, to='op_scraper.Petition')),
             ],
         ),
         migrations.CreateModel(
@@ -27,7 +28,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('full_name', models.CharField(max_length=255)),
                 ('created_petitions', models.ManyToManyField(related_name='creators', to='op_scraper.Petition')),
-                ('person', models.OneToOneField(null=True, to='op_scraper.Person')),
+                ('person', models.OneToOneField(related_name='petitions_created', null=True, to='op_scraper.Person')),
             ],
         ),
         migrations.AlterModelOptions(
