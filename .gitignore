@@ -3,6 +3,7 @@
 **/*.pyc
 offenesparlament/db.sqlite3
 offenesparlament/db.sqlite3-journal
+offenesparlament/docs/build
 *.sublime-project
 *.sublime-workspace
 .DS_Store
