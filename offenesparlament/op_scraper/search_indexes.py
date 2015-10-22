@@ -5,6 +5,8 @@ from op_scraper.models import Person, Law
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
+    parl_id = indexes.CharField(model_attr='parl_id')
+
     source_link = indexes.CharField(model_attr='source_link')
     internal_link = indexes.CharField(model_attr='slug')
 
@@ -27,6 +29,8 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
 
 class LawIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
+    parl_id = indexes.CharField(model_attr='parl_id')
+
     internal_link = indexes.CharField(model_attr='slug')
     title = indexes.CharField(model_attr='title')
     description = indexes.CharField(model_attr='description')
