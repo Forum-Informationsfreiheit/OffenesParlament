@@ -36,7 +36,7 @@ $(document).ready( () ->
             if response.result?
               React.render(
                   <SearchResults results={response.result} />
-                  document.getElementById('content')
+                  document.getElementById('search_results')
               )
 
       facetMatches: (callback) ->

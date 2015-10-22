@@ -17,7 +17,9 @@ urlpatterns = patterns(
     url(r'^gesetze/(?P<ggp>.{1,30})/(?P<parl_id>.{1,30})/$',
         views.gesetz_detail, name='gesetz_detail'),
     url(r'^schlagworte/$', views.keyword_list, name='keyword_list'),
-    url(r'^schlagworte/(?P<keyword>.+)/$', views.keyword_detail, name='keyword_detail'),
+    url(r'^schlagworte/(?P<keyword>.+)/$',
+        views.keyword_detail, name='keyword_detail'),
+
     # Search Urls
     url(r'^search/?$',
         JsonSearchView.as_view()),
@@ -25,6 +27,15 @@ urlpatterns = patterns(
         PersonSearchView.as_view()),
     url(r'^gesetze/search/?$',
         LawSearchView.as_view(search_model=Law)),
+
+    # Subscribe & verify Urls
+    url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
+        views.verify,
+        name='verify'),
+
+    url(r'^subscribe/?$',
+        views.subscribe),
+
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/scrape/(?P<spider_name>.{1,30})',
         admin_views.trigger_scrape, name='scrape_llp'),

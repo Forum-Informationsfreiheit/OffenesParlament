@@ -23,6 +23,17 @@
         {% endblock %}
       </div>
 
+      <!-- EXAMPLE MESSAGES CONTAINER PLEASE ADAPT -->
+      {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      {% endif %}
+      <!-- EXAMPLE MESSAGES CONTAINER PLEASE ADAPT -->
+
+
       {% block content %}
         <h1>Hello, parliament!</h1>
       {% endblock %}
