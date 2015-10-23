@@ -30,7 +30,7 @@ module.exports = (grunt) ->
         tasks: [ 'clean:style_images', 'build_styles' ]
       scripts:
         files: 'offenesparlament/offenesparlament/assets/scripts/**/*'
-        tasks: [ 'browserify:dev' ]
+        tasks: [ 'browserify:dev', 'concat:vendor' ]
     browserSync:
       dev:
         bsFiles:
