@@ -247,6 +247,7 @@ VS.ui.SearchBox = Backbone.View.extend({
 
   // Render a single facet, using its category and query value.
   renderFacet : function(facet, position) {
+    console.log('renderFacet', facet.get('permanent'))
     var view = new VS.ui.SearchFacet({
       app   : this.app,
       model : facet,
@@ -548,7 +549,13 @@ VS.ui.SearchFacet = Backbone.View.extend({
 
   type : 'facet',
 
-  className : 'search_facet',
+  className : function () {
+    if(this.model.get('permanent')) {
+      return 'search_facet permanent_facet';
+    } else {
+      return 'search_facet';
+    }
+  },
 
   events : {
     'click .category'           : 'selectFacet',
@@ -671,6 +678,7 @@ VS.ui.SearchFacet = Backbone.View.extend({
     if (autocomplete) {
       var menu = autocomplete.menu.element;
       autocomplete.search();
+      console.log('show autocomplete', autocomplete);
 
       // Resize the menu based on the correctly measured width of what's bigger:
       // the menu's original size or the menu items' new size.
@@ -882,14 +890,16 @@ VS.ui.SearchFacet = Backbone.View.extend({
   // Deletes the facet and sends the cursor over to the nearest input field.
   remove : function(e) {
     var committed = this.model.get('value');
-    this.deselectFacet();
-    this.disableEdit();
-    this.app.searchQuery.remove(this.model);
-    if (committed && this.app.options.autosearch) {
-      this.search(e, -1);
-    } else {
-      this.app.searchBox.renderFacets();
-      this.app.searchBox.focusNextFacet(this, -1, {viewPosition: this.options.order});
+    if(!this.model.get('permanent')) {
+      this.deselectFacet();
+      this.disableEdit();
+      this.app.searchQuery.remove(this.model);
+      if (committed && this.app.options.autosearch) {
+        this.search(e, -1);
+      } else {
+        this.app.searchBox.renderFacets();
+        this.app.searchBox.focusNextFacet(this, -1, {viewPosition: this.options.order});
+      }
     }
   },
 
