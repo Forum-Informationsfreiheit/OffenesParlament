@@ -137,6 +137,8 @@ class Dev(BaseConfig):
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
     CELERY_RESULT_BACKEND = 'amqp'
 
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
     # Workaround for the ReactorNotRestartable issue described here:
     # http://stackoverflow.com/questions/22116493/run-a-scrapy-spider-in-a-celery-task
     CELERYD_MAX_TASKS_PER_CHILD = 1

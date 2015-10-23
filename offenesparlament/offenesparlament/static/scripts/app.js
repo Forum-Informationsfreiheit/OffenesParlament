@@ -20228,7 +20228,7 @@ $(document).ready(function() {
             if (response.result != null) {
               return React.render(React.createElement(SearchResults, {
                 "results": response.result
-              }), document.getElementById('content'));
+              }), document.getElementById('search_results'));
             }
           }
         });

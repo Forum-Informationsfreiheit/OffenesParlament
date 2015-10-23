@@ -1,0 +1,17 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Gesetze" "gesetze_list" %}
+{% endblock %}
+
+{% block title %}Regierungsvorlagen &amp; Gesetzesinitiativen{% endblock %}
+
+{% block content %}
+  <h1>Email-Verifikation</h1>
+  <p class="explanation">
+    {{ message }}
+  </p>
+
+{% endblock %}

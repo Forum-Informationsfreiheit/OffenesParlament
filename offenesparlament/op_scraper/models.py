@@ -470,3 +470,36 @@ class Statement(models.Model):
 
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
+
+
+class User(models.Model):
+
+    """
+    A user that subscribed certain pages
+    """
+    email = models.EmailField(unique=True)
+
+
+class SubscribedContent(models.Model):
+
+    """
+    A news- or page-subscription
+    """
+    url = models.URLField(max_length=255, unique=True)
+    users = models.ManyToManyField(User, through="Subscription")
+    latest_content_hash = models.CharField(
+        max_length=16, null=True, blank=True)
+
+
+class Subscription(models.Model):
+
+    """
+    A single subscription of content for a user
+    """
+    user = models.ForeignKey(User)
+    content = models.ForeignKey(SubscribedContent)
+    verified = models.BooleanField()
+    verification_hash = models.CharField(max_length=32)
+
+    class Meta:
+        unique_together = ("user", "content")

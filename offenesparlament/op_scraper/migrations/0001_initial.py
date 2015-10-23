@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(default=b'', unique=True, max_length=255)),
                 ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
+                ('end_date', models.DateField(null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -62,6 +62,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(unique=True, max_length=255)),
+                ('_title_urlsafe', models.CharField(default=b'', max_length=255)),
             ],
             options={
                 'ordering': ['title'],
@@ -76,6 +77,7 @@ class Migration(migrations.Migration):
                 ('source_link', models.URLField(default=b'', max_length=255)),
                 ('parl_id', models.CharField(default=b'', max_length=30)),
                 ('description', models.TextField(blank=True)),
+                ('_slug', models.CharField(default=b'', max_length=255)),
                 ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
                 ('documents', models.ManyToManyField(related_name='laws', to='op_scraper.Document')),
                 ('keywords', models.ManyToManyField(related_name='laws', to='op_scraper.Keyword')),
@@ -117,6 +119,9 @@ class Migration(migrations.Migration):
                 ('keywords', models.ManyToManyField(to='op_scraper.Keyword')),
                 ('prelaw', models.ForeignKey(related_name='opinions', to='op_scraper.Law')),
             ],
+            options={
+                'ordering': ['date'],
+            },
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
@@ -141,6 +146,8 @@ class Migration(migrations.Migration):
                 ('deathdate', models.DateField(null=True, blank=True)),
                 ('deathplace', models.CharField(max_length=255, null=True, blank=True)),
                 ('occupation', models.CharField(max_length=255, null=True, blank=True)),
+                ('_slug', models.CharField(default=b'', max_length=255)),
+                ('latest_mandate', models.ForeignKey(related_name='latest_mandate', blank=True, to='op_scraper.Mandate', null=True)),
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
@@ -200,6 +207,40 @@ class Migration(migrations.Migration):
                 ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
         ),
+        migrations.CreateModel(
+            name='SubscribedContent',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('url', models.URLField(unique=True, max_length=255)),
+                ('latest_content_hash', models.CharField(max_length=16, null=True, blank=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Subscription',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('verified', models.BooleanField()),
+                ('verification_hash', models.CharField(max_length=32)),
+                ('content', models.ForeignKey(to='op_scraper.SubscribedContent')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='User',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('email', models.EmailField(unique=True, max_length=254)),
+            ],
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='user',
+            field=models.ForeignKey(to='op_scraper.User'),
+        ),
+        migrations.AddField(
+            model_name='subscribedcontent',
+            name='users',
+            field=models.ManyToManyField(to='op_scraper.User', through='op_scraper.Subscription'),
+        ),
         migrations.AddField(
             model_name='statement',
             name='step',
@@ -237,6 +278,10 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='entity',
             unique_together=set([('title', 'title_detail')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='subscription',
+            unique_together=set([('user', 'content')]),
         ),
         migrations.AlterUniqueTogether(
             name='law',
