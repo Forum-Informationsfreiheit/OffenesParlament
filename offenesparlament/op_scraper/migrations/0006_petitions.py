@@ -31,6 +31,17 @@ class Migration(migrations.Migration):
                 ('person', models.OneToOneField(related_name='petitions_created', null=True, to='op_scraper.Person')),
             ],
         ),
+        migrations.CreateModel(
+            name='PetitionSignature',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('full_name', models.CharField(max_length=255)),
+                ('postal_code', models.CharField(max_length=50)),
+                ('location', models.CharField(max_length=255)),
+                ('date', models.DateField()),
+                ('petition', models.ForeignKey(related_name='petition_signatures', to='op_scraper.Petition')),
+            ],
+        ),
         migrations.AlterModelOptions(
             name='opinion',
             options={'ordering': ['date']},
