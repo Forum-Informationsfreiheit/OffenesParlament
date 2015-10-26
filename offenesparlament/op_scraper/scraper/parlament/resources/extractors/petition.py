@@ -6,6 +6,8 @@ from parlament.resources.extractors import MultiExtractor
 from parlament.resources.util import _clean
 
 import re
+import time
+import datetime
 
 # import the logging library
 import logging
@@ -134,3 +136,30 @@ class PETITION:
                 return llp, parl_id
 
             return None
+
+    class SIGNATURES(MultiExtractor):
+
+        XPATH = '//*[@id="filterListeBI_001"]/table/tr'
+
+        @classmethod
+        def xt(cls, response):
+            raw_signatures = response.xpath(cls.XPATH).extract()
+
+            signatures = []
+            for raw_signature in raw_signatures:
+                sig_sel = Selector(text=raw_signature)
+                signature_list = sig_sel.xpath('//td/text()').extract()
+                full_name = _clean(signature_list[0])
+                postal_code = _clean(signature_list[1])
+                location = _clean(signature_list[2])
+                raw_date = time.strptime(_clean(signature_list[3]), '%d.%m.%Y')
+                date = datetime.datetime.fromtimestamp(time.mktime(raw_date))
+
+                signatures.append({
+                    'full_name': full_name,
+                    'postal_code': postal_code,
+                    'location': location,
+                    'date': date
+                })
+
+            return signatures

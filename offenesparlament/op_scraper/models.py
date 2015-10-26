@@ -519,3 +519,20 @@ class PetitionCreator(models.Model):
             return u'{}'.format(self.person)
         else:
             return u'{}'.format(self.full_name)
+
+
+class PetitionSignature(models.Model):
+    """
+    Public signature of a "Bürgerinitiative" or "Petition"
+    """
+    full_name = models.CharField(max_length=255)
+    postal_code= models.CharField(max_length=50)
+    location = models.CharField(max_length=255)
+    date = models.DateField()
+
+    # Relationships
+    petition = models.ForeignKey(Petition, related_name='petition_signatures')
+
+    def __unicode__(self):
+        return u'Unterschrift von {} ({}-{}) am {} für {}'\
+            .format(self.full_name, self.postal_code, self.location, self.date, self.petition)

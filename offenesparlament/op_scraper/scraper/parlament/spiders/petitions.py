@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
-
 from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
@@ -16,7 +15,6 @@ from scrapy import log
 
 from parlament.spiders import BaseSpider
 from parlament.resources.extractors.petition import *
-from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.opinion import *
 
 from parlament.settings import BASE_HOST
@@ -35,6 +33,7 @@ from op_scraper.models import Keyword
 from op_scraper.models import Document
 from op_scraper.models import Entity
 from op_scraper.models import Step
+from op_scraper.models import PetitionSignature
 
 
 class PetitionsSpider(BaseSpider):
@@ -194,6 +193,30 @@ class PetitionsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
+
+        # Only BI or PET have online signatures
+        if u'BI' in parl_id or u'PET' in parl_id:
+            # http://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00040/filter.psp?xdocumentUri=/PAKT/VHG/XXV/BI/BI_00040/index.shtml&GP_CODE=XXV&ITYP=BI&INR=40&FBEZ=BI_001&pageNumber=&STEP=
+            signatures_base_url = '{}/PAKT/VHG/{}/{}/{}/filter.psp?xdocumentUri=/PAKT/VHG/{}/{}/{}/\
+                index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&pageNumber=&STEP='
+
+            raw_parl_id = law_item.parl_id[1:-1].split('/')
+            petition_type = raw_parl_id[1]
+            petition_number = int(raw_parl_id[0])
+            url_parl_id = '{}_{}'.format(petition_type, petition_number)
+
+            signatures_url = signatures_base_url.format(BASE_HOST, LLP.roman_numeral, petition_type, url_parl_id,
+                                                        LLP.roman_numeral, petition_type, url_parl_id,
+                                                        LLP.roman_numeral, petition_type, petition_number)
+
+            post_req = scrapy.Request(signatures_url,
+                                          callback=self.parse_signatures,
+                                          dont_filter=True)
+
+            post_req.meta['petition_item'] = petition_item
+
+            callback_requests.append(post_req)
+
         log.msg(green("Open Callback requests: {}".format(
             len(callback_requests))), level=log.INFO)
 
@@ -219,7 +242,7 @@ class PetitionsSpider(BaseSpider):
 
     def parse_docs(self, response):
         """
-        Parse the documents attached to this pre-law
+        Parse the documents attached to this petition
         """
 
         docs = LAW.DOCS.xt(response)
@@ -249,7 +272,7 @@ class PetitionsSpider(BaseSpider):
 
     def parse_opinion(self, response):
         """
-        Parse one pre-law opinion
+        Parse one petition opinion
         """
         op_data = response.meta['op_data']
 
@@ -377,7 +400,6 @@ class PetitionsSpider(BaseSpider):
                                 ))
                             continue
 
-
     def parse_op_steps(self, response):
         """
         Parse the Opinions's steps
@@ -425,7 +447,7 @@ class PetitionsSpider(BaseSpider):
                 petition_creator, created = PetitionCreator.objects.get_or_create(person=person,
                                                                                   defaults={'full_name': name})
             else:
-                petition_creator, created = PetitionCreator.objects.get_or_create(full_name=name,person=person)
+                petition_creator, created = PetitionCreator.objects.get_or_create(full_name=name, person=person)
             petition_creators.append(petition_creator)
 
         return petition_creators
@@ -440,8 +462,24 @@ class PetitionsSpider(BaseSpider):
         if not reference is None:
             llp = LegislativePeriod.objects.get(
                 roman_numeral=reference[0])
-            ref = Petition.objects.filter(law__legislative_period=llp,law__parl_id=reference[1])
+            ref = Petition.objects.filter(law__legislative_period=llp, law__parl_id=reference[1])
             if len(ref) == 1:
                 return ref[0]
 
         return None
+
+    def parse_signatures(self, response):
+        """
+        Parse the public signatures
+        """
+        petition = response.meta['petition_item']
+
+        signatures = PETITION.SIGNATURES.xt(response)
+
+        for signature in signatures:
+            petition_signature, created = PetitionSignature.objects.get_or_create(petition=petition,**signature)
+
+            if created:
+                log.msg(u"Created: {}".format(
+                    green(u'[{}]'.format(petition_signature))
+                ))
