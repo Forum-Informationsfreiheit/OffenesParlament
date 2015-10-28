@@ -26,12 +26,13 @@ Term = React.createClass
     cl_names = classNames({
       anysearch_term: true
       anysearch_term_helper: @props.helper
+      anysearch_term_permanent: @props.permanent
     })
     if not @props.helper and not @props.permanent
       delete_button = <span onClick={@_on_delete_button_click} className="anysearch_term_delete_button">x</span>
     <span key={@props.id} className={cl_names}>
       {delete_button}
-      <span onClick={@props.onTermClicked} className="anysearch_term_category">{StringUtils.get_category_text(@props.category)}</span>
+      <span onClick={@_on_term_clicked} className="anysearch_term_category">{StringUtils.get_category_text(@props.category)}</span>
       <AutosizeInput
           name="form-field-name"
           value={@props.value}
@@ -45,6 +46,10 @@ Term = React.createClass
 
   _on_delete_button_click: (event) ->
     AnysearchActions.deleteTerm(@props.id)
+
+  _on_term_clicked: (event) ->
+    if not @props.permanent
+      @props.onTermClicked(event)
 
 module.exports = Term
 

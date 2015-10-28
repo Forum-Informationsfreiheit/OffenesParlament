@@ -15,12 +15,13 @@ _suggested_categories = []
 _suggested_values = []
 _search_results = null
 
-_create_term = (category, value, helper=false) ->
+_create_term = (category, value, helper=false, permanent=false) ->
   new_term =
     id: _id_counter
     category: category
     value: value
     helper: helper
+    permanent: permanent
   _id_counter += 1
   return new_term
 
@@ -29,8 +30,8 @@ _delete_term = (id) ->
   _pad_terms_with_helpers()
   _debounced_update_search_results()
 
-_add_term = (category, value) ->
-  _terms.push(_create_term(category, value))
+_add_term = (category, value, helper=false, permanent=false) ->
+  _terms.push(_create_term(category, value, helper, permanent))
   _pad_terms_with_helpers()
 
 _pad_terms_with_helpers = () ->
@@ -135,6 +136,9 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     switch payload.actionType
       when AnysearchConstants.CREATE_TERM
         _add_term(payload.category, payload.value)
+        AnysearchStore.emitChange()
+      when AnysearchConstants.CREATE_PERMANENT_TERM
+        _add_term(payload.category, payload.value, false, true)
         AnysearchStore.emitChange()
       when AnysearchConstants.DELETE_TERM
         _delete_term(payload.id)

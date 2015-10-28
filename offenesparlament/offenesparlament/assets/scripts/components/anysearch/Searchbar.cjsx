@@ -26,7 +26,7 @@ Searchbar = React.createClass
 
   componentDidMount: () ->
     AnysearchStore.addChangeListener(@_onChange)
-    AnysearchActions.createTerm('llps', 'XXV')
+    AnysearchActions.createPermanentTerm('llps', 'XXV')
 
   componentWillUnmount: () ->
     AnysearchStore.removeChangeListener(@_onChange)
@@ -65,6 +65,7 @@ Searchbar = React.createClass
         category={term.category}
         value={term.value}
         helper={term.helper}
+        permanent={term.permanent}
         onTermClicked={term_clicked}
         onInputFocused={term_input_focused}
         ref={last_term}

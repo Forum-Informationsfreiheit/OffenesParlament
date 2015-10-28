@@ -10,6 +10,13 @@ AnysearchActions =
       value: value
     })
 
+  createPermanentTerm: (category, value) ->
+    AppDispatcher.dispatch({
+      actionType: AnysearchConstants.CREATE_PERMANENT_TERM
+      category: category
+      value: value
+    })
+
   deleteTerm: (id) ->
     AppDispatcher.dispatch({
       actionType: AnysearchConstants.DELETE_TERM

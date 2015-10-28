@@ -22143,6 +22143,13 @@ AnysearchActions = {
       value: value
     });
   },
+  createPermanentTerm: function(category, value) {
+    return AppDispatcher.dispatch({
+      actionType: AnysearchConstants.CREATE_PERMANENT_TERM,
+      category: category,
+      value: value
+    });
+  },
   deleteTerm: function(id) {
     return AppDispatcher.dispatch({
       actionType: AnysearchConstants.DELETE_TERM,
@@ -22299,7 +22306,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
   },
   componentDidMount: function() {
     AnysearchStore.addChangeListener(this._onChange);
-    return AnysearchActions.createTerm('llps', 'XXV');
+    return AnysearchActions.createPermanentTerm('llps', 'XXV');
   },
   componentWillUnmount: function() {
     return AnysearchStore.removeChangeListener(this._onChange);
@@ -22360,6 +22367,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
           "category": term.category,
           "value": term.value,
           "helper": term.helper,
+          "permanent": term.permanent,
           "onTermClicked": term_clicked,
           "onInputFocused": term_input_focused,
           "ref": last_term
@@ -22486,7 +22494,8 @@ Term = React.createClass({displayName: "Term",
     var cl_names, delete_button;
     cl_names = classNames({
       anysearch_term: true,
-      anysearch_term_helper: this.props.helper
+      anysearch_term_helper: this.props.helper,
+      anysearch_term_permanent: this.props.permanent
     });
     if (!this.props.helper && !this.props.permanent) {
       delete_button = React.createElement("span", {
@@ -22498,7 +22507,7 @@ Term = React.createClass({displayName: "Term",
       "key": this.props.id,
       "className": cl_names
     }, delete_button, React.createElement("span", {
-      "onClick": this.props.onTermClicked,
+      "onClick": this._on_term_clicked,
       "className": "anysearch_term_category"
     }, StringUtils.get_category_text(this.props.category)), React.createElement(AutosizeInput, {
       "name": "form-field-name",
@@ -22512,6 +22521,11 @@ Term = React.createClass({displayName: "Term",
   },
   _on_delete_button_click: function(event) {
     return AnysearchActions.deleteTerm(this.props.id);
+  },
+  _on_term_clicked: function(event) {
+    if (!this.props.permanent) {
+      return this.props.onTermClicked(event);
+    }
   }
 });
 
@@ -22525,6 +22539,7 @@ keyMirror = require('keymirror');
 
 module.exports = keyMirror({
   CREATE_TERM: null,
+  CREATE_PERMANENT_TERM: null,
   DELETE_TERM: null,
   CHANGE_TERM_CATEGORY: null,
   CHANGE_TERM_VALUE: null,
@@ -22571,16 +22586,20 @@ _suggested_values = [];
 
 _search_results = null;
 
-_create_term = function(category, value, helper) {
+_create_term = function(category, value, helper, permanent) {
   var new_term;
   if (helper == null) {
     helper = false;
+  }
+  if (permanent == null) {
+    permanent = false;
   }
   new_term = {
     id: _id_counter,
     category: category,
     value: value,
-    helper: helper
+    helper: helper,
+    permanent: permanent
   };
   _id_counter += 1;
   return new_term;
@@ -22594,8 +22613,14 @@ _delete_term = function(id) {
   return _debounced_update_search_results();
 };
 
-_add_term = function(category, value) {
-  _terms.push(_create_term(category, value));
+_add_term = function(category, value, helper, permanent) {
+  if (helper == null) {
+    helper = false;
+  }
+  if (permanent == null) {
+    permanent = false;
+  }
+  _terms.push(_create_term(category, value, helper, permanent));
   return _pad_terms_with_helpers();
 };
 
@@ -22739,6 +22764,10 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
       switch (payload.actionType) {
         case AnysearchConstants.CREATE_TERM:
           _add_term(payload.category, payload.value);
+          AnysearchStore.emitChange();
+          break;
+        case AnysearchConstants.CREATE_PERMANENT_TERM:
+          _add_term(payload.category, payload.value, false, true);
           AnysearchStore.emitChange();
           break;
         case AnysearchConstants.DELETE_TERM:
