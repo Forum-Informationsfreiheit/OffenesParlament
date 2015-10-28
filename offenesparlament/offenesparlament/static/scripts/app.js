@@ -22143,6 +22143,12 @@ AnysearchActions = {
       value: value
     });
   },
+  deleteTerm: function(id) {
+    return AppDispatcher.dispatch({
+      actionType: AnysearchConstants.DELETE_TERM,
+      id: id
+    });
+  },
   changeTermValue: function(id, value) {
     return AppDispatcher.dispatch({
       actionType: AnysearchConstants.CHANGE_TERM_VALUE,
@@ -22313,11 +22319,20 @@ Searchbar = React.createClass({displayName: "Searchbar",
       }
     }
   },
+  onSearchbarClicked: function(event) {
+    if (event.target === this.refs.searchbar) {
+      return this.refs.last_term.focus();
+    }
+  },
   render: function() {
-    var items, loading, suggest, terms;
+    var items, last_key, loading, suggest, terms;
+    last_key = this.state.terms.length - 1;
     terms = _.map(this.state.terms, (function(_this) {
-      return function(term) {
-        var term_clicked, term_input_focused;
+      return function(term, key) {
+        var last_term, term_clicked, term_input_focused;
+        if (key === last_key) {
+          last_term = "last_term";
+        }
         term_input_focused = function() {
           AnysearchActions.updateFacets(term.id);
           if (term.helper) {
@@ -22346,7 +22361,8 @@ Searchbar = React.createClass({displayName: "Searchbar",
           "value": term.value,
           "helper": term.helper,
           "onTermClicked": term_clicked,
-          "onInputFocused": term_input_focused
+          "onInputFocused": term_input_focused,
+          "ref": last_term
         });
       };
     })(this));
@@ -22365,7 +22381,9 @@ Searchbar = React.createClass({displayName: "Searchbar",
       });
     }
     return React.createElement("div", {
-      "className": "anysearch_box"
+      "className": "anysearch_box",
+      "onClick": this.onSearchbarClicked,
+      "ref": "searchbar"
     }, terms, loading, suggest);
   },
   _onChange: function() {
@@ -22458,24 +22476,28 @@ Term = React.createClass({displayName: "Term",
   },
   componentDidMount: function() {},
   componentWillUnmount: function() {},
-  componentDidUpdate: function() {
-    if (this.props.forceFocus) {
-      return this.refs.input.focus();
-    }
-  },
   onChange: function(event) {
     return AnysearchActions.changeTermValue(this.props.id, event.target.value);
   },
+  focus: function() {
+    return this.refs.input.focus();
+  },
   render: function() {
-    var cl_names;
+    var cl_names, delete_button;
     cl_names = classNames({
       anysearch_term: true,
       anysearch_term_helper: this.props.helper
     });
+    if (!this.props.helper && !this.props.permanent) {
+      delete_button = React.createElement("span", {
+        "onClick": this._on_delete_button_click,
+        "className": "anysearch_term_delete_button"
+      }, "x");
+    }
     return React.createElement("span", {
       "key": this.props.id,
       "className": cl_names
-    }, React.createElement("span", {
+    }, delete_button, React.createElement("span", {
       "onClick": this.props.onTermClicked,
       "className": "anysearch_term_category"
     }, StringUtils.get_category_text(this.props.category)), React.createElement(AutosizeInput, {
@@ -22483,11 +22505,13 @@ Term = React.createClass({displayName: "Term",
       "value": this.props.value,
       "onChange": this.onChange,
       "onFocus": this.props.onInputFocused,
-      "autoFocus": this.props.forceFocus,
       "minWidth": 10,
       "className": "anysearch_term_value",
       "ref": "input"
     }));
+  },
+  _on_delete_button_click: function(event) {
+    return AnysearchActions.deleteTerm(this.props.id);
   }
 });
 
@@ -22501,6 +22525,7 @@ keyMirror = require('keymirror');
 
 module.exports = keyMirror({
   CREATE_TERM: null,
+  DELETE_TERM: null,
   CHANGE_TERM_CATEGORY: null,
   CHANGE_TERM_VALUE: null,
   UPDATE_FACETS: null
@@ -22518,7 +22543,7 @@ module.exports = AppDispatcher;
 
 
 },{"flux":2}],322:[function(require,module,exports){
-var AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _debounced_update_search_results, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _search_results, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, assign;
+var AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _debounced_update_search_results, _delete_term, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _search_results, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, assign;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 
@@ -22559,6 +22584,14 @@ _create_term = function(category, value, helper) {
   };
   _id_counter += 1;
   return new_term;
+};
+
+_delete_term = function(id) {
+  _terms = _.filter(_terms, function(term) {
+    return term.id !== id;
+  });
+  _pad_terms_with_helpers();
+  return _debounced_update_search_results();
 };
 
 _add_term = function(category, value) {
@@ -22706,6 +22739,10 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
       switch (payload.actionType) {
         case AnysearchConstants.CREATE_TERM:
           _add_term(payload.category, payload.value);
+          AnysearchStore.emitChange();
+          break;
+        case AnysearchConstants.DELETE_TERM:
+          _delete_term(payload.id);
           AnysearchStore.emitChange();
           break;
         case AnysearchConstants.CHANGE_TERM_VALUE:

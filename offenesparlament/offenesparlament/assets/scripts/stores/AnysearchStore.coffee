@@ -24,6 +24,11 @@ _create_term = (category, value, helper=false) ->
   _id_counter += 1
   return new_term
 
+_delete_term = (id) ->
+  _terms = _.filter(_terms, (term) -> return term.id != id)
+  _pad_terms_with_helpers()
+  _debounced_update_search_results()
+
 _add_term = (category, value) ->
   _terms.push(_create_term(category, value))
   _pad_terms_with_helpers()
@@ -130,6 +135,9 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     switch payload.actionType
       when AnysearchConstants.CREATE_TERM
         _add_term(payload.category, payload.value)
+        AnysearchStore.emitChange()
+      when AnysearchConstants.DELETE_TERM
+        _delete_term(payload.id)
         AnysearchStore.emitChange()
       when AnysearchConstants.CHANGE_TERM_VALUE
         _change_term_value(payload.id, payload.value)

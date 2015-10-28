@@ -10,6 +10,12 @@ AnysearchActions =
       value: value
     })
 
+  deleteTerm: (id) ->
+    AppDispatcher.dispatch({
+      actionType: AnysearchConstants.DELETE_TERM
+      id: id
+    })
+
   changeTermValue: (id, value) ->
     AppDispatcher.dispatch({
       actionType: AnysearchConstants.CHANGE_TERM_VALUE
