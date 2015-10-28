@@ -96,6 +96,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-favicons'
 
   grunt.registerTask 'build_styles', ['sass:dev', 'copy:images', 'copy:fonts']
-  grunt.registerTask 'dev', ['clean', 'build_styles', 'favicons:icons', 'browserify:dev', 'concat:vendor', 'watch']
-  grunt.registerTask 'reloading', ['clean', 'build_styles', 'favicons:icons', 'browserify:dev', 'concat:vendor', 'browserSync', 'watch']
+  grunt.registerTask 'clean_except_icons', [ 'clean:build', 'clean:style_images', 'clean:style_fonts', 'clean:scripts' ]
+  grunt.registerTask 'icons', ['favicons:icons']
+  grunt.registerTask 'dev', ['clean_except_icons', 'build_styles', 'browserify:dev', 'concat:vendor', 'watch']
+  grunt.registerTask 'reloading', ['clean_except_icons', 'build_styles', 'browserify:dev', 'concat:vendor', 'browserSync', 'watch']
 
