@@ -30,7 +30,6 @@ _add_term = (category, value) ->
 
 _pad_terms_with_helpers = () ->
   terms = _.filter(_terms, (term) -> return (not term.helper))
-  console.log _terms, terms
   if terms.length > 0 then terms.unshift(_create_term('', '', true))
   terms.push(_create_term('', '', true))
   _terms = terms
@@ -48,8 +47,11 @@ _change_term_value = (id, value) ->
 _change_term_category = (id, category) ->
   term = _.find(_terms, (term) -> return term.id == id)
   if term?
+    if term.helper
+      term.helper = false
     term.category = category
-    _update_facets()
+    _pad_terms_with_helpers()
+    _update_facets(id)
     _debounced_update_search_results()
 
 _get_terms_as_object = (excluded_term) ->
@@ -67,7 +69,6 @@ _update_search_results = () ->
     dataType: 'json'
     data: _get_terms_as_object()
     success: (response) ->
-      console.log 'result', response
       if response.result?
         _search_results = response.result
     complete: () ->
@@ -87,9 +88,9 @@ _update_facets = (selected_term_id) ->
       dataType: 'json'
       data: _.extend({only_facets: 1}, _get_terms_as_object(term))
       success: (response) ->
-        # console.log 'facet result', response
         if response.facets?.fields?
           _suggested_categories = _.keys(response.facets.fields)
+          if not _.has(_suggested_categories, 'q') then _suggested_categories.push('q')
           if _.has(response.facets.fields, term.category)
             _suggested_values = _.map(response.facets.fields[term.category], (item) -> return item[0])
           else

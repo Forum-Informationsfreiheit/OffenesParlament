@@ -22251,9 +22251,15 @@ Searchbar = React.createClass({displayName: "Searchbar",
   onSuggestionSelected: function(input) {
     if (this.state.active_term != null) {
       if (this.state.suggestion_type === 'category') {
-        return AnysearchActions.changeTermCategory(this.state.active_term.id, input);
+        AnysearchActions.changeTermCategory(this.state.active_term.id, input);
+        return this.setState({
+          suggestion_type: 'value'
+        });
       } else {
-        return AnysearchActions.changeTermValue(this.state.active_term.id, input);
+        AnysearchActions.changeTermValue(this.state.active_term.id, input);
+        return this.setState({
+          suggestion_type: null
+        });
       }
     }
   },
@@ -22264,10 +22270,17 @@ Searchbar = React.createClass({displayName: "Searchbar",
         var term_clicked, term_input_focused;
         term_input_focused = function() {
           AnysearchActions.updateFacets(term.id);
-          return _this.setState({
-            active_term: term,
-            suggestion_type: 'value'
-          });
+          if (term.helper) {
+            return _this.setState({
+              active_term: term,
+              suggestion_type: 'category'
+            });
+          } else {
+            return _this.setState({
+              active_term: term,
+              suggestion_type: 'value'
+            });
+          }
         };
         term_clicked = function() {
           AnysearchActions.updateFacets(term.id);
@@ -22393,6 +22406,11 @@ Term = React.createClass({displayName: "Term",
   },
   componentDidMount: function() {},
   componentWillUnmount: function() {},
+  componentDidUpdate: function() {
+    if (this.props.forceFocus) {
+      return this.refs.input.focus();
+    }
+  },
   onChange: function(event) {
     return AnysearchActions.changeTermValue(this.props.id, event.target.value);
   },
@@ -22405,7 +22423,9 @@ Term = React.createClass({displayName: "Term",
       "name": "form-field-name",
       "value": this.props.value,
       "onChange": this.onChange,
-      "onFocus": this.props.onInputFocused
+      "onFocus": this.props.onInputFocused,
+      "autoFocus": this.props.forceFocus,
+      "ref": "input"
     }));
   }
 });
@@ -22490,7 +22510,6 @@ _pad_terms_with_helpers = function() {
   terms = _.filter(_terms, function(term) {
     return !term.helper;
   });
-  console.log(_terms, terms);
   if (terms.length > 0) {
     terms.unshift(_create_term('', '', true));
   }
@@ -22520,8 +22539,12 @@ _change_term_category = function(id, category) {
     return term.id === id;
   });
   if (term != null) {
+    if (term.helper) {
+      term.helper = false;
+    }
     term.category = category;
-    _update_facets();
+    _pad_terms_with_helpers();
+    _update_facets(id);
     return _debounced_update_search_results();
   }
 };
@@ -22543,7 +22566,6 @@ _update_search_results = function() {
     dataType: 'json',
     data: _get_terms_as_object(),
     success: function(response) {
-      console.log('result', response);
       if (response.result != null) {
         return _search_results = response.result;
       }
@@ -22576,6 +22598,9 @@ _update_facets = function(selected_term_id) {
         var ref;
         if (((ref = response.facets) != null ? ref.fields : void 0) != null) {
           _suggested_categories = _.keys(response.facets.fields);
+          if (!_.has(_suggested_categories, 'q')) {
+            _suggested_categories.push('q');
+          }
           if (_.has(response.facets.fields, term.category)) {
             return _suggested_values = _.map(response.facets.fields[term.category], function(item) {
               return item[0];

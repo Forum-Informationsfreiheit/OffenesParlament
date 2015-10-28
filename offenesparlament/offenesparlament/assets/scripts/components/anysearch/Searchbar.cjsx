@@ -35,14 +35,19 @@ Searchbar = React.createClass
     if @state.active_term?
       if @state.suggestion_type == 'category'
         AnysearchActions.changeTermCategory(@state.active_term.id, input)
+        @setState({suggestion_type: 'value'})
       else
         AnysearchActions.changeTermValue(@state.active_term.id, input)
+        @setState({suggestion_type: null})
 
   render: ->
     terms = _.map(@state.terms, (term) =>
       term_input_focused = () =>
         AnysearchActions.updateFacets(term.id)
-        @setState({active_term: term, suggestion_type: 'value'})
+        if term.helper
+          @setState({active_term: term, suggestion_type: 'category'})
+        else
+          @setState({active_term: term, suggestion_type: 'value'})
       term_clicked = () =>
         AnysearchActions.updateFacets(term.id)
         @setState({active_term: term, suggestion_type: 'category'})
