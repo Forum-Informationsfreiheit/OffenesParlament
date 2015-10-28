@@ -22558,7 +22558,7 @@ module.exports = AppDispatcher;
 
 
 },{"flux":2}],322:[function(require,module,exports){
-var AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _debounced_update_search_results, _delete_term, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _search_results, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, assign;
+var AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _debounced_update_search_results, _delete_term, _get_term, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _search_results, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, assign;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 
@@ -22585,6 +22585,12 @@ _suggested_categories = [];
 _suggested_values = [];
 
 _search_results = null;
+
+_get_term = function(id) {
+  return _.find(_terms, function(term) {
+    return term.id === id;
+  });
+};
 
 _create_term = function(category, value, helper, permanent) {
   var new_term;
@@ -22635,9 +22641,7 @@ _pad_terms_with_helpers = function() {
 
 _change_term_value = function(id, value) {
   var term;
-  term = _.find(_terms, function(term) {
-    return term.id === id;
-  });
+  term = _get_term(id);
   if (term != null) {
     if (term.helper) {
       term.helper = false;
@@ -22651,9 +22655,7 @@ _change_term_value = function(id, value) {
 
 _change_term_category = function(id, category) {
   var term;
-  term = _.find(_terms, function(term) {
-    return term.id === id;
-  });
+  term = _get_term(id);
   if (term != null) {
     if (term.helper) {
       term.helper = false;
@@ -22700,9 +22702,7 @@ _update_facets = function(selected_term_id) {
   _loading = true;
   _suggested_categories = [];
   _suggested_values = [];
-  term = _.find(_terms, function(term) {
-    return term.id === selected_term_id;
-  });
+  term = _get_term(selected_term_id);
   if (term != null) {
     return $.ajax({
       url: '/personen/search',
@@ -22713,7 +22713,7 @@ _update_facets = function(selected_term_id) {
       success: function(response) {
         var ref;
         if (((ref = response.facets) != null ? ref.fields : void 0) != null) {
-          _suggested_categories = _.keys(response.facets.fields);
+          _update_suggested_categories(response.facets.fields, selected_term_id);
           if (!_.has(_suggested_categories, 'q')) {
             _suggested_categories.push('q');
           }
@@ -22730,6 +22730,20 @@ _update_facets = function(selected_term_id) {
         _loading = false;
         return AnysearchStore.emitChange();
       }
+    });
+  }
+};
+
+_update_suggested_categories = function(fields, selected_term_id) {
+  var categories, selected_term, used_categories;
+  selected_term = _get_term(selected_term_id);
+  if (selected_term != null) {
+    categories = _.keys(fields);
+    used_categories = _.map(_terms, function(term) {
+      return term.category;
+    });
+    return _suggested_categories = _.filter(categories, function(cat) {
+      return (!_.contains(used_categories, cat)) || cat === selected_term.category;
     });
   }
 };

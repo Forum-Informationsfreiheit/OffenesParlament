@@ -15,6 +15,10 @@ _suggested_categories = []
 _suggested_values = []
 _search_results = null
 
+
+_get_term = (id) ->
+  return _.find(_terms, (term) -> return term.id == id)
+
 _create_term = (category, value, helper=false, permanent=false) ->
   new_term =
     id: _id_counter
@@ -41,7 +45,7 @@ _pad_terms_with_helpers = () ->
   _terms = terms
 
 _change_term_value = (id, value) ->
-  term = _.find(_terms, (term) -> return term.id == id)
+  term = _get_term(id)
   if term?
     if term.helper
       term.helper = false
@@ -51,7 +55,7 @@ _change_term_value = (id, value) ->
     _debounced_update_search_results()
 
 _change_term_category = (id, category) ->
-  term = _.find(_terms, (term) -> return term.id == id)
+  term = _get_term(id)
   if term?
     if term.helper
       term.helper = false
@@ -87,7 +91,7 @@ _update_facets = (selected_term_id) ->
   _loading = true
   _suggested_categories = []
   _suggested_values = []
-  term = _.find(_terms, (term) -> return term.id == selected_term_id)
+  term = _get_term(selected_term_id)
   if term?
     $.ajax
       url: '/personen/search'
@@ -95,7 +99,7 @@ _update_facets = (selected_term_id) ->
       data: _.extend({only_facets: 1}, _get_terms_as_object(term))
       success: (response) ->
         if response.facets?.fields?
-          _suggested_categories = _.keys(response.facets.fields)
+          _update_suggested_categories(response.facets.fields, selected_term_id)
           if not _.has(_suggested_categories, 'q') then _suggested_categories.push('q')
           if _.has(response.facets.fields, term.category)
             _suggested_values = _.map(response.facets.fields[term.category], (item) -> return item[0])
@@ -104,6 +108,15 @@ _update_facets = (selected_term_id) ->
       complete: () ->
         _loading = false
         AnysearchStore.emitChange()
+
+_update_suggested_categories = (fields, selected_term_id) ->
+  selected_term = _get_term(selected_term_id)
+  if selected_term?
+    categories = _.keys(fields)
+    used_categories = _.map(_terms, (term) -> return term.category)
+    _suggested_categories = _.filter(categories, (cat) ->
+      return ( (not _.contains(used_categories, cat)) or cat == selected_term.category )
+    )
 
 
 AnysearchStore = assign({}, EventEmitter.prototype, {
