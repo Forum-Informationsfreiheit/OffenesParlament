@@ -30,7 +30,7 @@ _add_term = (category, value) ->
 
 _pad_terms_with_helpers = () ->
   terms = _.filter(_terms, (term) -> return (not term.helper))
-  if terms.length > 0 then terms.unshift(_create_term('', '', true))
+  # if terms.length > 0 then terms.unshift(_create_term('', '', true))
   terms.push(_create_term('', '', true))
   _terms = terms
 

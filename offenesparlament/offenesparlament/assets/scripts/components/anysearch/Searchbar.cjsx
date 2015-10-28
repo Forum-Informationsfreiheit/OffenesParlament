@@ -56,6 +56,7 @@ Searchbar = React.createClass
         id={term.id}
         category={term.category}
         value={term.value}
+        helper={term.helper}
         onTermClicked={term_clicked}
         onInputFocused={term_input_focused}
       />

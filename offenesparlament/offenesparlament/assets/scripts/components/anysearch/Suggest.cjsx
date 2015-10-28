@@ -14,12 +14,12 @@ Suggest = React.createClass
     return
 
   render: ->
-    autocomplete_styles = {position: 'absolute', backgroundColor: 'wheat'}
+    autocomplete_styles = {}
     items = _.map(@props.items, (item) =>
       on_item_selected = () =>
         @props.onSelect(item)
       <SuggestItem key={item} text={item} onClick={on_item_selected} />
     )
-    <div style={autocomplete_styles}>{items}</div>
+    <div className="anysearch_suggestions" style={autocomplete_styles}>{items}</div>
 
 module.exports = Suggest

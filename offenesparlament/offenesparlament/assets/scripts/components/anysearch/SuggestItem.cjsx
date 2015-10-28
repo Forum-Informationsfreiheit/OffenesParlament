@@ -14,7 +14,7 @@ SuggestItem = React.createClass
     return
 
   render: ->
-    <div onClick={@props.onClick} >{StringUtils.get_category_text(@props.text)}</div>
+    <div className="anysearch_suggestions_item" onClick={@props.onClick} >{StringUtils.get_category_text(@props.text)}</div>
 
 module.exports = SuggestItem
 

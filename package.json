@@ -2,6 +2,7 @@
   "name": "offenesparlament",
   "version": "0.1.0",
   "devDependencies": {
+    "classnames": "^2.2.0",
     "coffee-reactify": "^4.0.0",
     "flux": "^2.1.1",
     "grunt": "~0.4.5",
