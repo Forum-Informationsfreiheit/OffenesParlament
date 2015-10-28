@@ -19,6 +19,9 @@ Term = React.createClass
   onChange: (event) ->
     AnysearchActions.changeTermValue(@props.id, event.target.value)
 
+  focus: () ->
+    @refs.input.focus()
+
   render: ->
     cl_names = classNames({
       anysearch_term: true
@@ -33,6 +36,7 @@ Term = React.createClass
           onFocus={@props.onInputFocused}
           minWidth=10
           className="anysearch_term_value"
+          ref="input"
       />
     </span>
 

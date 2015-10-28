@@ -40,8 +40,16 @@ Searchbar = React.createClass
         AnysearchActions.changeTermValue(@state.active_term.id, input)
         @setState({suggestion_type: null})
 
+  onSearchbarClicked: (event) ->
+    if event.target == @refs.searchbar
+      @refs.last_term.focus()
+
+
   render: ->
-    terms = _.map(@state.terms, (term) =>
+    last_key = @state.terms.length - 1
+    terms = _.map(@state.terms, (term, key) =>
+      if key == last_key
+        last_term = "last_term"
       term_input_focused = () =>
         AnysearchActions.updateFacets(term.id)
         if term.helper
@@ -59,6 +67,7 @@ Searchbar = React.createClass
         helper={term.helper}
         onTermClicked={term_clicked}
         onInputFocused={term_input_focused}
+        ref={last_term}
       />
     )
     loading = if @state.loading then 'loading...' else ''
@@ -70,7 +79,7 @@ Searchbar = React.createClass
                   items={items}
                   onSelect={@onSuggestionSelected}
                 />
-    <div className="anysearch_box">
+    <div className="anysearch_box" onClick={@onSearchbarClicked} ref="searchbar">
       {terms}
       {loading}
       {suggest}
