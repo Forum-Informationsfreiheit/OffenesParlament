@@ -22382,11 +22382,13 @@ Searchbar = React.createClass({displayName: "Searchbar",
         case 'category':
           items = this.state.categories;
       }
-      suggest = React.createElement(Suggest, {
-        "items": items,
-        "onSelect": this.onSuggestionSelected,
-        "loading": this.state.loading
-      });
+      if (items && items.length > 0) {
+        suggest = React.createElement(Suggest, {
+          "items": items,
+          "onSelect": this.onSuggestionSelected,
+          "loading": this.state.loading
+        });
+      }
     }
     return React.createElement("div", {
       "className": "anysearch_box",
@@ -22494,7 +22496,7 @@ Term = React.createClass({displayName: "Term",
     return this.refs.input.focus();
   },
   render: function() {
-    var cl_names, delete_button;
+    var category, cl_names, delete_button;
     cl_names = classNames({
       anysearch_term: true,
       anysearch_term_helper: this.props.helper,
@@ -22506,13 +22508,16 @@ Term = React.createClass({displayName: "Term",
         "className": "anysearch_term_delete_button"
       }, "x");
     }
+    if (this.props.category) {
+      category = React.createElement("span", {
+        "onClick": this._on_term_clicked,
+        "className": "anysearch_term_category"
+      }, StringUtils.get_category_text(this.props.category));
+    }
     return React.createElement("span", {
       "key": this.props.id,
       "className": cl_names
-    }, delete_button, React.createElement("span", {
-      "onClick": this._on_term_clicked,
-      "className": "anysearch_term_category"
-    }, StringUtils.get_category_text(this.props.category)), React.createElement(AutosizeInput, {
+    }, delete_button, category, React.createElement(AutosizeInput, {
       "name": "form-field-name",
       "value": this.props.value,
       "onChange": this.onChange,
@@ -22721,9 +22726,13 @@ _update_facets = function(selected_term_id) {
             _suggested_categories.push('q');
           }
           if (_.has(response.facets.fields, term.category)) {
-            return _suggested_values = _.map(response.facets.fields[term.category], function(item) {
-              return item[0];
-            });
+            return _suggested_values = _.compact(_.map(response.facets.fields[term.category], function(item) {
+              if (item[0]) {
+                return item[0];
+              } else {
+                return null;
+              }
+            }));
           } else {
             return _suggested_values = [];
           }

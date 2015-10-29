@@ -1,14 +1,19 @@
 .anysearch_box
-  height: 30px
   margin: 10px 0 10px 0
   cursor: text
+  line-height: 0
+  border-radius: 6px
+  overflow: hidden
+  transition: box-shadow 200ms ease-in-out
+  &:hover
+    box-shadow: inset 0px 0px 13px 0px rgba(0, 0, 0, 0.1)
 
   .anysearch_term
     background-color: white
     border-radius: 4px
     line-height: 30px
     display: inline-block
-    margin: 0 10px 0 0
+    margin: 3px 3px 3px 3px
     overflow: hidden
     padding: 0
     &.anysearch_term_helper
