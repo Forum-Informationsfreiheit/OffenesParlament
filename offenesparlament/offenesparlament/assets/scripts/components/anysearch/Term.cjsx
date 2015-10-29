@@ -30,9 +30,11 @@ Term = React.createClass
     })
     if not @props.helper and not @props.permanent
       delete_button = <span onClick={@_on_delete_button_click} className="anysearch_term_delete_button">x</span>
+    if @props.category
+      category = <span onClick={@_on_term_clicked} className="anysearch_term_category">{StringUtils.get_category_text(@props.category)}</span>
     <span key={@props.id} className={cl_names}>
       {delete_button}
-      <span onClick={@_on_term_clicked} className="anysearch_term_category">{StringUtils.get_category_text(@props.category)}</span>
+      {category}
       <AutosizeInput
           name="form-field-name"
           value={@props.value}
