@@ -102,7 +102,10 @@ _update_facets = (selected_term_id) ->
           _update_suggested_categories(response.facets.fields, selected_term_id)
           if not _.has(_suggested_categories, 'q') then _suggested_categories.push('q')
           if _.has(response.facets.fields, term.category)
-            _suggested_values = _.map(response.facets.fields[term.category], (item) -> return item[0])
+            _suggested_values = _.compact(_.map(response.facets.fields[term.category], (item) ->
+              if item[0] then return item[0]
+              else return null
+            ))
           else
             _suggested_values = []
       complete: () ->

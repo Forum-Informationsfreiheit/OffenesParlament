@@ -75,11 +75,12 @@ Searchbar = React.createClass
       switch @state.suggestion_type
         when 'value' then items = @state.values
         when 'category' then items = @state.categories
-      suggest = <Suggest
-                  items={items}
-                  onSelect={@onSuggestionSelected}
-                  loading={@state.loading}
-                />
+      if items and items.length > 0
+        suggest = <Suggest
+                    items={items}
+                    onSelect={@onSuggestionSelected}
+                    loading={@state.loading}
+                  />
     <div className="anysearch_box" onClick={@onSearchbarClicked} ref="searchbar">
       {terms}
       {suggest}
