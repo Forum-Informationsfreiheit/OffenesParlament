@@ -22332,7 +22332,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
     }
   },
   render: function() {
-    var items, last_key, loading, suggest, terms;
+    var items, last_key, suggest, terms;
     last_key = this.state.terms.length - 1;
     terms = _.map(this.state.terms, (function(_this) {
       return function(term, key) {
@@ -22374,7 +22374,6 @@ Searchbar = React.createClass({displayName: "Searchbar",
         });
       };
     })(this));
-    loading = this.state.loading ? 'loading...' : '';
     if (this.state.active_term) {
       switch (this.state.suggestion_type) {
         case 'value':
@@ -22385,14 +22384,15 @@ Searchbar = React.createClass({displayName: "Searchbar",
       }
       suggest = React.createElement(Suggest, {
         "items": items,
-        "onSelect": this.onSuggestionSelected
+        "onSelect": this.onSuggestionSelected,
+        "loading": this.state.loading
       });
     }
     return React.createElement("div", {
       "className": "anysearch_box",
       "onClick": this.onSearchbarClicked,
       "ref": "searchbar"
-    }, terms, loading, suggest);
+    }, terms, suggest);
   },
   _onChange: function() {
     return this.setState(_get_state_from_store());
@@ -22431,6 +22431,9 @@ Suggest = React.createClass({displayName: "Suggest",
         });
       };
     })(this));
+    if (this.props.loading && items.length < 1) {
+      items = React.createElement("div", null, "loading...");
+    }
     return React.createElement("div", {
       "className": "anysearch_suggestions",
       "style": autocomplete_styles

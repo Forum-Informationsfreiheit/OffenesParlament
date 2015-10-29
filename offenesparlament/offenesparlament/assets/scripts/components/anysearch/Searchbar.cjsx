@@ -71,7 +71,6 @@ Searchbar = React.createClass
         ref={last_term}
       />
     )
-    loading = if @state.loading then 'loading...' else ''
     if @state.active_term
       switch @state.suggestion_type
         when 'value' then items = @state.values
@@ -79,10 +78,10 @@ Searchbar = React.createClass
       suggest = <Suggest
                   items={items}
                   onSelect={@onSuggestionSelected}
+                  loading={@state.loading}
                 />
     <div className="anysearch_box" onClick={@onSearchbarClicked} ref="searchbar">
       {terms}
-      {loading}
       {suggest}
     </div>
 

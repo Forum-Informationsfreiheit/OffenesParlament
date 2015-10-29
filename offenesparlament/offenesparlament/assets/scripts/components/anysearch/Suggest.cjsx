@@ -20,6 +20,8 @@ Suggest = React.createClass
         @props.onSelect(item)
       <SuggestItem key={item} text={item} onClick={on_item_selected} />
     )
+    if @props.loading and items.length < 1
+      items = <div>loading...</div>
     <div className="anysearch_suggestions" style={autocomplete_styles}>{items}</div>
 
 module.exports = Suggest
