@@ -50,15 +50,24 @@ Searchbar = React.createClass
     terms = _.map(@state.terms, (term, key) =>
       if key == last_key
         last_term = "last_term"
-      term_input_focused = () =>
+      term_input_focused = (event, left) =>
         AnysearchActions.updateFacets(term.id)
         if term.helper
-          @setState({active_term: term, suggestion_type: 'category'})
+          type = 'category'
         else
-          @setState({active_term: term, suggestion_type: 'value'})
-      term_clicked = () =>
+          type = 'value'
+        @setState({
+          active_term: term,
+          suggestion_type: type,
+          suggestion_left_position: left
+        })
+      term_clicked = (event, left) =>
         AnysearchActions.updateFacets(term.id)
-        @setState({active_term: term, suggestion_type: 'category'})
+        @setState({
+          active_term: term,
+          suggestion_type: 'category',
+          suggestion_left_position: left
+        })
       <Term
         key={term.id}
         id={term.id}
@@ -80,6 +89,7 @@ Searchbar = React.createClass
                     items={items}
                     onSelect={@onSuggestionSelected}
                     loading={@state.loading}
+                    left={@state.suggestion_left_position}
                   />
     <div className="anysearch_box" onClick={@onSearchbarClicked} ref="searchbar">
       {terms}

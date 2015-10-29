@@ -14,7 +14,7 @@ Suggest = React.createClass
     return
 
   render: ->
-    autocomplete_styles = {}
+    autocomplete_styles = {left: @props.left}
     items = _.map(@props.items, (item) =>
       on_item_selected = () =>
         @props.onSelect(item)
