@@ -472,6 +472,7 @@ class Statement(models.Model):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
 
+
 class User(models.Model):
 
     """
@@ -503,3 +504,68 @@ class Subscription(models.Model):
 
     class Meta:
         unique_together = ("user", "content")
+
+class Petition(models.Model):
+
+    """
+    "Beteiligung der BürgerInnen"
+    Either a "Bürgerinitiative" or a "Petition" (started by members of the parliament)
+    """
+    signable = models.BooleanField()
+    signing_url = models.URLField(max_length=255, default="")
+    signature_count = models.IntegerField(default=0)
+
+    # Relationships
+    law = models.OneToOneField(Law, related_name='petition')
+    reference = models.OneToOneField(
+        "self", blank=True, null=True, related_name='redistribution')
+
+    def __unicode__(self):
+        return u'{} eingebracht von {}'.format(self.law,self.creators.all())
+
+    @property
+    def full_signature_count(self):
+        """
+        Return the signature count including the count in the previous period
+        (if this Petition is a "Neuverteilung")
+        """
+        full_count = self.signature_count
+        if self.reference is not None:
+            full_count = full_count + self.reference.signature_count
+
+        return full_count
+
+
+class PetitionCreator(models.Model):
+    """
+    Creator of a "Bürgerinitiative" or "Petition".
+    Can be a member of the parliament.
+    """
+    full_name = models.CharField(max_length=255)
+
+    # Relationships
+    created_petitions = models.ManyToManyField(Petition, related_name='creators')
+    person = models.OneToOneField(Person, null=True, related_name='petitions_created')
+
+    def __unicode__(self):
+        if not self.person is None:
+            return u'{}'.format(self.person)
+        else:
+            return u'{}'.format(self.full_name)
+
+
+class PetitionSignature(models.Model):
+    """
+    Public signature of a "Bürgerinitiative" or "Petition"
+    """
+    full_name = models.CharField(max_length=255)
+    postal_code= models.CharField(max_length=50)
+    location = models.CharField(max_length=255)
+    date = models.DateField()
+
+    # Relationships
+    petition = models.ForeignKey(Petition, related_name='petition_signatures')
+
+    def __unicode__(self):
+        return u'Unterschrift von {} ({}-{}) am {} für {}'\
+            .format(self.full_name, self.postal_code, self.location, self.date, self.petition)

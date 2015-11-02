@@ -153,6 +153,37 @@ class Migration(migrations.Migration):
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
+            name='Petition',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('signable', models.BooleanField()),
+                ('signing_url', models.URLField(default=b'', max_length=255)),
+                ('signature_count', models.IntegerField(default=0)),
+                ('law', models.OneToOneField(related_name='petition', to='op_scraper.Law')),
+                ('reference', models.OneToOneField(related_name='redistribution', null=True, blank=True, to='op_scraper.Petition')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='PetitionCreator',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('full_name', models.CharField(max_length=255)),
+                ('created_petitions', models.ManyToManyField(related_name='creators', to='op_scraper.Petition')),
+                ('person', models.OneToOneField(related_name='petitions_created', null=True, to='op_scraper.Person')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='PetitionSignature',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('full_name', models.CharField(max_length=255)),
+                ('postal_code', models.CharField(max_length=50)),
+                ('location', models.CharField(max_length=255)),
+                ('date', models.DateField()),
+                ('petition', models.ForeignKey(related_name='petition_signatures', to='op_scraper.Petition')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Phase',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
