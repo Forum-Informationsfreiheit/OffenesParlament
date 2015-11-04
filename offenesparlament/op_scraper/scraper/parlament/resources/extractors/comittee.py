@@ -1,4 +1,6 @@
 import datetime
+import roman
+
 from django.utils.html import remove_tags
 from scrapy import Selector
 
@@ -19,6 +21,52 @@ logger = logging.getLogger(__name__)
 
 class COMITTEE:
 
+    @staticmethod
+    def url_to_parlid(url):
+        if url is not u'':
+            raw_parl_id = url.split('/')[-2]
+            if len(raw_parl_id) > 1:
+                raw_parl_id = raw_parl_id.split('_')
+                parl_id_type = raw_parl_id[0]
+                parl_id_number = int(raw_parl_id[1])
+                parl_id = u'({}/{})'.format(parl_id_number, parl_id_type)
+                return parl_id
+
+        return u''
+
+    class LLP(SingleExtractor):
+
+        XPATH = '//*[@id="content"]/div[1]/p/a[4]/text()'
+
+        @classmethod
+        def xt(cls, response):
+            raw_llp = response.xpath(cls.XPATH).extract()
+
+            if len(raw_llp) > 0 and u'Nationalrat' in raw_llp[0]:
+                list = raw_llp[0].split("-")
+                if len(list) > 1:
+                    llp = list[1][:-4]
+                    return llp
+
+            return None
+
+    class NAME(SingleExtractor):
+
+        XPATH = '//*[@id="inhalt"]/text()'
+
+    class DESCRIPTION(SingleExtractor):
+
+        # XPATH_TXT = '//*[@id="content"]/div[3]/div[2]/p/text()'
+        XPATH = '//*[@id="content"]/div[3]/div[2]/p'
+
+        @classmethod
+        def xt(cls, response):
+            raw = response.xpath(cls.XPATH).extract()
+            html_desc = raw[3:-4]
+            return html_desc
+            # raw = response.xpath(cls.XPATH_TXT).extract()
+            # txt = "".join(raw)
+            # return txt
 
     class MEMBERSHIP(SingleExtractor):
 
@@ -42,30 +90,27 @@ class COMITTEE:
 
                 tablerows = raw_membership.xpath('following-sibling::div[1]/table[1]/tbody/tr').extract()
 
-                last_position = u''
+                last_function = u''
                 for row in tablerows:
                     row_sel = Selector(text=row)
 
-                    raw_position = row_sel.xpath('//td[@class="biogr_am_funktext"]/text()').extract()
-                    if len(raw_position) > 0:
-                        position = _clean(raw_position[0])
-                        position = cls.standardize_position(position)
-                        last_position = position
+                    raw_function = row_sel.xpath('//td[@class="biogr_am_funktext"]/text()').extract()
+                    if len(raw_function) > 0:
+                        function = _clean(raw_function[0])
+                        # TODO: standardization should be done on model level
+                        # position = cls.standardize_position(position)
+                        last_function = function
                     else:
-                        position = last_position
+                        function = last_function
 
                     raw_comittee_link = row_sel.xpath('//td[@class="biogr_am_ausschuss"]/a/@href').extract()
                     if raw_comittee_link:
                         comittee_link = raw_comittee_link[0]
-                        raw_parl_id = comittee_link.split('/')[-2]
-                        raw_parl_id = raw_parl_id.split('_')
-                        parl_id_type = raw_parl_id[0]
-                        parl_id_number = int(raw_parl_id[1])
-                        comittee_parl_id = u'({}/{})'.format(parl_id_number, parl_id_type)
                         comittee_link = "{}/{}".format(BASE_HOST, comittee_link)
                     else:
                         comittee_link = u''
-                        comittee_parl_id = u''
+
+                    comittee_parl_id = COMITTEE.url_to_parlid(comittee_link)
 
                     raw_comitee_name = row_sel.xpath('//td[@class="biogr_am_ausschuss"]/a/text()').extract()
                     if len(raw_comitee_name) > 0:
@@ -82,33 +127,41 @@ class COMITTEE:
                         raw_dates = _clean(raw_dates)
                         # \u2013 == - (dash)
                         raw_dates = raw_dates.split(u'\u2013')
-                        raw_from = raw_dates[0]
-                        if raw_from is not u'':
-                            raw_from = time.strptime(raw_from, '%d.%m.%Y')
-                            date_from = datetime.datetime.fromtimestamp(time.mktime(raw_from))
+                        if len(raw_dates) > 0:
+                            raw_from = raw_dates[0]
+                            if raw_from is not u'':
+                                raw_from = time.strptime(raw_from, '%d.%m.%Y')
+                                date_from = datetime.datetime.fromtimestamp(time.mktime(raw_from))
+                            else:
+                                date_from = None
                         else:
                             date_from = None
 
-                        raw_to = raw_dates[0]
-                        if raw_from is not u'':
-                            raw_to = time.strptime(raw_to, '%d.%m.%Y')
-                            date_to = datetime.datetime.fromtimestamp(time.mktime(raw_to))
+                        if len(raw_dates) > 1:
+                            raw_to = raw_dates[1]
+                            if raw_to is not u'':
+                                raw_to = time.strptime(raw_to, '%d.%m.%Y')
+                                date_to = datetime.datetime.fromtimestamp(time.mktime(raw_to))
+                            else:
+                                date_to = None
                         else:
                             date_to = None
 
-                    memberships.append({
-                        'comittee':
-                            {
-                                'name': comittee_name,
-                                'parl_id': comittee_parl_id,
-                                'nrbr': nrbr,
-                                'llp': comittee_llp,
-                                'source_link': comittee_link
-                            },
-                        'position': position,
-                        'from': date_from,
-                        'to': date_to
-                    })
+                    # we cant add the membership if the parl_id of the comitee is empty
+                    if comittee_parl_id is not u'':
+                        memberships.append({
+                            'comittee':
+                                {
+                                    'name': comittee_name,
+                                    'parl_id': comittee_parl_id,
+                                    'nrbr': nrbr,
+                                    'legislative_period': comittee_llp,
+                                    'source_link': comittee_link
+                                },
+                            'function': function,
+                            'date_from': date_from,
+                            'date_to': date_to
+                        })
 
             return memberships
 

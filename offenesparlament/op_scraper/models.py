@@ -729,3 +729,42 @@ class DebateStatement(models.Model):
             self.index,
             self.doc_section,
             self.date)
+
+class Comittee(models.Model, ParlIDMixIn):
+    """
+    "Parlamentarischer Ausschuss"
+    Comittee of either the Nationalrat or Bundesrat for a specific topic
+    """
+    name = models.CharField(max_length=255)
+    parl_id = models.CharField(max_length=30)
+    source_link = models.URLField(max_length=255, default="")
+    nrbr = models.CharField(max_length=20)
+    description = models.CharField(max_length=1000, default="", blank=True)
+
+    # Relationships
+    legislative_period = models.ForeignKey(
+        LegislativePeriod, blank=True, null=True)
+
+    class Meta:
+        unique_together = ("parl_id", "legislative_period")
+
+    def __unicode__(self):
+        return u'{} [{}] in {}'\
+            .format(self.name, self.parl_id, self.legislative_period)
+
+
+class ComitteeMembership(models.Model):
+    """
+    Membership in a Comittee
+    """
+    date_from = models.DateField()
+    date_to = models.DateField(blank=True, null=True)
+
+    # Relationships
+    comittee = models.ForeignKey(Comittee, related_name='comittee_members')
+    person = models.ForeignKey(Person, related_name='comittee_memberships')
+    function = models.ForeignKey(Function, related_name='comittee_function')
+
+    def __unicode__(self):
+        return u'{}: {} des {} ({}-{})'\
+            .format(self.person, self.function, self.comittee, self.date_from, self.date_to)
