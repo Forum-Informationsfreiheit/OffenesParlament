@@ -30,8 +30,7 @@ Technical Documentation
    Search Provider: Haystack, Elasticsearch <searching.rst>
    Admin-Interface <admin.rst>
    Frontend <frontend.rst>
-
-
+   Subscriptions <subscriptions.rst>
 
 
 Indices and tables
