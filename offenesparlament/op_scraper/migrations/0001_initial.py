@@ -250,8 +250,6 @@ class Migration(migrations.Migration):
             name='Subscription',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('verified', models.BooleanField()),
-                ('verification_hash', models.CharField(max_length=32)),
                 ('content', models.ForeignKey(to='op_scraper.SubscribedContent')),
             ],
         ),
@@ -262,10 +260,23 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(unique=True, max_length=254)),
             ],
         ),
+        migrations.CreateModel(
+            name='Verification',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('verified', models.BooleanField()),
+                ('verification_hash', models.CharField(max_length=32)),
+            ],
+        ),
         migrations.AddField(
             model_name='subscription',
             name='user',
             field=models.ForeignKey(to='op_scraper.User'),
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='verification',
+            field=models.OneToOneField(null=True, blank=True, to='op_scraper.Verification'),
         ),
         migrations.AddField(
             model_name='subscribedcontent',

@@ -1,40 +1,40 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from . import views
+from offenesparlament.views import base_views
 from op_scraper import admin_views
 from django.conf import settings
-from offenesparlament.search_views import JsonSearchView, PersonSearchView, LawSearchView
-from op_scraper.models import Person, Law
+from offenesparlament.views import search
+from op_scraper.models import Law
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.index, name='home'),
-    url(r'^wir/$', views.about, name='about'),
-    url(r'^personen/$', views.person_list, name='person_list'),
+    url(r'^$', base_views.index, name='home'),
+    url(r'^wir/$', base_views.about, name='about'),
+    url(r'^personen/$', base_views.person_list, name='person_list'),
     url(r'^personen/(?P<parl_id>.{1,30})/(?P<name>.+)/$',
-        views.person_detail, name='person_detail'),
-    url(r'^gesetze/$', views.gesetze_list, name='laws_list'),
+        base_views.person_detail, name='person_detail'),
+    url(r'^gesetze/$', base_views.gesetze_list, name='laws_list'),
     url(r'^gesetze/(?P<ggp>.{1,30})/(?P<parl_id>.{1,30})/$',
-        views.gesetz_detail, name='gesetz_detail'),
-    url(r'^schlagworte/$', views.keyword_list, name='keyword_list'),
+        base_views.gesetz_detail, name='gesetz_detail'),
+    url(r'^schlagworte/$', base_views.keyword_list, name='keyword_list'),
     url(r'^schlagworte/(?P<keyword>.+)/$',
-        views.keyword_detail, name='keyword_detail'),
+        base_views.keyword_detail, name='keyword_detail'),
 
     # Search Urls
     url(r'^search/?$',
-        JsonSearchView.as_view()),
+        search.JsonSearchView.as_view()),
     url(r'^personen/search/?$',
-        PersonSearchView.as_view()),
+        search.PersonSearchView.as_view()),
     url(r'^gesetze/search/?$',
-        LawSearchView.as_view(search_model=Law)),
+        search.LawSearchView.as_view(search_model=Law)),
 
     # Subscribe & verify Urls
     url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
-        views.verify,
+        base_views.verify,
         name='verify'),
 
     url(r'^subscribe/?$',
-        views.subscribe),
+        base_views.subscribe),
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/scrape/(?P<spider_name>.{1,30})',

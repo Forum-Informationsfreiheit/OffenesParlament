@@ -472,7 +472,6 @@ class Statement(models.Model):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
 
-
 class User(models.Model):
 
     """
@@ -492,6 +491,17 @@ class SubscribedContent(models.Model):
         max_length=16, null=True, blank=True)
 
 
+class Verification(models.Model):
+
+    """
+    A generic Verification via random hash. Can be linked to a Subscription,
+    and is being used for one-time links as well.
+    """
+
+    verified = models.BooleanField()
+    verification_hash = models.CharField(max_length=32)
+
+
 class Subscription(models.Model):
 
     """
@@ -499,11 +509,13 @@ class Subscription(models.Model):
     """
     user = models.ForeignKey(User)
     content = models.ForeignKey(SubscribedContent)
-    verified = models.BooleanField()
-    verification_hash = models.CharField(max_length=32)
+
+    # Relationships
+    verification = models.OneToOneField(Verification, null=True, blank=True)
 
     class Meta:
         unique_together = ("user", "content")
+
 
 class Petition(models.Model):
 
@@ -521,7 +533,7 @@ class Petition(models.Model):
         "self", blank=True, null=True, related_name='redistribution')
 
     def __unicode__(self):
-        return u'{} eingebracht von {}'.format(self.law,self.creators.all())
+        return u'{} eingebracht von {}'.format(self.law, self.creators.all())
 
     @property
     def full_signature_count(self):
@@ -537,6 +549,7 @@ class Petition(models.Model):
 
 
 class PetitionCreator(models.Model):
+
     """
     Creator of a "Bürgerinitiative" or "Petition".
     Can be a member of the parliament.
@@ -544,8 +557,10 @@ class PetitionCreator(models.Model):
     full_name = models.CharField(max_length=255)
 
     # Relationships
-    created_petitions = models.ManyToManyField(Petition, related_name='creators')
-    person = models.OneToOneField(Person, null=True, related_name='petitions_created')
+    created_petitions = models.ManyToManyField(
+        Petition, related_name='creators')
+    person = models.OneToOneField(
+        Person, null=True, related_name='petitions_created')
 
     def __unicode__(self):
         if not self.person is None:
@@ -555,11 +570,12 @@ class PetitionCreator(models.Model):
 
 
 class PetitionSignature(models.Model):
+
     """
     Public signature of a "Bürgerinitiative" or "Petition"
     """
     full_name = models.CharField(max_length=255)
-    postal_code= models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=50)
     location = models.CharField(max_length=255)
     date = models.DateField()
 

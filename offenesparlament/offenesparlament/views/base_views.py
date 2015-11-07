@@ -10,6 +10,7 @@ from op_scraper.models import Keyword
 from op_scraper.models import User
 from op_scraper.models import SubscribedContent
 from op_scraper.models import Subscription
+from op_scraper.models import Verification
 from django.db.models import Count, Max
 from django.core.mail import send_mail
 
@@ -95,19 +96,21 @@ def verify(request, email, key):
     """
     sub_qs = Subscription.objects.filter(
         user__email=email,
-        verification_hash=key)
+        verification__verification_hash=key)
 
     if sub_qs.exists() and sub_qs.count() == 1:
         sub = sub_qs.first()
-        if sub.verified:
+        if sub.verification.verified:
             message = "Diese Subskription ist bereits bestätigt für {}!".format(
                 email)
         else:
-            sub.verified = True
-            sub.save()
+            sub.verification.verified = True
+            sub.verification.save()
             message = "Email-Adresse {} bestätigt.".format(email)
     else:
-        message = "Ups, da ist was schiefgelaufen - konnte {} nicht finden!".format(
+        message = """
+            Ups, da ist was schiefgelaufen - konnte {} nicht finden
+            (oder nicht eindeutig zuordnen)!""".format(
             email)
 
     return render(request, 'verification.html', {'message': message})
@@ -134,11 +137,15 @@ def subscribe(request):
                     'key': verification_hash}
             )
         )
+        verification_item = Verification.objects.create(
+            verified=False,
+            verification_hash=verification_hash
+        )
+
         Subscription.objects.create(
             user=user,
             content=content,
-            verified=False,
-            verification_hash=verification_hash
+            verification=verification_item
         )
         send_mail(
             'Verify thine self!',
