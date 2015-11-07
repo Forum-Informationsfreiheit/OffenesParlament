@@ -52,6 +52,7 @@ class PreLawsSpider(BaseSpider):
     }
 
     name = "pre_laws"
+    title = "Pre-Laws (Ministerialentwürfe) Spider"
 
     def __init__(self, **kw):
         super(PreLawsSpider, self).__init__(**kw)

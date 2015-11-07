@@ -129,6 +129,8 @@ class BaseConfig(Configuration):
 
     # Django Celery
     CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'
+    CELERYD_HIJACK_ROOT_LOGGER = False
 
 
 class Dev(BaseConfig):

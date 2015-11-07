@@ -12,11 +12,14 @@ class LegislativePeriodSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "/WWER/PARL/")
 
     name = "llp"
+    title = "Legislative Periods Spider"
+    LLP = []
 
     def __init__(self, **kw):
         super(LegislativePeriodSpider, self).__init__(**kw)
 
         self.start_urls = [self.BASE_URL]
+        self.print_debug()
 
     def parse(self, response):
 

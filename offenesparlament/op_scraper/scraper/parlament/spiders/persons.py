@@ -32,6 +32,8 @@ from op_scraper.models import LegislativePeriod
 class PersonsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filter.psp")
 
+    LLP = []
+
     RSS_TO_FUNCTION = {
         'NR': 'Abgeordnete(r) zum Nationalrat',
         'BR': 'Abgeordnete(r) zum Bundesrat'
@@ -61,6 +63,7 @@ class PersonsSpider(BaseSpider):
     }
 
     name = "persons"
+    title = "Persons Spider"
     persons_scraped = []
 
     def __init__(self, **kw):
@@ -84,6 +87,7 @@ class PersonsSpider(BaseSpider):
                 url_options = urlencode(urloptions)
                 url = "{}?{}".format(self.BASE_URL, url_options)
                 urls.append(url)
+            self.LLP.append(llp.number)
 
         return urls
 

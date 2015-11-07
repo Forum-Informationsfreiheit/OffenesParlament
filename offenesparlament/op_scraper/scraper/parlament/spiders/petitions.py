@@ -52,6 +52,7 @@ class PetitionsSpider(BaseSpider):
     }
 
     name = "petitions"
+    title = "Petitions Spider"
 
     def __init__(self, **kw):
         super(PetitionsSpider, self).__init__(**kw)
@@ -67,6 +68,7 @@ class PetitionsSpider(BaseSpider):
 
         self.cookies_seen = set()
         self.idlist = {}
+        self.print_debug()
 
     def get_urls(self):
         """
@@ -88,7 +90,8 @@ class PetitionsSpider(BaseSpider):
 
                         print "GP {}: {}: {} {}".format(
                             roman_numeral, nrbr, len(rss['entries']), bbet)
-                        urls = urls + [entry['link'] for entry in rss['entries']]
+                        urls = urls + [entry['link']
+                                       for entry in rss['entries']]
 
         return urls
 
@@ -193,7 +196,6 @@ class PetitionsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
-
         # Only BI or PET have online signatures
         if u'BI' in parl_id or u'PET' in parl_id:
             # http://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00040/filter.psp?xdocumentUri=/PAKT/VHG/XXV/BI/BI_00040/index.shtml&GP_CODE=XXV&ITYP=BI&INR=40&FBEZ=BI_001&pageNumber=&STEP=
@@ -210,8 +212,8 @@ class PetitionsSpider(BaseSpider):
                                                         LLP.roman_numeral, petition_type, petition_number)
 
             post_req = scrapy.Request(signatures_url,
-                                          callback=self.parse_signatures,
-                                          dont_filter=True)
+                                      callback=self.parse_signatures,
+                                      dont_filter=True)
 
             post_req.meta['petition_item'] = petition_item
 
@@ -447,7 +449,8 @@ class PetitionsSpider(BaseSpider):
                 petition_creator, created = PetitionCreator.objects.get_or_create(person=person,
                                                                                   defaults={'full_name': name})
             else:
-                petition_creator, created = PetitionCreator.objects.get_or_create(full_name=name, person=person)
+                petition_creator, created = PetitionCreator.objects.get_or_create(
+                    full_name=name, person=person)
             petition_creators.append(petition_creator)
 
         return petition_creators
@@ -462,7 +465,8 @@ class PetitionsSpider(BaseSpider):
         if not reference is None:
             llp = LegislativePeriod.objects.get(
                 roman_numeral=reference[0])
-            ref = Petition.objects.filter(law__legislative_period=llp, law__parl_id=reference[1])
+            ref = Petition.objects.filter(
+                law__legislative_period=llp, law__parl_id=reference[1])
             if len(ref) == 1:
                 return ref[0]
 
@@ -477,7 +481,8 @@ class PetitionsSpider(BaseSpider):
         signatures = PETITION.SIGNATURES.xt(response)
 
         for signature in signatures:
-            petition_signature, created = PetitionSignature.objects.get_or_create(petition=petition,**signature)
+            petition_signature, created = PetitionSignature.objects.get_or_create(
+                petition=petition, **signature)
 
             if created:
                 log.msg(u"Created: {}".format(

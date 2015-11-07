@@ -33,8 +33,6 @@ from op_scraper.models import LegislativePeriod
 class LawsInitiativesSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/RGES/filter.psp")
 
-    # LLP = range(24, 26)
-
     URLOPTIONS = {
         'view': 'RSS',
         'jsMode': 'RSS',
@@ -47,6 +45,7 @@ class LawsInitiativesSpider(BaseSpider):
     }
 
     name = "laws_initiatives"
+    title = "Laws & Initiatives Spider"
 
     def __init__(self, **kw):
         super(LawsInitiativesSpider, self).__init__(**kw)
@@ -61,6 +60,7 @@ class LawsInitiativesSpider(BaseSpider):
         self.start_urls = self.get_urls()
 
         self.cookies_seen = set()
+        self.print_debug()
 
     def parse(self, response):
         # Extract fields

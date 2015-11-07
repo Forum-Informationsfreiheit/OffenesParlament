@@ -38,7 +38,10 @@ class AdministrationsSpider(PersonsSpider):
         'pageNumber': '',
     }
 
+    LLP = []
+
     name = "administration"
+    title = "Administrations (Regierungen) Spider"
     persons_scraped = []
 
     def __init__(self, **kw):
@@ -47,6 +50,8 @@ class AdministrationsSpider(PersonsSpider):
 
         self.cookies_seen = set()
         self.idlist = {}
+
+        self.print_debug()
 
     def get_urls(self):
         """
