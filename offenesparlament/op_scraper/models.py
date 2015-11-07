@@ -472,25 +472,6 @@ class Statement(models.Model):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
 
-class User(models.Model):
-
-    """
-    A user that subscribed certain pages
-    """
-    email = models.EmailField(unique=True)
-
-
-class SubscribedContent(models.Model):
-
-    """
-    A news- or page-subscription
-    """
-    url = models.URLField(max_length=255, unique=True)
-    users = models.ManyToManyField(User, through="Subscription")
-    latest_content_hash = models.CharField(
-        max_length=16, null=True, blank=True)
-
-
 class Verification(models.Model):
 
     """
@@ -500,6 +481,46 @@ class Verification(models.Model):
 
     verified = models.BooleanField()
     verification_hash = models.CharField(max_length=32)
+
+
+class User(models.Model):
+
+    """
+    A user that subscribed certain pages
+    """
+    email = models.EmailField(unique=True)
+
+    # Relationships
+    verification = models.OneToOneField(Verification, null=True, blank=True)
+
+    # Interna, Utilities
+    _list_slug = models.CharField(max_length=255, default="")
+
+    @property
+    def list_slug(self):
+        if not self._list_slug:
+            self._list_slug = reverse(
+                'list',
+                kwargs={
+                    'email': self.user.email,
+                    'key': self.verification.verification_hash
+                }
+            )
+            self.save()
+
+
+
+class SubscribedContent(models.Model):
+
+    """
+    A news- or page-subscription
+    """
+    url = models.URLField(max_length=255, unique=True)
+    latest_content_hash = models.CharField(
+        max_length=16, null=True, blank=True)
+
+    # Relationships
+    users = models.ManyToManyField(User, through="Subscription")
 
 
 class Subscription(models.Model):
@@ -515,6 +536,23 @@ class Subscription(models.Model):
 
     class Meta:
         unique_together = ("user", "content")
+
+    # Interna, Utilities
+    _unsub_slug = models.CharField(max_length=255, default="")
+
+    @property
+    def unsub_slug(self):
+        if not self._unsub_slug:
+            self._unsub_slug = reverse(
+                'unsubscribe',
+                kwargs={
+                    'email': self.user.email,
+                    'key': self.verification.verification_hash
+                }
+            )
+            self.save()
+
+        return self._unsub_slug
 
 
 class Petition(models.Model):

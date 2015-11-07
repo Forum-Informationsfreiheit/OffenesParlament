@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from offenesparlament.views import base_views
+from offenesparlament.views import subscriptions
 from op_scraper import admin_views
 from django.conf import settings
 from offenesparlament.views import search
@@ -28,13 +29,34 @@ urlpatterns = patterns(
     url(r'^gesetze/search/?$',
         search.LawSearchView.as_view(search_model=Law)),
 
-    # Subscribe & verify Urls
+    # Subscription URLS
+
+    # Verify a new subscription
     url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
-        base_views.verify,
+        subscriptions.verify,
         name='verify'),
 
+    # Subscribe to a searchable page and start verification
     url(r'^subscribe/?$',
-        base_views.subscribe),
+        subscriptions.subscribe),
+
+    # Unsubscribe from a certain subscription
+    url(r'^unsubscribe/(?P<email>.+)/(?P<key>.+)/?$',
+        subscriptions.unsubscribe,
+        name='unsubscribe'),
+
+    # List emails subscriptions
+    url(r'^list/(?P<email>.+)/(?P<key>.+)/?$',
+        subscriptions.list,
+        name='list'),
+
+
+    # Resend list hashkey for email
+    url(r'^list/(?P<email>.+)/?$',
+        subscriptions.list,
+        name='list'),
+
+
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/scrape/(?P<spider_name>.{1,30})',

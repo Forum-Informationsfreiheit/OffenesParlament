@@ -1,0 +1,29 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Subskription" "list" %}
+{% endblock %}
+
+{% block title %}Subskriptions-Manager{% endblock %}
+
+{% block content %}
+  <h1>Subskriptions-Manager</h1>
+
+  {% if message %}
+    <p class="explanation">
+        {{ message }}
+    </p>
+  {% endif %}
+
+  {% if subscriptions %}
+    <p class="subscriptions">
+    {% for sub in subscriptions %}
+        <a href="{{ sub.content.url }}">{{ sub.content.url }}</a>
+        <a href="{{ sub.unsub_slug }}">Delete Subscription</a>
+    {% endfor %}
+    </p>
+  {% endif %}
+
+{% endblock %}
