@@ -20,6 +20,7 @@ from parlament.settings import BASE_HOST
 from parlament.resources.util import _clean
 
 from op_scraper.models import Comittee
+from op_scraper.models import LegislativePeriod
 
 
 class ComitteesSpider(BaseSpider):
@@ -81,14 +82,32 @@ class ComitteesSpider(BaseSpider):
         return urls
 
     def parse(self, response):
+        # Parse
         parl_id = COMITTEE.url_to_parlid(response.url)
         llp = COMITTEE.LLP.xt(response)
         name = COMITTEE.NAME.xt(response)
-        description = COMITTEE.DESCRIPTION.xt(response)
-
 
         if llp is not None:
             nrbr = 'Nationalrat'
+            legislative_period = LegislativePeriod.objects.get(roman_numeral=llp)
         else:
             nrbr = 'Bundesrat'
+            legislative_period = None
 
+        description = COMITTEE.DESCRIPTION.xt(response)
+
+        comittee_data = {
+            'description': description,
+            'name': name,
+        }
+
+        try:
+            comittee_item, created_comittee = Comittee.objects.update_or_create(
+                parl_id=parl_id,
+                legislative_period=legislative_period,
+                nrbr=nrbr,
+                defaults=comittee_data
+            )
+        except:
+            import ipdb
+            ipdb.set_trace()

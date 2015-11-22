@@ -43,9 +43,10 @@ class COMITTEE:
             raw_llp = response.xpath(cls.XPATH).extract()
 
             if len(raw_llp) > 0 and u'Nationalrat' in raw_llp[0]:
-                list = raw_llp[0].split("-")
-                if len(list) > 1:
-                    llp = list[1][:-4]
+                llp_list = raw_llp[0].split("-")
+                if len(llp_list) > 1:
+                    llp = llp_list[1][:-4]
+                    llp = llp.lstrip()
                     return llp
 
             return None
@@ -53,6 +54,18 @@ class COMITTEE:
     class NAME(SingleExtractor):
 
         XPATH = '//*[@id="inhalt"]/text()'
+        XPATH_TITLE = '/html/head/title/text()'
+
+        @classmethod
+        def xt(cls, response):
+            title = response.xpath(cls.XPATH_TITLE).extract()[0]
+            name = response.xpath(cls.XPATH).extract()[0]
+
+            if title == name:
+                return name
+            else:
+                full_name = u'{}: {}'.format(title, name)
+                return full_name
 
     class DESCRIPTION(SingleExtractor):
 
@@ -62,15 +75,126 @@ class COMITTEE:
         @classmethod
         def xt(cls, response):
             raw = response.xpath(cls.XPATH).extract()
-            html_desc = raw[3:-4]
-            return html_desc
+            if len(raw) > 0:
+                html_desc = raw[0][3:-4]
+                return html_desc
+            else:
+                return u''
             # raw = response.xpath(cls.XPATH_TXT).extract()
             # txt = "".join(raw)
             # return txt
 
+    class MEETINGS(SingleExtractor):
+
+        XPATH = '//*[@id="tab-Sitzungsueberblick"]/following-sibling::table/tbody'
+
+        @classmethod
+        def xt(cls, response):
+            raw_meetings = response.xpath(cls.XPATH)
+
+            meetings = []
+
+            for raw_meeting in raw_meetings:
+                raw_header_row = raw_meeting.xpath('tr[@class="historyHeader"]')
+                raw_date = raw_header_row.xpath('td[1]/text()').extract()
+
+                if len(raw_date) > 0:
+                    raw_date = _clean(raw_date[0])
+                    if raw_date is not u'':
+                        raw_date = time.strptime(raw_date, '%d.%m.%Y')
+                        meeting_date = datetime.datetime.fromtimestamp(time.mktime(raw_date))
+                    else:
+                        meeting_date = None
+                else:
+                    meeting_date = None
+
+                raw_number = raw_header_row.xpath('td[2]/em/a/text()').extract()
+                if len(raw_number) > 0 and u'Sitzung' in raw_number[0]:
+                    meeting_number = raw_number[0].split()[0][:-1]
+                else:
+                    continue # not a meeting
+
+                raw_document_urls = raw_header_row.xpath('td[2]/a/@href').extract()
+
+                html_url, pdf_url = u"", u""
+                for url in raw_document_urls:
+                    if url.endswith('.pdf'):
+                        pdf_url = url
+                    elif url.endswith('.html'):
+                        html_url = url
+                title = u'Tagesordnung der {}. Sitzung des {} am {}'\
+                    .format(meeting_number, COMITTEE.NAME.xt(response), str(meeting_date))
+
+                meeting_document = {
+                    'title': title,
+                    'html_url': html_url,
+                    'pdf_url': pdf_url
+                }
+
+                raw_rows = raw_header_row.xpath('following-sibling::tr')
+
+                meeting_topics = []
+
+                for raw_row in raw_rows:
+                    raw_topic_number = raw_row.xpath('td[1]/text()').extract()
+
+                    if len(raw_topic_number) > 0:
+                        topic_number_list = _clean(raw_topic_number[0]).split()
+                        if len(topic_number_list) == 2 and topic_number_list[0] == u'TOP':
+                            topic_number = int(topic_number_list[1])
+                        else:
+                            topic_number = 0
+                    else:
+                        topic_number = 0
+
+                    if topic_number == 0:
+                        continue  # not a TOP -> ignore row
+
+                    raw_topic_text = raw_row.xpath('td[2]/text()').extract()
+
+                    if len(raw_topic_text) > 0:
+                        topic_text = _clean(raw_topic_text[0])
+                        if topic_text.endswith('('):
+                            topic_text = topic_text[:-1].rstrip()
+                    else:
+                        topic_text = u''
+
+                    if len(raw_topic_text) > 1:
+                        topic_comment = _clean(raw_topic_text[1])
+                        if topic_comment.startswith(')'):
+                            topic_comment = topic_comment[:-1].lstrip()
+                    else:
+                        topic_comment = u''
+
+                    raw_topic_law_id = raw_row.xpath('td[2]/a/text()').extract()
+
+                    if len(raw_topic_law_id) > 0:
+                        topic_law_id = raw_topic_law_id[0]
+                    else:
+                        topic_law_id = u''
+
+                    topic = {
+                        'number': topic_number,
+                        'text': topic_text,
+                        'comment': topic_comment,
+                        'law_id': topic_law_id
+                    }
+
+                    meeting_topics.append(topic)
+
+                meeting = {
+                    'number': meeting_number,
+                    'date': meeting_date,
+                    'agenda': meeting_document,
+                    'topics': meeting_topics,
+                }
+
+                meetings.append(meeting)
+
+            return meetings
+
     class MEMBERSHIP(SingleExtractor):
 
-        #XPATH = '//*[@id="content"]/div[3]/div[4]/h3'
         XPATH = '//*[@id="tab-Ausschuesse"]/following-sibling::h3'
 
         @classmethod
@@ -97,8 +221,7 @@ class COMITTEE:
                     raw_function = row_sel.xpath('//td[@class="biogr_am_funktext"]/text()').extract()
                     if len(raw_function) > 0:
                         function = _clean(raw_function[0])
-                        # TODO: standardization should be done on model level
-                        # position = cls.standardize_position(position)
+                        # TODO: standardization of functions should be done on model level
                         last_function = function
                     else:
                         function = last_function
@@ -164,30 +287,3 @@ class COMITTEE:
                         })
 
             return memberships
-
-        @classmethod
-        def standardize_position(cls, position):
-
-            # Mapping between gendered comitee positions (as written on the parliament website)
-            # and standardized positions
-            comittee_positions = {
-                u'Obfrau': u'Obfrau/Obmann',
-                u'Obmann': u'Obfrau/Obmann',
-                u'Obfraustellvertreterin': u'ObfraustellvertreterIn/ObmannstellverteterIn',
-                u'Obmannstellvertreterin': u'ObfraustellvertreterIn/ObmannstellverteterIn',
-                u'Obfraustellvertreter': u'ObfraustellvertreterIn/ObmannstellverteterIn',
-                u'Obfraustellvertreterin': u'ObfraustellvertreterIn/ObmannstellverteterIn',
-                u'Vorsitzende': u'Vorsitzende/Vorsitzender',
-                u'Vorsitzender': u'Vorsitzende/Vorsitzender',
-                u'Schriftf\xfchrerin': u'Schriftf\xfchrerIn',
-                u'Schriftf\xfchrer': u'Schriftf\xfchrerIn',
-                u'Stellvertretende Ausschussvorsitzende':
-                    u'Stellvertretende Ausschussvorsitzende/Stellvertretender Ausschussvorsitzender',
-                u'Stellvertretende Ausschussvorsitzende':
-                    u'Stellvertretende Ausschussvorsitzende/Stellvertretender Ausschussvorsitzender'
-            }
-
-            if position in comittee_positions:
-                return comittee_positions[position]
-            else:
-                return position

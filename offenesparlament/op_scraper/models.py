@@ -768,3 +768,34 @@ class ComitteeMembership(models.Model):
     def __unicode__(self):
         return u'{}: {} des {} ({}-{})'\
             .format(self.person, self.function, self.comittee, self.date_from, self.date_to)
+
+
+class ComitteeMeeting(models.Model):
+    """
+    Meeting ("Sitzung") of a Comittee
+    """
+    number = models.IntegerField()
+    date = models.DateField()
+
+    # Relationships
+    comittee = models.ForeignKey(Comittee, related_name='comittee_meetings')
+    agenda = models.OneToOneField(Document, related_name='comittee_meeting')
+
+    class Meta:
+        unique_together = ("number", "date", "comittee")
+
+
+class ComitteeAgendaTopic(models.Model):
+    """
+    Agenda topic ("Tagesordnungspunkt") of a Comittee meeting
+    """
+    number = models.IntegerField()
+    text = models.CharField(max_length=255)
+    comment = models.CharField(max_length=255)
+
+    # Relationships
+    meeting = models.ForeignKey(Comittee, related_name='agenda_topics')
+    law = models.ForeignKey(Law, related_name='agenda_topics', null=True)
+
+    class Meta:
+        unique_together = ("number", "meeting")

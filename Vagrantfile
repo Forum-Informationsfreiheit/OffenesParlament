@@ -40,4 +40,6 @@ Vagrant.configure("2") do |config|
     #, verbose: "vvv"
 
   end
+
+  config.ssh.insert_key = false
 end
