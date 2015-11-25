@@ -9,6 +9,7 @@ offenesparlament/docs/build
 .DS_Store
 /.vagrant/
 ignore/
+src/
 node_modules/*
 *.map
 .sass-cache
