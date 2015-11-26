@@ -39,6 +39,20 @@ class LegislativePeriod(models.Model):
 
         return rep_str
 
+    @property
+    def facet_repr(self):
+        if self.end_date:
+            rep_str = "{} - {} ({})".format(
+                self.start_date,
+                self.end_date,
+                self.roman_numeral)
+        else:
+            rep_str = "aktuell seit {} ({})".format(
+                self.start_date,
+                self.roman_numeral)
+
+        return rep_str
+
 
 class Phase(models.Model):
 
@@ -417,6 +431,10 @@ class Person(models.Model, ParlIDMixIn):
     def llps_roman(self):
         return [llp.roman_numeral for llp in self.llps]
 
+    @property
+    def llps_facet(self):
+        return [llp.facet_repr for llp in self.llps]
+
     def get_latest_mandate(self):
         """
         Returns the most recent mandate a person had.
@@ -507,7 +525,6 @@ class User(models.Model):
                 }
             )
             self.save()
-
 
 
 class SubscribedContent(models.Model):

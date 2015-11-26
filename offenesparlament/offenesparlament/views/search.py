@@ -2,10 +2,10 @@ import datetime
 import json
 from haystack.generic_views import SearchView
 from django.http import HttpResponse
+
 from haystack.query import SearchQuerySet
 
 from op_scraper.models import Person, Law
-
 
 class QuerySetEncoder(json.JSONEncoder):
 
@@ -80,11 +80,17 @@ class JsonSearchView(SearchView):
 
         # Filter by facets
         if query_args['facet_filters']:
-            # qs.filter(**query_args['facet_filters'])
             for facet_field in query_args['facet_filters'].keys():
+                # We use narrow to limit the index entries beforehand, but
+                # need to use filter afterwards to remove partly correct results
+                # For instance, searching for Steyr (Oberoesterreich) yielded
+                # everyone from Oberoesterreich until filtering by it again.
                 qs = qs.narrow(u"{}:{}".format(
                     facet_field,
                     query_args['facet_filters'][facet_field])
+                ).filter(
+                    **{
+                    facet_field: query_args['facet_filters'][facet_field]}
                 )
 
         # Retrieve facets and facet_counts

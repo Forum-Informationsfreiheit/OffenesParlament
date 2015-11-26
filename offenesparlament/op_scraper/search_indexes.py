@@ -21,7 +21,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     occupation = indexes.CharField(
         model_attr='occupation', faceted=True, null=True)
     party = indexes.CharField(model_attr='party', faceted=True, null=True)
-    llps = indexes.MultiValueField(model_attr='llps_roman', faceted=True)
+    llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
 
     def get_model(self):
         return Person
