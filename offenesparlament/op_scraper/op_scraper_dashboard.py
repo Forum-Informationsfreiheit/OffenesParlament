@@ -98,6 +98,18 @@ class CustomIndexDashboard(Dashboard):
             ]
         ))
 
+        self.children.append(modules.LinkList(
+            _('ElasticSearch'),
+            column=2,
+            children=[
+                {
+                    'title': _('Update ElasticSearch Index'),
+                    'url': '/admin/elastic/update',
+                    'external': False,
+                },
+            ]
+        ))
+
         # append another link list module for "support".
         # self.children.append(modules.LinkList(
         #     _('Support'),

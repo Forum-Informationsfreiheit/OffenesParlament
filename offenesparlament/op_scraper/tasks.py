@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from scrapy.crawler import CrawlerProcess
+from haystack.management.commands import update_index
 
 from celery import shared_task
 
@@ -19,4 +20,10 @@ def scrape(spider):
         process.crawl(spider)
         # the script will block here until the crawling is finished
         process.start()
+    return
+
+
+@shared_task
+def update_elastic():
+    update_index.Command().handle()
     return
