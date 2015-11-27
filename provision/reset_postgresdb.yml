@@ -8,7 +8,7 @@
       become_user: postgres
 
     - name: Recreate local postgresdb
-      postgresql_db: name=op
+      postgresql_db: name=op encoding='UTF-8' lc_collate='de_DE.UTF-8' lc_ctype='de_DE.UTF-8' template='template0'
       become: true
       become_user: postgres
 
