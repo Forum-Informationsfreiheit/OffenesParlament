@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     node.vm.network :private_network, ip: '192.168.47.15'
     node.vm.provision :shell, path: "bootstrap.sh"
 
-    config.vm.provision "ansible" do |ansible|
+    node.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision/reset_postgresdb.yml"
     end
 
