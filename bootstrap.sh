@@ -2,7 +2,7 @@
 
 #BASE
 sudo apt-get -qq update
-sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties git htop
+sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties git htop postgresql libpq-dev
 
 # requirements for scrapy
 sudo apt-get -qq update
@@ -35,7 +35,7 @@ sudo /etc/init.d/elasticsearch restart
 
 # supervisor
 sudo pip install pip --upgrade
-sudo pip install supervisor
+sudo pip install supervisor psycopg2
 sudo cp /vagrant/provision/supervisord.conf /etc/
 sudo supervisord
 

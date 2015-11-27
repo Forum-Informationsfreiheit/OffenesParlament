@@ -1,0 +1,18 @@
+---
+- hosts: all
+  tasks:
+
+    - name: Drop local postgresdb
+      postgresql_db: name=op state=absent
+      become: true
+      become_user: postgres
+
+    - name: Recreate local postgresdb
+      postgresql_db: name=op
+      become: true
+      become_user: postgres
+
+    - name: Create op user
+      postgresql_user: db=op name=op password=secret priv=ALL
+      become: true
+      become_user: postgres
