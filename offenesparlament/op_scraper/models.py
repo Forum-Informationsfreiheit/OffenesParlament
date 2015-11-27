@@ -452,7 +452,8 @@ class Person(models.Model, ParlIDMixIn):
 
     @property
     def full_name_urlsafe(self):
-        return re.sub(u'[^a-zA-Z0-9ßöäüÖÄÜ]+', '-', self.full_name)
+        base_name = self.full_name or self.reversed_name
+        return re.sub(u'[^a-zA-Z0-9ßöäüÖÄÜ]+', '-', base_name)
 
     @property
     def most_recent_function_or_occupation(self):
