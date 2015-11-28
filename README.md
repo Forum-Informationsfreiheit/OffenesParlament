@@ -125,3 +125,9 @@ python manage.py update_index
 ```
 
 to perform a simple update. For this to succeed, make sure ElasticSearch is up and running.
+
+## Staying in Contact
+
+We have a mailing list now, sign up here:
+
+https://lists.metalab.at/mailman/listinfo/offenesparlament_at
