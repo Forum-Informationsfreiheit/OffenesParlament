@@ -40,3 +40,10 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+Community
+=========
+
+If you'd like to stay in touch, sign up to our mailing list:
+
+https://lists.metalab.at/mailman/listinfo/offenesparlament_at
