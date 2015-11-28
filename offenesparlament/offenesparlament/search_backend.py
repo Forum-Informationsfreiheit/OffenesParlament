@@ -14,19 +14,21 @@ class FuzzyElasticsearchSearchBackend(ElasticsearchSearchBackend):
         fuzzy_field = kwargs.pop('min_similarity', '')
         search_kwargs = super(FuzzyElasticsearchSearchBackend, self).build_search_kwargs(
             query_string, **kwargs)
-        if fuzzy and 'query_string' in search_kwargs['query']['filtered']['query']:
-            try:
-                # fuzzyfy query strings
-                query_string = search_kwargs['query'][
-                    'filtered']['query']['query_string']['query']
-                query_string = u'({}~)'.format(
-                    query_string[1:-1].replace(' ', '~ '))
-                search_kwargs['query']['filtered']['query'][
-                    'query_string']['query'] = query_string
-            except:
-                # something went wrong, maybe we don't have a query_string
-                # query after all?
-                pass
+        # if fuzzy and 'query_string' in search_kwargs['query']['filtered']['query']:
+        #     try:
+        # TODO THIS BREAKS THE FACETTING WE NEED TO FIGURE OUT WHAT TO DO ABOUT THIS
+        # fuzzyfy query strings
+        #         query_string = search_kwargs['query'][
+        #             'filtered']['query']['query_string']['query']
+        #         query_string = u'({}~)'.format(
+        #             query_string[1:-1].replace(' ', '~ '))
+        #         search_kwargs['query']['filtered']['query'][
+        #             'query_string']['query'] = query_string
+        #     except:
+        # something went wrong, maybe we don't have a query_string
+        # query after all?
+        #         pass
+        # print "KWARGS: {}".format(search_kwargs)
         return search_kwargs
 
 
