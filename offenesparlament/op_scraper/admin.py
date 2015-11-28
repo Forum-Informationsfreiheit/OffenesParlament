@@ -104,3 +104,9 @@ class FunctionAdmin(BaseAdmin):
 @admin.register(Mandate)
 class MandateAdmin(BaseAdmin):
     pass
+
+@admin.register(Inquiry)
+class Inquiryadmin(BaseAdmin):
+    list_display = (
+        'subject', 'legislative_period', 'parl_id', 'inquiry_type')
+    pass

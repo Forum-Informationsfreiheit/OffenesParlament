@@ -63,11 +63,12 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
+        #urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_07259/index.shtml"]
         urls = []
-        
+
         if self.LLP:
             for i in self.LLP:
-                for nrbr in ['NR', 'BR']:
+                for nrbr in ['NR']:
                     roman_numeral = roman.toRoman(i)
                     options = self.URLOPTIONS.copy()
                     options['GP'] = roman_numeral
@@ -79,7 +80,7 @@ class InquiriesSpider(BaseSpider):
                     print "GP {}: {} inquiries from {}".format(
                         roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-            
+        
 
         return urls
 

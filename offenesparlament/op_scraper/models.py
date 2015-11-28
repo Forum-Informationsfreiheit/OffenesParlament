@@ -449,4 +449,3 @@ class Inquiry(models.Model):
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
-
