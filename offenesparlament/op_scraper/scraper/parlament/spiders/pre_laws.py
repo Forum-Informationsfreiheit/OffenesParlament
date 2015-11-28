@@ -57,6 +57,12 @@ class PreLawsSpider(BaseSpider):
     def __init__(self, **kw):
         super(PreLawsSpider, self).__init__(**kw)
 
+        if 'llp' in kw:
+            try:
+                self.LLP = [int(kw['llp'])]
+            except:
+                pass
+
         # add at least a default URL for testing
         self.start_urls = self.get_urls()
 
