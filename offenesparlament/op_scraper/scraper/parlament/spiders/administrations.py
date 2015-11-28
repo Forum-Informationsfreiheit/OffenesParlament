@@ -40,7 +40,7 @@ class AdministrationsSpider(PersonsSpider):
 
     LLP = []
 
-    name = "administration"
+    name = "administrations"
     title = "Administrations (Regierungen) Spider"
     persons_scraped = []
 
