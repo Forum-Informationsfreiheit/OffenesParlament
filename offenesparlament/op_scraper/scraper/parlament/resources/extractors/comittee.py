@@ -112,24 +112,31 @@ class COMITTEE:
                 if len(raw_number) > 0 and u'Sitzung' in raw_number[0]:
                     meeting_number = raw_number[0].split()[0][:-1]
                 else:
-                    continue # not a meeting
+                    continue  # not a meeting
 
                 raw_document_urls = raw_header_row.xpath('td[2]/a/@href').extract()
 
-                html_url, pdf_url = u"", u""
+                html_link, pdf_link = u"", u""
                 for url in raw_document_urls:
                     if url.endswith('.pdf'):
-                        pdf_url = url
+                        pdf_link = url
+                        if not pdf_link.startswith(BASE_HOST):
+                            pdf_link = "{}/{}".format(BASE_HOST, pdf_link)
                     elif url.endswith('.html'):
-                        html_url = url
+                        html_link = url
+                        if not html_link.startswith(BASE_HOST):
+                            html_link = "{}/{}".format(BASE_HOST, html_link)
                 title = u'Tagesordnung der {}. Sitzung des {} am {}'\
-                    .format(meeting_number, COMITTEE.NAME.xt(response), str(meeting_date))
+                    .format(meeting_number, COMITTEE.NAME.xt(response), str(meeting_date.date()))
 
-                meeting_document = {
-                    'title': title,
-                    'html_url': html_url,
-                    'pdf_url': pdf_url
-                }
+                if html_link != u'' or pdf_link != u'':
+                    meeting_document = {
+                        'title': title,
+                        'html_link': html_link,
+                        'pdf_link': pdf_link
+                    }
+                else:
+                    meeting_document = None
 
                 raw_rows = raw_header_row.xpath('following-sibling::tr')
 
@@ -169,15 +176,34 @@ class COMITTEE:
                     raw_topic_law_id = raw_row.xpath('td[2]/a/text()').extract()
 
                     if len(raw_topic_law_id) > 0:
-                        topic_law_id = raw_topic_law_id[0]
+                        topic_law_id = u'({})'.format(raw_topic_law_id[0])
                     else:
                         topic_law_id = u''
+
+                    raw_topic_law_link = raw_row.xpath('td[2]/a/@href').extract()
+
+                    if len(raw_topic_law_link) > 0:
+                        raw_topic_law_link_splitted = raw_topic_law_link[0].split('/')
+                        if len(raw_topic_law_link_splitted) > 3:
+                            topic_law_llp = raw_topic_law_link_splitted[3]
+                        else:
+                            topic_law_llp = u''
+                    else:
+                        topic_law_llp = u''
+
+                    if topic_law_id != u'':
+                        topic_law = {
+                            'parl_id': topic_law_id,
+                            'llp': topic_law_llp
+                        }
+                    else:
+                        topic_law = None
 
                     topic = {
                         'number': topic_number,
                         'text': topic_text,
                         'comment': topic_comment,
-                        'law_id': topic_law_id
+                        'law': topic_law
                     }
 
                     meeting_topics.append(topic)

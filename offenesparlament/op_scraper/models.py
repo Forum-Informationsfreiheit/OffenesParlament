@@ -779,7 +779,7 @@ class ComitteeMeeting(models.Model):
 
     # Relationships
     comittee = models.ForeignKey(Comittee, related_name='comittee_meetings')
-    agenda = models.OneToOneField(Document, related_name='comittee_meeting')
+    agenda = models.OneToOneField(Document, related_name='comittee_meeting', null=True)
 
     class Meta:
         unique_together = ("number", "date", "comittee")
@@ -791,10 +791,10 @@ class ComitteeAgendaTopic(models.Model):
     """
     number = models.IntegerField()
     text = models.CharField(max_length=255)
-    comment = models.CharField(max_length=255)
+    comment = models.CharField(max_length=255, null=True, blank=True)
 
     # Relationships
-    meeting = models.ForeignKey(Comittee, related_name='agenda_topics')
+    meeting = models.ForeignKey(ComitteeMeeting, related_name='agenda_topics')
     law = models.ForeignKey(Law, related_name='agenda_topics', null=True)
 
     class Meta:
