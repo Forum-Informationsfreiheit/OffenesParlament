@@ -739,7 +739,7 @@ class Comittee(models.Model, ParlIDMixIn):
     parl_id = models.CharField(max_length=30)
     source_link = models.URLField(max_length=255, default="")
     nrbr = models.CharField(max_length=20)
-    description = models.CharField(max_length=1000, default="", blank=True)
+    description = models.TextField(default="", blank=True)
 
     # Relationships
     legislative_period = models.ForeignKey(
