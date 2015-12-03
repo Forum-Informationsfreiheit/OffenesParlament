@@ -80,8 +80,17 @@ class ComitteesSpider(BaseSpider):
                     roman_numeral, len(rss['entries']))
                 urls = urls + [entry['link'] for entry in rss['entries']]
 
-        # BR comittees are not LLP based
-        # TODO: BR comittee URLs
+        # AKT = aktiv, AUF = aufgeloest
+        for aktauf in ['AKT','AUF']:
+            options['NRBR'] = 'BR'
+            options['R_AKTAUF'] = aktauf
+            url_options = urlencode(options)
+            url_br = "{}?{}".format(self.BASE_URL, url_options)
+            rss = feedparser.parse(url_br)
+
+            print "BR {}: {} Comittees".format(
+                aktauf, len(rss['entries']))
+            urls = urls + [entry['link'] for entry in rss['entries']]
 
         return urls
 

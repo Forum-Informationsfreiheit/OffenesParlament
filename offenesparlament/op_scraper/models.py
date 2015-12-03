@@ -735,7 +735,7 @@ class Comittee(models.Model, ParlIDMixIn):
     "Parlamentarischer Ausschuss"
     Comittee of either the Nationalrat or Bundesrat for a specific topic
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=511)
     parl_id = models.CharField(max_length=30)
     source_link = models.URLField(max_length=255, default="")
     nrbr = models.CharField(max_length=20)

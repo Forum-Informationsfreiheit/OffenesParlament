@@ -24,15 +24,18 @@ class COMITTEE:
     @staticmethod
     def url_to_parlid(url):
         if url is not u'':
-            raw_parl_id = url.split('/')[-2]
-            if len(raw_parl_id) > 1:
-                raw_parl_id = raw_parl_id.split('_')
-                parl_id_type = raw_parl_id[0]
-                parl_id_number = int(raw_parl_id[1])
-                parl_id = u'({}/{})'.format(parl_id_number, parl_id_type)
-                return parl_id
+            splitted_url = url.split('/')
+            if len(splitted_url) > 3:
+                llp = splitted_url[-4]
+                raw_parl_id = splitted_url[-2]
+                if len(raw_parl_id) > 1:
+                    raw_parl_id = raw_parl_id.split('_')
+                    parl_id_type = raw_parl_id[0]
+                    parl_id_number = int(raw_parl_id[1])
+                    parl_id = u'({}/{})'.format(parl_id_number, parl_id_type)
+                    return llp, parl_id
 
-        return u''
+        return u'', u''
 
     class LLP(SingleExtractor):
 
@@ -219,6 +222,46 @@ class COMITTEE:
 
             return meetings
 
+    class LAWS(SingleExtractor):
+
+        XPATH = '//*[@id="tab-Verhandlungsgegenstaende"]/following-sibling::div/ul/li/a'
+
+        @classmethod
+        def xt(cls, response):
+            raw_laws = response.xpath(cls.XPATH)
+
+            laws = []
+
+            for raw_law in raw_laws:
+                raw_title = raw_law.xpath('text()').extract()
+
+                if len(raw_title) > 0:
+                    law_title = _clean(raw_title[0])
+                else:
+                    law_title = u''
+
+                raw_link = raw_law.xpath('@href').extract()
+
+                if len(raw_link) > 0:
+                    law_link = raw_link[0]
+                    law_llp, law_parl_id = COMITTEE.url_to_parlid(law_link)
+
+                    law_link = "{}/{}".format(BASE_HOST, law_link)
+                else:
+                    # without a link we can't get the necessary info
+                    continue
+                if law_llp != u'' and law_parl_id != u'':
+                    law = {
+                        'title': law_title,
+                        'source_link': law_link,
+                        'parl_id': law_parl_id,
+                        'llp': law_llp,
+                    }
+
+                    laws.append(law)
+
+            return laws
+
     class MEMBERSHIP(SingleExtractor):
 
         XPATH = '//*[@id="tab-Ausschuesse"]/following-sibling::h3'
@@ -259,7 +302,7 @@ class COMITTEE:
                     else:
                         comittee_link = u''
 
-                    comittee_parl_id = COMITTEE.url_to_parlid(comittee_link)
+                    _,comittee_parl_id = COMITTEE.url_to_parlid(comittee_link)
 
                     raw_comitee_name = row_sel.xpath('//td[@class="biogr_am_ausschuss"]/a/text()').extract()
                     if len(raw_comitee_name) > 0:
