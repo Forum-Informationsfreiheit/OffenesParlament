@@ -7,6 +7,7 @@ from haystack.query import SearchQuerySet
 
 from op_scraper.models import Person, Law
 
+
 class QuerySetEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -76,7 +77,10 @@ class JsonSearchView(SearchView):
 
         # Do we have a query or are we just getting all of them?
         if 'q' in query_args:
-            qs = qs.auto_query(query_args['q'])
+            qry = query_args['q']
+            # fuzzify search
+            qry = u'{}~'.format(qry.replace(' ', '~ '))
+            qs = qs.auto_query(qry)
 
         # Filter by facets
         if query_args['facet_filters']:
@@ -90,7 +94,7 @@ class JsonSearchView(SearchView):
                     query_args['facet_filters'][facet_field])
                 ).filter(
                     **{
-                    facet_field: query_args['facet_filters'][facet_field]}
+                        facet_field: query_args['facet_filters'][facet_field]}
                 )
 
         # Retrieve facets and facet_counts
