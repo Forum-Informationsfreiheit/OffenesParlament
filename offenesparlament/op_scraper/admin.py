@@ -104,3 +104,7 @@ class FunctionAdmin(BaseAdmin):
 @admin.register(Mandate)
 class MandateAdmin(BaseAdmin):
     pass
+
+@admin.register(Petition)
+class PetitionAdmin(BaseAdmin):
+    pass

@@ -589,7 +589,9 @@ class Petition(models.Model):
         "self", blank=True, null=True, related_name='redistribution')
 
     def __unicode__(self):
-        return u'{} eingebracht von {}'.format(self.law, self.creators.all())
+        return u'{} eingebracht von {}'.format(
+            self.law.title,
+            ", ".join([unicode(c) for c in self.creators.all()]))
 
     @property
     def full_signature_count(self):
@@ -620,7 +622,7 @@ class PetitionCreator(models.Model):
 
     def __unicode__(self):
         if not self.person is None:
-            return u'{}'.format(self.person)
+            return u'{}'.format(self.person.full_name)
         else:
             return u'{}'.format(self.full_name)
 
