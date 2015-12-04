@@ -39,6 +39,8 @@ from op_scraper.models import PetitionSignature
 class PetitionsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/BB/filter.psp")
 
+    ALLOWED_LLPS = range(20, 26)
+
     URLOPTIONS = {
         'view': 'RSS',
         'jsMode': 'RSS',
@@ -479,12 +481,22 @@ class PetitionsSpider(BaseSpider):
         petition = response.meta['petition_item']
 
         signatures = PETITION.SIGNATURES.xt(response)
+        log.msg(u"Creating or updating {} signatures".format(
+            green(u'{}'.format(len(signatures)))
+        ))
 
+        count_created = 0
+        count_updated = 0
         for signature in signatures:
             petition_signature, created = PetitionSignature.objects.get_or_create(
                 petition=petition, **signature)
 
             if created:
-                log.msg(u"Created: {}".format(
-                    green(u'[{}]'.format(petition_signature))
-                ))
+                count_created += 1
+            else:
+                count_updated += 1
+
+        log.msg(u"Created {} and updated {} signatures".format(
+            green(u'{}'.format(count_created)),
+            green(u'{}'.format(count_updated))
+        ))

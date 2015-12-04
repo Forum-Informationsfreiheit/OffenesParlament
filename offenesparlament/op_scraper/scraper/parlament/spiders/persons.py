@@ -32,7 +32,7 @@ from op_scraper.models import LegislativePeriod
 class PersonsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filter.psp")
 
-    LLP = []
+    ALLOWED_LLPS = []
 
     RSS_TO_FUNCTION = {
         'NR': 'Abgeordnete(r) zum Nationalrat',
