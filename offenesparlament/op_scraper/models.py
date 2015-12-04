@@ -621,7 +621,7 @@ class PetitionCreator(models.Model):
         Person, null=True, related_name='petitions_created')
 
     def __unicode__(self):
-        if not self.person is None:
+        if self.person is not None:
             return u'{}'.format(self.person.full_name)
         else:
             return u'{}'.format(self.full_name)
