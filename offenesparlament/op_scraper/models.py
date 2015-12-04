@@ -790,7 +790,7 @@ class ComitteeAgendaTopic(models.Model):
     Agenda topic ("Tagesordnungspunkt") of a Comittee meeting
     """
     number = models.IntegerField()
-    text = models.CharField(max_length=255)
+    text = models.CharField(max_length=1000)
     comment = models.CharField(max_length=255, null=True, blank=True)
 
     # Relationships
