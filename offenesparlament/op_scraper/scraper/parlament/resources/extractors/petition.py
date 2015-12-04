@@ -185,9 +185,9 @@ class PETITION:
 
                     if len(signature_list) > 3:
                         raw_date = time.strptime(_clean(signature_list[3]), '%d.%m.%Y')
-                        date = datetime.datetime.fromtimestamp(time.mktime(raw_date))
+                        date = datetime.date.fromtimestamp(time.mktime(raw_date))
                     else:
-                        date = datetime.datetime.fromtimestamp(0)
+                        date = datetime.date.fromtimestamp(0)
 
                     signatures.append({
                         'full_name': full_name,

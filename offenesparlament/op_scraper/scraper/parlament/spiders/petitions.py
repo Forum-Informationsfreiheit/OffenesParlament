@@ -201,8 +201,8 @@ class PetitionsSpider(BaseSpider):
         # Only BI or PET have online signatures
         if u'BI' in parl_id or u'PET' in parl_id:
             # http://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00040/filter.psp?xdocumentUri=/PAKT/VHG/XXV/BI/BI_00040/index.shtml&GP_CODE=XXV&ITYP=BI&INR=40&FBEZ=BI_001&pageNumber=&STEP=
-            signatures_base_url = '{}/PAKT/VHG/{}/{}/{}/filter.psp?xdocumentUri=/PAKT/VHG/{}/{}/{}/\
-                index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&R_1000=ALLE&pageNumber=&STEP='
+            signatures_base_url = '{}/PAKT/VHG/{}/{}/{}/filter.psp?xdocumentUri=/PAKT/VHG/{}/{}/{}/'\
+                'index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&R_1000=ALLE&STEP=&pageNumber='
 
             raw_parl_id = law_item.parl_id[1:-1].split('/')
             petition_type = raw_parl_id[1]
@@ -485,18 +485,37 @@ class PetitionsSpider(BaseSpider):
             green(u'{}'.format(len(signatures)))
         ))
 
+        # find latest saved signature date
+        last_signature_date = datetime.date.fromtimestamp(0)
+        try:
+            last_signature_date = petition.petition_signatures.latest('date').date
+            log.msg(u'Latest signature date saved: {}'.format(
+                green(u'{}'.format(last_signature_date))
+            ))
+        except:
+            log.msg(u'No latest signature date found')
+
         count_created = 0
-        count_updated = 0
-        for signature in signatures:
+        count_bulk_create = 0
+
+        # signatures on the latest saved date
+        signatures_ondate = [sig for sig in signatures if sig['date'] == last_signature_date]
+        for signature in signatures_ondate:
             petition_signature, created = PetitionSignature.objects.get_or_create(
                 petition=petition, **signature)
-
             if created:
                 count_created += 1
-            else:
-                count_updated += 1
 
-        log.msg(u"Created {} and updated {} signatures".format(
+        signatures_afterdate = [sig for sig in signatures if sig['date'] > last_signature_date]
+        signature_items = []
+        for signature in signatures_afterdate:
+            signature_item = PetitionSignature(petition=petition,**signature)
+            signature_items.append(signature_item)
+            count_bulk_create += 1
+
+        PetitionSignature.objects.bulk_create(signature_items)
+
+        log.msg(u"Created {} and bulk created {} signatures".format(
             green(u'{}'.format(count_created)),
-            green(u'{}'.format(count_updated))
+            green(u'{}'.format(count_bulk_create))
         ))
