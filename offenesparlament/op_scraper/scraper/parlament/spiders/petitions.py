@@ -202,7 +202,7 @@ class PetitionsSpider(BaseSpider):
         if u'BI' in parl_id or u'PET' in parl_id:
             # http://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00040/filter.psp?xdocumentUri=/PAKT/VHG/XXV/BI/BI_00040/index.shtml&GP_CODE=XXV&ITYP=BI&INR=40&FBEZ=BI_001&pageNumber=&STEP=
             signatures_base_url = '{}/PAKT/VHG/{}/{}/{}/filter.psp?xdocumentUri=/PAKT/VHG/{}/{}/{}/\
-                index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&pageNumber=&STEP='
+                index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&R_1000=ALLE&pageNumber=&STEP='
 
             raw_parl_id = law_item.parl_id[1:-1].split('/')
             petition_type = raw_parl_id[1]
