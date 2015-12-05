@@ -643,3 +643,77 @@ class PetitionSignature(models.Model):
     def __unicode__(self):
         return u'Unterschrift von {} ({}-{}) am {} für {}'\
             .format(self.full_name, self.postal_code, self.location, self.date, self.petition)
+
+
+class Debate(models.Model):
+
+    """
+    A debate / session in parlament, on a specific date.
+    """
+    date = models.DateTimeField()
+    title = models.CharField(max_length=255, null=True)
+    debate_type = models.CharField(max_length=255, null=True)
+    protocol_url = models.URLField(max_length=255, null=True)
+    detail_url = models.URLField(max_length=255, null=True)
+    nr = models.IntegerField(null=True)
+    llp = models.ForeignKey(LegislativePeriod, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.title
+
+class DebateStatement(models.Model):
+
+    """
+    Statement in a debate
+    """
+
+    # Datime from the debate date + the most recent timestamp found in debate
+    date = models.DateTimeField(null=True)
+
+    # Ref. to debate
+    debate = models.ForeignKey(Debate, null=True,
+                               related_name='debate_statements')
+
+    # Enumeration of the sections as they were parsed
+    # (might be useful for ordering)
+    index = models.IntegerField(default=1)
+
+    # The name of the div's class / section in the transcript
+    doc_section = models.CharField(max_length=255)
+
+    # Flags about the type of the section
+    text_type = models.CharField(max_length=12, null=True)
+
+    # .. and the role of the speaker, if it the section is a real statement
+    speaker_role = models.CharField(max_length=12, null=True)
+
+    # Start and end pages of the statement in the transcript
+    page_start = models.IntegerField(null=True)
+    page_end = models.IntegerField(null=True)
+
+    # Cleaned text, will then contain only the statement of the speaker
+    full_text = models.TextField(null=True)
+
+    # Statement / transcript section, as it was fetched
+    raw_text = models.TextField(null=True)
+
+    # Will contain statement and links, references etc. - cleaned
+    # and properly marked-up
+    annotated_text = models.TextField(null=True)
+
+    # Person ref (speaker)
+    person = models.ForeignKey(Person, null=True,
+                               related_name='debate_statements')
+    # Name of speaker (useful for cases without person-ref for speaker?)
+    speaker_name = models.CharField(max_length=255, null=True)
+
+    # For debug reasons, can contain extracted data as JSON string
+    debugdump = models.TextField(null=True)
+
+    def __unicode__(self):
+        return u'{}, {}-{}, {}'.format(
+            # self.person.full_name if self.person else '-',
+            self.speaker_name,
+            self.index,
+            self.doc_section,
+            self.date)
