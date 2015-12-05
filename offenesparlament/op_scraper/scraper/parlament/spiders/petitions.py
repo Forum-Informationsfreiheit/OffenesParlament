@@ -464,7 +464,7 @@ class PetitionsSpider(BaseSpider):
         """
         reference = PETITION.REFERENCE.xt(response)
 
-        if not reference is None:
+        if reference is not None:
             llp = LegislativePeriod.objects.get(
                 roman_numeral=reference[0])
             ref = Petition.objects.filter(
@@ -507,6 +507,9 @@ class PetitionsSpider(BaseSpider):
                 count_created += 1
 
         signatures_afterdate = [sig for sig in signatures if sig['date'] > last_signature_date]
+        # remove duplicates as pre-processing step for bulk_create
+        # code for de-duplication for list of dicts used from: http://stackoverflow.com/a/6281063/331559
+        signatures_afterdate = [dict(y) for y in set(tuple(x.items()) for x in signatures_afterdate)]
         signature_items = []
         for signature in signatures_afterdate:
             signature_item = PetitionSignature(petition=petition,**signature)
