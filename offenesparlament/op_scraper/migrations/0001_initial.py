@@ -78,9 +78,6 @@ class Migration(migrations.Migration):
                 ('parl_id', models.CharField(default=b'', max_length=30)),
                 ('description', models.TextField(blank=True)),
                 ('_slug', models.CharField(default=b'', max_length=255)),
-                ('category', models.ForeignKey(blank=True, to='op_scraper.Category', null=True)),
-                ('documents', models.ManyToManyField(related_name='laws', to='op_scraper.Document')),
-                ('keywords', models.ManyToManyField(related_name='laws', to='op_scraper.Keyword')),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
@@ -117,7 +114,6 @@ class Migration(migrations.Migration):
                 ('documents', models.ManyToManyField(to='op_scraper.Document')),
                 ('entity', models.ForeignKey(related_name='opinions', to='op_scraper.Entity')),
                 ('keywords', models.ManyToManyField(to='op_scraper.Keyword')),
-                ('prelaw', models.ForeignKey(related_name='opinions', to='op_scraper.Law')),
             ],
             options={
                 'ordering': ['date'],
@@ -153,22 +149,10 @@ class Migration(migrations.Migration):
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
-            name='Petition',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('signable', models.BooleanField()),
-                ('signing_url', models.URLField(default=b'', max_length=255)),
-                ('signature_count', models.IntegerField(default=0)),
-                ('law', models.OneToOneField(related_name='petition', to='op_scraper.Law')),
-                ('reference', models.OneToOneField(related_name='redistribution', null=True, blank=True, to='op_scraper.Petition')),
-            ],
-        ),
-        migrations.CreateModel(
             name='PetitionCreator',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('full_name', models.CharField(max_length=255)),
-                ('created_petitions', models.ManyToManyField(related_name='creators', to='op_scraper.Petition')),
                 ('person', models.OneToOneField(related_name='petitions_created', null=True, to='op_scraper.Person')),
             ],
         ),
@@ -180,7 +164,6 @@ class Migration(migrations.Migration):
                 ('postal_code', models.CharField(max_length=50)),
                 ('location', models.CharField(max_length=255)),
                 ('date', models.DateField()),
-                ('petition', models.ForeignKey(related_name='petition_signatures', to='op_scraper.Petition')),
             ],
         ),
         migrations.CreateModel(
@@ -233,9 +216,6 @@ class Migration(migrations.Migration):
                 ('date', models.DateField()),
                 ('protocol_url', models.URLField(default=b'', max_length=255)),
                 ('source_link', models.URLField(default=b'', max_length=255)),
-                ('law', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Law', null=True)),
-                ('opinion', models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Opinion', null=True)),
-                ('phase', models.ForeignKey(to='op_scraper.Phase')),
             ],
         ),
         migrations.CreateModel(
@@ -270,6 +250,17 @@ class Migration(migrations.Migration):
                 ('verification_hash', models.CharField(max_length=32)),
             ],
         ),
+        migrations.CreateModel(
+            name='Petition',
+            fields=[
+                ('law_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='op_scraper.Law')),
+                ('signable', models.BooleanField()),
+                ('signing_url', models.URLField(default=b'', max_length=255)),
+                ('signature_count', models.IntegerField(default=0)),
+                ('reference', models.OneToOneField(related_name='redistribution', null=True, blank=True, to='op_scraper.Petition')),
+            ],
+            bases=('op_scraper.law',),
+        ),
         migrations.AddField(
             model_name='user',
             name='verification',
@@ -291,9 +282,29 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(to='op_scraper.User', through='op_scraper.Subscription'),
         ),
         migrations.AddField(
+            model_name='step',
+            name='law',
+            field=models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Law', null=True),
+        ),
+        migrations.AddField(
+            model_name='step',
+            name='opinion',
+            field=models.ForeignKey(related_name='steps', blank=True, to='op_scraper.Opinion', null=True),
+        ),
+        migrations.AddField(
+            model_name='step',
+            name='phase',
+            field=models.ForeignKey(to='op_scraper.Phase'),
+        ),
+        migrations.AddField(
             model_name='statement',
             name='step',
             field=models.ForeignKey(related_name='statements', to='op_scraper.Step'),
+        ),
+        migrations.AddField(
+            model_name='opinion',
+            name='prelaw',
+            field=models.ForeignKey(related_name='opinions', to='op_scraper.Law'),
         ),
         migrations.AddField(
             model_name='mandate',
@@ -304,6 +315,21 @@ class Migration(migrations.Migration):
             model_name='mandate',
             name='state',
             field=models.ForeignKey(blank=True, to='op_scraper.State', null=True),
+        ),
+        migrations.AddField(
+            model_name='law',
+            name='category',
+            field=models.ForeignKey(blank=True, to='op_scraper.Category', null=True),
+        ),
+        migrations.AddField(
+            model_name='law',
+            name='documents',
+            field=models.ManyToManyField(related_name='laws', to='op_scraper.Document'),
+        ),
+        migrations.AddField(
+            model_name='law',
+            name='keywords',
+            field=models.ManyToManyField(related_name='laws', to='op_scraper.Keyword'),
         ),
         migrations.AddField(
             model_name='law',
@@ -331,6 +357,16 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='subscription',
             unique_together=set([('user', 'content')]),
+        ),
+        migrations.AddField(
+            model_name='petitionsignature',
+            name='petition',
+            field=models.ForeignKey(related_name='petition_signatures', to='op_scraper.Petition'),
+        ),
+        migrations.AddField(
+            model_name='petitioncreator',
+            name='created_petitions',
+            field=models.ManyToManyField(related_name='creators', to='op_scraper.Petition'),
         ),
         migrations.AlterUniqueTogether(
             name='law',

@@ -573,7 +573,7 @@ class Subscription(models.Model):
         return self._unsub_slug
 
 
-class Petition(models.Model):
+class Petition(Law):
 
     """
     "Beteiligung der BürgerInnen"
@@ -584,13 +584,13 @@ class Petition(models.Model):
     signature_count = models.IntegerField(default=0)
 
     # Relationships
-    law = models.OneToOneField(Law, related_name='petition')
+    # law = models.OneToOneField(Law, related_name='petition')
     reference = models.OneToOneField(
         "self", blank=True, null=True, related_name='redistribution')
 
     def __unicode__(self):
         return u'{} eingebracht von {}'.format(
-            self.law.title,
+            super(Petition, self).__unicode__(),
             ", ".join([unicode(c) for c in self.creators.all()]))
 
     @property
@@ -621,7 +621,7 @@ class PetitionCreator(models.Model):
         Person, null=True, related_name='petitions_created')
 
     def __unicode__(self):
-        if not self.person is None:
+        if self.person is not None:
             return u'{}'.format(self.person.full_name)
         else:
             return u'{}'.format(self.full_name)
