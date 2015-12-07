@@ -90,15 +90,9 @@ class INQUIRY:
         def xt(cls, response):
             steps = []
             raw_steps = response.xpath(cls.XPATH)
-            for raw_step in raw_steps:
-                step_selector = Selector(text=raw_step.extract())
+            for index, step in enumerate(raw_steps, start=1):
+                step_selector = Selector(text=step.extract())
                 title = INQUIRY.STEPS.TITLE.xt(step_selector)
-                title_link = INQUIRY.STEPS.TITLE_LINK.xt(step_selector)
-                if title_link:
-                    title_link = "{}{}".format(
-                        BASE_HOST,
-                        title_link
-                    )
                 date_str = INQUIRY.STEPS.DATE.xt(step_selector).strip()
                 date = datetime.datetime.strptime(
                     date_str, "%d.%m.%Y").date()
@@ -108,15 +102,12 @@ class INQUIRY:
                         BASE_HOST,
                         protocol_url
                     )
-                step = {
+                steps.append({
                     'title': title,
                     'date': date,
+                    'sortkey': str(index).zfill(3),
                     'protocol_url': protocol_url,
-                    'title_link': title_link
-
-                }
-
-                steps.append(step)
+                })
             return steps
 
 
@@ -133,9 +124,6 @@ class INQUIRY:
                 title_selector = step_selector.xpath('//td[2]')[0].extract()
                 full_title = re.sub('<[^>]*>', '', title_selector).strip()
                 return full_title
-
-        class TITLE_LINK(SingleExtractor):
-            XPATH = "//td[2]/a/@href"
 
         class PROTOCOL(SingleExtractor):
             XPATH = "//td[3]/a/@href"

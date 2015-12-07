@@ -29,9 +29,9 @@ from op_scraper.models import Function
 from op_scraper.models import Keyword
 from op_scraper.models import Mandate
 from op_scraper.models import Step
+from op_scraper.models import Phase
 from op_scraper.models import Category
 from op_scraper.models import LegislativePeriod
-from op_scraper.models import InquiryStep
 from op_scraper.models import Inquiry
 
 
@@ -131,11 +131,12 @@ class InquiriesSpider(BaseSpider):
         inquiry_item.sender = sender_objects
         
         response.meta['inquiry_item'] = inquiry_item
+
         if any("Dringliche" in '{}'.format(s) for s in inquiry_item.keywords.all()):
             #inquiry_item.steps = self.parse_steps_urgent(response)
             print green("Dringliche Anfrage, Steps werden noch nicht gescraped")
         else:    
-            inquiry_item.steps = self.parse_steps(response)
+            step_num = self.parse_steps(response)
 
         inquiry_item.save()
         if inquiry_created:
@@ -186,15 +187,25 @@ class InquiriesSpider(BaseSpider):
         return doc_items
 
     def parse_steps(self, response):
-        
-        steps = INQUIRY.STEPS.xt(response)
-        step_items = []
-        for step in steps:
-            step_item, created = InquiryStep.objects.update_or_create(
-                date = step['date'],
-                title = step['title'],
-                protocol_url = step['protocol_url'],
-                title_link = step['title_link']
-                )
+        inquiry_item = response.meta['inquiry_item']
 
-        return step_items
+        phase_item, created = Phase.objects.get_or_create(
+            title='default_inqu')
+        if created:
+            log.msg(u"Created Phase {}".format(
+                green(u'[{}]'.format(phase_item.title))))
+
+        steps = INQUIRY.STEPS.xt(response)
+
+        for step in steps:
+            step_item, created = Step.objects.update_or_create(
+                title = step['title'],
+                sortkey = step['sortkey'],
+                date = step['date'],
+                protocol_url = step['protocol_url'],
+                inquiry = inquiry_item,
+                phase=phase_item,
+                source_link = response.url
+                )
+            step_item.save()
+        return len(steps)

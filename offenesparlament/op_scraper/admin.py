@@ -108,5 +108,5 @@ class MandateAdmin(BaseAdmin):
 @admin.register(Inquiry)
 class Inquiryadmin(BaseAdmin):
     list_display = (
-        'subject', 'legislative_period', 'parl_id', 'inquiry_type')
+        'title', 'legislative_period', 'parl_id', 'category')
     pass
