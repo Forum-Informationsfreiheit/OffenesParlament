@@ -425,28 +425,19 @@ class InquiryStep(models.Model):
         else:
             return self.title
 
-class Inquiry(models.Model):
+class Inquiry(Law):
     """
     An inquiry to the members of government
     """
-    parl_id = models.CharField(max_length=31)
-#    last_update = models.DateField()
-    inquiry_type = models.CharField(max_length=31, default="")
-    url = models.URLField(max_length=255, default="")
 #    answer_parl_id = models.CharField(max_length=31)
-    subject = models.CharField(max_length=511)
-    description = models.CharField(max_length=1023, default="")
 #    status = models.CharField(max_length=255)
 
     #Relationships
-    documents = models.ManyToManyField(Document, related_name='inquiries')
-    sender = models.ForeignKey(Person, related_name='inquiries_sent', default="")
+    sender = models.ManyToManyField(Person, related_name='inquiries_sent', default="")
     receiver = models.ForeignKey(Person, related_name='inquiries_received', default="")
-    keywords = models.ManyToManyField(Keyword, related_name='inquiries')
-    legislative_period = models.ForeignKey(LegislativePeriod)
-    steps = models.ManyToManyField(InquiryStep, related_name='inquiries')
 
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
+
 

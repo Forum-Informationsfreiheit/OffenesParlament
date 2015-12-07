@@ -28,6 +28,8 @@ from op_scraper.models import Person
 from op_scraper.models import Function
 from op_scraper.models import Keyword
 from op_scraper.models import Mandate
+from op_scraper.models import Step
+from op_scraper.models import Category
 from op_scraper.models import LegislativePeriod
 from op_scraper.models import InquiryStep
 from op_scraper.models import Inquiry
@@ -63,11 +65,12 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        urls = []
+        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml"]
         
+        """
         if self.LLP:
             for i in self.LLP:
-                for nrbr in ['NR', 'BR']:
+                for nrbr in ['NR']:
                     roman_numeral = roman.toRoman(i)
                     options = self.URLOPTIONS.copy()
                     options['GP'] = roman_numeral
@@ -79,26 +82,34 @@ class InquiriesSpider(BaseSpider):
                     print "GP {}: {} inquiries from {}".format(
                         roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-            
+        """
 
         return urls
 
 
     def parse(self, response):
-        url = response.url
-        inquiry_type = response.url.split('/')[-3]
+        source_link = response.url
         LLP = LegislativePeriod.objects.get(
             roman_numeral=response.url.split('/')[-4])
 
         parl_id = response.url.split('/')[-2]
-        subject = INQUIRY.SUBJECT.xt(response)
+        title = INQUIRY.TITLE.xt(response)
         description = INQUIRY.DESCRIPTION.xt(response)
-        sender_object = Person.objects.get(
-            parl_id=INQUIRY.SENDER.xt(response))
+        sender_objects  = []
+        for sender_object in INQUIRY.SENDER.xt(response):
+            sender_objects.append(Person.objects.get(
+                parl_id=sender_object))
         receiver_object = Person.objects.get(
             parl_id=INQUIRY.RECEIVER.xt(response))
+        category = INQUIRY.CATEGORY.xt(response)
+        for sender_object in sender_objects:
+            log.msg(u"Sender {}".format(sender_object.full_name))
+        cat, created = Category.objects.get_or_create(title=category)
+        if created:
+            log.msg(u"Created category {}".format(
+                green(u'[{}]'.format(category))))
 
-        #self.logger.info(u"Inquiry {}/{}: {}".format(green(u'{}'.format(parl_id)), cyan(u'{}'.format(LLP.roman_numeral)), subject))
+        #self.logger.info(u"Inquiry {}/{}: {}".format(green(u'{}'.format(parl_id)), cyan(u'{}'.format(LLP.roman_numeral)), title))
         inquiry_data = {
             'parl_id': parl_id
         }
@@ -107,17 +118,17 @@ class InquiriesSpider(BaseSpider):
             parl_id=parl_id,
             defaults=inquiry_data,
             legislative_period=LLP,
-            subject=subject,
-            inquiry_type=inquiry_type,
-            url=url,
+            title=title,
+            source_link=source_link,
             description=description,
-            sender=sender_object,
             receiver=receiver_object
             )
 
         #Attach foreign keys
         inquiry_item.keywords = self.parse_keywords(response)
         inquiry_item.documents = self.parse_docs(response)
+        inquiry_item.category = cat
+        inquiry_item.sender = sender_objects
         
         response.meta['inquiry_item'] = inquiry_item
         if any("Dringliche" in '{}'.format(s) for s in inquiry_item.keywords.all()):
@@ -133,7 +144,7 @@ class InquiriesSpider(BaseSpider):
             logtext = u"Updated Inquiry {} with ID {}, LLP {} @ {}"
             
         logtext = logtext.format(
-            red(subject),
+            red(title),
             cyan(u"{}".format(parl_id)),
             green(str(LLP)),
             blue(response.url),

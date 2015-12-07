@@ -45,8 +45,11 @@ class INQUIRY:
                 })
             return docs
 
-    class SUBJECT(SingleExtractor):
+    class TITLE(SingleExtractor):
         XPATH = '//*[@id="inhalt"]/text()'
+
+    class CATEGORY(SingleExtractor):
+        XPATH = '//*[@id="content"]//h3/text()'
 
     class PARL_ID(SingleExtractor):
         XPATH = '//*[@id="inhalt"]/span/text()'
@@ -69,8 +72,8 @@ class INQUIRY:
 
         @classmethod
         def xt(cls, response):
-            sender_link = response.xpath(cls.XPATH).extract()
-            return sender_link[0].split('/')[-2]
+            sender_links = response.xpath(cls.XPATH).extract()
+            return [sender_link.split('/')[-2] for sender_link in sender_links]
 
     class RECEIVER(SingleExtractor):
         XPATH = '//*[@class="c_2"]/p[last()]/a/@href'
@@ -136,3 +139,5 @@ class INQUIRY:
 
         class PROTOCOL(SingleExtractor):
             XPATH = "//td[3]/a/@href"
+
+    
