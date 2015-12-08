@@ -105,6 +105,20 @@ class FunctionAdmin(BaseAdmin):
 class MandateAdmin(BaseAdmin):
     pass
 
+
 @admin.register(Petition)
 class PetitionAdmin(BaseAdmin):
     pass
+
+
+@admin.register(DebateStatement)
+class DebateStatementAdmin(BaseAdmin):
+    list_display = (
+        'doc_section', 'speaker_name',
+        'text_type', 'speaker_role',
+        'page_start', 'page_end', 'date')
+
+
+@admin.register(Debate)
+class DebateStatementAdmin(BaseAdmin):
+    list_display = ('title', 'date', 'protocol_url')

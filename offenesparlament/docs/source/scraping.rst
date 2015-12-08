@@ -16,6 +16,7 @@ A scrapy scraper consists of a set of `spiders` - a single process capable of sc
 * **llp**: Scrapes the list of available legislative periods
 * **persons**: Scans 'Parlamentarier' as found `here <http://www.parlament.gv.at/WWER/SUCHE/>`_
 * **administrations**: A secondary spider that also scans Persons, this time focused on their mandates as part of specific administrations, as shown `in here <http://www.parlament.gv.at/WWER/BREG/REG/>`_
+* **statements**: Scrapes Debates and DebateStatements. Requires `llp` and `persons` for lookup.
 
 Each of those spiders inherits from `BaseSpider` (cf. ``/offenesparlament/op_scraper/scraper/parlament/spiders/__init__.py``), which offers some generic methods to be used by different spiders.
 

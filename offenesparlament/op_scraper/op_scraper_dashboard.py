@@ -95,6 +95,11 @@ class CustomIndexDashboard(Dashboard):
                     'url': '/admin/scrape/petitions',
                     'external': False,
                 },
+                {
+                    'title': _('Scrape Debates/Statements'),
+                    'url': '/admin/scrape/debates',
+                    'external': False,
+                },
             ]
         ))
 

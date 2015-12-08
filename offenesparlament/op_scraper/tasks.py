@@ -15,6 +15,8 @@ DEFAULT_CRAWLER_OPTIONS = {
 
 @shared_task
 def scrape(spider, **kwargs):
+    from django.contrib import admin
+    admin.autodiscover()
     with transaction.atomic(), reversion.create_revision():
         process = CrawlerProcess(DEFAULT_CRAWLER_OPTIONS)
         process.crawl(spider, **kwargs)

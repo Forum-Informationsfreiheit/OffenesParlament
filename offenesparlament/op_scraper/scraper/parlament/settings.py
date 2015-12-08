@@ -27,3 +27,12 @@ STATS_ENABLED = False
 # CONCURRENT_REQUESTS = 8
 
 AUTOTHROTTLE_ENABLED = False
+
+# # Cache requests:
+# DOWNLOADER_MIDDLEWARES = {
+#     'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+# }
+# HTTPCACHE_POLICY = 'scrapy.extensions.httpcache.DummyPolicy'
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# HTTPCACHE_ENABLED = True
+# HTTPCACHE_DIR = '/tmp/scrapy-cache'
