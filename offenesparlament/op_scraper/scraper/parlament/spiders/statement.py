@@ -118,8 +118,9 @@ class StatementSpider(BaseSpider):
         for debate in fetch_debates:
             debate['llp'] = llp
             debate['debate_type'] = debate_type
+            debate['protocol_url'] = BASE_HOST + debate['protocol_url']
             debate_item = self.store_debate(debate)
-            yield scrapy.Request(BASE_HOST + debate['protocol_url'],
+            yield scrapy.Request(debate['protocol_url'],
                                  callback=self.parse_debate,
                                  meta={'debate': debate_item})
 
@@ -133,7 +134,7 @@ class StatementSpider(BaseSpider):
             sect['debate'] = response.meta['debate']
             if 'speaker_id' in sect and sect['speaker_id'] is not None:
                 try:
-                    sect['speaker'] = Person.objects.get(
+                    sect['person'] = Person.objects.get(
                         parl_id=sect['speaker_id'])
                 except Person.DoesNotExist:
                     self.logger.warning(
