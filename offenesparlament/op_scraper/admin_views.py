@@ -67,7 +67,14 @@ class ScrapeForm(forms.Form):
 
 def trigger_scrape(request, spider_name):
     # if this is a POST request we need to process the form data
-    if request.method == 'POST' or not SPIDERS[spider_name]['has_options']:
+    if not SPIDERS[spider_name]['has_options']:
+        messages.success(
+            request,
+            'Scraping of {} triggered. Awesomeness ensues.'.format(
+                spider_name))
+        scrape.delay(SPIDERS[spider_name]['scraper'])
+        return redirect('/admin/')
+    if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = ScrapeForm(request.POST)
         messages.success(

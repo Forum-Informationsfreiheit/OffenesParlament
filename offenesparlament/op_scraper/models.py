@@ -283,9 +283,9 @@ class Step(models.Model):
         Opinion, null=True, blank=True, related_name='steps')
 
     def __unicode__(self):
-        if self.title:
+        try:
             return remove_tags(self.title, 'a')
-        else:
+        except:
             return self.title
 
 
