@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import feedparser
+import roman
 from urllib import urlencode
 
 from ansicolor import green, red
@@ -45,13 +46,22 @@ class StatementSpider(BaseSpider):
 
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/STPROT/")
 
+    ALLOWED_LLPS = range(20, 26)
+
     name = "statement"
 
     def __init__(self, **kw):
         super(StatementSpider, self).__init__(**kw)
 
         self.DEBATETYPE = kw['type'] if 'type' in kw else 'NR'
-        self.LLP = kw['llp'] if 'llp' in kw else 'XXIII'
+        if 'llp' in kw:
+            try:
+                self.LLP = roman.toRoman(int(kw['llp']))
+            except:
+                self.LLP = kw['llp']
+        else:
+            self.LLP = 'XXIII'
+
         self.SNR = kw['snr'] if 'snr' in kw else None
 
         self.start_urls = [self.BASE_URL]
@@ -69,8 +79,8 @@ class StatementSpider(BaseSpider):
                   'view': 'RSS',
                   'jsMode': 'RSS',
                   'xdocumentUri': '/PAKT/STPROT/',
-                  'NUR_VORL':'N',
-                  'R_PLSO':'PL',
+                  'NUR_VORL': 'N',
+                  'R_PLSO': 'PL',
                   'FBEZ': 'FP_011',
                   # 'listeId': '',
                   }
@@ -79,7 +89,8 @@ class StatementSpider(BaseSpider):
         try:
             llp = LegislativePeriod.objects.get(roman_numeral=params['GP'])
         except LegislativePeriod.DoesNotExist:
-            self.logger.warning(red(u"LLP '{}' not found".format(params['GP'])))
+            self.logger.warning(
+                red(u"LLP '{}' not found".format(params['GP'])))
         callback_requests.append(
             scrapy.Request(self.BASE_URL + '?' + urlencode(params),
                            callback=self.parse_debatelist,
@@ -94,20 +105,20 @@ class StatementSpider(BaseSpider):
 
         llp = response.meta['llp'] if 'llp' in response.meta else None
         debate_type = response.meta['type'] \
-                                    if 'type' in response.meta else ''
+            if 'type' in response.meta else ''
         debates = RSS_DEBATES.xt(response)
         self.logger.info(green(u"{} debates from {}".format(len(debates),
-                                                           response.url)))
+                                                            response.url)))
 
         # If SNR is set, use only a subset of debates for further parsing
-        fetch_debates=filter(lambda r: r['protocol_url'] != "" and
+        fetch_debates = filter(lambda r: r['protocol_url'] != "" and
                                (not self.SNR or self.SNR in r['title']),
                                debates)
 
         for debate in fetch_debates:
             debate['llp'] = llp
             debate['debate_type'] = debate_type
-            debate_item=self.store_debate(debate)
+            debate_item = self.store_debate(debate)
             yield scrapy.Request(BASE_HOST + debate['protocol_url'],
                                  callback=self.parse_debate,
                                  meta={'debate': debate_item})
@@ -122,9 +133,11 @@ class StatementSpider(BaseSpider):
             sect['debate'] = response.meta['debate']
             if 'speaker_id' in sect and sect['speaker_id'] is not None:
                 try:
-                    sect['speaker'] = Person.objects.get(parl_id=sect['speaker_id'])
+                    sect['speaker'] = Person.objects.get(
+                        parl_id=sect['speaker_id'])
                 except Person.DoesNotExist:
-                    self.logger.warning(red(u"Person '{}' not found".format(sect['speaker_id'])))
+                    self.logger.warning(
+                        red(u"Person '{}' not found".format(sect['speaker_id'])))
 
             if sect['ref_timestamp'] is not None \
                     and len(sect['ref_timestamp']) == 2:
@@ -151,7 +164,6 @@ class StatementSpider(BaseSpider):
         self.logger.info(green(u"Debate metadata saved {}".format(debate)))
         return debate
 
-
     def store_statement(self, data, index=-1):
         """
         Save (update or insert) debate_statement to ORM
@@ -165,7 +177,7 @@ class StatementSpider(BaseSpider):
         except DebateStatement.DoesNotExist:
             debate_statement = DebateStatement()
         keys = set(data.keys()) &\
-               set([v.name for v in DebateStatement._meta.get_fields()])
+            set([v.name for v in DebateStatement._meta.get_fields()])
         for key in keys:
             setattr(debate_statement, key, data[key])
         debate_statement.save()

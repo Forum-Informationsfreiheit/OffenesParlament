@@ -10,6 +10,8 @@ from op_scraper.scraper.parlament.spiders.laws_initiatives import LawsInitiative
 from op_scraper.scraper.parlament.spiders.petitions import PetitionsSpider
 from op_scraper.scraper.parlament.spiders.pre_laws import PreLawsSpider
 from op_scraper.scraper.parlament.spiders.persons import PersonsSpider
+from op_scraper.scraper.parlament.spiders.statement import StatementSpider
+
 
 SPIDERS = {
     'llp': {
@@ -36,6 +38,10 @@ SPIDERS = {
         'scraper': PetitionsSpider,
         'has_options': True
     },
+    'debates': {
+        'scraper': StatementSpider,
+        'has_options': True
+    },
 }
 
 SPIDER_CHOICES = (
@@ -45,6 +51,7 @@ SPIDER_CHOICES = (
     ('pre_laws', 'Ministerialentwürfe und Vorparlamentarische Prozesses'),
     ('laws', 'Gesetze'),
     ('petitions', 'Petitionen'),
+    ('debates', 'Debatten und Statements'),
 )
 
 from django import forms
@@ -74,6 +81,7 @@ def trigger_scrape(request, spider_name):
                 spider_name))
         scrape.delay(SPIDERS[spider_name]['scraper'])
         return redirect('/admin/')
+
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = ScrapeForm(request.POST)

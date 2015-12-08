@@ -30,6 +30,37 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Debate',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField()),
+                ('title', models.CharField(max_length=255, null=True)),
+                ('debate_type', models.CharField(max_length=255, null=True)),
+                ('protocol_url', models.URLField(max_length=255, null=True)),
+                ('detail_url', models.URLField(max_length=255, null=True)),
+                ('nr', models.IntegerField(null=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='DebateStatement',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField(null=True)),
+                ('index', models.IntegerField(default=1)),
+                ('doc_section', models.CharField(max_length=255)),
+                ('text_type', models.CharField(max_length=12, null=True)),
+                ('speaker_role', models.CharField(max_length=12, null=True)),
+                ('page_start', models.IntegerField(null=True)),
+                ('page_end', models.IntegerField(null=True)),
+                ('full_text', models.TextField(null=True)),
+                ('raw_text', models.TextField(null=True)),
+                ('annotated_text', models.TextField(null=True)),
+                ('speaker_name', models.CharField(max_length=255, null=True)),
+                ('debugdump', models.TextField(null=True)),
+                ('debate', models.ForeignKey(related_name='debate_statements', to='op_scraper.Debate', null=True)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Document',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -353,6 +384,16 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='entity',
             unique_together=set([('title', 'title_detail')]),
+        ),
+        migrations.AddField(
+            model_name='debatestatement',
+            name='person',
+            field=models.ForeignKey(related_name='debate_statements', to='op_scraper.Person', null=True),
+        ),
+        migrations.AddField(
+            model_name='debate',
+            name='llp',
+            field=models.ForeignKey(blank=True, to='op_scraper.LegislativePeriod', null=True),
         ),
         migrations.AlterUniqueTogether(
             name='subscription',
