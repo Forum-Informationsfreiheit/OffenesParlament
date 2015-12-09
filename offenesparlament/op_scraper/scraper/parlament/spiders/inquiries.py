@@ -66,9 +66,9 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml"]
+        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml"]
+        """urls = []
         
-        """
         if self.LLP:
             for i in self.LLP:
                 for nrbr in ['NR']:
@@ -83,16 +83,18 @@ class InquiriesSpider(BaseSpider):
                     print "GP {}: {} inquiries from {}".format(
                         roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-        """
-
+                    """
         return urls
 
 
     def parse(self, response):
         source_link = response.url
-        LLP = LegislativePeriod.objects.get(
-            roman_numeral=response.url.split('/')[-4])
-
+        category = INQUIRY.CATEGORY.xt(response)
+        if("BR" in category):
+            LLP = None
+        else:
+            LLP = LegislativePeriod.objects.get(
+                roman_numeral=response.url.split('/')[-4])
         parl_id = response.url.split('/')[-2]
         title = INQUIRY.TITLE.xt(response)
         description = INQUIRY.DESCRIPTION.xt(response)
@@ -102,7 +104,6 @@ class InquiriesSpider(BaseSpider):
                 parl_id=sender_object))
         receiver_object = Person.objects.get(
             parl_id=INQUIRY.RECEIVER.xt(response))
-        category = INQUIRY.CATEGORY.xt(response)
         cat, created = Category.objects.get_or_create(title=category)
         if created:
             log.msg(u"Created category {}".format(
@@ -136,7 +137,7 @@ class InquiriesSpider(BaseSpider):
                 self.parse_parliament_steps(response)
         else:    
             step_num = self.parse_steps(response)
-            
+
         inquiry_item.save()
         if inquiry_created:
             logtext = u"Created Inquiry {} with ID {}, LLP {} @ {}"
