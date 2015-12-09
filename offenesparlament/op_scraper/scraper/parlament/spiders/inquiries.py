@@ -33,6 +33,7 @@ from op_scraper.models import Phase
 from op_scraper.models import Category
 from op_scraper.models import LegislativePeriod
 from op_scraper.models import Inquiry
+from op_scraper.models import Statement
 
 
 class InquiriesSpider(BaseSpider):
@@ -65,7 +66,7 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml"]
+        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml"]
         
         """
         if self.LLP:
@@ -102,8 +103,6 @@ class InquiriesSpider(BaseSpider):
         receiver_object = Person.objects.get(
             parl_id=INQUIRY.RECEIVER.xt(response))
         category = INQUIRY.CATEGORY.xt(response)
-        for sender_object in sender_objects:
-            log.msg(u"Sender {}".format(sender_object.full_name))
         cat, created = Category.objects.get_or_create(title=category)
         if created:
             log.msg(u"Created category {}".format(
@@ -133,11 +132,11 @@ class InquiriesSpider(BaseSpider):
         response.meta['inquiry_item'] = inquiry_item
 
         if any("Dringliche" in '{}'.format(s) for s in inquiry_item.keywords.all()):
-            #inquiry_item.steps = self.parse_steps_urgent(response)
-            print green("Dringliche Anfrage, Steps werden noch nicht gescraped")
+            if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
+                self.parse_parliament_steps(response)
         else:    
             step_num = self.parse_steps(response)
-
+            
         inquiry_item.save()
         if inquiry_created:
             logtext = u"Created Inquiry {} with ID {}, LLP {} @ {}"
@@ -209,3 +208,79 @@ class InquiriesSpider(BaseSpider):
                 )
             step_item.save()
         return len(steps)
+
+    def parse_parliament_steps(self, response):
+        """
+        Callback function to parse the additional 'Parlamentarisches Verfahren'
+        page
+        """
+        inquiry_item = response.meta['inquiry_item']
+
+        phases = INQUIRY.PHASES.xt(response)
+
+        for phase in phases:
+            # Create phase if we don't have it yet
+            phase_item, created = Phase.objects.get_or_create(
+                title=phase['title'])
+            if created:
+                log.msg(u"Created Phase {}".format(
+                    green(u'[{}]'.format(phase_item.title))))
+
+            # Create steps
+            for step in phase['steps']:
+                step_item, created = Step.objects.update_or_create(
+                    title=step['title']['text'],
+                    sortkey=step['sortkey'],
+                    date=step['date'],
+                    protocol_url=step['protocol_url'],
+                    inquiry=inquiry_item,
+                    phase=phase_item,
+                    source_link=response.url
+                )
+                step_item.save()
+                if created:
+                    log.msg(u"Created Step {}".format(
+                        green(u'[{}]'.format(step_item.title))))
+
+                # Save statements for this step, if applicable
+                if 'statements' in step['title']:
+                    for stmnt in step['title']['statements']:
+                        # Find the person
+                        pq = Person.objects.filter(
+                            source_link__endswith=stmnt['person_source_link'])
+                        if pq.exists() and pq.count() == 1:
+                            person_item = pq.first()
+                            st_data = {
+                                'speech_type': stmnt['statement_type'],
+                                'protocol_url': stmnt['protocol_link']
+                            }
+                            st_item, st_created = Statement.objects.update_or_create(
+                                index=stmnt['index'],
+                                person=person_item,
+                                step=step_item,
+                                defaults=st_data)
+                            if st_created:
+                                log.msg(u"Created Statement by {} on {}".format(
+                                    green(
+                                        u'[{}]'.format(person_item.full_name)),
+                                    step_item.date))
+                            else:
+                                log.msg(u"Updated Statement by {} on {}".format(
+                                    green(
+                                        u'[{}]'.format(person_item.full_name)),
+                                    step_item.date))
+                        else:
+                            # We can't save statements if we can't find the
+                            # Person
+                            log.msg(
+                                red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
+                                    green(
+                                        u'[{}]'.format(stmnt['person_name'])),
+                                    blue(
+                                        "[{}]".format(stmnt['person_source_link'])),
+                                    red("{}").format(
+                                        "" if pq.exists() else " not"),
+                                    "" if pq.count() > 1 else ", but {} persons matching found!".format(
+                                        pq.count())
+                                ))
+                            continue
