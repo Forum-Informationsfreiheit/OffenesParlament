@@ -54,7 +54,7 @@ class StatementSpider(BaseSpider):
         super(StatementSpider, self).__init__(**kw)
 
         self.DEBATETYPE = kw['type'] if 'type' in kw else 'NR'
-        if 'llp' in kw:
+        if 'llp' in kw and kw['llp'] != 'all':
             try:
                 self.LLP = roman.toRoman(int(kw['llp']))
             except:
