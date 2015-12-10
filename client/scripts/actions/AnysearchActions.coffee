@@ -43,5 +43,10 @@ AnysearchActions =
       selected_term_id: selected_term_id
     })
 
+  declareSearchbarSetupComplete: () ->
+    AppDispatcher.dispatch({
+      actionType: AnysearchConstants.SEARCHBAR_SETUP_COMPLETE
+    })
+
 
 module.exports = AnysearchActions

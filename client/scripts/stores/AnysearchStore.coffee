@@ -1,6 +1,7 @@
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee')
 EventEmitter = require('events').EventEmitter
 AnysearchConstants = require('../constants/AnysearchConstants.coffee')
+RouterActions = require('../actions/RouterActions.coffee')
 assign = require('object-assign')
 _ = require 'underscore'
 
@@ -15,7 +16,12 @@ _loading = false
 _suggested_categories = []
 _suggested_values = []
 _search_results = null
+_setup_complete = false
+_was_edited_by_user = false
 
+
+_process_edit = () ->
+  if _setup_complete then _was_edited_by_user = true
 
 _get_term = (id) ->
   return _.find(_terms, (term) -> return term.id == id)
@@ -34,10 +40,12 @@ _delete_term = (id) ->
   _terms = _.filter(_terms, (term) -> return term.id != id)
   _pad_terms_with_helpers()
   _debounced_update_search_results()
+  _process_edit()
 
 _add_term = (category, value, helper=false, permanent=false) ->
   _terms.push(_create_term(category, value, helper, permanent))
   _pad_terms_with_helpers()
+  _process_edit()
 
 _pad_terms_with_helpers = () ->
   terms = _.filter(_terms, (term) -> return (not term.helper))
@@ -52,8 +60,11 @@ _change_term_value = (id, value) ->
       term.helper = false
       term.category = 'q'
     term.value = value
+    if not _was_edited_by_user and term.category == 'llps'
+      RouterActions.changeLlpUrl(_parse_term_value(value, term.category))
     _pad_terms_with_helpers()
     _debounced_update_search_results()
+    _process_edit()
 
 _change_term_category = (id, category) ->
   term = _get_term(id)
@@ -64,6 +75,7 @@ _change_term_category = (id, category) ->
     _pad_terms_with_helpers()
     _update_facets(id)
     _debounced_update_search_results()
+    _process_edit()
 
 _parse_term_value = (value, category) ->
   if category == 'llps'
@@ -179,6 +191,8 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
       when AnysearchConstants.UPDATE_FACETS
         _update_facets(payload.selected_term_id)
         AnysearchStore.emitChange()
+      when AnysearchConstants.SEARCHBAR_SETUP_COMPLETE
+        _setup_complete = true
     return true # No errors. Needed by promise in Dispatcher.
   )
 })
