@@ -38,6 +38,7 @@ module.exports = (grunt) ->
             'offenesparlament/offenesparlament/**/*'
             '!**/*.sqlite3'
             '!**/*.map'
+            '!**/*.DS_Store'
           ]
         options:
           watchTask: true
