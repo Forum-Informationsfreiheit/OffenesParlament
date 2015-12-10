@@ -7,6 +7,7 @@ _ = require 'underscore'
 
 CHANGE_EVENT = 'change'
 SERVER_DEBOUNCE_INTERVAL = 200
+LLP_REGEXP = /(.+)(\()([XVICDM]{1,})(\))/  # matches "aktuell seit 2013-10-29 (XXV)" and used to extract "XXV"
 
 _id_counter = 0
 _terms = []
@@ -64,12 +65,22 @@ _change_term_category = (id, category) ->
     _update_facets(id)
     _debounced_update_search_results()
 
+_parse_term_value = (value, category) ->
+  if category == 'llps'
+    matches = LLP_REGEXP.exec(value)
+    if matches and matches.length == 5
+      return matches[3]
+    else
+      return value
+  else
+    return value
+
 _get_terms_as_object = (excluded_term) ->
   return _.object(_.compact(_.map(_terms, (term) ->
     if term.helper or (excluded_term and excluded_term.category == term.category)
       return null
     else
-      return [term.category, term.value]
+      return [term.category, _parse_term_value(term.value, term.category)]
   )))
 
 _update_search_results = () ->
