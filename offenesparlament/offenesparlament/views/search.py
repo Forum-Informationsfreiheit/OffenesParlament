@@ -83,11 +83,12 @@ class JsonSearchView(SearchView):
             self.search_model, [query_args]))
 
         (result, facet_counts) = self.get_queryset(query_args)
-        # combine results and facets
+
         # calculate offset end
         start_index = query_args['offset']
         end_index = query_args[
             'offset'] + query_args['limit'] if query_args['limit'] else None
+        # combine results and facets, limit and offset as given as parameters
         result_list = [
             sr.get_stored_fields() for sr in
             result[start_index:end_index]]
