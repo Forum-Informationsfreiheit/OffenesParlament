@@ -84,14 +84,18 @@ class JsonSearchView(SearchView):
 
         (result, facet_counts) = self.get_queryset(query_args)
 
-        # calculate offset end
-        start_index = query_args['offset']
-        end_index = query_args[
-            'offset'] + query_args['limit'] if query_args['limit'] else None
-        # combine results and facets, limit and offset as given as parameters
-        result_list = [
-            sr.get_stored_fields() for sr in
-            result[start_index:end_index]]
+        # don't limit/offset empty results when we only return facets
+        if 'only_facets' not in query_args:
+            # calculate offset end
+            start_index = query_args['offset']
+            end_index = query_args[
+                'offset'] + query_args['limit'] if query_args['limit'] else None
+            # combine results and facets, limit and offset as given as parameters
+            result_list = [
+                sr.get_stored_fields() for sr in
+                result[start_index:end_index]]
+        else:
+            result_list = []
         result = {
             'result': result_list,
             'facets': facet_counts
