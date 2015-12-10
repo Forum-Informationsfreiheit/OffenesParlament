@@ -11,25 +11,25 @@ module.exports = (grunt) ->
         options:
           alias: ['react:']  # Make React available externally for dev tools
         files:
-          'offenesparlament/offenesparlament/static/scripts/app.js': 'offenesparlament/offenesparlament/assets/scripts/app.coffee'
-          'offenesparlament/offenesparlament/static/scripts/homepage.js': 'offenesparlament/offenesparlament/assets/scripts/homepage.coffee'
+          'offenesparlament/offenesparlament/static/scripts/app.js': 'client/scripts/app.coffee'
+          'offenesparlament/offenesparlament/static/scripts/homepage.js': 'client/scripts/homepage.coffee'
     concat:
       vendor:
-        src: ['offenesparlament/offenesparlament/assets/scripts/vendor/visualsearch/dependencies.js', 'offenesparlament/offenesparlament/assets/scripts/vendor/visualsearch/visualsearch.js']
+        src: ['client/scripts/vendor/visualsearch/dependencies.js', 'client/scripts/vendor/visualsearch/visualsearch.js']
         dest: 'offenesparlament/offenesparlament/static/scripts/vendor.js'
     sass:
       dev:
         options:
           sourcemap: 'inline'
         files:
-          'offenesparlament/offenesparlament/static/css/vendor.css': 'offenesparlament/offenesparlament/assets/styles/vendor/vendor.sass'
-          'offenesparlament/offenesparlament/static/css/site.css': 'offenesparlament/offenesparlament/assets/styles/site.sass'
+          'offenesparlament/offenesparlament/static/css/vendor.css': 'client/styles/vendor/vendor.sass'
+          'offenesparlament/offenesparlament/static/css/site.css': 'client/styles/site.sass'
     watch:
       styles:
-        files: 'offenesparlament/offenesparlament/assets/styles/**/*'
+        files: 'client/styles/**/*'
         tasks: [ 'clean:style_images', 'build_styles' ]
       scripts:
-        files: 'offenesparlament/offenesparlament/assets/scripts/**/*'
+        files: 'client/scripts/**/*'
         tasks: [ 'browserify:dev', 'concat:vendor' ]
     browserSync:
       dev:
@@ -48,17 +48,17 @@ module.exports = (grunt) ->
           reloadDebounce: 1000
     copy:
       images:
-        cwd: 'offenesparlament/offenesparlament/assets/styles/'
+        cwd: 'client/styles/'
         src: [ 'img/**/*' ]
         dest: 'offenesparlament/offenesparlament/static/css/'
         expand: true
       fonts:
-        cwd: 'offenesparlament/offenesparlament/assets/styles/'
+        cwd: 'client/styles/'
         src: [ 'fonts/**/*' ]
         dest: 'offenesparlament/offenesparlament/static/'
         expand: true
       vendor_scripts:
-        cwd: 'offenesparlament/offenesparlament/assets/scripts/vendor'
+        cwd: 'client/scripts/vendor'
         src: [ 'search.js' ]
         dest: 'offenesparlament/offenesparlament/static/scripts/'
         expand: true
@@ -82,7 +82,7 @@ module.exports = (grunt) ->
         tileBlackWhite: false
         tileColor: "#ffffff"
       icons:
-        src: 'offenesparlament/offenesparlament/assets/styles/img/favicon.png'
+        src: 'client/styles/img/favicon.png'
         dest: 'offenesparlament/offenesparlament/static/favicons/'
 
 

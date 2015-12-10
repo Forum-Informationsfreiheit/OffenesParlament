@@ -15,6 +15,12 @@ class ParlIDMixIn(object):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
+class LlpManager(models.Manager):
+    def get_current(self):
+        llp = LegislativePeriod.objects.latest('start_date')
+        return llp
+
+
 class LegislativePeriod(models.Model):
 
     """
@@ -25,6 +31,7 @@ class LegislativePeriod(models.Model):
     roman_numeral = models.CharField(unique=True, max_length=255, default="")
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
+    objects = LlpManager()
 
     def __unicode__(self):
         if self.end_date:
