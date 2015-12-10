@@ -26,7 +26,6 @@ Searchbar = React.createClass
 
   componentDidMount: () ->
     AnysearchStore.addChangeListener(@_onChange)
-    AnysearchActions.createPermanentTerm('llps', 'XXV')
 
   componentWillUnmount: () ->
     AnysearchStore.removeChangeListener(@_onChange)

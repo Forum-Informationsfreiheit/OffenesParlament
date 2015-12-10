@@ -2,6 +2,7 @@ React = require 'react'
 ReactDOM = require 'react-dom'
 SearchResults = require './components/SearchResults.cjsx'
 AnysearchStore = require './stores/AnysearchStore.coffee'
+AnysearchActions = require './actions/AnysearchActions.coffee'
 _ = require 'underscore'
 
 $(document).ready( () ->
@@ -24,6 +25,7 @@ $(document).ready( () ->
   content_container = document.getElementById('content')
   if anysearch_container
     Searchbar = require("./components/anysearch/Searchbar.cjsx")
+    AnysearchActions.createPermanentTerm('llps', OFFPARL_DATA_GGP)
     ReactDOM.render(
       React.createElement(Searchbar, {}),
       anysearch_container

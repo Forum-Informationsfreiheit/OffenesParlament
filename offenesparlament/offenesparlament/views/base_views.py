@@ -106,7 +106,10 @@ def _ensure_ggp_is_set(request, ggp_roman_numeral=None):
     if ggp_roman_numeral is not None:
         llp = LegislativePeriod.objects.get(roman_numeral=ggp_roman_numeral)
         request.session['ggp_roman_numeral'] = llp.roman_numeral
+        request.session['ggp_facet_repr'] = llp.facet_repr
     elif 'ggp_roman_numeral' not in request.session or request.session['ggp_roman_numeral'] is None:
-        request.session['ggp_roman_numeral'] = LegislativePeriod.objects.get_current().roman_numeral
+        llp = LegislativePeriod.objects.get_current()
+        request.session['ggp_roman_numeral'] = llp.roman_numeral
+        request.session['ggp_facet_repr'] = llp.facet_repr
     llp = LegislativePeriod.objects.get(roman_numeral=request.session['ggp_roman_numeral'])
     return llp

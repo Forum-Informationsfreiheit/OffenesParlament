@@ -15,6 +15,11 @@
       <script src="{% static 'scripts/app.js' %}"></script>
     {% endblock %}
 
+    {% load jsonify %}
+    <script>
+      var OFFPARL_DATA_GGP = {{ request.session.ggp_facet_repr|jsonify }};
+    </script>
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

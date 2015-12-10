@@ -46,7 +46,8 @@ class BaseConfig(Configuration):
         'reversion',
         'django_extensions',
         'django_bootstrap_breadcrumbs',
-        'import_export'
+        'import_export',
+        'jsonify'
     )
 
     MIDDLEWARE_CLASSES = (
