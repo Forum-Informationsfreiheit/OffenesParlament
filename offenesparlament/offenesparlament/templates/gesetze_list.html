@@ -30,4 +30,8 @@
   <div id="search_results">
   {% include 'partials/lawlist.html' with laws=laws %}
   </div>
+  {% load jsonify %}
+  <script>
+    var OFFPARL_DATA_SEARCH_TYPE = 'Gesetze';
+  </script>
 {% endblock %}

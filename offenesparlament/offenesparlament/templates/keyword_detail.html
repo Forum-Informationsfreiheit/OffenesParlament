@@ -17,4 +17,8 @@
     <h2>Verhandlungsgegenstände</h2>
     {% include 'partials/lawlist.html' with laws=laws %}
   </div>
+  {% load jsonify %}
+  <script>
+    var OFFPARL_DATA_SEARCH_TYPE = 'Gesetze';
+  </script>
 {% endblock %}

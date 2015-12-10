@@ -26,6 +26,8 @@ $(document).ready( () ->
   if anysearch_container
     Searchbar = require("./components/anysearch/Searchbar.cjsx")
     AnysearchActions.createPermanentTerm('llps', OFFPARL_DATA_GGP)
+    if OFFPARL_DATA_SEARCH_TYPE?
+      AnysearchActions.createTerm('type', OFFPARL_DATA_SEARCH_TYPE)
     AnysearchActions.declareSearchbarSetupComplete()
     ReactDOM.render(
       React.createElement(Searchbar, {}),

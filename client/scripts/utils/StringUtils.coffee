@@ -5,6 +5,9 @@ _human_categories =
   deathplace: 'Todesort'
   occupation: 'Beruf'
   q: 'Text'
+  category: 'Kategorie'
+  keywords: 'Schlagwort'
+  type: 'Suchtyp'
 
 
 module.exports =

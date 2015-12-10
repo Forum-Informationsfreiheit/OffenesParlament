@@ -26,6 +26,9 @@ _process_edit = () ->
 _get_term = (id) ->
   return _.find(_terms, (term) -> return term.id == id)
 
+_get_term_by_category = (category) ->
+  return _.find(_terms, (term) -> return term.category == category)
+
 _create_term = (category, value, helper=false, permanent=false) ->
   new_term =
     id: _id_counter
@@ -95,10 +98,20 @@ _get_terms_as_object = (excluded_term) ->
       return [term.category, _parse_term_value(term.value, term.category)]
   )))
 
+_get_url = () ->
+  type_term = _get_term_by_category('type')
+  if type_term?
+    switch type_term.value
+      when 'Personen'
+        return '/personen/search'
+      when 'Gesetze'
+        return '/gesetze/search'
+  return '/search'
+
 _update_search_results = () ->
   _loading = true
   $.ajax
-    url: '/personen/search'
+    url: _get_url()
     dataType: 'json'
     data: _get_terms_as_object()
     success: (response) ->
@@ -117,18 +130,19 @@ _update_facets = (selected_term_id) ->
   term = _get_term(selected_term_id)
   if term?
     $.ajax
-      url: '/personen/search'
+      url: _get_url()
       dataType: 'json'
       data: _.extend({only_facets: 1}, _get_terms_as_object(term))
       success: (response) ->
         if response.facets?.fields?
           _update_suggested_categories(response.facets.fields, selected_term_id)
-          if not _.has(_suggested_categories, 'q') then _suggested_categories.push('q')
           if _.has(response.facets.fields, term.category)
             _suggested_values = _.compact(_.map(response.facets.fields[term.category], (item) ->
               if item[0] then return item[0]
               else return null
             ))
+          else if term.category == 'type'
+            _suggested_values = ['Personen', 'Gesetze']
           else
             _suggested_values = []
       complete: () ->
@@ -139,6 +153,8 @@ _update_suggested_categories = (fields, selected_term_id) ->
   selected_term = _get_term(selected_term_id)
   if selected_term?
     categories = _.keys(fields)
+    if not _.has(categories, 'q') then categories.push('q')
+    if not _.has(categories, 'type') then categories.push('type')
     used_categories = _.map(_terms, (term) -> return term.category)
     _suggested_categories = _.filter(categories, (cat) ->
       return ( (not _.contains(used_categories, cat)) or cat == selected_term.category )
