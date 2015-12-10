@@ -16,6 +16,7 @@ class ParlIDMixIn(object):
 
 
 class LlpManager(models.Manager):
+
     def get_current(self):
         llp = LegislativePeriod.objects.latest('start_date')
         return llp
@@ -205,6 +206,10 @@ class Law(models.Model, ParlIDMixIn):
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
+
+    @property
+    def llps_facet(self):
+        return [self.legislative_period.facet_repr]
 
     @property
     def keyword_titles(self):
@@ -667,6 +672,7 @@ class Debate(models.Model):
 
     def __unicode__(self):
         return self.title
+
 
 class DebateStatement(models.Model):
 
