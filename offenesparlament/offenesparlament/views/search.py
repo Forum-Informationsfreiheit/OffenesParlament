@@ -177,7 +177,7 @@ class LawSearchView(JsonSearchView):
 
     search_model = Law
     facet_fields = [
-        'llp',
+        'llps',
         'category',
         'keywords'
     ]
