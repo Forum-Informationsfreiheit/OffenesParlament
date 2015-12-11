@@ -74,15 +74,15 @@ class StatementSpider(BaseSpider):
 
         callback_requests = []
 
-        params = {'NRBRBV': self.DEBATETYPE,
-                  'GP': self.LLP,
-                  'view': 'RSS',
+        params = {'view': 'RSS',
                   'jsMode': 'RSS',
-                  'xdocumentUri': '/PAKT/STPROT/',
+                  'xdocumentUri': '/PAKT/STPROT/index.shtml',
+                  'NRBRBV': self.DEBATETYPE,
                   'NUR_VORL': 'N',
                   'R_PLSO': 'PL',
+                  'GP': self.LLP,
                   'FBEZ': 'FP_011',
-                  # 'listeId': '',
+                  'listeId': '211',
                   }
 
         llp = None
@@ -91,8 +91,10 @@ class StatementSpider(BaseSpider):
         except LegislativePeriod.DoesNotExist:
             self.logger.warning(
                 red(u"LLP '{}' not found".format(params['GP'])))
+
+        feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
         callback_requests.append(
-            scrapy.Request(self.BASE_URL + '?' + urlencode(params),
+            scrapy.Request(feed_url,
                            callback=self.parse_debatelist,
                            meta={'llp': llp, 'type': params['NRBRBV']}))
 
