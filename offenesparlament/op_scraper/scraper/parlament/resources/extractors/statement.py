@@ -28,7 +28,7 @@ class RSS_DEBATES(MultiExtractor):
 
     """
     Debate meta data (inlcuding the url to the detailed transcript) from
-    RSS feded.
+    RSS feed.
     """
     XPATH = '//item'
 
@@ -44,33 +44,35 @@ class RSS_DEBATES(MultiExtractor):
             XPATH = './/link/text()'
 
         class DATE(SingleExtractor):
-            XPATH = './/pubdate/text()'
+            XPATH = './/pubDate/text()'
+
+        class DESCRIPTION(SingleExtractor):
+            XPATH = './/description/text()'
+
+        class PROTOCOL_URL(SingleExtractor):
+            XPATH = './/a[contains(@href, \'html\')]/@href'
 
         @classmethod
         def xt(cls, response):
 
             # Debatedate
             dtime = None
-            dtime_text = cls.DATE.xt(response)
             try:
                 dtime = datetime.datetime.strptime(
-                    regexTimestamp.findall(dtime_text)[0], '%d %b %Y')
-            except ValueError:
+                    regexTimestamp.findall(cls.DATE.xt(response))[0],
+                    '%d %b %Y')
+            except (IndexError, ValueError):
                 logger.warn(u"Could not parse date '{}'".format(dtime_text))
 
             # Protocol URL from description field
-            descr = Selector(text=response.xpath('.//description').extract()[0])
-            links = filter(lambda v: v.strip().endswith('.html'),
-                           descr.xpath('//a/@href').extract())
-            protocol_url = ''
-            if len(links):
-                protocol_url = links[0]
+            descr = Selector(text=cls.DESCRIPTION.xt(response))
+            protocol_url = cls.PROTOCOL_URL.xt(descr)
 
             # Debate-nr from protocol url
             dnr = None
             try:
                 dnr = int(regexDebateNr.findall(protocol_url)[0])
-            except IndexError, ValueError:
+            except (IndexError, ValueError):
                 logger.warn(u"Could not parse debate_nr from '{}'".format(protocol_url))
 
             return {

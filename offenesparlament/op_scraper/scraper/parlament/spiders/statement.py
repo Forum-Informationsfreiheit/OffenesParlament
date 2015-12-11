@@ -30,17 +30,16 @@ class StatementSpider(BaseSpider):
     protokolle"), for this, the RSS-Feed at
     `http://www.parlament.gv.at/PAKT/STPROT/` is used.
 
-    Parameters are `type` (NR, BR) and `llp` (as roman number) for type of
-    debate and llp respectively; and use `snr` to scrape only a single
-    debate ("sitzung")::
+    Parameters are `type` (NR, BR) and `llp` (number) for type of
+    debate and llp respectively::
 
-        ./manage.py scrape crawl statement -a llp=XXIV -a type=NR
+        ./manage.py scrape crawl statement -a llp=24 -a type=NR
 
-    or just for one debate ::
+    To limit the debate list, use `snr` to scrape only debates that
+    have 'snr' in the title::
 
-        ./manage.py scrape crawl statement -a llp=XXIV -a type=NR\
+        ./manage.py scrape crawl statement -a llp=24 -a type=NR\
         -a snr=171
-
 
     """
 
@@ -74,15 +73,15 @@ class StatementSpider(BaseSpider):
 
         callback_requests = []
 
-        params = {'NRBRBV': self.DEBATETYPE,
-                  'GP': self.LLP,
-                  'view': 'RSS',
+        params = {'view': 'RSS',
                   'jsMode': 'RSS',
-                  'xdocumentUri': '/PAKT/STPROT/',
+                  'xdocumentUri': '/PAKT/STPROT/index.shtml',
+                  'NRBRBV': self.DEBATETYPE,
                   'NUR_VORL': 'N',
                   'R_PLSO': 'PL',
+                  'GP': self.LLP,
                   'FBEZ': 'FP_011',
-                  # 'listeId': '',
+                  'listeId': '211',
                   }
 
         llp = None
@@ -91,8 +90,10 @@ class StatementSpider(BaseSpider):
         except LegislativePeriod.DoesNotExist:
             self.logger.warning(
                 red(u"LLP '{}' not found".format(params['GP'])))
+
+        feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
         callback_requests.append(
-            scrapy.Request(self.BASE_URL + '?' + urlencode(params),
+            scrapy.Request(feed_url,
                            callback=self.parse_debatelist,
                            meta={'llp': llp, 'type': params['NRBRBV']}))
 
@@ -128,7 +129,7 @@ class StatementSpider(BaseSpider):
         """
         Debate-transcript ("Stenografisches Protokoll") parser
         """
-
+        i = 0
         for i, sect in enumerate(DOCSECTIONS.xt(response)):
             # Lookup + add references to the section data
             sect['debate'] = response.meta['debate']
