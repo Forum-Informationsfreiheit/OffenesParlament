@@ -17,6 +17,10 @@ def about(request):
     return render(request, 'about.html')
 
 
+def subscriptions(request):
+    return render(request, 'subscriptions.html')
+
+
 def person_list(request):
     llp = _ensure_ggp_is_set(request)
     return redirect('person_list_with_ggp', ggp=llp.roman_numeral)

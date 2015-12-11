@@ -11,6 +11,7 @@ urlpatterns = patterns(
     '',
     url(r'^$', base_views.index, name='home'),
     url(r'^wir/$', base_views.about, name='about'),
+    url(r'^abos/$', base_views.subscriptions, name='subscriptions'),
     url(r'^personen/$', base_views.person_list, name='person_list'),
     url(r'^personen/(?P<parl_id>.{1,60})/(?P<name>.+)/$',
         base_views.person_detail, name='person_detail'),
