@@ -3,6 +3,7 @@ ReactDOM = require 'react-dom'
 SearchResults = require './components/SearchResults.cjsx'
 AnysearchStore = require './stores/AnysearchStore.coffee'
 AnysearchActions = require './actions/AnysearchActions.coffee'
+$ = require 'jquery'
 _ = require 'underscore'
 
 $(document).ready( () ->
@@ -22,6 +23,7 @@ $(document).ready( () ->
     )
 
   anysearch_container = document.getElementById('anysearch_container')
+  anysearch_container_homepage = document.getElementById('anysearch_container_homepage')
   content_container = document.getElementById('content')
   if anysearch_container
     Searchbar = require("./components/anysearch/Searchbar.cjsx")
@@ -32,6 +34,14 @@ $(document).ready( () ->
     ReactDOM.render(
       React.createElement(Searchbar, {}),
       anysearch_container
+    )
+  else if anysearch_container_homepage
+    Searchbar = require("./components/anysearch/Searchbar.cjsx")
+    AnysearchActions.createTerm('llps', OFFPARL_DATA_GGP)
+    AnysearchActions.declareSearchbarSetupComplete()
+    ReactDOM.render(
+      React.createElement(Searchbar, {}),
+      anysearch_container_homepage
     )
 
   render_results = () ->

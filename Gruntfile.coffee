@@ -13,10 +13,6 @@ module.exports = (grunt) ->
         files:
           'offenesparlament/offenesparlament/static/scripts/app.js': 'client/scripts/app.coffee'
           'offenesparlament/offenesparlament/static/scripts/homepage.js': 'client/scripts/homepage.coffee'
-    concat:
-      vendor:
-        src: ['client/scripts/vendor/visualsearch/dependencies.js', 'client/scripts/vendor/visualsearch/visualsearch.js']
-        dest: 'offenesparlament/offenesparlament/static/scripts/vendor.js'
     sass:
       dev:
         options:
@@ -30,7 +26,7 @@ module.exports = (grunt) ->
         tasks: [ 'clean:style_images', 'build_styles' ]
       scripts:
         files: 'client/scripts/**/*'
-        tasks: [ 'browserify:dev', 'concat:vendor' ]
+        tasks: [ 'browserify:dev' ]
     browserSync:
       dev:
         bsFiles:
@@ -57,11 +53,6 @@ module.exports = (grunt) ->
         cwd: 'client/styles/'
         src: [ 'fonts/**/*' ]
         dest: 'offenesparlament/offenesparlament/static/'
-        expand: true
-      vendor_scripts:
-        cwd: 'client/scripts/vendor'
-        src: [ 'search.js' ]
-        dest: 'offenesparlament/offenesparlament/static/scripts/'
         expand: true
     clean:
       build: src: [
@@ -99,6 +90,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'build_styles', ['sass:dev', 'copy:images', 'copy:fonts']
   grunt.registerTask 'clean_except_icons', [ 'clean:build', 'clean:style_images', 'clean:style_fonts', 'clean:scripts' ]
   grunt.registerTask 'icons', ['favicons:icons']
-  grunt.registerTask 'dev', ['clean_except_icons', 'build_styles', 'browserify:dev', 'concat:vendor', 'watch']
-  grunt.registerTask 'reloading', ['clean_except_icons', 'build_styles', 'browserify:dev', 'concat:vendor', 'browserSync', 'watch']
+  grunt.registerTask 'dev', ['clean_except_icons', 'build_styles', 'browserify:dev', 'watch']
+  grunt.registerTask 'reloading', ['clean_except_icons', 'build_styles', 'browserify:dev', 'browserSync', 'watch']
 
