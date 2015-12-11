@@ -1,5 +1,6 @@
 React = require 'react'
 SuggestItem = require './SuggestItem.cjsx'
+_ = require 'underscore'
 
 
 Suggest = React.createClass

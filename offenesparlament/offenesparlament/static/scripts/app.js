@@ -81,7 +81,7 @@ module.exports = RouterActions;
 
 
 },{"../constants/AnysearchConstants.coffee":9,"../dispatcher/AppDispatcher.coffee":10}],3:[function(require,module,exports){
-var AnysearchActions, AnysearchStore, React, ReactDOM, SearchResults, _;
+var $, AnysearchActions, AnysearchStore, React, ReactDOM, SearchResults, _;
 
 React = require('react');
 
@@ -93,10 +93,12 @@ AnysearchStore = require('./stores/AnysearchStore.coffee');
 
 AnysearchActions = require('./actions/AnysearchActions.coffee');
 
+$ = require('jquery');
+
 _ = require('underscore');
 
 $(document).ready(function() {
-  var ReactTooltip, Searchbar, anysearch_container, content_container, render_results, tooltip_container;
+  var ReactTooltip, Searchbar, anysearch_container, anysearch_container_homepage, content_container, render_results, tooltip_container;
   tooltip_container = document.getElementById('react_tooltip_container');
   if (tooltip_container) {
     ReactTooltip = require("react-tooltip");
@@ -111,6 +113,7 @@ $(document).ready(function() {
     }), tooltip_container);
   }
   anysearch_container = document.getElementById('anysearch_container');
+  anysearch_container_homepage = document.getElementById('anysearch_container_homepage');
   content_container = document.getElementById('content');
   if (anysearch_container) {
     Searchbar = require("./components/anysearch/Searchbar.cjsx");
@@ -120,6 +123,11 @@ $(document).ready(function() {
     }
     AnysearchActions.declareSearchbarSetupComplete();
     ReactDOM.render(React.createElement(Searchbar, {}), anysearch_container);
+  } else if (anysearch_container_homepage) {
+    Searchbar = require("./components/anysearch/Searchbar.cjsx");
+    AnysearchActions.createTerm('llps', OFFPARL_DATA_GGP);
+    AnysearchActions.declareSearchbarSetupComplete();
+    ReactDOM.render(React.createElement(Searchbar, {}), anysearch_container_homepage);
   }
   render_results = function() {
     var results;
@@ -136,10 +144,12 @@ $(document).ready(function() {
 });
 
 
-},{"./actions/AnysearchActions.coffee":1,"./components/SearchResults.cjsx":4,"./components/anysearch/Searchbar.cjsx":5,"./stores/AnysearchStore.coffee":11,"react":"react","react-dom":22,"react-tooltip":24,"underscore":182}],4:[function(require,module,exports){
-var React, SearchResults;
+},{"./actions/AnysearchActions.coffee":1,"./components/SearchResults.cjsx":4,"./components/anysearch/Searchbar.cjsx":5,"./stores/AnysearchStore.coffee":11,"jquery":19,"react":"react","react-dom":22,"react-tooltip":24,"underscore":182}],4:[function(require,module,exports){
+var React, SearchResults, _;
 
 React = require('react');
+
+_ = require('underscore');
 
 SearchResults = React.createClass({displayName: "SearchResults",
   getInitialState: function() {
@@ -154,7 +164,9 @@ SearchResults = React.createClass({displayName: "SearchResults",
         if (r.title != null) {
           return React.createElement("li", {
             "key": r.title
-          }, r.title);
+          }, React.createElement("a", {
+            "href": r.internal_link
+          }, r.title));
         } else if (r.full_name != null) {
           return React.createElement("li", {
             "key": r.full_name
@@ -175,8 +187,8 @@ SearchResults = React.createClass({displayName: "SearchResults",
 module.exports = SearchResults;
 
 
-},{"react":"react"}],5:[function(require,module,exports){
-var AnysearchActions, AnysearchStore, AutosizeInput, React, Searchbar, Suggest, Term, _, _get_state_from_store;
+},{"react":"react","underscore":182}],5:[function(require,module,exports){
+var $, AnysearchActions, AnysearchStore, AutosizeInput, React, Searchbar, Suggest, Term, _, _get_state_from_store;
 
 React = require('react');
 
@@ -189,6 +201,8 @@ Suggest = require('./Suggest.cjsx');
 AnysearchActions = require('../../actions/AnysearchActions.coffee');
 
 AnysearchStore = require('../../stores/AnysearchStore.coffee');
+
+$ = require('jquery');
 
 _ = require('underscore');
 
@@ -211,10 +225,25 @@ Searchbar = React.createClass({displayName: "Searchbar",
     return _.extend(initial_state, _get_state_from_store());
   },
   componentDidMount: function() {
-    return AnysearchStore.addChangeListener(this._onChange);
+    AnysearchStore.addChangeListener(this._onChange);
+    return $(document).click(this._handleGlobalClick);
   },
   componentWillUnmount: function() {
-    return AnysearchStore.removeChangeListener(this._onChange);
+    AnysearchStore.removeChangeListener(this._onChange);
+    return $(document).off('click');
+  },
+  _event_was_inside_anysearch: function(event) {
+    var target_classname;
+    target_classname = $(event.target).attr('class');
+    return (target_classname != null ? target_classname.startsWith('anysearch') : void 0) || $.contains(this.refs.searchbar, event.target);
+  },
+  _handleGlobalClick: function(event) {
+    if (!this._event_was_inside_anysearch(event)) {
+      return this.setState({
+        active_term: null,
+        suggestion_type: null
+      });
+    }
   },
   onSuggestionSelected: function(input) {
     if (this.state.active_term != null) {
@@ -232,12 +261,12 @@ Searchbar = React.createClass({displayName: "Searchbar",
     }
   },
   onSearchbarClicked: function(event) {
-    if (event.target === this.refs.searchbar) {
+    if (event.target === this.refs.searchbar || event.target === this.refs.icon || event.target === this.refs.placeholder) {
       return this.refs.last_term.focus();
     }
   },
   render: function() {
-    var items, last_key, suggest, terms;
+    var items, last_key, placeholder, suggest, terms;
     last_key = this.state.terms.length - 1;
     terms = _.map(this.state.terms, (function(_this) {
       return function(term, key) {
@@ -293,15 +322,24 @@ Searchbar = React.createClass({displayName: "Searchbar",
           "items": items,
           "onSelect": this.onSuggestionSelected,
           "loading": this.state.loading,
-          "left": this.state.suggestion_left_position
+          "left": this.state.suggestion_left_position,
+          "ref": "suggest"
         });
       }
+    } else if (terms.length < 2) {
+      placeholder = React.createElement("span", {
+        "className": "anysearch_placeholder",
+        "ref": "placeholder"
+      }, "Wonach möchten Sie suchen?");
     }
     return React.createElement("div", {
       "className": "anysearch_box",
       "onClick": this.onSearchbarClicked,
       "ref": "searchbar"
-    }, terms, suggest);
+    }, React.createElement("span", {
+      "className": "anysearch_icon",
+      "ref": "icon"
+    }), placeholder, terms, suggest);
   },
   _onChange: function() {
     return this.setState(_get_state_from_store());
@@ -311,12 +349,14 @@ Searchbar = React.createClass({displayName: "Searchbar",
 module.exports = Searchbar;
 
 
-},{"../../actions/AnysearchActions.coffee":1,"../../stores/AnysearchStore.coffee":11,"./Suggest.cjsx":6,"./Term.cjsx":8,"react":"react","react-input-autosize":23,"underscore":182}],6:[function(require,module,exports){
-var React, Suggest, SuggestItem;
+},{"../../actions/AnysearchActions.coffee":1,"../../stores/AnysearchStore.coffee":11,"./Suggest.cjsx":6,"./Term.cjsx":8,"jquery":19,"react":"react","react-input-autosize":23,"underscore":182}],6:[function(require,module,exports){
+var React, Suggest, SuggestItem, _;
 
 React = require('react');
 
 SuggestItem = require('./SuggestItem.cjsx');
+
+_ = require('underscore');
 
 Suggest = React.createClass({displayName: "Suggest",
   getInitialState: function() {
@@ -355,7 +395,7 @@ Suggest = React.createClass({displayName: "Suggest",
 module.exports = Suggest;
 
 
-},{"./SuggestItem.cjsx":7,"react":"react"}],7:[function(require,module,exports){
+},{"./SuggestItem.cjsx":7,"react":"react","underscore":182}],7:[function(require,module,exports){
 var React, StringUtils, SuggestItem;
 
 React = require('react');
@@ -493,7 +533,7 @@ module.exports = AppDispatcher;
 
 
 },{"flux":14}],11:[function(require,module,exports){
-var AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, LLP_REGEXP, RouterActions, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _debounced_update_search_results, _delete_term, _get_term, _get_term_by_category, _get_terms_as_object, _get_url, _id_counter, _loading, _pad_terms_with_helpers, _parse_term_value, _process_edit, _search_results, _setup_complete, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, _was_edited_by_user, assign;
+var $, AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, LLP_REGEXP, RouterActions, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _debounced_update_search_results, _delete_term, _get_term, _get_term_by_category, _get_terms_as_object, _get_url, _id_counter, _loading, _pad_terms_with_helpers, _parse_term_value, _process_edit, _search_results, _setup_complete, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, _was_edited_by_user, assign;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 
@@ -504,6 +544,8 @@ AnysearchConstants = require('../constants/AnysearchConstants.coffee');
 RouterActions = require('../actions/RouterActions.coffee');
 
 assign = require('object-assign');
+
+$ = require('jquery');
 
 _ = require('underscore');
 
@@ -606,11 +648,12 @@ _change_term_value = function(id, value) {
     }
     term.value = value;
     if (!_was_edited_by_user && term.category === 'llps') {
-      RouterActions.changeLlpUrl(_parse_term_value(value, term.category));
+      return RouterActions.changeLlpUrl(_parse_term_value(value, term.category));
+    } else {
+      _pad_terms_with_helpers();
+      _debounced_update_search_results();
+      return _process_edit();
     }
-    _pad_terms_with_helpers();
-    _debounced_update_search_results();
-    return _process_edit();
   }
 };
 
@@ -812,8 +855,10 @@ _pad_terms_with_helpers();
 module.exports = AnysearchStore;
 
 
-},{"../actions/RouterActions.coffee":2,"../constants/AnysearchConstants.coffee":9,"../dispatcher/AppDispatcher.coffee":10,"events":17,"object-assign":21,"underscore":182}],12:[function(require,module,exports){
-var _human_categories;
+},{"../actions/RouterActions.coffee":2,"../constants/AnysearchConstants.coffee":9,"../dispatcher/AppDispatcher.coffee":10,"events":17,"jquery":19,"object-assign":21,"underscore":182}],12:[function(require,module,exports){
+var _, _human_categories;
+
+_ = require('underscore');
 
 _human_categories = {
   party: 'Partei',
@@ -838,7 +883,7 @@ module.exports = {
 };
 
 
-},{}],13:[function(require,module,exports){
+},{"underscore":182}],13:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
   Licensed under the MIT License (MIT), see

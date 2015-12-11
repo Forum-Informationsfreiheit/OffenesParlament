@@ -3,6 +3,7 @@ EventEmitter = require('events').EventEmitter
 AnysearchConstants = require('../constants/AnysearchConstants.coffee')
 RouterActions = require('../actions/RouterActions.coffee')
 assign = require('object-assign')
+$ = require 'jquery'
 _ = require 'underscore'
 
 
@@ -65,9 +66,10 @@ _change_term_value = (id, value) ->
     term.value = value
     if not _was_edited_by_user and term.category == 'llps'
       RouterActions.changeLlpUrl(_parse_term_value(value, term.category))
-    _pad_terms_with_helpers()
-    _debounced_update_search_results()
-    _process_edit()
+    else
+      _pad_terms_with_helpers()
+      _debounced_update_search_results()
+      _process_edit()
 
 _change_term_category = (id, category) ->
   term = _get_term(id)

@@ -7,6 +7,7 @@
 
 {% load staticfiles%}
 {% block js_files %}
+  <script src="{% static 'scripts/app.js' %}"></script>
   <script src="{% static 'scripts/homepage.js' %}"></script>
 {% endblock %}
 
@@ -15,9 +16,8 @@
 <div class="homepage_content">
   <div class="container">
     <div class="homepage_search">
-      <div class="searchbar">
-        <i class="glyphicon glyphicon-search"></i>
-        <input type="text" class="form-control" placeholder="Wonach möchten Sie suchen?" />
+      <div class="search_bar">
+        <div id="anysearch_container_homepage"></div>
       </div>
       <div class="help">
         <a href="#">Beispielsuche ansehen</a>

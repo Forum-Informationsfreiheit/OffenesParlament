@@ -1,3 +1,6 @@
+_ = require 'underscore'
+
+
 _human_categories =
   party: 'Partei'
   birthplace: 'Geburtsort'
