@@ -224,11 +224,17 @@ class COMITTEE:
 
     class LAWS(SingleExtractor):
 
-        XPATH = '//*[@id="tab-Verhandlungsgegenstaende"]/following-sibling::div/ul/li/a'
+        # Verhandlungsgegenstaende
+        XPATH_LAWS = '//*[@id="tab-Verhandlungsgegenstaende"]/following-sibling::div/ul/li/a'
+        # Veroeffentlichungen
+        XPATH_REPORTS = '//*[@id="tab-VeroeffentlichungenBerichte"]/following-sibling::div/ul/li/a'
 
         @classmethod
         def xt(cls, response):
-            raw_laws = response.xpath(cls.XPATH)
+            raw_laws = response.xpath(cls.XPATH_LAWS)
+            raw_reports = response.xpath(cls.XPATH_REPORTS)
+
+            raw_laws = raw_laws + raw_reports
 
             laws = []
 

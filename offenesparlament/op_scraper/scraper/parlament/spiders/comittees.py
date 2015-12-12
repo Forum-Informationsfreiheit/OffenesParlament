@@ -14,6 +14,7 @@ from urllib import urlencode
 from scrapy import log
 
 from parlament.spiders import BaseSpider
+
 from parlament.resources.extractors.comittee import *
 
 from parlament.settings import BASE_HOST
@@ -146,17 +147,15 @@ class ComitteesSpider(BaseSpider):
                 defaults=meeting_data
             )
 
+            comittee_laws = []
+
             for topic in meeting['topics']:
                 if topic['law'] is not None:
                     law = topic['law']
-                    if law['llp'] != u'':
-                        law_legislative_period = LegislativePeriod.objects.get(roman_numeral=law['llp'])
-                    else:
-                        law_legislative_period = None
-                    try:
-                        law_item = Law.objects.get(legislative_period=law_legislative_period,parl_id=law['parl_id'])
-                    except Law.DoesNotExist:
-                        law_item = None
+                    law_item = self.parse_law(law)
+                    if law_item is not None:
+                        comittee_laws.append(law_item)
+                    comittee_laws.append(law_item)
                 else:
                     law_item = None
 
@@ -171,3 +170,27 @@ class ComitteesSpider(BaseSpider):
                     meeting=meeting_item,
                     defaults=agenda_topic_data,
                 )
+
+        # parse Verhandlungsgegenstaende and Veroeffentlichungen
+        laws_and_reports = COMITTEE.LAWS.xt(response)
+
+        for law in laws_and_reports:
+            law_item = self.parse_law(law)
+            if law_item is not None:
+                comittee_laws.append(law_item)
+
+        comittee_item.laws.add(*comittee_laws)
+        comittee_item.save()
+
+    def parse_law(self, law_dict):
+        if law_dict['llp'] != u'' and law_dict['llp'] != u'BR':
+            law_legislative_period = LegislativePeriod.objects.get(roman_numeral=law_dict['llp'])
+        else:
+            law_legislative_period = None
+
+        try:
+            law_item = Law.objects.get(legislative_period=law_legislative_period,parl_id=law_dict['parl_id'])
+        except Law.DoesNotExist:
+            law_item = None
+
+        return law_item

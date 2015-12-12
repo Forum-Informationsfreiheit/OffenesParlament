@@ -730,6 +730,7 @@ class DebateStatement(models.Model):
             self.doc_section,
             self.date)
 
+
 class Comittee(models.Model, ParlIDMixIn):
     """
     "Parlamentarischer Ausschuss"
@@ -744,6 +745,7 @@ class Comittee(models.Model, ParlIDMixIn):
     # Relationships
     legislative_period = models.ForeignKey(
         LegislativePeriod, blank=True, null=True)
+    laws = models.ManyToManyField(Law, related_name='comitees')
 
     class Meta:
         unique_together = ("parl_id", "legislative_period")
@@ -790,7 +792,7 @@ class ComitteeAgendaTopic(models.Model):
     Agenda topic ("Tagesordnungspunkt") of a Comittee meeting
     """
     number = models.IntegerField()
-    text = models.CharField(max_length=1000)
+    text = models.TextField()
     comment = models.CharField(max_length=255, null=True, blank=True)
 
     # Relationships
