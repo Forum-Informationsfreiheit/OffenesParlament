@@ -459,7 +459,7 @@ class PetitionsSpider(BaseSpider):
             llp = LegislativePeriod.objects.get(
                 roman_numeral=reference[0])
             ref = Petition.objects.filter(
-                law__legislative_period=llp, law__parl_id=reference[1])
+                legislative_period=llp, parl_id=reference[1])
             if len(ref) == 1:
                 return ref[0]
 
