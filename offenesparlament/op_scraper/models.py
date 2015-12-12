@@ -745,7 +745,9 @@ class Comittee(models.Model, ParlIDMixIn):
     # Relationships
     legislative_period = models.ForeignKey(
         LegislativePeriod, blank=True, null=True)
-    laws = models.ManyToManyField(Law, related_name='comitees')
+    laws = models.ManyToManyField(Law, blank=True, null=True, related_name='comittees')
+    parent_comittee = models.ForeignKey(
+        "self", blank=True, null=True, related_name='sub_comittees')
 
     class Meta:
         unique_together = ("parl_id", "legislative_period")

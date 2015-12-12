@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 import phonenumber_field.modelfields
 import op_scraper.models
 import annoying.fields
@@ -27,6 +27,44 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(unique=True, max_length=255)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Comittee',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=511)),
+                ('parl_id', models.CharField(max_length=30)),
+                ('source_link', models.URLField(default=b'', max_length=255)),
+                ('nrbr', models.CharField(max_length=20)),
+                ('description', models.TextField(default=b'', blank=True)),
+            ],
+            bases=(models.Model, op_scraper.models.ParlIDMixIn),
+        ),
+        migrations.CreateModel(
+            name='ComitteeAgendaTopic',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('number', models.IntegerField()),
+                ('text', models.TextField()),
+                ('comment', models.CharField(max_length=255, null=True, blank=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ComitteeMeeting',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('number', models.IntegerField()),
+                ('date', models.DateField()),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ComitteeMembership',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date_from', models.DateField()),
+                ('date_to', models.DateField(null=True, blank=True)),
+                ('comittee', models.ForeignKey(related_name='comittee_members', to='op_scraper.Comittee')),
             ],
         ),
         migrations.CreateModel(
@@ -395,6 +433,51 @@ class Migration(migrations.Migration):
             name='llp',
             field=models.ForeignKey(blank=True, to='op_scraper.LegislativePeriod', null=True),
         ),
+        migrations.AddField(
+            model_name='comitteemembership',
+            name='function',
+            field=models.ForeignKey(related_name='comittee_function', to='op_scraper.Function'),
+        ),
+        migrations.AddField(
+            model_name='comitteemembership',
+            name='person',
+            field=models.ForeignKey(related_name='comittee_memberships', to='op_scraper.Person'),
+        ),
+        migrations.AddField(
+            model_name='comitteemeeting',
+            name='agenda',
+            field=models.OneToOneField(related_name='comittee_meeting', null=True, to='op_scraper.Document'),
+        ),
+        migrations.AddField(
+            model_name='comitteemeeting',
+            name='comittee',
+            field=models.ForeignKey(related_name='comittee_meetings', to='op_scraper.Comittee'),
+        ),
+        migrations.AddField(
+            model_name='comitteeagendatopic',
+            name='law',
+            field=models.ForeignKey(related_name='agenda_topics', to='op_scraper.Law', null=True),
+        ),
+        migrations.AddField(
+            model_name='comitteeagendatopic',
+            name='meeting',
+            field=models.ForeignKey(related_name='agenda_topics', to='op_scraper.ComitteeMeeting'),
+        ),
+        migrations.AddField(
+            model_name='comittee',
+            name='laws',
+            field=models.ManyToManyField(related_name='comittees', null=True, to='op_scraper.Law', blank=True),
+        ),
+        migrations.AddField(
+            model_name='comittee',
+            name='legislative_period',
+            field=models.ForeignKey(blank=True, to='op_scraper.LegislativePeriod', null=True),
+        ),
+        migrations.AddField(
+            model_name='comittee',
+            name='parent_comittee',
+            field=models.ForeignKey(related_name='sub_comittees', blank=True, to='op_scraper.Comittee', null=True),
+        ),
         migrations.AlterUniqueTogether(
             name='subscription',
             unique_together=set([('user', 'content')]),
@@ -411,6 +494,18 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='law',
+            unique_together=set([('parl_id', 'legislative_period')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='comitteemeeting',
+            unique_together=set([('number', 'date', 'comittee')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='comitteeagendatopic',
+            unique_together=set([('number', 'meeting')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='comittee',
             unique_together=set([('parl_id', 'legislative_period')]),
         ),
     ]

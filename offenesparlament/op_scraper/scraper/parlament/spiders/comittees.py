@@ -18,7 +18,6 @@ from parlament.spiders import BaseSpider
 from parlament.resources.extractors.comittee import *
 
 from parlament.settings import BASE_HOST
-from parlament.resources.util import _clean
 
 from op_scraper.models import Comittee
 from op_scraper.models import ComitteeMeeting
@@ -97,7 +96,7 @@ class ComitteesSpider(BaseSpider):
 
     def parse(self, response):
         # Parse
-        parl_id = COMITTEE.url_to_parlid(response.url)
+        parl_id = COMITTEE.url_to_parlid(response.url)[1]
         llp = COMITTEE.LLP.xt(response)
         name = COMITTEE.NAME.xt(response)
 
@@ -108,12 +107,24 @@ class ComitteesSpider(BaseSpider):
             nrbr = 'Bundesrat'
             legislative_period = None
 
+        # main-comittee parl_id starts with the number 1
+        # sub-comittees parl_id start  with the number 2
+        if not parl_id.startswith(u'(1/'):
+            try:
+                parent_parl_id = u'(1/{}'.format(parl_id.split('/')[1])
+                parent_comitee = Comittee.objects.get(parl_id=parent_parl_id,legislative_period=legislative_period)
+            except Comittee.DoesNotExist:
+                parent_comitee = None
+        else:
+            parent_comitee = None
+
         description = COMITTEE.DESCRIPTION.xt(response)
 
         comittee_data = {
             'description': description,
             'name': name,
-            'source_link': response.url
+            'source_link': response.url,
+            'parent_comittee': parent_comitee
         }
 
         try:
@@ -128,6 +139,8 @@ class ComitteesSpider(BaseSpider):
             ipdb.set_trace()
 
         meetings = COMITTEE.MEETINGS.xt(response)
+
+        comittee_laws = []
 
         for meeting in meetings:
             agenda_data = meeting['agenda']
@@ -147,15 +160,12 @@ class ComitteesSpider(BaseSpider):
                 defaults=meeting_data
             )
 
-            comittee_laws = []
-
             for topic in meeting['topics']:
                 if topic['law'] is not None:
                     law = topic['law']
                     law_item = self.parse_law(law)
                     if law_item is not None:
                         comittee_laws.append(law_item)
-                    comittee_laws.append(law_item)
                 else:
                     law_item = None
 
@@ -178,6 +188,7 @@ class ComitteesSpider(BaseSpider):
             law_item = self.parse_law(law)
             if law_item is not None:
                 comittee_laws.append(law_item)
+
 
         comittee_item.laws.add(*comittee_laws)
         comittee_item.save()
