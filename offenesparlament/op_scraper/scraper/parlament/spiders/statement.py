@@ -74,15 +74,15 @@ class StatementSpider(BaseSpider):
 
         callback_requests = []
 
-        params = {'NRBRBV': self.DEBATETYPE,
-                  'GP': self.LLP,
-                  'view': 'RSS',
+        params = {'view': 'RSS',
                   'jsMode': 'RSS',
-                  'xdocumentUri': '/PAKT/STPROT/',
+                  'xdocumentUri': '/PAKT/STPROT/index.shtml',
+                  'NRBRBV': self.DEBATETYPE,
                   'NUR_VORL': 'N',
                   'R_PLSO': 'PL',
+                  'GP': self.LLP,
                   'FBEZ': 'FP_011',
-                  # 'listeId': '',
+                  'listeId': '211',
                   }
 
         llp = None
@@ -91,8 +91,10 @@ class StatementSpider(BaseSpider):
         except LegislativePeriod.DoesNotExist:
             self.logger.warning(
                 red(u"LLP '{}' not found".format(params['GP'])))
+
+        feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
         callback_requests.append(
-            scrapy.Request(self.BASE_URL + '?' + urlencode(params),
+            scrapy.Request(feed_url,
                            callback=self.parse_debatelist,
                            meta={'llp': llp, 'type': params['NRBRBV']}))
 
@@ -118,8 +120,9 @@ class StatementSpider(BaseSpider):
         for debate in fetch_debates:
             debate['llp'] = llp
             debate['debate_type'] = debate_type
+            debate['protocol_url'] = BASE_HOST + debate['protocol_url']
             debate_item = self.store_debate(debate)
-            yield scrapy.Request(BASE_HOST + debate['protocol_url'],
+            yield scrapy.Request(debate['protocol_url'],
                                  callback=self.parse_debate,
                                  meta={'debate': debate_item})
 
@@ -133,7 +136,7 @@ class StatementSpider(BaseSpider):
             sect['debate'] = response.meta['debate']
             if 'speaker_id' in sect and sect['speaker_id'] is not None:
                 try:
-                    sect['speaker'] = Person.objects.get(
+                    sect['person'] = Person.objects.get(
                         parl_id=sect['speaker_id'])
                 except Person.DoesNotExist:
                     self.logger.warning(

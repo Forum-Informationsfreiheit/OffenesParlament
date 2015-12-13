@@ -666,7 +666,7 @@ class Debate(models.Model):
     title = models.CharField(max_length=255, null=True)
     debate_type = models.CharField(max_length=255, null=True)
     protocol_url = models.URLField(max_length=255, null=True)
-    detail_url = models.URLField(max_length=255, null=True)
+    detail_url = models.URLField(max_length=255, null=True, blank=True)
     nr = models.IntegerField(null=True)
     llp = models.ForeignKey(LegislativePeriod, null=True, blank=True)
 
