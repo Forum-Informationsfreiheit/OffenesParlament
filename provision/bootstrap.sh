@@ -38,7 +38,8 @@ sudo /etc/init.d/elasticsearch restart
 # supervisor
 sudo pip install pip --upgrade
 sudo pip install supervisor psycopg2
-sudo cp /vagrant/provision/supervisord.conf /etc/
+sudo cp /vagrant/provision/conf/supervisord.conf /etc/
+mkdir -p /vagrant/ignore/var/log
 sudo supervisord
 
 # install node.js and NPM
@@ -62,12 +63,3 @@ sudo pip install -r requirements.dev.txt
 
 #django-configuration: set Dev environment variable on login
 echo 'DJANGO_CONFIGURATION="Dev"; export DJANGO_CONFIGURATION' >> ~/.profile
-
-#set up django project with migrations and admin account
-cd offenesparlament
-python manage.py makemigrations
-python manage.py migrate
-
-# python manage.py createsuperuser
-# Create the superuser without interaction. username: admin; password: admin
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | ./manage.py shell

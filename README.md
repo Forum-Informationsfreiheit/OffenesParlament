@@ -9,6 +9,7 @@ An open-data framework for the public data of the Austrian Parliament
 - [Vagrant](https://docs.vagrantup.com/v2/installation/index.html)
 - [Vagrant Hostmanager Plugin](https://github.com/smdahlen/vagrant-hostmanager)
 - [Virtualbox](https://www.virtualbox.org/)
+- [Ansible](http://docs.ansible.com/ansible/intro_installation.html#installing-the-control-machine) (preferrably via `pip install ansible`)
 
 
 ### Setup
@@ -52,6 +53,22 @@ An open-data framework for the public data of the Austrian Parliament
  vagrant halt
  ```
 
+### Provisioning
+
+Vagrant provisioners can be used to update the dev setup and to flush the database:
+
+'bootstrap' installs the necessary dependencies:
+
+ ```
+ vagrant provision --provision-with bootstrap
+ ```
+
+'reset_db' clears and re-creates the postgres database and runs migrations:
+
+ ```
+ vagrant provision --provision-with reset_db
+ ```
+
 ## Documentation
 
 Documentation is available via Sphinx. To generate cd to the `docs` directory and run:
@@ -60,7 +77,9 @@ Documentation is available via Sphinx. To generate cd to the `docs` directory an
 make html
 ```
 
-The documentation will then be available at ``docs/build/html/index.html``
+The documentation will then be available at ``docs/build/html/index.html``.
+
+There is also an online version available over at [offenesparlament.readthedocs.org](http://offenesparlament.readthedocs.org/en/latest/).
 
 ## Resetting the database
 
