@@ -107,8 +107,12 @@ class PetitionsSpider(BaseSpider):
 
         status = LAW.STATUS.xt(response)
 
-        LLP = LegislativePeriod.objects.get(
-            roman_numeral=response.url.split('/')[-4])
+        raw_llp = response.url.split('/')[-4]
+        if raw_llp != u'BR':
+            LLP = LegislativePeriod.objects.get(
+                roman_numeral=raw_llp)
+        else:
+            LLP = None
 
         # save ids and stuff for internals
         if LLP not in self.idlist:
