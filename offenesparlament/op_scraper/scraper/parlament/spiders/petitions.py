@@ -193,9 +193,8 @@ class PetitionsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
-        # Only BI or PET have online signatures
-        if u'BI' in parl_id or u'PET' in parl_id:
-            # http://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00040/filter.psp?xdocumentUri=/PAKT/VHG/XXV/BI/BI_00040/index.shtml&GP_CODE=XXV&ITYP=BI&INR=40&FBEZ=BI_001&pageNumber=&STEP=
+        # Only BI or PET (but not PET-BR) have online signatures
+        if u'BI' in parl_id or u'PET' in parl_id and not u'PET-BR' in parl_id:
             signatures_base_url = '{}/PAKT/VHG/{}/{}/{}/filter.psp?xdocumentUri=/PAKT/VHG/{}/{}/{}/'\
                 'index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&R_1000=ALLE&STEP=&pageNumber='
 
