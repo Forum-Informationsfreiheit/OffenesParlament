@@ -119,8 +119,10 @@ class PreLawsSpider(BaseSpider):
 
         # is the tab 'Parlamentarisches Verfahren available?'
         if opinions:
+            skipped_ops = 0
             for op in opinions:
                 if Opinion.objects.filter(parl_id=op['parl_id']).exists():
+                    skipped_ops += 1
                     continue
                 post_req = scrapy.Request("{}/{}".format(BASE_HOST, op['url']),
                                           callback=self.parse_opinion,
@@ -130,8 +132,8 @@ class PreLawsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
-        log.msg(green("Open Callback requests: {}".format(
-            len(callback_requests))), level=log.INFO)
+            log.msg(green("Open/Skipped Callback requests: {}/{}".format(
+                len(callback_requests), skipped_ops)), level=log.INFO)
 
         return callback_requests
 
