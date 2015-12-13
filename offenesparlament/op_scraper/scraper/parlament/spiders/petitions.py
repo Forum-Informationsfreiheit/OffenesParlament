@@ -79,7 +79,7 @@ class PetitionsSpider(BaseSpider):
         if self.LLP:
             for i in self.LLP:
                 for nrbr in ['NR', 'BR']:
-                    for bbet in ['BI', 'PET', 'VOLKBG']:
+                    for bbet in ['BI', 'PET', 'PET-BR', 'VOLKBG']:
                         roman_numeral = roman.toRoman(i)
                         options = self.URLOPTIONS.copy()
                         options['GP'] = roman_numeral
