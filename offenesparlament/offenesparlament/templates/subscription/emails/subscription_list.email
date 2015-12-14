@@ -1,0 +1,7 @@
+Hej there,<br /><br />
+
+a list of subscriptions on OffenesParlament.at has been requested for this email address.<br />
+
+Please follow this link to view or edit your subscriptions:<br /><br />
+
+<a href="{{ list_url }}">My Subscriptions</a>

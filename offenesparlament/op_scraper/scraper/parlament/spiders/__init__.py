@@ -3,6 +3,10 @@ import scrapy
 import feedparser
 import roman
 from urllib import urlencode
+from ansicolor import red
+from ansicolor import cyan
+from ansicolor import green
+from ansicolor import blue
 
 
 class BaseSpider(scrapy.Spider):
@@ -28,6 +32,28 @@ class BaseSpider(scrapy.Spider):
         # shut off annoying debug level core api messages
         import scrapy
         scrapy.core.engine.logger.setLevel('INFO')
+
+    def print_debug(self):
+        """
+        Collects and prints a structured debug message
+        """
+        message = """
+    {bar}
+
+    {title}
+
+      Scraping LLPs: {llps}
+      Base URL:      {url}
+
+    {bar}
+        """.format(
+            bar=cyan(
+                '############################################################'),
+            title=red(self.title),
+            llps=self.LLP or "Not applicable",
+            url=self.BASE_URL
+        )
+        print message
 
     def get_urls(self):
         """

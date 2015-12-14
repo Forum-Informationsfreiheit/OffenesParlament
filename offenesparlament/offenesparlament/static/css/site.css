@@ -1,5 +1,83 @@
 @charset "UTF-8";
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic);
+.anysearch_box {
+  margin: 10px 0 10px 0;
+  cursor: text;
+  line-height: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: box-shadow 200ms ease-in-out; }
+  .anysearch_box:hover {
+    box-shadow: inset 0px 0px 13px 0px rgba(0, 0, 0, 0.1); }
+  .anysearch_box .anysearch_icon {
+    background-image: url("img/icons/magnifier_gray.svg");
+    background-repeat: no-repeat;
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    margin: 10px 10px 10px 10px;
+    vertical-align: top; }
+  .anysearch_box .anysearch_placeholder {
+    position: absolute;
+    line-height: 36px;
+    color: #7f7f7f;
+    font-size: 15px; }
+  .anysearch_box .anysearch_term {
+    background-color: white;
+    border-radius: 4px;
+    line-height: 30px;
+    display: inline-block;
+    margin: 3px 3px 3px 3px;
+    overflow: hidden;
+    padding: 0; }
+    .anysearch_box .anysearch_term.anysearch_term_helper {
+      background: none; }
+    .anysearch_box .anysearch_term.anysearch_term_permanent .anysearch_term_category {
+      cursor: default; }
+    .anysearch_box .anysearch_term .anysearch_term_delete_button {
+      margin: 0 3px 0 8px;
+      color: #7f7f7f;
+      cursor: pointer; }
+    .anysearch_box .anysearch_term .anysearch_term_category {
+      background: none;
+      line-height: 30px;
+      display: inline-block;
+      margin: 0;
+      padding: 0 0 0 6px;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor: pointer;
+      color: #7f7f7f; }
+    .anysearch_box .anysearch_term .anysearch_term_value input {
+      width: 30px;
+      box-sizing: content-box;
+      height: 30px;
+      background: none;
+      border: none;
+      padding: 0 6px;
+      margin: 0;
+      line-height: 30px;
+      outline: none; }
+  .anysearch_box .anysearch_suggestions {
+    position: absolute;
+    background-color: wheat;
+    min-width: 100px;
+    z-index: 1000; }
+    .anysearch_box .anysearch_suggestions .anysearch_suggestions_item {
+      line-height: 20px;
+      cursor: pointer;
+      padding: 3px 6px; }
+      .anysearch_box .anysearch_suggestions .anysearch_suggestions_item:hover {
+        background-color: #e6e6e6; }
+
+#anysearch_container_homepage .anysearch_box {
+  padding: 10px;
+  margin: 0; }
+  #anysearch_container_homepage .anysearch_box .anysearch_icon {
+    width: 20px;
+    height: 20px;
+    margin: 9px 16px 7px 10px; }
+
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px; }
@@ -7,19 +85,35 @@ body {
 h1 {
   font-size: 30px;
   font-weight: bold;
-  margin: 50px 0 35px 0; }
+  margin: 50px 0 0 0; }
   @media screen and (max-width: 500px) {
     h1 {
       font-size: 25px;
       margin: 30px 0 15px 0; } }
 
+p.explanation {
+  font-size: 18px;
+  margin: 25px 0 45px 0;
+  line-height: 170%; }
+  @media screen and (max-width: 500px) {
+    p.explanation {
+      font-size: 14px;
+      margin: 15px 0 25px 0; } }
+
 a, a:active, a:focus, a:visited {
-  color: #036fd5;
+  color: #006fd5;
   text-decoration: none; }
 
 a:hover {
-  color: #81b7ea;
+  color: #7fb7ea;
   text-decoration: none; }
+
+ul {
+  list-style-position: outside;
+  padding-left: 20px; }
+  ul li {
+    margin-bottom: 10px;
+    padding-right: 10px; }
 
 .content {
   margin-bottom: 70px; }
@@ -41,7 +135,7 @@ a:hover {
 
 .menu_bar {
   width: 100%;
-  background-color: #1f4563;
+  background-color: #1e4563;
   color: white;
   overflow: hidden; }
   .menu_bar .logo {
@@ -56,38 +150,43 @@ a:hover {
     float: right; }
     .menu_bar nav ul.menu_bar_items {
       list-style: none;
-      padding: 0; }
+      padding: 0;
+      margin: 0; }
       .menu_bar nav ul.menu_bar_items li {
         display: inline-block;
-        margin-left: 30px; }
+        margin: 0; }
         .menu_bar nav ul.menu_bar_items li a {
           color: white;
           text-decoration: none;
-          font-size: 13px; }
+          font-size: 13px;
+          display: inline-block;
+          line-height: 50px;
+          padding: 0 15px; }
           .menu_bar nav ul.menu_bar_items li a:hover {
-            color: #81b7ea;
+            color: #7fb7ea;
             background-color: initial; }
 
-ul.person_list {
+.search_bar {
+  width: 100%;
+  background-color: #e5e5e5; }
+
+ul.columned_linklist {
   -webkit-column-count: 3;
   -moz-column-count: 3;
   column-count: 3;
   padding: 0; }
   @media screen and (max-width: 940px) {
-    ul.person_list {
+    ul.columned_linklist {
       -webkit-column-count: 2;
       -moz-column-count: 2;
       column-count: 2; } }
   @media screen and (max-width: 500px) {
-    ul.person_list {
+    ul.columned_linklist {
       -webkit-column-count: 1;
       -moz-column-count: 1;
       column-count: 1; } }
-  ul.person_list li {
-    margin: 6px 0; }
-    @media screen and (max-width: 940px) {
-      ul.person_list li {
-        margin: 10px 0; } }
+  ul.columned_linklist li {
+    margin: 13px 0; }
 
 .top_bar {
   margin: 30px 0; }
@@ -108,7 +207,8 @@ ul.breadcrumbs {
   ul.breadcrumbs li {
     font-weight: bold;
     display: inline;
-    margin-right: 5px; }
+    margin-right: 5px;
+    padding-right: 0; }
     ul.breadcrumbs li a {
       font-weight: normal; }
 
@@ -125,24 +225,61 @@ ul.breadcrumbs {
   font-size: 80%;
   background-color: #cccccc; }
   .party_tag.spoe {
-    background-color: #b40000; }
+    background-color: #ec3733; }
   .party_tag.oevp {
-    background-color: black; }
+    background-color: #413c4d; }
   .party_tag.gruene {
-    background-color: #32af00; }
+    background-color: #3f925b; }
   .party_tag.neos, .party_tag.neos-lif {
-    background-color: #c800af; }
+    background-color: #d74c6b; }
   .party_tag.fpoe {
-    background-color: #0050c8; }
-  .party_tag.stronach {
-    background-color: #f0c800; }
+    background-color: #5e94ba; }
+  .party_tag.stronach, .party_tag.strona {
+    background-color: #f3bc40; }
   .party_tag.bzoe {
-    background-color: #ff9600; }
+    background-color: #f3783e; }
 
 .person_info {
-  margin-top: 30px; }
-  .person_info img {
-    max-width: 150px; }
+  margin-top: 30px;
+  margin-bottom: 40px; }
+  .person_info .person_info_photo {
+    display: inline-block;
+    width: 150px;
+    margin-right: 25px; }
+    @media screen and (max-width: 500px) {
+      .person_info .person_info_photo {
+        width: 100%;
+        margin-bottom: 30px; } }
+    .person_info .person_info_photo figure {
+      padding: 0;
+      margin: 0; }
+      .person_info .person_info_photo figure figcaption {
+        font-size: 10px;
+        text-align: center; }
+    .person_info .person_info_photo img {
+      width: 100%; }
+  .person_info .person_info_text {
+    display: inline-block;
+    vertical-align: top; }
+    @media screen and (max-width: 500px) {
+      .person_info .person_info_text {
+        display: block; } }
+    .person_info .person_info_text .person_info_section {
+      margin-bottom: 30px; }
+      .person_info .person_info_text .person_info_section h3 {
+        margin-bottom: 5px; }
+      .person_info .person_info_text .person_info_section ul {
+        margin: 0; }
+
+.info_buttons {
+  margin-top: 40px; }
+  .info_buttons.law_info_buttons {
+    text-align: center; }
+  .info_buttons a {
+    margin: 10px 20px 10px 0; }
+    @media screen and (max-width: 500px) {
+      .info_buttons a {
+        margin: 10px 0; } }
 
 .homepage_content {
   background-color: #2a4f6b;
@@ -173,7 +310,7 @@ ul.breadcrumbs {
       margin: 0 10px;
       color: white; }
       .homepage_search .help a:hover {
-        color: #81b7ea; }
+        color: #7fb7ea; }
 
 .projectintro {
   background-color: #f55f57; }
@@ -210,9 +347,15 @@ ul.breadcrumbs {
         @media screen and (max-width: 940px) {
           .projectintro .projectintro_item .projectintro_item_border_inlay .projectintro_item_content, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay .projectintro_item_content {
             margin: 30px 0; } }
-    .projectintro .projectintro_item h2, .projectintro .projectintro_item_inverse h2 {
-      font-weight: bold;
-      font-size: 16px; }
+    .projectintro .projectintro_item h3, .projectintro .projectintro_item_inverse h3 {
+      background-repeat: no-repeat;
+      padding: 0 0 0 37px; }
+    .projectintro .projectintro_item .projectintro_item_icon_parliament, .projectintro .projectintro_item_inverse .projectintro_item_icon_parliament {
+      background-image: url("img/icons/parliament_white.svg"); }
+    .projectintro .projectintro_item .projectintro_item_icon_paperplane, .projectintro .projectintro_item_inverse .projectintro_item_icon_paperplane {
+      background-image: url("img/icons/paperplane_white.svg"); }
+    .projectintro .projectintro_item .projectintro_item_icon_personsearch, .projectintro .projectintro_item_inverse .projectintro_item_icon_personsearch {
+      background-image: url("img/icons/personsearch_red.svg"); }
   .projectintro .projectintro_item_inverse {
     color: #f55f57; }
     @media screen and (max-width: 940px) {
@@ -235,11 +378,11 @@ ul.breadcrumbs {
     color: white;
     line-height: 200%; }
     .footer a:hover {
-      color: #81b7ea;
+      color: #7fb7ea;
       text-decoration: none; }
 
 .footer_content {
-  margin: 20px auto 50px auto; }
+  margin: 20px auto 100px auto; }
   @media screen and (max-width: 940px) {
     .footer_content {
       margin: 20px auto; } }
@@ -252,13 +395,15 @@ ul.breadcrumbs {
 
 .footer_right {
   width: 40%;
-  text-align: right; }
+  text-align: right;
+  margin-top: 1em; }
   @media screen and (max-width: 940px) {
     .footer_right {
-      margin-top: 20px; } }
+      margin-top: 40px; } }
 
 .footer_left, .footer_right {
-  display: inline-block; }
+  display: inline-block;
+  vertical-align: top; }
   @media screen and (max-width: 940px) {
     .footer_left, .footer_right {
       width: 100%;
@@ -285,5 +430,251 @@ ul.breadcrumbs {
     width: 50%;
     display: inline-block;
     text-align: left; } }
+
+.footer_logos a {
+  display: inline-block;
+  background-repeat: no-repeat;
+  margin-right: 20px;
+  vertical-align: middle;
+  opacity: 0.8; }
+  @media screen and (max-width: 500px) {
+    .footer_logos a {
+      margin: 10px 20px 10px 0; } }
+  .footer_logos a:hover {
+    opacity: 1; }
+.footer_logos .netidee {
+  width: 100px;
+  height: 60px;
+  background-image: url("img/netidee_logo.png");
+  background-size: auto 60px; }
+.footer_logos .foi {
+  width: 230px;
+  height: 43px;
+  background-image: url("img/foi_logo.png");
+  background-size: auto 43px; }
+
+.button {
+  background-color: white;
+  border: 1px solid #f55f57;
+  padding: 8px 35px 8px 65px;
+  color: #f55f57;
+  text-decoration: none;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 35px 7px;
+  display: inline-block; }
+  @media screen and (max-width: 500px) {
+    .button {
+      padding-right: 10px;
+      display: block; } }
+  .button:active, .button:visited {
+    color: #f55f57; }
+  .button:hover, .button:focus {
+    color: white;
+    background-color: #f55f57;
+    text-decoration: none; }
+
+.button_source {
+  background-image: url("img/icons/flagged_parliament_red.svg");
+  background-position-y: 6px; }
+  .button_source:hover, .button_source:focus {
+    background-image: url("img/icons/flagged_parliament_white.svg"); }
+
+.button_notifications {
+  background-image: url("img/icons/notification_red.svg");
+  background-position-y: 8px; }
+  .button_notifications:hover, .button_notifications:focus {
+    background-image: url("img/icons/notification_white.svg"); }
+
+.keyword_box {
+  padding: 40px;
+  border: 1px solid #cfe4d6;
+  background-color: #ebf4ee; }
+  .keyword_box h2 {
+    margin: 0 0 25px 0; }
+  .keyword_box .columned_wrapper {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2; }
+  @media screen and (max-width: 500px) {
+    .keyword_box {
+      padding: 20px; }
+      .keyword_box .columned_wrapper {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1; } }
+  .keyword_box ul {
+    margin: 0; }
+  .keyword_box a {
+    color: #40925b; }
+
+.speech_type_Pro, .speech_type_Contra {
+  width: 70px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: 15px;
+  overflow: hidden;
+  text-indent: -5000px;
+  background-position: 14px 3px; }
+
+.speech_type_Pro {
+  background-image: url("img/icons/thumb_up.svg"); }
+
+.speech_type_Contra {
+  background-image: url("img/icons/thumb_down.svg"); }
+
+table {
+  font-size: 13px;
+  width: 100%; }
+  table th {
+    text-align: left;
+    padding: 10px; }
+  table tbody {
+    border-top: 1px solid #d9d9d9; }
+    table tbody tr {
+      border-bottom: 1px solid #d9d9d9; }
+      table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2; }
+      table tbody tr td {
+        padding: 10px;
+        vertical-align: top; }
+
+.statement_links {
+  margin-top: 8px; }
+  .statement_links a {
+    height: 15px;
+    line-height: 15px; }
+  .statement_links a.icon_parliament {
+    border-right: 1px solid #d9d9d9;
+    padding-right: 8px;
+    margin-right: 5px; }
+
+.icon_link {
+  text-indent: 20px;
+  height: 20px;
+  display: inline-block;
+  background-repeat: no-repeat; }
+  .icon_link.icon_parliament {
+    background-image: url("img/icons/parliament.svg");
+    background-size: 15px; }
+  .icon_link.icon_law {
+    background-image: url("img/icons/law.svg");
+    background-size: 12px; }
+  .icon_link.icon_html {
+    background-image: url("img/icons/html.svg");
+    background-size: 11px;
+    background-position: 0px 2px; }
+  .icon_link.icon_pdf {
+    background-image: url("img/icons/pdf.svg");
+    background-size: 11px;
+    background-position: 0px 2px; }
+
+.section {
+  margin-top: 70px; }
+
+.about_goal_box {
+  margin-top: 33px;
+  overflow: hidden; }
+  .about_goal_box div {
+    width: 33%;
+    display: inline-block;
+    color: white;
+    line-height: 170%;
+    vertical-align: top;
+    overflow: hidden;
+    padding-bottom: 500px;
+    margin-bottom: -500px; }
+    @media screen and (max-width: 940px) {
+      .about_goal_box div {
+        width: 100%;
+        display: block;
+        padding: initial;
+        margin: initial; } }
+    .about_goal_box div h3 {
+      background-repeat: no-repeat;
+      padding: 0 0 0 37px;
+      margin: 27px 30px 17px 30px; }
+    .about_goal_box div p {
+      margin: 17px 30px 26px 30px; }
+  .about_goal_box .about_goal_box_improvedcontent {
+    background-color: #f55f57; }
+    .about_goal_box .about_goal_box_improvedcontent h3 {
+      background-image: url("img/icons/database_white.svg"); }
+  .about_goal_box .about_goal_box_usability {
+    background-color: #2a4f6b; }
+    .about_goal_box .about_goal_box_usability h3 {
+      background-image: url("img/icons/heart_white.svg"); }
+  .about_goal_box .about_goal_box_alerts {
+    background-color: #40925b; }
+    .about_goal_box .about_goal_box_alerts h3 {
+      background-image: url("img/icons/paperplane_white.svg"); }
+
+.law_status {
+  background-repeat: no-repeat;
+  padding: 0 0 0 25px; }
+
+.law_status_offen {
+  background-image: url("img/icons/status_open.svg"); }
+
+.law_status_beschlossen {
+  color: #40925b;
+  background-image: url("img/icons/status_completed.svg"); }
+
+.law_status_zurückgezogen, .law_status_abgelehnt {
+  color: #f55f57;
+  background-image: url("img/icons/status_negative.svg"); }
+
+.lawlist td {
+  vertical-align: middle; }
+
+#react_tooltip_container .__react_component_tooltip {
+  max-width: 300px;
+  -webkit-box-shadow: 1px 1px 21px -4px rgba(0, 0, 0, 0.31);
+  -moz-box-shadow: 1px 1px 21px -4px rgba(0, 0, 0, 0.31);
+  box-shadow: 1px 1px 21px -4px rgba(0, 0, 0, 0.31); }
+  #react_tooltip_container .__react_component_tooltip.type-light {
+    color: #7f7f7f; }
+
+.law_details_box {
+  background-color: #f4f6f7;
+  border: 1px solid #dde3e8;
+  padding: 40px 40px 20px 40px;
+  margin: 40px 0; }
+  .law_details_box h2 {
+    margin: 0 0 27px 0; }
+  .law_details_box h3 {
+    margin: 0 0 5px 0; }
+  .law_details_box .column {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top; }
+    .law_details_box .column p {
+      margin: 0 50px 28px 0; }
+
+.keyword_list a {
+  margin-right: 15px; }
+
+table.phases_list tr:nth-child(odd) {
+  background-color: white; }
+table.phases_list tr.phase {
+  background-color: #f4f6f7;
+  color: #1f4563;
+  font-weight: bold; }
+table.phases_list tr .date {
+  padding-right: 50px;
+  padding-left: 15px; }
+
+.linklist_oneline a {
+  margin-right: 5px;
+  padding-right: 5px;
+  border-right: 1px solid #cccccc; }
+  .linklist_oneline a:last-child {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none; }
+
+.innerpage_menu {
+  font-size: 13px;
+  margin-top: 10px; }
 
 /*# sourceMappingURL=site.css.map */

@@ -37,7 +37,7 @@ The views all inherit from ``JsonSearchView``, an adaptation of Haystack's ``Sea
 Each accepts a query parameter, `q`, and a list of `facet filters`, named like the facets available for that view:
 
 Main Search
-    * No Facets
+    * party: A person's party, for instance, SPÖ
 
 Persons
     * party: A person's party, for instance, SPÖ
@@ -189,6 +189,45 @@ and would return the following JSON data::
         }
      ]
   }
+
+Facet Only Search
+-----------------
+
+Besides the normal, query-based search, it is possible to retrieve only the
+facets (for and empty query, for instance). This is necessary to allow filling of
+dropdown/selection boxes before the first search. A typical request might then
+look like this::
+
+  http://offenesparlament.vm:8000/personen/search?q=&only_facets=true
+
+But this facet-only search also works with a query, should that be necessary::
+
+  http://offenesparlament.vm:8000/personen/search?q=Mayer&only_facets=true
+
+The result looks like the above-mentioned search result, but always contains an
+empty list in the 'results' field.
+
+Paging
+------
+
+In addition to the query arguments for filtering and facetting, the search views
+also automatically limit the results to allow for smooth paging. Two parameters
+govern this behaviour: `offset` and `limit`.
+
+`Offset` returns search results from
+the given integer on - so, for a search that produced 100 results, an offset
+value of '20' would only return results 20 to 100.
+If no `offset` value is given, the view assumes '0' and returns results
+starting with the first one.
+
+`Limit` restricts the amount of results per page; with the abovementioned
+example and a `limit` value of '50', the query would only return results
+20 through 70.
+If no `limit` is given, the view assumes a default of 50 results. This can be
+changed in the ``offenesparlament/constants.py`` file.
+
+
+
 
 Indices
 =======

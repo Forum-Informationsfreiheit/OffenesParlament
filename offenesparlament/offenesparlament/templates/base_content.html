@@ -3,7 +3,7 @@
 {% block container %}
   <div class="content">
     <div class="container">
-      <div class="">
+      <div class="" id="content">
       {% load django_bootstrap_breadcrumbs %}
       {% block breadcrumbs %}
         {% clear_breadcrumbs %}
@@ -12,16 +12,18 @@
 
       <div class="top_bar">
         {% render_breadcrumbs "breadcrumbs.html" %}
-        {% block ggp_selector %}
-          <div class="ggp_selector">
-            <select>
-              <option>Aktuell, seit 2013 (25.)</option>
-              <option>2008-2013 (24.)</option>
-              <option>2006-2008 (23.)</option>
-            </select>
-          </div>
-        {% endblock %}
       </div>
+
+      <!-- EXAMPLE MESSAGES CONTAINER PLEASE ADAPT -->
+      {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      {% endif %}
+      <!-- EXAMPLE MESSAGES CONTAINER PLEASE ADAPT -->
+
 
       {% block content %}
         <h1>Hello, parliament!</h1>

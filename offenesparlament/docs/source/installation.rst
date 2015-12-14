@@ -41,8 +41,8 @@ Setup
    `dev` watches and regenerates files when their sources change.
    (Remember that sources also change when you do a git pull and
    generated client files aren't commited to git) And `reloading` does
-   that and uses [Browsersync](http://www.browsersync.io/) to reload your browser when files
-   change
+   that and uses `Browsersync <http://www.browsersync.io/>`_ to reload your
+   browser when files change
   ::
 
     cd /vagrant

@@ -4,26 +4,146 @@
 {% block breadcrumbs %}
   {{ block.super }}
   {% breadcrumb "Gesetze" "laws_list" %}
-  {% breadcrumb gesetz.short_title "gesetz_detail" %}
+  {% breadcrumb law.short_title "gesetz_detail" %}
 {% endblock %}
 
 {% block ggp_selector %}{% endblock %}
 
-{% block title %}{{ person.reversed_name }}{% endblock %}
+{% block title %}{{ law.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ gesetz.title }} <a href='{{gesetz.source_link}}'>[SOURCE]</a></h1>
+<h1>{{ law.title }} {{ law.parl_id }}</h1>
+
+<div class="linklist_oneline innerpage_menu">
+  <a href="#parlamentarisch">Parlamentarisches Verfahren</a>
+  {% if law.references %}
+    <a href="#vorparlamentarisch">Vorparlamentarisches Verfahren</a>
+  {% endif %}
+</div>
 
 
-  {% for phase, steps in gesetz.steps_by_phases.items %}
-  <h2>{{phase.title}}</h2>
+<div class="law_details_box">
+  <h2>{{ law.category.title }}</h2>
 
-  <ul>
-  {% for step in steps%}
-  {% autoescape off %}
-  <li>{{step.title}}</li>
-  {% endautoescape %}
-  {% endfor %}
-  </ul>
-  {% endfor %}
+  <div class="column">
+    <p>{{ law.description }}</p>
+    {% if law.references %}
+      <p>Bezieht sich auf: {{ law.references.short_title }}</p>
+    {% endif %}
+
+    {% if law.keywords.all %}
+      <h3>Schlagworte</h3>
+      <p class="keyword_list">
+      {% for kw in law.keywords.all %}
+        <a href="{% url 'keyword_detail' keyword=kw.title_urlsafe %}">{{ kw }}</a>
+      {% endfor %}
+      </p>
+    {% endif %}
+  </div><!--
+  --><div class="column">
+    <h3>Status</h3>
+    <p>
+      {% autoescape off %}
+      <span class="law_status law_status_{{ law.simple_status }}">{{ law.status }}</span></br>
+      {% endautoescape %}
+    </p>
+  </div>
+</div>
+
+<div class="info_buttons law_info_buttons">
+  <a href="{{ law.source_link }}" class="button button_source">Zur Parlamentsseite</a>
+  <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
+</div>
+
+
+
+<div class="section">
+  <h2 id="parlamentarisch">Parlamentarisches Verfahren</h2>
+  <table class="phases_list">
+    <thead>
+      <tr>
+        <th class="date">Datum</th>
+        <th class="title">Stand des parlamentarischen Verfahrens</th>
+        <th class="protocol">Protokoll</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% autoescape off %}
+      {% for phase, steps in law.steps_by_phases.items %}
+      <tr class="phase">
+        <td class="date"></td>
+        <td class="title">{{ phase.title_extended }}</td>
+        <td class="protocol"></td>
+      </tr>
+        {% for step in steps %}
+        <tr class="step">
+          <td class="date">{{ step.date }}</td>
+          <td class="title">{{ step.title }}</td>
+          <td class="protocol">
+            {% if step.protocol_url %}
+            <a href="{{ step.protocol_url }}" class="icon_link icon_parliament">Protokoll</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      {% endfor %}
+      {% endautoescape %}
+    </tbody>
+  </table>
+</div>
+
+{% if law.references %}
+  <div class="section">
+    <h2 id="vorparlamentarisch">Vorparlamentarisches Verfahren</h2>
+
+    <div class="law_details_box">
+      <h2>{{ law.references.category.title }}</h2>
+
+      <div class="column">
+        <p>{{ law.references.title }}</p>
+        <h3>Schlagworte</h3>
+        <p class="keyword_list">
+        {% for kw in law.references.keywords.all %}
+          <a href="{% url 'keyword_detail' keyword=kw.title_urlsafe %}">{{ kw }}</a>
+        {% endfor %}
+        </p>
+      </div><!--
+      --><div class="column">
+        <ul>
+        {% for doc in law.references.documents.all %}
+        <li><a href="http://www.parlament.gv.at{{ doc.pdf_link }}" class="icon_link icon_pdf">{{ doc.title }}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th class="date">Datum</th>
+          <th class="title">Stellungnahme</th>
+          <th class="by">Von</th>
+          <th class="links"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for opinion in law.references.opinions.all %}
+        <tr>
+          <td class="date">{{ opinion.date }}</td>
+          <td class="title">{{ opinion.parl_id }}</td>
+          <td class="by">{{ opinion.entity }}</td>
+          <td class="links">
+            <a href="{{ opinion.source_link }}" class="icon_link icon_parliament">Parlamentsseite</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+
+{% load jsonify %}
+<script>
+  var OFFPARL_DATA_SEARCH_TYPE = 'Gesetze';
+</script>
 {% endblock %}

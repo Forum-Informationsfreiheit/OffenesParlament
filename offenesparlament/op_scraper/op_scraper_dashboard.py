@@ -95,7 +95,27 @@ class CustomIndexDashboard(Dashboard):
                     'url': '/admin/scrape/inquiries',
                     'external': False,
                 },
+                    'title': _('Scrape Petitions'),
+                    'url': '/admin/scrape/petitions',
+                    'external': False,
+                },
+                {
+                    'title': _('Scrape Debates/Statements'),
+                    'url': '/admin/scrape/debates',
+                    'external': False,
+                },
+            ]
+        ))
 
+        self.children.append(modules.LinkList(
+            _('ElasticSearch'),
+            column=2,
+            children=[
+                {
+                    'title': _('Update ElasticSearch Index'),
+                    'url': '/admin/elastic/update',
+                    'external': False,
+                },
             ]
         ))
 

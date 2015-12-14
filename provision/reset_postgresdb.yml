@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+
+    - name: Drop local postgresdb
+      postgresql_db: name=op state=absent
+      become: true
+      become_user: postgres
+
+    - name: Recreate local postgresdb
+      postgresql_db: name=op encoding='UTF-8' lc_collate='de_DE.UTF-8' lc_ctype='de_DE.UTF-8' template='template0'
+      become: true
+      become_user: postgres
+
+    - name: Create op user
+      postgresql_user: db=op name=op password=secret priv=ALL
+      become: true
+      become_user: postgres
+
+    - name: Makemigrations and Migrate
+      shell: "cd offenesparlament && python manage.py makemigrations && python manage.py migrate"
+
+    - name: Create Admin-User
+      shell: cd offenesparlament && echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | ./manage.py shell

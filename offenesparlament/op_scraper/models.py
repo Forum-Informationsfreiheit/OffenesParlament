@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from datetime import date
 from django.db import models
 from django.utils.html import remove_tags
 from django.core.urlresolvers import reverse
@@ -14,6 +15,13 @@ class ParlIDMixIn(object):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
+class LlpManager(models.Manager):
+
+    def get_current(self):
+        llp = LegislativePeriod.objects.latest('start_date')
+        return llp
+
+
 class LegislativePeriod(models.Model):
 
     """
@@ -24,6 +32,7 @@ class LegislativePeriod(models.Model):
     roman_numeral = models.CharField(unique=True, max_length=255, default="")
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
+    objects = LlpManager()
 
     def __unicode__(self):
         if self.end_date:
@@ -32,9 +41,23 @@ class LegislativePeriod(models.Model):
                 self.start_date,
                 self.end_date)
         else:
-            rep_str = "{} (since {})".format(
+            rep_str = "{} (seit {})".format(
                 self.roman_numeral,
                 self.start_date)
+
+        return rep_str
+
+    @property
+    def facet_repr(self):
+        if self.end_date:
+            rep_str = "{} - {} ({})".format(
+                self.start_date,
+                self.end_date,
+                self.roman_numeral)
+        else:
+            rep_str = "aktuell seit {} ({})".format(
+                self.start_date,
+                self.roman_numeral)
 
         return rep_str
 
@@ -48,6 +71,10 @@ class Phase(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def title_extended(self):
+        return self.title.replace('NR', 'Nationalrat').replace('BR', 'Bundesrat')
 
 
 class Entity(models.Model):
@@ -119,12 +146,21 @@ class Keyword(models.Model):
     A keyword assigned to laws and prelaws
     """
     title = models.CharField(max_length=255, unique=True)
+    _title_urlsafe = models.CharField(max_length=255, default="")
 
     def __unicode__(self):
         return self.title
 
     class Meta:
         ordering = ['title']
+
+    @property
+    def title_urlsafe(self):
+        if not self._title_urlsafe:
+            result = re.sub(r'[\.(), -]+', '-', self.title)
+            self._title_urlsafe = re.sub(r'^-|-$', '', result)
+            self.save()
+        return self._title_urlsafe
 
 
 class Law(models.Model, ParlIDMixIn):
@@ -142,6 +178,9 @@ class Law(models.Model, ParlIDMixIn):
     parl_id = models.CharField(max_length=30, default="")
 
     description = models.TextField(blank=True)
+
+    # Interna, Utilities
+    _slug = models.CharField(max_length=255, default="")
 
     # Relationships
     category = models.ForeignKey(Category, null=True, blank=True)
@@ -169,6 +208,10 @@ class Law(models.Model, ParlIDMixIn):
         return self.legislative_period.roman_numeral
 
     @property
+    def llps_facet(self):
+        return [self.legislative_period.facet_repr]
+
+    @property
     def keyword_titles(self):
         return [kw.title for kw in self.keywords.all()]
 
@@ -180,14 +223,31 @@ class Law(models.Model, ParlIDMixIn):
         return (self.title[:100] + '...') if len(self.title) > 100 else self.title
 
     @property
-    def url(self):
-        return reverse(
-            'gesetz_detail',
-            kwargs={
-                'parl_id': self.parl_id_urlsafe,
-                'ggp': self.llp_roman
-            }
-        )
+    def slug(self):
+        if not self._slug:
+            self._slug = reverse(
+                'gesetz_detail',
+                kwargs={
+                    'parl_id': self.parl_id_urlsafe,
+                    'ggp': self.llp_roman
+                }
+            )
+            self.save()
+
+        return self._slug
+
+    @property
+    def simple_status(self):
+        if self.status is None:
+            return 'offen'
+        elif self.status.startswith('Beschlossen'):
+            return 'beschlossen'
+        elif self.status.startswith('Gesetzesantrag abgelehnt'):
+            return 'abgelehnt'
+        elif self.status.startswith(u'Zurückgezogen'):
+            return 'zurückgezogen'
+        else:
+            return 'offen'
 
     def __unicode__(self):
         return self.title
@@ -209,6 +269,9 @@ class Opinion(models.Model, ParlIDMixIn):
     keywords = models.ManyToManyField(Keyword)
     entity = models.ForeignKey(Entity, related_name='opinions')
     prelaw = models.ForeignKey(Law, related_name='opinions')
+
+    class Meta:
+        ordering = ['date']
 
     def __unicode__(self):
         return u'{} zu {}'.format(self.entity.title, self.prelaw.parl_id)
@@ -295,6 +358,19 @@ class Mandate(models.Model):
             self.party,
             self.legislative_period)
 
+    def latest_end_date(self):
+
+        if self.end_date:
+            return self.end_date
+
+        if self.legislative_period and self.legislative_period.end_date:
+            return self.legislative_period.end_date
+
+        if self.administration and self.administration.end_date:
+            return self.administration.end_date
+
+        return None
+
 
 class Person(models.Model, ParlIDMixIn):
 
@@ -314,10 +390,13 @@ class Person(models.Model, ParlIDMixIn):
     deathplace = models.CharField(max_length=255, null=True, blank=True)
     occupation = models.CharField(max_length=255, null=True, blank=True)
 
+    # Interna, Utilities
+    _slug = models.CharField(max_length=255, default="")
+
     # Relationsships
-    # party = models.ForeignKey(Party) ## Removed, party is always the last
-    # mandate they have/had
     mandates = models.ManyToManyField(Mandate)
+    latest_mandate = models.ForeignKey(
+        Mandate, related_name='latest_mandate', null=True, blank=True)
 
     def __unicode__(self):
         return self.full_name
@@ -332,41 +411,54 @@ class Person(models.Model, ParlIDMixIn):
     def llps(self):
         return [
             m.legislative_period
-            for m in self.mandates.order_by('-legislative_period__end_date') if m.legislative_period]
+            for m in self.mandates.order_by('-legislative_period__end_date')
+            if m.legislative_period]
 
     @property
     def llps_roman(self):
         return [llp.roman_numeral for llp in self.llps]
 
     @property
-    def latest_mandate(self):
-        mandates = self.mandates.order_by('-legislative_period__end_date')
-        if mandates:
-            return mandates[0]
+    def llps_facet(self):
+        return [llp.facet_repr for llp in self.llps]
+
+    def get_latest_mandate(self):
+        """
+        Returns the most recent mandate a person had.
+
+        WARNING: This is a costly function and should only be used during
+        scraping, not during list display of persons!
+        """
+
+        if self.mandates:
+            return max(
+                self.mandates.all(),
+                key=lambda m: m.latest_end_date() or date(3000, 1, 1))
         else:
-            mandates = self.mandates.order_by(
-                '-legislative_period__start_date')
-            if mandates:
-                return mandates[0]
-        return None
+            return None
 
     @property
     def full_name_urlsafe(self):
-        return re.sub(u'[^a-zA-Z0-9ßöäüÖÄÜ]+', '-', self.full_name)
+        base_name = self.full_name or self.reversed_name
+        return re.sub(u'[^a-zA-Z0-9ßöäüÖÄÜ]+', '-', base_name)
 
     @property
     def most_recent_function_or_occupation(self):
-        return self.latest_mandate or self.occupation
+        return self.latest_mandate.function.title or self.occupation
 
     @property
-    def url(self):
-        return reverse(
-            'person_detail',
-            kwargs={
-                'parl_id': self.parl_id_urlsafe,
-                'name': self.full_name_urlsafe
-            }
-        )
+    def slug(self):
+        if not self._slug:
+            self._slug = reverse(
+                'person_detail',
+                kwargs={
+                    'parl_id': self.parl_id_urlsafe,
+                    'name': self.full_name_urlsafe
+                }
+            )
+            self.save()
+
+        return self._slug
 
 class Inquiry(Law):
     """
@@ -396,7 +488,7 @@ class Step(models.Model):
     source_link = models.URLField(max_length=255, default="")
 
     # Relationships
-    phase = models.ForeignKey(Phase)    
+    phase = models.ForeignKey(Phase)
     law = models.ForeignKey(Law, null=True, blank=True, related_name='steps')
     opinion = models.ForeignKey(
         Opinion, null=True, blank=True, related_name='steps')
@@ -404,9 +496,9 @@ class Step(models.Model):
         Inquiry, null=True, blank=True, related_name='steps_inquiry')
 
     def __unicode__(self):
-        if self.title:
+        try:
             return remove_tags(self.title, 'a')
-        else:
+        except:
             return self.title
 
 class Statement(models.Model):
@@ -424,4 +516,231 @@ class Statement(models.Model):
 
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
+
+class Verification(models.Model):
+
+    """
+    A generic Verification via random hash. Can be linked to a Subscription,
+    and is being used for one-time links as well.
+    """
+
+    verified = models.BooleanField()
+    verification_hash = models.CharField(max_length=32)
+
+
+class User(models.Model):
+
+    """
+    A user that subscribed certain pages
+    """
+    email = models.EmailField(unique=True)
+
+    # Relationships
+    verification = models.OneToOneField(Verification, null=True, blank=True)
+
+    # Interna, Utilities
+    _list_slug = models.CharField(max_length=255, default="")
+
+    @property
+    def list_slug(self):
+        if not self._list_slug:
+            self._list_slug = reverse(
+                'list',
+                kwargs={
+                    'email': self.user.email,
+                    'key': self.verification.verification_hash
+                }
+            )
+            self.save()
+
+
+class SubscribedContent(models.Model):
+
+    """
+    A news- or page-subscription
+    """
+    url = models.URLField(max_length=255, unique=True)
+    latest_content_hash = models.CharField(
+        max_length=16, null=True, blank=True)
+
+    # Relationships
+    users = models.ManyToManyField(User, through="Subscription")
+
+
+class Subscription(models.Model):
+
+    """
+    A single subscription of content for a user
+    """
+    user = models.ForeignKey(User)
+    content = models.ForeignKey(SubscribedContent)
+
+    # Relationships
+    verification = models.OneToOneField(Verification, null=True, blank=True)
+
+    class Meta:
+        unique_together = ("user", "content")
+
+    # Interna, Utilities
+    _unsub_slug = models.CharField(max_length=255, default="")
+
+    @property
+    def unsub_slug(self):
+        if not self._unsub_slug:
+            self._unsub_slug = reverse(
+                'unsubscribe',
+                kwargs={
+                    'email': self.user.email,
+                    'key': self.verification.verification_hash
+                }
+            )
+            self.save()
+
+        return self._unsub_slug
+
+
+class Petition(Law):
+
+    """
+    "Beteiligung der BürgerInnen"
+    Either a "Bürgerinitiative" or a "Petition" (started by members of the parliament)
+    """
+    signable = models.BooleanField()
+    signing_url = models.URLField(max_length=255, default="")
+    signature_count = models.IntegerField(default=0)
+
+    # Relationships
+    reference = models.OneToOneField(
+        "self", blank=True, null=True, related_name='redistribution')
+
+    def __unicode__(self):
+        return u'{} eingebracht von {}'.format(
+            super(Petition, self).__unicode__(),
+            ", ".join([unicode(c) for c in self.creators.all()]))
+
+    @property
+    def full_signature_count(self):
+        """
+        Return the signature count including the count in the previous period
+        (if this Petition is a "Neuverteilung")
+        """
+        full_count = self.signature_count
+        if self.reference is not None:
+            full_count = full_count + self.reference.signature_count
+
+        return full_count
+
+
+class PetitionCreator(models.Model):
+
+    """
+    Creator of a "Bürgerinitiative" or "Petition".
+    Can be a member of the parliament.
+    """
+    full_name = models.CharField(max_length=255)
+
+    # Relationships
+    created_petitions = models.ManyToManyField(
+        Petition, related_name='creators')
+    person = models.OneToOneField(
+        Person, null=True, related_name='petitions_created')
+
+    def __unicode__(self):
+        if self.person is not None:
+            return u'{}'.format(self.person.full_name)
+        else:
+            return u'{}'.format(self.full_name)
+
+
+class PetitionSignature(models.Model):
+
+    """
+    Public signature of a "Bürgerinitiative" or "Petition"
+    """
+    full_name = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=50)
+    location = models.CharField(max_length=255)
+    date = models.DateField()
+
+    # Relationships
+    petition = models.ForeignKey(Petition, related_name='petition_signatures')
+
+    def __unicode__(self):
+        return u'Unterschrift von {} ({}-{}) am {} für {}'\
+            .format(self.full_name, self.postal_code, self.location, self.date, self.petition)
+
+
+class Debate(models.Model):
+
+    """
+    A debate / session in parlament, on a specific date.
+    """
+    date = models.DateTimeField()
+    title = models.CharField(max_length=255, null=True)
+    debate_type = models.CharField(max_length=255, null=True)
+    protocol_url = models.URLField(max_length=255, null=True)
+    detail_url = models.URLField(max_length=255, null=True, blank=True)
+    nr = models.IntegerField(null=True)
+    llp = models.ForeignKey(LegislativePeriod, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.title
+
+
+class DebateStatement(models.Model):
+
+    """
+    Statement in a debate
+    """
+
+    # Datime from the debate date + the most recent timestamp found in debate
+    date = models.DateTimeField(null=True)
+
+    # Ref. to debate
+    debate = models.ForeignKey(Debate, null=True,
+                               related_name='debate_statements')
+
+    # Enumeration of the sections as they were parsed
+    # (might be useful for ordering)
+    index = models.IntegerField(default=1)
+
+    # The name of the div's class / section in the transcript
+    doc_section = models.CharField(max_length=255)
+
+    # Flags about the type of the section
+    text_type = models.CharField(max_length=12, null=True)
+
+    # .. and the role of the speaker, if it the section is a real statement
+    speaker_role = models.CharField(max_length=12, null=True)
+
+    # Start and end pages of the statement in the transcript
+    page_start = models.IntegerField(null=True)
+    page_end = models.IntegerField(null=True)
+
+    # Cleaned text, will then contain only the statement of the speaker
+    full_text = models.TextField(null=True)
+
+    # Statement / transcript section, as it was fetched
+    raw_text = models.TextField(null=True)
+
+    # Will contain statement and links, references etc. - cleaned
+    # and properly marked-up
+    annotated_text = models.TextField(null=True)
+
+    # Person ref (speaker)
+    person = models.ForeignKey(Person, null=True,
+                               related_name='debate_statements')
+    # Name of speaker (useful for cases without person-ref for speaker?)
+    speaker_name = models.CharField(max_length=255, null=True)
+
+    # For debug reasons, can contain extracted data as JSON string
+    debugdump = models.TextField(null=True)
+
+    def __unicode__(self):
+        return u'{}, {}-{}, {}'.format(
+            # self.person.full_name if self.person else '-',
+            self.speaker_name,
+            self.index,
+            self.doc_section,
+            self.date)
 

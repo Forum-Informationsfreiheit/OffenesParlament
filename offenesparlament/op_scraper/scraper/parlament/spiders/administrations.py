@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import feedparser
 
 from ansicolor import red
 from ansicolor import cyan
@@ -10,26 +9,20 @@ from ansicolor import blue
 from urllib import urlencode
 
 from parlament.settings import BASE_HOST
-from parlament.spiders import BaseSpider
+from parlament.spiders.persons import PersonsSpider
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
 from parlament.resources.extractors.opinion import *
 from parlament.resources.extractors.administration import *
 
-from parlament.resources.util import _clean
-
-
-from op_scraper.models import Party
-from op_scraper.models import State
 from op_scraper.models import Person
 from op_scraper.models import Function
 from op_scraper.models import Mandate
-from op_scraper.models import LegislativePeriod
 from op_scraper.models import Administration
 
 
-class AdministrationsSpider(BaseSpider):
+class AdministrationsSpider(PersonsSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "WWER/BREG/REG/filter.psp")
 
     URLOPTIONS_ADMIN = {
@@ -45,7 +38,10 @@ class AdministrationsSpider(BaseSpider):
         'pageNumber': '',
     }
 
-    name = "administration"
+    LLP = []
+
+    name = "administrations"
+    title = "Administrations (Regierungen) Spider"
     persons_scraped = []
 
     def __init__(self, **kw):
@@ -54,6 +50,8 @@ class AdministrationsSpider(BaseSpider):
 
         self.cookies_seen = set()
         self.idlist = {}
+
+        self.print_debug()
 
     def get_urls(self):
         """
@@ -152,40 +150,3 @@ class AdministrationsSpider(BaseSpider):
                 green(u'[{}]'.format(admin_item.title))))
 
         return admin_item
-
-    def parse_person_detail(self, response):
-        """
-        Parse a persons detail page before creating the person object
-        """
-        person = response.meta['person']
-        self.logger.info(u"Updating Person Detail {}".format(
-            green(u"[{}]".format(person['reversed_name']))
-        ))
-        full_name = PERSON.DETAIL.FULL_NAME.xt(response)
-        bio_data = PERSON.DETAIL.BIO.xt(response)
-
-        profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
-        profile_photo_copyright = PERSON.DETAIL.PHOTO_COPYRIGHT.xt(response)
-        try:
-            person_data = {
-                'photo_link': "{}{}".format(BASE_HOST, profile_photo_url),
-                'photo_copyright': profile_photo_copyright,
-                'full_name': full_name,
-                'reversed_name': person['reversed_name'],
-                'birthdate': bio_data['birthdate'],
-                'birthplace': bio_data['birthplace'],
-                'deathdate': bio_data['deathdate'],
-                'deathplace': bio_data['deathplace'],
-                'occupation': bio_data['occupation']}
-
-            person_item, created_person = Person.objects.update_or_create(
-                source_link=person['source_link'],
-                parl_id=person['parl_id'],
-                defaults=person_data
-            )
-            person_item.save()
-        except:
-            self.logger.info(red("Error saving Person {}".format(full_name)))
-            import ipdb
-            ipdb.set_trace()
-            return

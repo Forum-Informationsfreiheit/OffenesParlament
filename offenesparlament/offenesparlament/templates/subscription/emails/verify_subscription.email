@@ -1,0 +1,6 @@
+Hej there,<br /><br />
+
+please verify that you are the owner of this address by opening
+this verification link:<br /><br />
+
+<a href="{{ verification_url }}">Verify me!</a>

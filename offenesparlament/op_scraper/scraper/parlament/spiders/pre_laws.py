@@ -36,7 +36,7 @@ from op_scraper.models import Opinion
 class PreLawsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/MESN/filter.psp")
 
-    # LLP = range(24, 26)
+    ALLOWED_LLPS = range(20, 26)
 
     URLOPTIONS = {
         'view': 'RSS',
@@ -52,9 +52,16 @@ class PreLawsSpider(BaseSpider):
     }
 
     name = "pre_laws"
+    title = "Pre-Laws (Ministerialentwürfe) Spider"
 
     def __init__(self, **kw):
         super(PreLawsSpider, self).__init__(**kw)
+        print "Initializing PRE_LAW scraper with keywords:{}".format(kw)
+        if 'llp' in kw:
+            try:
+                self.LLP = [int(kw['llp'])]
+            except:
+                pass
 
         # add at least a default URL for testing
         self.start_urls = self.get_urls()
@@ -112,8 +119,10 @@ class PreLawsSpider(BaseSpider):
 
         # is the tab 'Parlamentarisches Verfahren available?'
         if opinions:
+            skipped_ops = 0
             for op in opinions:
                 if Opinion.objects.filter(parl_id=op['parl_id']).exists():
+                    skipped_ops += 1
                     continue
                 post_req = scrapy.Request("{}/{}".format(BASE_HOST, op['url']),
                                           callback=self.parse_opinion,
@@ -123,8 +132,8 @@ class PreLawsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
-        log.msg(green("Open Callback requests: {}".format(
-            len(callback_requests))), level=log.INFO)
+            log.msg(green("Open/Skipped Callback requests: {}/{}".format(
+                len(callback_requests), skipped_ops)), level=log.INFO)
 
         return callback_requests
 

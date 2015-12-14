@@ -12,41 +12,92 @@
 {% block title %}{{ person.reversed_name }}{% endblock %}
 
 {% block content %}
-  <h1>{{ person.reversed_name }}<a href='{{person.source_link}}'>[SOURCE]</a></h1>
+  <h1>{{ person.reversed_name }}</h1>
   <p>
     {{ person.most_recent_function_or_occupation }}
     {% include 'partials/party_tag.html' with party=person.party %}
   </p>
 
   <div class="person_info">
-    <div class="">
-      <img src="{{person.photo_link}}" />
+    <div class="person_info_photo">
+      <figure>
+        <img src="{{person.photo_link}}" />
+        <figcaption>Foto: {{ person.photo_copyright }}</figcaption>
+      </figure>
     </div>
-    <div class="">
-      Geboren: {{ person.birthdate}}<br />
-      {% if person.deathdate %}
-        Gestorben: {{person.deathdate}}
-      {% endif %}
+    <div class="person_info_text">
+      <div class="person_info_section">
+        Geboren am {{ person.birthdate }}, {{ person.birthplace }}<br />
+        {% if person.deathdate %}
+          &dagger; {{ person.deathdate }}, {{ person.deathplace }}<br />
+        {% endif %}
+        Beruf: {{ person.occupation }}
+      </div>
+
+      <div class="person_info_section">
+        <h3>Politische Mandate</h3>
+        <ul>
+        {% for mand in person.mandates.all %}
+        <li>
+          {{ mand.function.title }}
+          {% if mand.legislative_period %}
+            ({{mand.legislative_period.roman_numeral}}. <abbr title="Gesetzgebungsperiode">GP</abbr>)
+          {% endif %}
+          {% include 'partials/party_tag.html' with party=mand.party %}
+        </li>
+        {% endfor %}
+        </ul>
+      </div>
+
+      <div class="info_buttons">
+        <a href="{{person.source_link}}" class="button button_source">Parlamentsprofil ansehen</a>
+        <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
+      </div>
+
     </div>
   </div>
 
-  <div class="">
-    <div class="">
-      <h2>Statements</h2>
-      <ul>
-      {% for st in person.statements.all %}
-        <li>
-        {% if st.speech_type == "Pro" %}
-          👍
-        {% elif st.speech_type == "Contra" %}
-          👎
-        {% else %}
-          {{st.speech_type}}
-          {{st.protocol_url}}
-        {% endif %}
-        <a href="{% url 'gesetz_detail' parl_id=st.step.law.parl_id_urlsafe ggp=st.step.law.legislative_period %}">[{{st.step.date}}] {{st.step.law.title}}</a></li>
-      {% endfor %}
-      </ul>
-    </div>
+  {% include 'partials/keywordbox.html' with keywords=keywords tooltip="Zu diesen Schlagworten hatte die/der Parlamentarier_in in den letzten 4 Wochen am meisten Aktivität" %}
+
+  <div class="section">
+    <h2>Redebeiträge</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Art</th>
+          <th>Datum</th>
+          <th>Verhandlungsgegenstand</th>
+      </thead>
+      <tbody>
+        {% for st in person.statements.all %}
+        <tr>
+          <td>
+            <div class="speech_type speech_type_{{st.speech_type}}">
+            {{st.speech_type}}
+            </div>
+          </td>
+          <td>
+            {{st.step.date}}
+          </td>
+          <td>
+            {{st.step.law.title}}</br>
+            <div class="statement_links">
+              <a href="{{ st.protocol_url }}" class="icon_link icon_parliament">Redebeitrag auf parlament.gv.at</a>
+              <a href="{{ st.step.law.slug }}" class="icon_link icon_law">Zum Gesetz</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
+
+  <div class="section">
+    <h2>Verhandlungsgegenstände</h2>
+    {% include 'partials/lawlist.html' with laws=laws %}
+  </div>
+  {% load jsonify %}
+  <script>
+    var OFFPARL_DATA_SEARCH_TYPE = 'Personen';
+  </script>
 {% endblock %}

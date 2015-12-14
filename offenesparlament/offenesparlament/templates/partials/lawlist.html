@@ -1,0 +1,23 @@
+<table class="lawlist">
+  <thead>
+    <tr>
+      <th>Aktualisierung</th>
+      <th>Art</th>
+      <th>Betreff</th>
+      <th>Nummer</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for law in laws %}
+    <tr>
+      <td class="lawlist_date">{{ law.last_update }}</td>
+      <td class="lawlist_category">{{ law.category.title }}</td>
+      <td class="lawlist_title"><a href="{{ law.slug }}">{{ law.title }}</a></td>
+      <td class="lawlist_parl_id">{{ law.parl_id }}</td>
+      <td class="lawlist_status"><span class="law_status law_status_{{ law.simple_status }}">{{ law.simple_status }}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+

@@ -1,0 +1,10 @@
+<div class="keyword_box" data-tip="{{ tooltip }}">
+  <h2>Top {{ keywords|length }} Schlagworte</h2>
+  <div class="columned_wrapper">
+    <ul>
+      {% for kw in keywords %}
+      <li><a href="{% url 'keyword_detail' keyword=kw.title_urlsafe %}">{{ kw }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

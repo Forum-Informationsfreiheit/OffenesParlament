@@ -26,7 +26,18 @@ Vagrant.configure("2") do |config|
   config.vm.define 'offenesparlament' do |node|
     node.vm.hostname = 'offenesparlament.vm'
     node.vm.network :private_network, ip: '192.168.47.15'
-    node.vm.provision :shell, path: "bootstrap.sh"
+
+
+    ##
+    # Provisioners
+    ##
+
+    # 1. Bootstrap provisioner, installs the dev system and dependencies
+    config.vm.provision "bootstrap", type: "shell", path: "provision/bootstrap.sh", privileged: false
+
+    # 2. DB Creation and Reset provisioner
+    node.vm.provision "reset_db", type: "ansible", playbook: "provision/reset_postgresdb.yml"
+    #, verbose: "vvv"
 
   end
 end

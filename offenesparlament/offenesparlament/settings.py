@@ -46,7 +46,9 @@ class BaseConfig(Configuration):
         'reversion',
         'django_extensions',
         'django_bootstrap_breadcrumbs',
-        'import_export'
+        'import_export',
+        'jsonify',
+        'djcelery',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -64,10 +66,9 @@ class BaseConfig(Configuration):
     GRAPPELLI_INDEX_DASHBOARD = 'op_scraper.op_scraper_dashboard.CustomIndexDashboard'
 
     # Haystack Configuration
-
     HAYSTACK_CONNECTIONS = {
         'default': {
-            'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+            'ENGINE': 'offenesparlament.search_backend.FuzzyElasticsearchSearchEngine',
             'URL': 'http://localhost:9200/',
             'INDEX_NAME': 'haystack',
         },
@@ -100,10 +101,21 @@ class BaseConfig(Configuration):
     # Database
     # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     }
+    # }
+
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'op',
+            'USER': 'op',
+            'PASSWORD': 'secret',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 
@@ -116,9 +128,11 @@ class BaseConfig(Configuration):
 
     USE_I18N = True
 
-    USE_L10N = True
+    USE_L10N = False
 
     USE_TZ = True
+
+    DATE_FORMAT = "j.n.Y"
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -127,13 +141,17 @@ class BaseConfig(Configuration):
 
     # Django Celery
     CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+    CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'
+    CELERYD_HIJACK_ROOT_LOGGER = False
 
 
 class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
-    CELERY_RESULT_BACKEND = 'amqp'
+    #CELERY_RESULT_BACKEND = 'amqp'
+
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
     # Workaround for the ReactorNotRestartable issue described here:
     # http://stackoverflow.com/questions/22116493/run-a-scrapy-spider-in-a-celery-task
@@ -175,7 +193,7 @@ class Dev(BaseConfig):
     MIDDLEWARE_CLASSES = BaseConfig.MIDDLEWARE_CLASSES + \
         ('debug_toolbar.middleware.DebugToolbarMiddleware', )
 
-    INTERNAL_IPS = ('127.0.0.1', '10.0.2.2')
+    INTERNAL_IPS = ('127.0.0.1', '10.0.2.2', '192.168.47.1')
 
     DEBUG_TOOLBAR_PANELS = [
         # 'debug_toolbar.panels.versions.VersionsPanel',
