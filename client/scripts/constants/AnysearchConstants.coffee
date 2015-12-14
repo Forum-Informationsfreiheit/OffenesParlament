@@ -7,3 +7,4 @@ module.exports = keyMirror
   CHANGE_TERM_CATEGORY: null
   CHANGE_TERM_VALUE: null
   UPDATE_FACETS: null
+  SEARCHBAR_SETUP_COMPLETE: null

@@ -16,3 +16,9 @@
       postgresql_user: db=op name=op password=secret priv=ALL
       become: true
       become_user: postgres
+
+    - name: Makemigrations and Migrate
+      shell: "cd offenesparlament && python manage.py makemigrations && python manage.py migrate"
+
+    - name: Create Admin-User
+      shell: cd offenesparlament && echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | ./manage.py shell

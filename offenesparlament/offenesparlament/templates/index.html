@@ -7,6 +7,7 @@
 
 {% load staticfiles%}
 {% block js_files %}
+  <script src="{% static 'scripts/app.js' %}"></script>
   <script src="{% static 'scripts/homepage.js' %}"></script>
 {% endblock %}
 
@@ -15,9 +16,8 @@
 <div class="homepage_content">
   <div class="container">
     <div class="homepage_search">
-      <div class="searchbar">
-        <i class="glyphicon glyphicon-search"></i>
-        <input type="text" class="form-control" placeholder="Wonach möchten Sie suchen?" />
+      <div class="search_bar">
+        <div id="anysearch_container_homepage"></div>
       </div>
       <div class="help">
         <a href="#">Beispielsuche ansehen</a>
@@ -32,19 +32,20 @@
       <div class="projectintro_item_border_inlay">
         <div class="projectintro_item_content">
           <h3 class="projectintro_item_icon_parliament">Suchen & analysieren</h3>
-          <p>Hier können Sie vom österreichischen Parlament veröffentlichte
-          Dokumente einfach durchsuchen, analysieren und mit handelnden
-          Personen verknüpfen.</p>
+          <p>Hier können Sie vom österreichischen Parlament
+          veröffentlichte Informationen finden, einordnen und
+          nachvollziehen<br/><br/></p>
         </div>
       </div>
     </div><!--
     --><div class="projectintro_item">
       <div class="projectintro_item_border_inlay">
         <div class="projectintro_item_content">
-          <h3 class="projectintro_item_icon_paperplane">Direkt in Ihr Postfach</h3>
-          <p>Wenn Sie ein Thema besonders interessiert, können Sie sich über neue
-          Beiträge benachrichtigen lassen. Sie können auch Suchabfragen
-          abonnieren.</p>
+          <h3 class="projectintro_item_icon_paperplane">Auf dem Laufenden bleiben</h3>
+          <p>Demnächst wird es möglich sein, Benachrichtigungen zu
+          Themen, Personen, Stichworten und Gesetzen Ihres Interesses zu
+          bestellen – und wir geben via Email Bescheid, wenn sich etwas
+          tut</p>
         </div>
       </div>
     </div><!--
@@ -52,8 +53,10 @@
       <div class="projectintro_item_border_inlay">
         <div class="projectintro_item_content">
           <h3 class="projectintro_item_icon_personsearch">Über uns</h3>
-          <p>[Blindtext] Dieses Projekt wird durch die Internet Foundation
-          Austria (IPA) / netidee.at gefördert.</p>
+          <p>Dies ist ein zivilgesellschaftliches Projekt, mit dem Ziel,
+          die Aktivitäten des Parlaments einfacher nachvollziehbar zu
+          machen. Feedback &amp; Anregungen bitte an
+          office@informationsfreiheit.at</p>
         </div>
       </div>
     </div>

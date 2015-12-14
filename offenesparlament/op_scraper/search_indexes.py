@@ -36,7 +36,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     description = indexes.CharField(model_attr='description')
     category = indexes.CharField(
         model_attr='category__title', faceted=True, null=True)
-    llp = indexes.CharField(model_attr='llp_roman', faceted=True)
+    llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
 
     # Related, aggregated and Multi-Value Fields
     steps = indexes.MultiValueField()

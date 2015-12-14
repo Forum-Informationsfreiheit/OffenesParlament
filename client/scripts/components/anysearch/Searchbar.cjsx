@@ -4,6 +4,7 @@ Term = require './Term.cjsx'
 Suggest = require './Suggest.cjsx'
 AnysearchActions = require '../../actions/AnysearchActions.coffee'
 AnysearchStore = require '../../stores/AnysearchStore.coffee'
+$ = require 'jquery'
 _ = require 'underscore'
 
 
@@ -26,10 +27,23 @@ Searchbar = React.createClass
 
   componentDidMount: () ->
     AnysearchStore.addChangeListener(@_onChange)
-    AnysearchActions.createPermanentTerm('llps', 'XXV')
+    $(document).click(@_handleGlobalClick)
 
   componentWillUnmount: () ->
     AnysearchStore.removeChangeListener(@_onChange)
+    $(document).off('click')
+
+  _event_was_inside_anysearch: (event) ->
+    target_classname = $(event.target).attr('class')
+    return target_classname?.startsWith('anysearch') or $.contains(@refs.searchbar, event.target)
+
+  _handleGlobalClick: (event) ->
+    if not @_event_was_inside_anysearch(event)
+      # click happened ouside of anysearch
+      @setState(
+        active_term: null
+        suggestion_type: null
+      )
 
   onSuggestionSelected: (input) ->
     if @state.active_term?
@@ -41,7 +55,7 @@ Searchbar = React.createClass
         @setState({suggestion_type: null})
 
   onSearchbarClicked: (event) ->
-    if event.target == @refs.searchbar
+    if event.target == @refs.searchbar or event.target == @refs.icon or event.target == @refs.placeholder
       @refs.last_term.focus()
 
 
@@ -90,8 +104,13 @@ Searchbar = React.createClass
                     onSelect={@onSuggestionSelected}
                     loading={@state.loading}
                     left={@state.suggestion_left_position}
+                    ref="suggest"
                   />
+    else if terms.length < 2
+      placeholder = <span className="anysearch_placeholder" ref="placeholder">Wonach möchten Sie suchen?</span>
     <div className="anysearch_box" onClick={@onSearchbarClicked} ref="searchbar">
+      <span className="anysearch_icon" ref="icon"></span>
+      {placeholder}
       {terms}
       {suggest}
     </div>

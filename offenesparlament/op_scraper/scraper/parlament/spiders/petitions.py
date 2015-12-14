@@ -79,7 +79,7 @@ class PetitionsSpider(BaseSpider):
         if self.LLP:
             for i in self.LLP:
                 for nrbr in ['NR', 'BR']:
-                    for bbet in ['BI', 'PET', 'VOLKBG']:
+                    for bbet in ['BI', 'PET', 'PET-BR', 'VOLKBG']:
                         roman_numeral = roman.toRoman(i)
                         options = self.URLOPTIONS.copy()
                         options['GP'] = roman_numeral
@@ -107,8 +107,12 @@ class PetitionsSpider(BaseSpider):
 
         status = LAW.STATUS.xt(response)
 
-        LLP = LegislativePeriod.objects.get(
-            roman_numeral=response.url.split('/')[-4])
+        raw_llp = response.url.split('/')[-4]
+        if raw_llp != u'BR':
+            LLP = LegislativePeriod.objects.get(
+                roman_numeral=raw_llp)
+        else:
+            LLP = None
 
         # save ids and stuff for internals
         if LLP not in self.idlist:
@@ -189,9 +193,8 @@ class PetitionsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
-        # Only BI or PET have online signatures
-        if u'BI' in parl_id or u'PET' in parl_id:
-            # http://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00040/filter.psp?xdocumentUri=/PAKT/VHG/XXV/BI/BI_00040/index.shtml&GP_CODE=XXV&ITYP=BI&INR=40&FBEZ=BI_001&pageNumber=&STEP=
+        # Only BI or PET (but not PET-BR) have online signatures
+        if u'BI' in parl_id or u'PET' in parl_id and not u'PET-BR' in parl_id:
             signatures_base_url = '{}/PAKT/VHG/{}/{}/{}/filter.psp?xdocumentUri=/PAKT/VHG/{}/{}/{}/'\
                 'index.shtml&GP_CODE={}&ITYP={}&INR={}&FBEZ=BI_001&R_1000=ALLE&STEP=&pageNumber='
 
@@ -459,7 +462,7 @@ class PetitionsSpider(BaseSpider):
             llp = LegislativePeriod.objects.get(
                 roman_numeral=reference[0])
             ref = Petition.objects.filter(
-                law__legislative_period=llp, law__parl_id=reference[1])
+                legislative_period=llp, parl_id=reference[1])
             if len(ref) == 1:
                 return ref[0]
 

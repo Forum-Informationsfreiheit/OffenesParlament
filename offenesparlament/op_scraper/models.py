@@ -15,6 +15,13 @@ class ParlIDMixIn(object):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
+class LlpManager(models.Manager):
+
+    def get_current(self):
+        llp = LegislativePeriod.objects.latest('start_date')
+        return llp
+
+
 class LegislativePeriod(models.Model):
 
     """
@@ -25,6 +32,7 @@ class LegislativePeriod(models.Model):
     roman_numeral = models.CharField(unique=True, max_length=255, default="")
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
+    objects = LlpManager()
 
     def __unicode__(self):
         if self.end_date:
@@ -179,7 +187,7 @@ class Law(models.Model, ParlIDMixIn):
     keywords = models.ManyToManyField(Keyword, related_name="laws")
     press_releases = models.ManyToManyField(PressRelease, related_name="laws")
     documents = models.ManyToManyField(Document, related_name="laws")
-    legislative_period = models.ForeignKey(LegislativePeriod)
+    legislative_period = models.ForeignKey(LegislativePeriod, null=True, blank=True)
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
 
@@ -198,6 +206,10 @@ class Law(models.Model, ParlIDMixIn):
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
+
+    @property
+    def llps_facet(self):
+        return [self.legislative_period.facet_repr]
 
     @property
     def keyword_titles(self):
@@ -584,7 +596,6 @@ class Petition(Law):
     signature_count = models.IntegerField(default=0)
 
     # Relationships
-    # law = models.OneToOneField(Law, related_name='petition')
     reference = models.OneToOneField(
         "self", blank=True, null=True, related_name='redistribution')
 
@@ -660,6 +671,7 @@ class Debate(models.Model):
 
     def __unicode__(self):
         return self.title
+
 
 class DebateStatement(models.Model):
 

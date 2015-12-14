@@ -46,7 +46,9 @@ class BaseConfig(Configuration):
         'reversion',
         'django_extensions',
         'django_bootstrap_breadcrumbs',
-        'import_export'
+        'import_export',
+        'jsonify',
+        'djcelery',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -147,7 +149,7 @@ class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
-    CELERY_RESULT_BACKEND = 'amqp'
+    #CELERY_RESULT_BACKEND = 'amqp'
 
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

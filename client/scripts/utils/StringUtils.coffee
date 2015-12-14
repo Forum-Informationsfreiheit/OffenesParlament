@@ -1,3 +1,6 @@
+_ = require 'underscore'
+
+
 _human_categories =
   party: 'Partei'
   birthplace: 'Geburtsort'
@@ -5,6 +8,9 @@ _human_categories =
   deathplace: 'Todesort'
   occupation: 'Beruf'
   q: 'Text'
+  category: 'Kategorie'
+  keywords: 'Schlagwort'
+  type: 'Suchtyp'
 
 
 module.exports =

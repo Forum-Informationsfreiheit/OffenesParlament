@@ -6,6 +6,13 @@ from django.http import HttpResponse
 from haystack.query import SearchQuerySet
 
 from op_scraper.models import Person, Law
+from offenesparlament.constants import ES_DEFAULT_LIMIT
+
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class QuerySetEncoder(json.JSONEncoder):
@@ -40,6 +47,26 @@ class JsonSearchView(SearchView):
         if 'q' in request.GET and request.GET['q']:
             query_args['q'] = request.GET['q']
 
+        query_args['offset'] = 0
+        if 'offset' in request.GET and request.GET['offset']:
+            try:
+                query_args['offset'] = int(request.GET['offset'])
+            except ValueError:
+                logging.warn(
+                    "Illegal query argument received: offset={}".format(
+                        request.GET['offset']))
+                pass
+
+        query_args['limit'] = ES_DEFAULT_LIMIT
+        if 'limit' in request.GET and request.GET['limit']:
+            try:
+                query_args['limit'] = int(request.GET['limit'])
+            except ValueError:
+                logging.warn(
+                    "Illegal query argument received: offset={}".format(
+                        request.GET['offset']))
+                pass
+
         if 'only_facets' in request.GET:
             query_args['only_facets'] = True
 
@@ -51,12 +78,24 @@ class JsonSearchView(SearchView):
         return query_args
 
     def get(self, request, *args, **kwargs):
-
         query_args = self.extract_query_args(request)
+        logger.info("Searching {} with arguments {}".format(
+            self.search_model, [query_args]))
+
         (result, facet_counts) = self.get_queryset(query_args)
 
-        # combine results and facets
-        result_list = [sr.get_stored_fields() for sr in result]
+        # don't limit/offset empty results when we only return facets
+        if 'only_facets' not in query_args:
+            # calculate offset end
+            start_index = query_args['offset']
+            end_index = query_args[
+                'offset'] + query_args['limit'] if query_args['limit'] else None
+            # combine results and facets, limit and offset as given as parameters
+            result_list = [
+                sr.get_stored_fields() for sr in
+                result[start_index:end_index]]
+        else:
+            result_list = []
         result = {
             'result': result_list,
             'facets': facet_counts
@@ -138,7 +177,7 @@ class LawSearchView(JsonSearchView):
 
     search_model = Law
     facet_fields = [
-        'llp',
+        'llps',
         'category',
         'keywords'
     ]

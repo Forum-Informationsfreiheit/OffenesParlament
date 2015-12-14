@@ -6,6 +6,8 @@ Constants and Utility classes
 from django.core.mail import send_mail
 from django.template import loader, Context
 
+# Limit results for ElasticSearch to this number by Default
+ES_DEFAULT_LIMIT = 50
 
 class EmailController():
 

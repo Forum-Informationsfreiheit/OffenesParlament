@@ -207,6 +207,27 @@ But this facet-only search also works with a query, should that be necessary::
 The result looks like the above-mentioned search result, but always contains an
 empty list in the 'results' field.
 
+Paging
+------
+
+In addition to the query arguments for filtering and facetting, the search views
+also automatically limit the results to allow for smooth paging. Two parameters
+govern this behaviour: `offset` and `limit`.
+
+`Offset` returns search results from
+the given integer on - so, for a search that produced 100 results, an offset
+value of '20' would only return results 20 to 100.
+If no `offset` value is given, the view assumes '0' and returns results
+starting with the first one.
+
+`Limit` restricts the amount of results per page; with the abovementioned
+example and a `limit` value of '50', the query would only return results
+20 through 70.
+If no `limit` is given, the view assumes a default of 50 results. This can be
+changed in the ``offenesparlament/constants.py`` file.
+
+
+
 
 Indices
 =======

@@ -1,4 +1,5 @@
 React = require 'react'
+_ = require 'underscore'
 
 
 SearchResults = React.createClass
@@ -15,7 +16,7 @@ SearchResults = React.createClass
   render: ->
     results = _.map(@props.results, (r) =>
       if r.title?
-        return <li key={r.title}>{r.title}</li>
+        return <li key={r.title}><a href={r.internal_link}>{r.title}</a></li>
       else if r.full_name?
         return <li key={r.full_name}><a href={r.internal_link}>{r.full_name}</a></li>
     )
