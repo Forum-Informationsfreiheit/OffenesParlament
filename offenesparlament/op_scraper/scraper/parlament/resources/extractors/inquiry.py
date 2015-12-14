@@ -254,9 +254,18 @@ class INQUIRY:
             @classmethod
             def xt(cls, step_selector):
                 title_selector = step_selector.xpath('//td[2]')[0].extract()
-                full_title = re.sub('<[^>]*>', '', title_selector).strip()
+                #full_title = re.sub('<[^>]*>', '', title_selector).strip()
+                full_title = title_selector.strip()
                 return full_title
+
 
         class PROTOCOL(SingleExtractor):
             XPATH = "//td[3]/a/@href"
 
+    class RESPONSE_LINK(SingleExtractor):
+        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[last()]/td[2]'
+
+        @classmethod
+        def xt(cls, response):
+            response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[last()]/td[2]/a/@href').extract()
+            return response_link[0]

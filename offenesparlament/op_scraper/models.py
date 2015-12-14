@@ -378,6 +378,7 @@ class Inquiry(Law):
     #Relationships
     sender = models.ManyToManyField(Person, related_name='inquiries_sent', default="")
     receiver = models.ForeignKey(Person, related_name='inquiries_received', default="")
+    #response = models.ForeignKey(Law, related_name='inquiry', default="")
 
     @property
     def llp_roman(self):

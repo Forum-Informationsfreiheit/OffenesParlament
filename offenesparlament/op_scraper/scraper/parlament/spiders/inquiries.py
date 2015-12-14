@@ -66,12 +66,12 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml"]
-        """urls = []
+        #urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml"]
+        urls = []
         
         if self.LLP:
             for i in self.LLP:
-                for nrbr in ['NR']:
+                for nrbr in ['NR','BR']:
                     roman_numeral = roman.toRoman(i)
                     options = self.URLOPTIONS.copy()
                     options['GP'] = roman_numeral
@@ -83,27 +83,36 @@ class InquiriesSpider(BaseSpider):
                     print "GP {}: {} inquiries from {}".format(
                         roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-                    """
+                    
         return urls
 
 
     def parse(self, response):
         source_link = response.url
         category = INQUIRY.CATEGORY.xt(response)
+
+        # Inquiries from Bundesrat don't have an LLP => set None
         if("BR" in category):
             LLP = None
         else:
             LLP = LegislativePeriod.objects.get(
                 roman_numeral=response.url.split('/')[-4])
+
         parl_id = response.url.split('/')[-2]
         title = INQUIRY.TITLE.xt(response)
         description = INQUIRY.DESCRIPTION.xt(response)
+
+        # An inquiry can have multiple senders, but only a single recipient. 
         sender_objects  = []
         for sender_object in INQUIRY.SENDER.xt(response):
             sender_objects.append(Person.objects.get(
                 parl_id=sender_object))
+        
         receiver_object = Person.objects.get(
             parl_id=INQUIRY.RECEIVER.xt(response))
+        
+        # Get or create Category object for the inquiry and log to screen if new 
+        # category is created.
         cat, created = Category.objects.get_or_create(title=category)
         if created:
             log.msg(u"Created category {}".format(
@@ -114,6 +123,7 @@ class InquiriesSpider(BaseSpider):
             'parl_id': parl_id
         }
         
+        # Create or update Inquiry item
         inquiry_item, inquiry_created = Inquiry.objects.update_or_create(
             parl_id=parl_id,
             defaults=inquiry_data,
@@ -132,12 +142,32 @@ class InquiriesSpider(BaseSpider):
         
         response.meta['inquiry_item'] = inquiry_item
 
+
+        callback_requests = []
+
+        # Dringliche / Urgent inquiries have a different structure for steps 
+        # and history. This case distinction accomodates these different structures.
         if any("Dringliche" in '{}'.format(s) for s in inquiry_item.keywords.all()):
             if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
                 self.parse_parliament_steps(response)
         else:    
-            step_num = self.parse_steps(response)
+            response_link = self.parse_steps(response)
+            """if response_link:
+                post_req = scrapy.Request("{}/{}".format(BASE_HOST,response_link),
+                                            callback=self.parse_inquiry_response
+                                            dont_filter=True)
+                post_req.meta['inquiry_item'] = inquiry_item
+                post_req.meta['']
 
+                log.msg(u"Created response_link {}".format(
+                green(u'[{}]'.format(response_link))))"""
+
+
+        
+
+
+
+        # Save Inquiry item and log to terminal if created or updated.
         inquiry_item.save()
         if inquiry_created:
             logtext = u"Created Inquiry {} with ID {}, LLP {} @ {}"
@@ -153,7 +183,11 @@ class InquiriesSpider(BaseSpider):
         )
         log.msg(logtext, level=log.INFO)
 
-        return
+
+        #log.msg(green("Open Callback requests: {}".format(
+        #   len(callback_requests))), level=log.INFO)
+
+        return 
 
     def parse_keywords(self, response):
 
@@ -187,8 +221,14 @@ class InquiriesSpider(BaseSpider):
         return doc_items
 
     def parse_steps(self, response):
+        """
+            Callback function to parse the single-page history for normal inquiries
+        """
+
         inquiry_item = response.meta['inquiry_item']
 
+        # Get or created a default-phase for inquiries, because there are no phases in 
+        # simple inquiries.
         phase_item, created = Phase.objects.get_or_create(
             title='default_inqu')
         if created:
@@ -196,6 +236,12 @@ class InquiriesSpider(BaseSpider):
                 green(u'[{}]'.format(phase_item.title))))
 
         steps = INQUIRY.STEPS.xt(response)
+
+        if "Schriftliche Beantwortung" in steps[-1]["title"]:
+            response_link = INQUIRY.RESPONSE_LINK.xt(response)
+        else:
+            response_link = 0
+
 
         for step in steps:
             step_item, created = Step.objects.update_or_create(
@@ -208,12 +254,12 @@ class InquiriesSpider(BaseSpider):
                 source_link = response.url
                 )
             step_item.save()
-        return len(steps)
+        return response_link
 
     def parse_parliament_steps(self, response):
         """
         Callback function to parse the additional 'Parlamentarisches Verfahren'
-        page
+        page.
         """
         inquiry_item = response.meta['inquiry_item']
 
