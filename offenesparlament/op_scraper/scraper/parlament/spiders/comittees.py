@@ -44,6 +44,7 @@ class ComitteesSpider(BaseSpider):
     }
 
     name = "comittees"
+    title = "Comittees Spider"
 
     def __init__(self, **kw):
         super(ComitteesSpider, self).__init__(**kw)
@@ -118,6 +119,15 @@ class ComitteesSpider(BaseSpider):
         else:
             parent_comitee = None
 
+        # Log our progress
+        logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
+            red(name),
+            magenta(u"[{}]".format(parl_id)),
+            green(str(llp)),
+            blue(response.url)
+        )
+        log.msg(logtext, level=log.INFO)
+
         description = COMITTEE.DESCRIPTION.xt(response)
 
         comittee_data = {
@@ -153,6 +163,14 @@ class ComitteesSpider(BaseSpider):
                 'agenda': agenda_item
             }
 
+            # Log our progress
+            logtext = u"Scraping meeting no. {} of {} on {}".format(
+                red(meeting['number']),
+                magenta(name),
+                green(meeting['date']),
+            )
+            log.msg(logtext, level=log.INFO)
+
             meeting_item, meeting_created = ComitteeMeeting.objects.update_or_create(
                 number=meeting['number'],
                 date=meeting['date'],
@@ -185,10 +203,17 @@ class ComitteesSpider(BaseSpider):
         laws_and_reports = COMITTEE.LAWS.xt(response)
 
         for law in laws_and_reports:
+            # Log our progress
+            logtext = u"Adding law with id {}, LLP {} to {}".format(
+                magenta(u"[{}]".format(law['parl_id'])),
+                green(law['llp']),
+                blue(name)
+            )
+            log.msg(logtext, level=log.INFO)
+
             law_item = self.parse_law(law)
             if law_item is not None:
                 comittee_laws.append(law_item)
-
 
         comittee_item.laws.add(*comittee_laws)
         comittee_item.save()
