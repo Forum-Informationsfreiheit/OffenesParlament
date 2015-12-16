@@ -741,16 +741,19 @@ class Comittee(models.Model, ParlIDMixIn):
     source_link = models.URLField(max_length=255, default="")
     nrbr = models.CharField(max_length=20)
     description = models.TextField(default="", blank=True)
+    active = models.BooleanField(default=True)
 
     # Relationships
     legislative_period = models.ForeignKey(
         LegislativePeriod, blank=True, null=True)
-    laws = models.ManyToManyField(Law, blank=True, null=True, related_name='comittees')
+    laws = models.ManyToManyField(Law, blank=True, related_name='comittees')
     parent_comittee = models.ForeignKey(
         "self", blank=True, null=True, related_name='sub_comittees')
 
     class Meta:
-        unique_together = ("parl_id", "legislative_period")
+        # NR comittees are unique by parl_id & legislative period
+        # BR comittees additionaly need active for uniqueness
+        unique_together = ("parl_id", "legislative_period", "active")
 
     def __unicode__(self):
         return u'{} [{}] in {}'\

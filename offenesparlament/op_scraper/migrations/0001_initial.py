@@ -38,6 +38,7 @@ class Migration(migrations.Migration):
                 ('source_link', models.URLField(default=b'', max_length=255)),
                 ('nrbr', models.CharField(max_length=20)),
                 ('description', models.TextField(default=b'', blank=True)),
+                ('active', models.BooleanField(default=True)),
             ],
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
@@ -75,7 +76,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255, null=True)),
                 ('debate_type', models.CharField(max_length=255, null=True)),
                 ('protocol_url', models.URLField(max_length=255, null=True)),
-                ('detail_url', models.URLField(max_length=255, null=True)),
+                ('detail_url', models.URLField(max_length=255, null=True, blank=True)),
                 ('nr', models.IntegerField(null=True)),
             ],
         ),
@@ -403,7 +404,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='law',
             name='legislative_period',
-            field=models.ForeignKey(to='op_scraper.LegislativePeriod'),
+            field=models.ForeignKey(blank=True, to='op_scraper.LegislativePeriod', null=True),
         ),
         migrations.AddField(
             model_name='law',
@@ -466,7 +467,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comittee',
             name='laws',
-            field=models.ManyToManyField(related_name='comittees', null=True, to='op_scraper.Law', blank=True),
+            field=models.ManyToManyField(related_name='comittees', to='op_scraper.Law', blank=True),
         ),
         migrations.AddField(
             model_name='comittee',
@@ -506,6 +507,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='comittee',
-            unique_together=set([('parl_id', 'legislative_period')]),
+            unique_together=set([('parl_id', 'legislative_period', 'active')]),
         ),
     ]

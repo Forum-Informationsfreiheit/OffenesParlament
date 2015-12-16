@@ -268,6 +268,23 @@ class COMITTEE:
 
             return laws
 
+    class ACTIVE(SingleExtractor):
+
+        XPATH = '//*[@id="tab-Sitzungsueberblick"]/following-sibling::table/tbody/tr'
+
+        @classmethod
+        def xt(cls, response):
+            rows = response.xpath(cls.XPATH)
+
+            for row in rows:
+                raw_active = row.xpath('td[2]/text()').extract()
+                if len(raw_active) > 0:
+                    active = _clean(raw_active[0])
+                    if active == u'Aufl\xf6sung':
+                        return False
+
+            return True
+
     class MEMBERSHIP(SingleExtractor):
 
         XPATH = '//*[@id="tab-Ausschuesse"]/following-sibling::h3'

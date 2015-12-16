@@ -104,9 +104,13 @@ class ComitteesSpider(BaseSpider):
         if llp is not None:
             nrbr = 'Nationalrat'
             legislative_period = LegislativePeriod.objects.get(roman_numeral=llp)
+            # NR comittees are "active" if they are in the current LLP
+            active = (legislative_period == LegislativePeriod.objects.get_current())
         else:
             nrbr = 'Bundesrat'
             legislative_period = None
+            # BR comittees are active if they are not "aufgelöst"
+            active = COMITTEE.ACTIVE.xt(response)
 
         # main-comittee parl_id starts with the number 1
         # sub-comittees parl_id start  with the number 2
@@ -134,7 +138,8 @@ class ComitteesSpider(BaseSpider):
             'description': description,
             'name': name,
             'source_link': response.url,
-            'parent_comittee': parent_comitee
+            'parent_comittee': parent_comitee,
+            'active': active
         }
 
         try:
@@ -167,7 +172,7 @@ class ComitteesSpider(BaseSpider):
             logtext = u"Scraping meeting no. {} of {} on {}".format(
                 red(meeting['number']),
                 magenta(name),
-                green(meeting['date']),
+                green(str(meeting['date'].date())),
             )
             log.msg(logtext, level=log.INFO)
 
