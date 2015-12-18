@@ -11,6 +11,7 @@ from op_scraper.scraper.parlament.spiders.petitions import PetitionsSpider
 from op_scraper.scraper.parlament.spiders.pre_laws import PreLawsSpider
 from op_scraper.scraper.parlament.spiders.persons import PersonsSpider
 from op_scraper.scraper.parlament.spiders.statement import StatementSpider
+from op_scraper.scraper.parlament.spiders.comittees import ComitteesSpider
 
 
 SPIDERS = {
@@ -42,6 +43,10 @@ SPIDERS = {
         'scraper': StatementSpider,
         'has_options': True
     },
+    'comittees': {
+        'scraper': ComitteesSpider,
+        'has_options': True
+    },
 }
 
 SPIDER_CHOICES = (
@@ -52,6 +57,7 @@ SPIDER_CHOICES = (
     ('laws', 'Gesetze'),
     ('petitions', 'Petitionen'),
     ('debates', 'Debatten und Statements'),
+    ('comittees', 'Ausschüsse')
 )
 
 from django import forms
