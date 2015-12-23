@@ -30,10 +30,11 @@ class COMITTEE:
                 raw_parl_id = splitted_url[-2]
                 if len(raw_parl_id) > 1:
                     raw_parl_id = raw_parl_id.split('_')
-                    parl_id_type = raw_parl_id[0]
-                    parl_id_number = int(raw_parl_id[1])
-                    parl_id = u'({}/{})'.format(parl_id_number, parl_id_type)
-                    return llp, parl_id
+                    if len(raw_parl_id) > 1:
+                        parl_id_type = raw_parl_id[0]
+                        parl_id_number = int(raw_parl_id[1])
+                        parl_id = u'({}/{})'.format(parl_id_number, parl_id_type)
+                        return llp, parl_id
 
         return u'', u''
 
@@ -157,9 +158,6 @@ class COMITTEE:
                     else:
                         topic_number = 0
 
-                    if topic_number == 0:
-                        continue  # not a TOP -> ignore row
-
                     raw_topic_text = raw_row.xpath('td[2]/text()').extract()
 
                     if len(raw_topic_text) > 0:
@@ -176,23 +174,21 @@ class COMITTEE:
                     else:
                         topic_comment = u''
 
-                    raw_topic_law_id = raw_row.xpath('td[2]/a/text()').extract()
+                    raw_topic_law_text = raw_row.xpath('td[2]/a/text()').extract()
 
-                    if len(raw_topic_law_id) > 0:
-                        topic_law_id = u'({})'.format(raw_topic_law_id[0])
+                    if len(raw_topic_law_text) > 0:
+                        topic_law_text = u'({})'.format(raw_topic_law_text[0])
                     else:
-                        topic_law_id = u''
+                        topic_law_text = u''
+
+                    topic_text = u'{} {}'.format(topic_text,topic_law_text)
 
                     raw_topic_law_link = raw_row.xpath('td[2]/a/@href').extract()
 
                     if len(raw_topic_law_link) > 0:
-                        raw_topic_law_link_splitted = raw_topic_law_link[0].split('/')
-                        if len(raw_topic_law_link_splitted) > 3:
-                            topic_law_llp = raw_topic_law_link_splitted[3]
-                        else:
-                            topic_law_llp = u''
+                        topic_law_llp, topic_law_id = COMITTEE.url_to_parlid(raw_topic_law_link[0])
                     else:
-                        topic_law_llp = u''
+                        topic_law_llp, topic_law_id = u'', u''
 
                     if topic_law_id != u'':
                         topic_law = {

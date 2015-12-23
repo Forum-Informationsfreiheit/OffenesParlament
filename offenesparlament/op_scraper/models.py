@@ -805,4 +805,4 @@ class ComitteeAgendaTopic(models.Model):
     law = models.ForeignKey(Law, related_name='agenda_topics', null=True)
 
     class Meta:
-        unique_together = ("number", "meeting")
+        unique_together = ("text", "meeting")

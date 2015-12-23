@@ -224,9 +224,9 @@ class ComitteesSpider(BaseSpider):
         comittee_item.save()
 
     def parse_law(self, law_dict):
-        if law_dict['llp'] != u'' and law_dict['llp'] != u'BR':
+        try:
             law_legislative_period = LegislativePeriod.objects.get(roman_numeral=law_dict['llp'])
-        else:
+        except LegislativePeriod.DoesNotExist:
             law_legislative_period = None
 
         try:
