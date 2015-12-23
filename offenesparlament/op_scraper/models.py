@@ -803,6 +803,3 @@ class ComitteeAgendaTopic(models.Model):
     # Relationships
     meeting = models.ForeignKey(ComitteeMeeting, related_name='agenda_topics')
     law = models.ForeignKey(Law, related_name='agenda_topics', null=True)
-
-    class Meta:
-        unique_together = ("text", "meeting")

@@ -193,7 +193,6 @@ class ComitteesSpider(BaseSpider):
                     law_item = None
 
                 agenda_topic_data = {
-                    'text': topic['text'],
                     'comment': topic['comment'],
                     'law': law_item,
                 }
@@ -201,6 +200,7 @@ class ComitteesSpider(BaseSpider):
                 agenda_topic_item, agenda_topic_created = ComitteeAgendaTopic.objects.update_or_create(
                     number=topic['number'],
                     meeting=meeting_item,
+                    text=topic['text'],
                     defaults=agenda_topic_data,
                 )
 
