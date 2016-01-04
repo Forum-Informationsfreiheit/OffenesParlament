@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import scrapy
 import feedparser
 import roman
@@ -65,7 +66,7 @@ class InquiriesSpider(BaseSpider):
         """
         Returns a list of URLs to scrape
         """
-        #urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml"]
+        #urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06110/index.shtml"]
         urls = []
         
         if self.LLP:
@@ -103,13 +104,20 @@ class InquiriesSpider(BaseSpider):
 
         # An inquiry can have multiple senders, but only a single recipient. 
         sender_objects  = []
-        for sender_object in INQUIRY.SENDER.xt(response):
-            sender_objects.append(Person.objects.get(
-                parl_id=sender_object))
-        
-        receiver_object = Person.objects.get(
-            parl_id=INQUIRY.RECEIVER.xt(response))
-        
+        try: 
+            for sender_object in INQUIRY.SENDER.xt(response):
+                sender_objects.append(Person.objects.get(
+                    parl_id=sender_object))
+        except:
+            log.msg(red(u'Sender was not found in database, skipping Inquiry {} in LLP {}'.format(parl_id,LLP)))
+            return
+        try:
+            receiver_object = Person.objects.get(
+                parl_id=INQUIRY.RECEIVER.xt(response))
+        except:
+            log.msg(red(u'Receiver {} was not found in database, skipping Inquiry {} in LLP {}'.format(INQUIRY.RECEIVER.xt(response),parl_id,LLP)))
+            return
+
         # Get or create Category object for the inquiry and log to screen if new 
         # category is created.
         cat, created = Category.objects.get_or_create(title=category)
@@ -153,7 +161,7 @@ class InquiriesSpider(BaseSpider):
             response_link = self.parse_steps(response)
             """if response_link:
                 post_req = scrapy.Request("{}/{}".format(BASE_HOST,response_link),
-                                            callback=self.parse_inquiry_response
+                                            callback=self.parse_inquiry_response,
                                             dont_filter=True)
                 post_req.meta['inquiry_item'] = inquiry_item
                 post_req.meta['']
@@ -169,7 +177,7 @@ class InquiriesSpider(BaseSpider):
             logtext = u"Updated Inquiry {} with ID {}, LLP {} @ {}"
             
         logtext = logtext.format(
-            red(title),
+            cyan(title),
             cyan(u"{}".format(parl_id)),
             green(str(LLP)),
             blue(response.url),
