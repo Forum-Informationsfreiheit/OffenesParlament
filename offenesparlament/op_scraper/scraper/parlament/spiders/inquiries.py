@@ -115,7 +115,7 @@ class InquiriesSpider(BaseSpider):
             receiver_object = Person.objects.get(
                 parl_id=INQUIRY.RECEIVER.xt(response))
         except:
-            log.msg(red(u'Receiver {} was not found in database, skipping Inquiry {} in LLP {}'.format(INQUIRY.RECEIVER.xt(response),parl_id,LLP)))
+            log.msg(red(u'Receiver was not found in database, skipping Inquiry {} in LLP {}'.format(parl_id,LLP)))
             return
 
         # Get or create Category object for the inquiry and log to screen if new 
