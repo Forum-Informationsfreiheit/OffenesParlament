@@ -269,3 +269,24 @@ class INQUIRY:
         def xt(cls, response):
             response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[last()]/td[2]/a/@href').extract()
             return response_link[0]
+
+    class RESPONSESENDER(SingleExtractor):
+        XPATH = '//*[@class="c_2"]/p[contains(text(), "Beantwortet durch")]/a/@href'
+
+        @classmethod
+        def xt(cls, response):
+            sender_links = response.xpath(cls.XPATH).extract()
+            return [sender_link.split('/')[-2] for sender_link in sender_links]
+
+    class RESPONSEDESCRIPTION(SingleExtractor):
+        XPATH = '//*[@id="content"]/div[3]/div[2]/div/p[1]'
+        
+        @classmethod
+        def xt(cls, response):
+            description = response.xpath(cls.XPATH).extract()
+            if description:
+                description = description[0]
+            else:
+                description = u""
+            description_nowhitespace = re.sub('\s+',' ',description)
+            return remove_tags(description_nowhitespace, 'p').strip()

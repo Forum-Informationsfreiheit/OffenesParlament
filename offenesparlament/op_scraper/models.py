@@ -460,17 +460,22 @@ class Person(models.Model, ParlIDMixIn):
 
         return self._slug
 
+class InquiryResponse(Law):
+    sender = models.ForeignKey(Person, related_name='inquiries_answered', default="")
+
+    @property
+    def llp_roman(self):
+        return self.legislative_period.roman_numeral
+
+
 class Inquiry(Law):
     """
     An inquiry to the members of government
     """
-#    answer_parl_id = models.CharField(max_length=31)
-#    status = models.CharField(max_length=255)
-
     #Relationships
     sender = models.ManyToManyField(Person, related_name='inquiries_sent', default="")
     receiver = models.ForeignKey(Person, related_name='inquiries_received', default="")
-    #response = models.ForeignKey(Law, related_name='inquiry', default="")
+    response = models.ForeignKey(InquiryResponse, null=True, blank=True, related_name='inquiries', default="")
 
     @property
     def llp_roman(self):
