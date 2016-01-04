@@ -35,7 +35,6 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Inquiry
 from op_scraper.models import Statement
 
-
 class InquiriesSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/JMAB/filter.psp")
 
@@ -83,7 +82,7 @@ class InquiriesSpider(BaseSpider):
                     print "GP {}: {} inquiries from {}".format(
                         roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-                    
+        
         return urls
 
 
@@ -120,19 +119,19 @@ class InquiriesSpider(BaseSpider):
 
         #self.logger.info(u"Inquiry {}/{}: {}".format(green(u'{}'.format(parl_id)), cyan(u'{}'.format(LLP.roman_numeral)), title))
         inquiry_data = {
-            'parl_id': parl_id
+            'title': title,
+            'source_link': source_link,
+            'description': description,
+            'receiver': receiver_object
         }
         
         # Create or update Inquiry item
         inquiry_item, inquiry_created = Inquiry.objects.update_or_create(
             parl_id=parl_id,
-            defaults=inquiry_data,
             legislative_period=LLP,
-            title=title,
-            source_link=source_link,
-            description=description,
-            receiver=receiver_object
+            defaults=inquiry_data
             )
+
 
         #Attach foreign keys
         inquiry_item.keywords = self.parse_keywords(response)
@@ -161,11 +160,6 @@ class InquiriesSpider(BaseSpider):
 
                 log.msg(u"Created response_link {}".format(
                 green(u'[{}]'.format(response_link))))"""
-
-
-        
-
-
 
         # Save Inquiry item and log to terminal if created or updated.
         inquiry_item.save()

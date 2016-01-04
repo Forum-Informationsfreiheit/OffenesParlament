@@ -57,6 +57,7 @@ SPIDER_CHOICES = (
     ('laws', 'Gesetze'),
     ('petitions', 'Petitionen'),
     ('debates', 'Debatten und Statements'),
+    ('inquiries', 'Parlamentarische Anfragen & Beantwortungen')
 )
 
 from django import forms
