@@ -268,7 +268,10 @@ class INQUIRY:
         @classmethod
         def xt(cls, response):
             response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[last()]/td[2]/a/@href').extract()
-            return response_link[0]
+            if not response_link:
+                return 0
+            else:
+                return response_link[0]
 
     class RESPONSESENDER(SingleExtractor):
         XPATH = '//*[@class="c_2"]/p[contains(text(), "Beantwortet durch")]/a/@href'
