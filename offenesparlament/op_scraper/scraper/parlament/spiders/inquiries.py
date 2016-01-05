@@ -21,7 +21,6 @@ from parlament.resources.extractors.opinion import *
 from parlament.resources.extractors.inquiry import *
 from parlament.resources.util import _clean
 
-
 from op_scraper.models import Party
 from op_scraper.models import Document
 from op_scraper.models import State
@@ -68,7 +67,7 @@ class InquiriesSpider(BaseSpider):
         Returns a list of URLs to scrape
         """
         # This predefined list of URLs is chosen to include all types of inquiries possible in the Austrian parliament in order to provide a suitable testing surface for new functions.
-        #urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06110/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06651/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04024/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04025/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00178/index.shtml"]
+        # urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml","https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06110/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06651/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04024/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04025/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00178/index.shtml"]
         urls = []
         
         if self.LLP:
@@ -92,6 +91,11 @@ class InquiriesSpider(BaseSpider):
     def parse(self, response):
         source_link = response.url
         category = INQUIRY.CATEGORY.xt(response)
+        parl_id = response.url.split('/')[-2]
+        title = INQUIRY.TITLE.xt(response)
+        description = INQUIRY.DESCRIPTION.xt(response)
+        sender_objects  = []
+        callback_requests = []
 
         # Inquiries from Bundesrat don't have an LLP => set None
         if("BR" in category):
@@ -99,13 +103,14 @@ class InquiriesSpider(BaseSpider):
         else:
             LLP = LegislativePeriod.objects.get(
                 roman_numeral=response.url.split('/')[-4])
+        # Get or create Category object for the inquiry and log to screen if new 
+        # category is created.
+        cat, created = Category.objects.get_or_create(title=category)
+        if created:
+            log.msg(u"Created category {}".format(
+                green(u'[{}]'.format(category))))
 
-        parl_id = response.url.split('/')[-2]
-        title = INQUIRY.TITLE.xt(response)
-        description = INQUIRY.DESCRIPTION.xt(response)
-
-        # An inquiry can have multiple senders, but only a single recipient. 
-        sender_objects  = []
+        # An inquiry can have multiple senders, but only a single recipient. Try/catch in case person does not exist in the database.
         try: 
             for sender_object in INQUIRY.SENDER.xt(response):
                 sender_objects.append(Person.objects.get(
@@ -120,28 +125,17 @@ class InquiriesSpider(BaseSpider):
             log.msg(red(u'Receiver was not found in database, skipping Inquiry {} in LLP {}'.format(parl_id,LLP)))
             return
 
-        # Get or create Category object for the inquiry and log to screen if new 
-        # category is created.
-        cat, created = Category.objects.get_or_create(title=category)
-        if created:
-            log.msg(u"Created category {}".format(
-                green(u'[{}]'.format(category))))
-
-        #self.logger.info(u"Inquiry {}/{}: {}".format(green(u'{}'.format(parl_id)), cyan(u'{}'.format(LLP.roman_numeral)), title))
-        inquiry_data = {
-            'title': title,
-            'source_link': source_link,
-            'description': description,
-            'receiver': receiver_object
-        }
-        
         # Create or update Inquiry item
         inquiry_item, inquiry_created = Inquiry.objects.update_or_create(
             parl_id=parl_id,
             legislative_period=LLP,
-            defaults=inquiry_data
+            defaults={
+            'title': title,
+            'source_link': source_link,
+            'description': description,
+            'receiver': receiver_object
+            }
             )
-
 
         #Attach foreign keys
         inquiry_item.keywords = self.parse_keywords(response)
@@ -150,9 +144,6 @@ class InquiriesSpider(BaseSpider):
         inquiry_item.sender = sender_objects
         
         response.meta['inquiry_item'] = inquiry_item
-
-
-        callback_requests = []
 
         # Dringliche / Urgent inquiries have a different structure for steps 
         # and history. This case distinction accomodates these different structures.
@@ -172,6 +163,7 @@ class InquiriesSpider(BaseSpider):
 
         # Save Inquiry item and log to terminal if created or updated.
         inquiry_item.save()
+
         if inquiry_created:
             logtext = u"Created Inquiry {} with ID {}, LLP {} @ {}"
         else: 
@@ -344,8 +336,8 @@ class InquiriesSpider(BaseSpider):
         title = INQUIRY.TITLE.xt(response)
         description = INQUIRY.RESPONSEDESCRIPTION.xt(response)
         LLP = inquiry_item.legislative_period
-
         category = INQUIRY.CATEGORY.xt(response)
+
         # Get or create Category object for the inquiry and log to screen if new 
         # category is created.
         cat, created = Category.objects.get_or_create(title=category)
@@ -359,25 +351,24 @@ class InquiriesSpider(BaseSpider):
         except:
             log.msg(red(u'Receiver was not found in database, skipping Inquiry {} in LLP {}'.format(parl_id,LLP)))
             return
-
-
-        inquiryresponse_data = {
-            'title': title,
-            'source_link': source_link,
-            'description': description,
-            'sender': sender_object
-        }
         
         # Create or update Inquiry item
         inquiryresponse_item, inquiryresponse_created = InquiryResponse.objects.update_or_create(
             parl_id=parl_id,
             legislative_period=LLP,
-            defaults=inquiryresponse_data
+            defaults={
+            'title': title,
+            'source_link': source_link,
+            'description': description,
+            'sender': sender_object
+            }
             )
 
-        #Attach foreign Keys
+        # Attach foreign Keys
         inquiryresponse_item.documents = self.parse_docs(response)
         inquiryresponse_item.category = cat
+
+        # Save InquiryResponse object
         inquiryresponse_item.save()
 
         if inquiryresponse_created:
