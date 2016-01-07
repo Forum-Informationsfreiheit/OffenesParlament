@@ -81,6 +81,11 @@ class CustomIndexDashboard(Dashboard):
                     'external': False,
                 },
                 {
+                    'title': _('Scrape Persons/Audit Office Presidents'),
+                    'url': '/admin/scrape/auditors',
+                    'external': False,
+                },
+                {
                     'title': _('Scrape Pre-Laws'),
                     'url': '/admin/scrape/pre_laws',
                     'external': False,
