@@ -191,7 +191,8 @@ class Law(models.Model, ParlIDMixIn):
     keywords = models.ManyToManyField(Keyword, related_name="laws")
     press_releases = models.ManyToManyField(PressRelease, related_name="laws")
     documents = models.ManyToManyField(Document, related_name="laws")
-    legislative_period = models.ForeignKey(LegislativePeriod, null=True, blank=True)
+    legislative_period = models.ForeignKey(
+        LegislativePeriod, null=True, blank=True)
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
 
@@ -429,7 +430,7 @@ class Person(models.Model, ParlIDMixIn):
         Mandate, related_name='latest_mandate', null=True, blank=True)
 
     def __unicode__(self):
-        return self.full_name
+        return self.full_name or self.reversed_name
 
     @property
     def party(self):
@@ -737,6 +738,7 @@ class DebateStatement(models.Model):
 
 
 class Comittee(models.Model, ParlIDMixIn):
+
     """
     "Parlamentarischer Ausschuss"
     Comittee of either the Nationalrat or Bundesrat for a specific topic
@@ -766,6 +768,7 @@ class Comittee(models.Model, ParlIDMixIn):
 
 
 class ComitteeMembership(models.Model):
+
     """
     Membership in a Comittee
     """
@@ -783,6 +786,7 @@ class ComitteeMembership(models.Model):
 
 
 class ComitteeMeeting(models.Model):
+
     """
     Meeting ("Sitzung") of a Comittee
     """
@@ -791,13 +795,15 @@ class ComitteeMeeting(models.Model):
 
     # Relationships
     comittee = models.ForeignKey(Comittee, related_name='comittee_meetings')
-    agenda = models.OneToOneField(Document, related_name='comittee_meeting', null=True)
+    agenda = models.OneToOneField(
+        Document, related_name='comittee_meeting', null=True)
 
     class Meta:
         unique_together = ("number", "date", "comittee")
 
 
 class ComitteeAgendaTopic(models.Model):
+
     """
     Agenda topic ("Tagesordnungspunkt") of a Comittee meeting
     """

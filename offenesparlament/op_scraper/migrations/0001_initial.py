@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
+from django.db import models, migrations
 import phonenumber_field.modelfields
 import op_scraper.models
 import annoying.fields
@@ -212,6 +212,7 @@ class Migration(migrations.Migration):
                 ('deathdate', models.DateField(null=True, blank=True)),
                 ('deathplace', models.CharField(max_length=255, null=True, blank=True)),
                 ('occupation', models.CharField(max_length=255, null=True, blank=True)),
+                ('ts', models.DateTimeField(null=True)),
                 ('_slug', models.CharField(default=b'', max_length=255)),
                 ('latest_mandate', models.ForeignKey(related_name='latest_mandate', blank=True, to='op_scraper.Mandate', null=True)),
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
@@ -500,10 +501,6 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='comitteemeeting',
             unique_together=set([('number', 'date', 'comittee')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='comitteeagendatopic',
-            unique_together=set([('number', 'meeting')]),
         ),
         migrations.AlterUniqueTogether(
             name='comittee',

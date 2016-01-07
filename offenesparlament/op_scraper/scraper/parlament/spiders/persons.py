@@ -120,7 +120,7 @@ class PersonsSpider(BaseSpider):
             title=function_str)
 
         self.logger.info(
-            "Scraping {} persons for LLP {}".format(len(persons), llp_roman))
+            u"Scraping {} persons for LLP {}".format(len(persons), llp_roman))
 
         # Iterate all persons
         for p in persons:
@@ -155,7 +155,7 @@ class PersonsSpider(BaseSpider):
                         state=state_item)
                 except:
                     self.logger.info(
-                        red("Error saving Mandate {} ({})".format(function_item, party_item)))
+                        red(u"Error saving Mandate {} ({})".format(function_item, party_item)))
                     import ipdb
                     ipdb.set_trace()
                 if mandate_item not in person_item.mandates.all():
@@ -167,7 +167,7 @@ class PersonsSpider(BaseSpider):
                 latest_mandate_item = person_item.get_latest_mandate()
                 person_item.latest_mandate = latest_mandate_item
                 self.logger.info(
-                    cyan("Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
+                    cyan(u"Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
                 person_item.save()
 
             # First time we encounter a person, we scan her detail page too
@@ -240,7 +240,7 @@ class PersonsSpider(BaseSpider):
         ts = GENERIC.TIMESTAMP.xt(response)
         if not self.has_changes(person['parl_id'], person['source_link'], ts):
             self.logger.info(
-                green("Skipping Person Detail, no changes: {}".format(
+                green(u"Skipping Person Detail, no changes: {}".format(
                     full_name)))
             return
 
@@ -324,8 +324,8 @@ class PersonsSpider(BaseSpider):
                         green(u"[{}]".format(membership_item))
                     ))
 
-        except:
-            self.logger.info(red("Error saving Person {}".format(full_name)))
+        except Exception as error:
+            self.logger.info(red(u"Error saving Person {}".format(full_name)))
             import ipdb
             ipdb.set_trace()
             return
