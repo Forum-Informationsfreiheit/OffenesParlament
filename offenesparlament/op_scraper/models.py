@@ -15,6 +15,10 @@ class ParlIDMixIn(object):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
+class TimeStampMixIn(object):
+    ts = models.DateTimeField()
+
+
 class LlpManager(models.Manager):
 
     def get_current(self):
@@ -414,6 +418,7 @@ class Person(models.Model, ParlIDMixIn):
     deathdate = models.DateField(null=True, blank=True)
     deathplace = models.CharField(max_length=255, null=True, blank=True)
     occupation = models.CharField(max_length=255, null=True, blank=True)
+    ts = models.DateTimeField(null=True)
 
     # Interna, Utilities
     _slug = models.CharField(max_length=255, default="")
