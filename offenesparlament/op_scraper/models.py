@@ -729,3 +729,77 @@ class DebateStatement(models.Model):
             self.index,
             self.doc_section,
             self.date)
+
+
+class Comittee(models.Model, ParlIDMixIn):
+    """
+    "Parlamentarischer Ausschuss"
+    Comittee of either the Nationalrat or Bundesrat for a specific topic
+    """
+    name = models.CharField(max_length=511)
+    parl_id = models.CharField(max_length=30)
+    source_link = models.URLField(max_length=255, default="")
+    nrbr = models.CharField(max_length=20)
+    description = models.TextField(default="", blank=True)
+    active = models.BooleanField(default=True)
+
+    # Relationships
+    legislative_period = models.ForeignKey(
+        LegislativePeriod, blank=True, null=True)
+    laws = models.ManyToManyField(Law, blank=True, related_name='comittees')
+    parent_comittee = models.ForeignKey(
+        "self", blank=True, null=True, related_name='sub_comittees')
+
+    class Meta:
+        # NR comittees are unique by parl_id & legislative period
+        # BR comittees additionaly need active for uniqueness
+        unique_together = ("parl_id", "legislative_period", "active")
+
+    def __unicode__(self):
+        return u'{} [{}] in {}'\
+            .format(self.name, self.parl_id, self.legislative_period)
+
+
+class ComitteeMembership(models.Model):
+    """
+    Membership in a Comittee
+    """
+    date_from = models.DateField()
+    date_to = models.DateField(blank=True, null=True)
+
+    # Relationships
+    comittee = models.ForeignKey(Comittee, related_name='comittee_members')
+    person = models.ForeignKey(Person, related_name='comittee_memberships')
+    function = models.ForeignKey(Function, related_name='comittee_function')
+
+    def __unicode__(self):
+        return u'{}: {} des {} ({}-{})'\
+            .format(self.person, self.function, self.comittee, self.date_from, self.date_to)
+
+
+class ComitteeMeeting(models.Model):
+    """
+    Meeting ("Sitzung") of a Comittee
+    """
+    number = models.IntegerField()
+    date = models.DateField()
+
+    # Relationships
+    comittee = models.ForeignKey(Comittee, related_name='comittee_meetings')
+    agenda = models.OneToOneField(Document, related_name='comittee_meeting', null=True)
+
+    class Meta:
+        unique_together = ("number", "date", "comittee")
+
+
+class ComitteeAgendaTopic(models.Model):
+    """
+    Agenda topic ("Tagesordnungspunkt") of a Comittee meeting
+    """
+    number = models.IntegerField()
+    text = models.TextField()
+    comment = models.CharField(max_length=255, null=True, blank=True)
+
+    # Relationships
+    meeting = models.ForeignKey(ComitteeMeeting, related_name='agenda_topics')
+    law = models.ForeignKey(Law, related_name='agenda_topics', null=True)

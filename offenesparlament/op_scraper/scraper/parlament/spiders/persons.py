@@ -17,6 +17,7 @@ from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
 from parlament.resources.extractors.opinion import *
+from parlament.resources.extractors.comittee import *
 
 from parlament.resources.util import _clean
 
@@ -27,6 +28,8 @@ from op_scraper.models import Person
 from op_scraper.models import Function
 from op_scraper.models import Mandate
 from op_scraper.models import LegislativePeriod
+from op_scraper.models import Comittee
+from op_scraper.models import ComitteeMembership
 
 
 class PersonsSpider(BaseSpider):
@@ -168,19 +171,18 @@ class PersonsSpider(BaseSpider):
                     cyan("Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
                 person_item.save()
 
-            # First time we encounter a person, we scan her detail page too
-            if not parl_id in self.persons_scraped:
+            # Scan detail page (needed always to get the current comittee memberships)
+            # Create Detail Page request
+            req = scrapy.Request(p['source_link'],
+                                 callback=self.parse_person_detail)
+            req.meta['person'] = {
+                'reversed_name': p['reversed_name'],
+                'source_link': p['source_link'],
+                'parl_id': parl_id
+            }
+            callback_requests.append(req)
+            self.persons_scraped.append(parl_id)
 
-                # Create Detail Page request
-                req = scrapy.Request(p['source_link'],
-                                     callback=self.parse_person_detail)
-                req.meta['person'] = {
-                    'reversed_name': p['reversed_name'],
-                    'source_link': p['source_link'],
-                    'parl_id': parl_id
-                }
-                callback_requests.append(req)
-                self.persons_scraped.append(parl_id)
         return callback_requests
 
     def get_party_item(self, mandate):
@@ -217,7 +219,7 @@ class PersonsSpider(BaseSpider):
 
     def parse_person_detail(self, response):
         """
-        Parse a persons detail page before creating the person object
+        Parse a persons detail page
         """
         person = response.meta['person']
         self.logger.info(u"Updating Person Detail {}".format(
@@ -251,6 +253,53 @@ class PersonsSpider(BaseSpider):
 
             # Instatiate slug
             person_item.slug
+
+            # Parse the Comittee (Ausschuss) memberships for this person
+            memberships = COMITTEE.MEMBERSHIP.xt(response)
+
+            for m in memberships:
+                comittee = m['comittee']
+                if comittee['legislative_period'] is not None:
+                    llp = LegislativePeriod.objects.get(roman_numeral=comittee['legislative_period'])
+                    comittee['legislative_period'] = llp
+
+                comittee_item, created_comittee = Comittee.objects.get_or_create(**comittee)
+                if created_comittee:
+                    self.logger.info(u"Created comittee {}".format(
+                        green(u"[{}]".format(comittee))
+                    ))
+
+                function_data = {
+                    'title': m['function'],
+                    'short': m['function']
+                }
+
+                function_item, created_function = Function.objects.get_or_create(**function_data)
+                if created_function:
+                    self.logger.info(u"Created function {}".format(
+                        green(u"[{}]".format(function_item))
+                    ))
+
+                membership_data = {
+                    'date_from': m['date_from'],
+                    'comittee': comittee_item,
+                    'person': person_item,
+                    'function': function_item
+                }
+
+                membership_item, created_membership = ComitteeMembership.objects.update_or_create(
+                    defaults=
+                        {
+                            'date_to': m['date_to']
+                        },
+                    **membership_data
+                )
+
+                if created_membership:
+                    self.logger.info(u"Created membership {}".format(
+                        green(u"[{}]".format(membership_item))
+                    ))
+
 
         except:
             self.logger.info(red("Error saving Person {}".format(full_name)))
