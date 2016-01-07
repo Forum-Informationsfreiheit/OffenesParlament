@@ -10,6 +10,8 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
 
     source_link = indexes.CharField(model_attr='source_link')
     internal_link = indexes.CharField(model_attr='slug')
+    photo_link = indexes.CharField(model_attr='photo_link')
+    photo_copyright = indexes.CharField(model_attr='photo_copyright')
 
     birthdate = indexes.DateTimeField(model_attr='birthdate', null=True)
     deathdate = indexes.DateTimeField(model_attr='deathdate', null=True)
