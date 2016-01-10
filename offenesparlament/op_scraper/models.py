@@ -739,7 +739,7 @@ class DebateStatement(models.Model):
             self.date)
 
 
-class Comittee(models.Model, ParlIDMixIn):
+class Comittee(Timestamped, ParlIDMixIn):
 
     """
     "Parlamentarischer Ausschuss"

@@ -13,8 +13,11 @@ from urllib import urlencode
 
 from scrapy import log
 
+import pytz
+
 from parlament.spiders import BaseSpider
 
+from parlament.resources.extractors import *
 from parlament.resources.extractors.comittee import *
 
 from parlament.settings import BASE_HOST
@@ -82,7 +85,7 @@ class ComitteesSpider(BaseSpider):
                 urls = urls + [entry['link'] for entry in rss['entries']]
 
         # AKT = aktiv, AUF = aufgeloest
-        for aktauf in ['AKT','AUF']:
+        for aktauf in ['AKT', 'AUF']:
             options['NRBR'] = 'BR'
             options['R_AKTAUF'] = aktauf
             url_options = urlencode(options)
@@ -98,14 +101,17 @@ class ComitteesSpider(BaseSpider):
     def parse(self, response):
         # Parse
         parl_id = COMITTEE.url_to_parlid(response.url)[1]
+        ts = GENERIC.TIMESTAMP.xt(response)
         llp = COMITTEE.LLP.xt(response)
         name = COMITTEE.NAME.xt(response)
 
         if llp is not None:
             nrbr = 'Nationalrat'
-            legislative_period = LegislativePeriod.objects.get(roman_numeral=llp)
+            legislative_period = LegislativePeriod.objects.get(
+                roman_numeral=llp)
             # NR comittees are "active" if they are in the current LLP
-            active = (legislative_period == LegislativePeriod.objects.get_current())
+            active = (
+                legislative_period == LegislativePeriod.objects.get_current())
         else:
             nrbr = 'Bundesrat'
             legislative_period = None
@@ -117,11 +123,18 @@ class ComitteesSpider(BaseSpider):
         if not parl_id.startswith(u'(1/'):
             try:
                 parent_parl_id = u'(1/{}'.format(parl_id.split('/')[1])
-                parent_comitee = Comittee.objects.get(parl_id=parent_parl_id,legislative_period=legislative_period)
+                parent_comitee = Comittee.objects.get(
+                    parl_id=parent_parl_id, legislative_period=legislative_period)
             except Comittee.DoesNotExist:
                 parent_comitee = None
         else:
             parent_comitee = None
+
+        if not self.has_changes(parl_id, legislative_period, nrbr, response.url, ts):
+            self.logger.info(
+                green(u"Skipping Comittee, no changes: {}".format(
+                    name)))
+            return
 
         # Log our progress
         logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
@@ -139,7 +152,8 @@ class ComitteesSpider(BaseSpider):
             'name': name,
             'source_link': response.url,
             'parent_comittee': parent_comitee,
-            'active': active
+            'active': active,
+            'ts': ts
         }
 
         try:
@@ -150,8 +164,12 @@ class ComitteesSpider(BaseSpider):
                 defaults=comittee_data
             )
         except:
-            import ipdb
-            ipdb.set_trace()
+            log.msg(
+                u"Could not update/create Comittee {}".format(name),
+                level=log.ERROR)
+            return
+            # import ipdb
+            # ipdb.set_trace()
 
         meetings = COMITTEE.MEETINGS.xt(response)
 
@@ -160,7 +178,8 @@ class ComitteesSpider(BaseSpider):
         for meeting in meetings:
             agenda_data = meeting['agenda']
             if agenda_data is not None:
-                agenda_item, agenda_created = Document.objects.get_or_create(**agenda_data)
+                agenda_item, agenda_created = Document.objects.get_or_create(
+                    **agenda_data)
             else:
                 agenda_item = None
 
@@ -223,14 +242,34 @@ class ComitteesSpider(BaseSpider):
         comittee_item.laws.add(*comittee_laws)
         comittee_item.save()
 
+    def has_changes(self, parl_id, legislative_period, nrbr, source_link, ts):
+        if not Comittee.objects.filter(
+            parl_id=parl_id,
+            legislative_period=legislative_period,
+            source_link=source_link,
+            nrbr=nrbr
+        ).exists():
+            return True
+
+        ts = ts.replace(tzinfo=pytz.utc)
+        if Comittee.objects.get(
+                parl_id=parl_id,
+                legislative_period=legislative_period,
+                source_link=source_link,
+                nrbr=nrbr).ts != ts:
+            return True
+        return False
+
     def parse_law(self, law_dict):
         try:
-            law_legislative_period = LegislativePeriod.objects.get(roman_numeral=law_dict['llp'])
+            law_legislative_period = LegislativePeriod.objects.get(
+                roman_numeral=law_dict['llp'])
         except LegislativePeriod.DoesNotExist:
             law_legislative_period = None
 
         try:
-            law_item = Law.objects.get(legislative_period=law_legislative_period,parl_id=law_dict['parl_id'])
+            law_item = Law.objects.get(
+                legislative_period=law_legislative_period, parl_id=law_dict['parl_id'])
         except Law.DoesNotExist:
             law_item = None
 
