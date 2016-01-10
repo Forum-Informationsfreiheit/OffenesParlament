@@ -142,6 +142,7 @@ class Migration(migrations.Migration):
             name='Law',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('ts', models.DateTimeField(null=True)),
                 ('title', models.CharField(max_length=1023)),
                 ('status', models.TextField(null=True, blank=True)),
                 ('source_link', models.URLField(default=b'', max_length=255)),
@@ -201,6 +202,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
+                ('ts', models.DateTimeField(null=True)),
                 ('parl_id', models.CharField(max_length=30, serialize=False, primary_key=True)),
                 ('source_link', models.URLField(default=b'', max_length=255)),
                 ('photo_link', models.URLField(default=b'', max_length=255)),
@@ -212,11 +214,13 @@ class Migration(migrations.Migration):
                 ('deathdate', models.DateField(null=True, blank=True)),
                 ('deathplace', models.CharField(max_length=255, null=True, blank=True)),
                 ('occupation', models.CharField(max_length=255, null=True, blank=True)),
-                ('ts', models.DateTimeField(null=True)),
                 ('_slug', models.CharField(default=b'', max_length=255)),
                 ('latest_mandate', models.ForeignKey(related_name='latest_mandate', blank=True, to='op_scraper.Mandate', null=True)),
                 ('mandates', models.ManyToManyField(to='op_scraper.Mandate')),
             ],
+            options={
+                'abstract': False,
+            },
             bases=(models.Model, op_scraper.models.ParlIDMixIn),
         ),
         migrations.CreateModel(
@@ -330,6 +334,9 @@ class Migration(migrations.Migration):
                 ('signature_count', models.IntegerField(default=0)),
                 ('reference', models.OneToOneField(related_name='redistribution', null=True, blank=True, to='op_scraper.Petition')),
             ],
+            options={
+                'abstract': False,
+            },
             bases=('op_scraper.law',),
         ),
         migrations.AddField(

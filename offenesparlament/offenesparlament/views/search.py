@@ -90,12 +90,14 @@ class JsonSearchView(SearchView):
             start_index = query_args['offset']
             end_index = query_args[
                 'offset'] + query_args['limit'] if query_args['limit'] else None
-            # combine results and facets, limit and offset as given as parameters
+            # combine results and facets, limit and offset as given as
+            # parameters
             result_list = [
                 sr.get_stored_fields() for sr in
                 result[start_index:end_index]]
         else:
             result_list = []
+
         result = {
             'result': result_list,
             'facets': facet_counts
@@ -141,7 +143,14 @@ class JsonSearchView(SearchView):
         if self.facet_fields:
             facets = qs
             for facet_field in self.facet_fields:
-                facets = facets.facet(facet_field)
+                if facet_field == 'ts':
+                    facets = facets.date_facet(
+                        facet_field,
+                        start_date=datetime.date(1900, 1, 1),
+                        end_date=datetime.date(2020, 1, 1),
+                        gap_by='month')
+                else:
+                    facets = facets.facet(facet_field)
             facet_counts = facets.facet_counts()
 
         # Get results and return them
@@ -179,5 +188,6 @@ class LawSearchView(JsonSearchView):
     facet_fields = [
         'llps',
         'category',
-        'keywords'
+        'keywords',
+        'ts'
     ]

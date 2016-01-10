@@ -15,8 +15,11 @@ class ParlIDMixIn(object):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
 
-class TimeStampMixIn(object):
-    ts = models.DateTimeField()
+class Timestamped(models.Model):
+    ts = models.DateTimeField(null=True)
+
+    class Meta:
+        abstract = True
 
 
 class LlpManager(models.Manager):
@@ -167,7 +170,7 @@ class Keyword(models.Model):
         return self._title_urlsafe
 
 
-class Law(models.Model, ParlIDMixIn):
+class Law(Timestamped, ParlIDMixIn):
 
     """
     A single 'Verhandlungssache' or negotiable matter
@@ -402,7 +405,7 @@ class Mandate(models.Model):
         return None
 
 
-class Person(models.Model, ParlIDMixIn):
+class Person(Timestamped, ParlIDMixIn):
 
     """
     A single person in parliament, including Abgeordnete, Regierungsmitglieder,
@@ -419,7 +422,6 @@ class Person(models.Model, ParlIDMixIn):
     deathdate = models.DateField(null=True, blank=True)
     deathplace = models.CharField(max_length=255, null=True, blank=True)
     occupation = models.CharField(max_length=255, null=True, blank=True)
-    ts = models.DateTimeField(null=True)
 
     # Interna, Utilities
     _slug = models.CharField(max_length=255, default="")

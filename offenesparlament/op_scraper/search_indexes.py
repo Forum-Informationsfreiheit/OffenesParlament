@@ -33,6 +33,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
 class LawIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     parl_id = indexes.CharField(model_attr='parl_id')
+    ts = indexes.DateTimeField(model_attr='ts', faceted=True)
 
     internal_link = indexes.CharField(model_attr=u'slug')
     title = indexes.CharField(model_attr='title')
