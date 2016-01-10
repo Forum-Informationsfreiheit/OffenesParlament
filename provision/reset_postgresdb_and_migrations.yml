@@ -17,7 +17,7 @@
       become: true
       become_user: postgres
 
-    - name: Makemigrations and Migrate
+    - name: Remove_Migrations Makemigrations and Migrate
       shell: "cd offenesparlament && python remove_migrations.py && python manage.py makemigrations && python manage.py migrate"
 
     - name: Create Admin-User
