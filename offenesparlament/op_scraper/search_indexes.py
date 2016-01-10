@@ -5,7 +5,7 @@ from op_scraper.models import Person, Law
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
-    ts = indexes.DateTimeField(model_attr='ts')
+    ts = indexes.DateTimeField(model_attr='ts', faceted=True)
     parl_id = indexes.CharField(model_attr='parl_id')
 
     source_link = indexes.CharField(model_attr='source_link')
