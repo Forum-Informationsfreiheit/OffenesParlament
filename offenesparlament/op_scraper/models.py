@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 import re
+import json
 
 
 class ParlIDMixIn(object):
@@ -210,6 +211,24 @@ class Law(Timestamped, ParlIDMixIn):
             phases[step.phase].append(step)
 
         return phases
+
+    def steps_by_phases_json(self):
+        """
+        Returns a json representation of the steps_by_phases dict
+        """
+        phases = {}
+        for step in self.steps.all():
+            if step.phase not in phases:
+                phases[step.phase.title] = []
+            phases[step.phase.title].append({
+                'title': step.title,
+                'sortkey': step.sortkey,
+                'date': step.date.isoformat(),
+                'protocol_url': step.protocol_url,
+                'source_link': step.source_link
+            })
+
+        return json.dumps(phases)
 
     @property
     def llp_roman(self):
@@ -623,6 +642,14 @@ class Petition(Law):
             full_count = full_count + self.reference.signature_count
 
         return full_count
+
+    @property
+    def slug(self):
+        if not self._slug:
+            self._slug = '#'
+            self.save()
+
+        return self._slug
 
 
 class PetitionCreator(models.Model):

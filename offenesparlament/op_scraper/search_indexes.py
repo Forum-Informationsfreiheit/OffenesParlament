@@ -43,17 +43,20 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
 
     # Related, aggregated and Multi-Value Fields
-    steps = indexes.MultiValueField()
+    steps = indexes.CharField()
     opinions = indexes.MultiValueField()
     documents = indexes.MultiValueField()
     keywords = indexes.MultiValueField(
         model_attr='keyword_titles', faceted=True)
 
+    def index_queryset(self, using=None):
+        return self.get_model().objects.filter(petition__isnull=True)
+
     def prepare_steps(self, obj):
         """
         Collects the object's step's id
         """
-        return [step.id for step in obj.steps.all()]
+        return obj.steps_by_phases_json()
 
     def prepare_opinions(self, obj):
         """
