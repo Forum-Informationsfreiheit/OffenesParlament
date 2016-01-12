@@ -63,7 +63,7 @@ SPIDERS = {
 SPIDER_CHOICES = (
     ('llp', u'Gesetzgebungsperioden'),
     ('administrations', u'Regierungsmitglieder'),
-    ('administrations', u'RechnungshofpräsidentInnen'),
+    ('auditors', u'RechnungshofpräsidentInnen'),
     ('persons', u'Personen'),
     ('pre_laws', u'Ministerialentwürfe und Vorparlamentarische Prozesses'),
     ('laws', u'Gesetze'),
