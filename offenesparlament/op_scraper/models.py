@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 import re
+import json
 
 
 class ParlIDMixIn(object):
@@ -13,6 +14,13 @@ class ParlIDMixIn(object):
     @property
     def parl_id_urlsafe(self):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
+
+
+class Timestamped(models.Model):
+    ts = models.DateTimeField(null=True)
+
+    class Meta:
+        abstract = True
 
 
 class LlpManager(models.Manager):
@@ -163,7 +171,7 @@ class Keyword(models.Model):
         return self._title_urlsafe
 
 
-class Law(models.Model, ParlIDMixIn):
+class Law(Timestamped, ParlIDMixIn):
 
     """
     A single 'Verhandlungssache' or negotiable matter
@@ -187,7 +195,8 @@ class Law(models.Model, ParlIDMixIn):
     keywords = models.ManyToManyField(Keyword, related_name="laws")
     press_releases = models.ManyToManyField(PressRelease, related_name="laws")
     documents = models.ManyToManyField(Document, related_name="laws")
-    legislative_period = models.ForeignKey(LegislativePeriod, null=True, blank=True)
+    legislative_period = models.ForeignKey(
+        LegislativePeriod, null=True, blank=True)
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
 
@@ -202,6 +211,24 @@ class Law(models.Model, ParlIDMixIn):
             phases[step.phase].append(step)
 
         return phases
+
+    def steps_by_phases_json(self):
+        """
+        Returns a json representation of the steps_by_phases dict
+        """
+        phases = {}
+        for step in self.steps.all():
+            if step.phase not in phases:
+                phases[step.phase.title] = []
+            phases[step.phase.title].append({
+                'title': step.title,
+                'sortkey': step.sortkey,
+                'date': step.date.isoformat(),
+                'protocol_url': step.protocol_url,
+                'source_link': step.source_link
+            })
+
+        return json.dumps(phases)
 
     @property
     def llp_roman(self):
@@ -372,7 +399,7 @@ class Mandate(models.Model):
         return None
 
 
-class Person(models.Model, ParlIDMixIn):
+class Person(Timestamped, ParlIDMixIn):
 
     """
     A single person in parliament, including Abgeordnete, Regierungsmitglieder,
@@ -399,7 +426,7 @@ class Person(models.Model, ParlIDMixIn):
         Mandate, related_name='latest_mandate', null=True, blank=True)
 
     def __unicode__(self):
-        return self.full_name
+        return self.full_name or self.reversed_name
 
     @property
     def party(self):
@@ -635,6 +662,14 @@ class Petition(Law):
 
         return full_count
 
+    @property
+    def slug(self):
+        if not self._slug:
+            self._slug = '#'
+            self.save()
+
+        return self._slug
+
 
 class PetitionCreator(models.Model):
 
@@ -749,3 +784,80 @@ class DebateStatement(models.Model):
             self.doc_section,
             self.date)
 
+class Comittee(Timestamped, ParlIDMixIn):
+
+    """
+    "Parlamentarischer Ausschuss"
+    Comittee of either the Nationalrat or Bundesrat for a specific topic
+    """
+    name = models.CharField(max_length=511)
+    parl_id = models.CharField(max_length=30)
+    source_link = models.URLField(max_length=255, default="")
+    nrbr = models.CharField(max_length=20)
+    description = models.TextField(default="", blank=True)
+    active = models.BooleanField(default=True)
+
+    # Relationships
+    legislative_period = models.ForeignKey(
+        LegislativePeriod, blank=True, null=True)
+    laws = models.ManyToManyField(Law, blank=True, related_name='comittees')
+    parent_comittee = models.ForeignKey(
+        "self", blank=True, null=True, related_name='sub_comittees')
+
+    class Meta:
+        # NR comittees are unique by parl_id & legislative period
+        # BR comittees additionaly need active for uniqueness
+        unique_together = ("parl_id", "legislative_period", "active")
+
+    def __unicode__(self):
+        return u'{} [{}] in {}'\
+            .format(self.name, self.parl_id, self.legislative_period)
+
+
+class ComitteeMembership(models.Model):
+
+    """
+    Membership in a Comittee
+    """
+    date_from = models.DateField()
+    date_to = models.DateField(blank=True, null=True)
+
+    # Relationships
+    comittee = models.ForeignKey(Comittee, related_name='comittee_members')
+    person = models.ForeignKey(Person, related_name='comittee_memberships')
+    function = models.ForeignKey(Function, related_name='comittee_function')
+
+    def __unicode__(self):
+        return u'{}: {} des {} ({}-{})'\
+            .format(self.person, self.function, self.comittee, self.date_from, self.date_to)
+
+
+class ComitteeMeeting(models.Model):
+
+    """
+    Meeting ("Sitzung") of a Comittee
+    """
+    number = models.IntegerField()
+    date = models.DateField()
+
+    # Relationships
+    comittee = models.ForeignKey(Comittee, related_name='comittee_meetings')
+    agenda = models.OneToOneField(
+        Document, related_name='comittee_meeting', null=True)
+
+    class Meta:
+        unique_together = ("number", "date", "comittee")
+
+
+class ComitteeAgendaTopic(models.Model):
+
+    """
+    Agenda topic ("Tagesordnungspunkt") of a Comittee meeting
+    """
+    number = models.IntegerField()
+    text = models.TextField()
+    comment = models.CharField(max_length=255, null=True, blank=True)
+
+    # Relationships
+    meeting = models.ForeignKey(ComitteeMeeting, related_name='agenda_topics')
+    law = models.ForeignKey(Law, related_name='agenda_topics', null=True)

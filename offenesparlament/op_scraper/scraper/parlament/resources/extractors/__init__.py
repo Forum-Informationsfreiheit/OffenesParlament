@@ -1,4 +1,5 @@
 # Base Classes
+from datetime import datetime
 
 
 class BaseExtractor:
@@ -46,3 +47,21 @@ class MultiExtractor(BaseExtractor):
         values = cls._xt(response)
         values = [v.strip() for v in values if isinstance(v, unicode)]
         return values
+
+
+class GENERIC:
+
+    class TIMESTAMP(SingleExtractor):
+        XPATH = '//*[@id="filterListeFW_016"]//table//tr'
+
+        @classmethod
+        def xt(cls, response):
+            tstring = response.xpath(
+                '//*[@id="utilities"]/span/text()').extract()[0]
+            tstring = tstring.replace(u'LETZTES UPDATE: ', '')
+            try:
+                ts = datetime.strptime(tstring, '%d.%m.%Y; %H:%M')
+                return ts
+            except:
+                import ipdb
+                ipdb.set_trace()

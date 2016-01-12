@@ -9,7 +9,10 @@ from roman import fromRoman
 
 from scrapy import log
 
+import pytz
+
 from parlament.spiders import BaseSpider
+from parlament.resources.extractors import *
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
@@ -65,13 +68,21 @@ class LawsInitiativesSpider(BaseSpider):
         self.print_debug()
 
     def parse(self, response):
+
+        LLP = LegislativePeriod.objects.get(
+            roman_numeral=response.url.split('/')[-4])
+
         # Extract fields
+        ts = GENERIC.TIMESTAMP.xt(response)
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
         status = LAW.STATUS.xt(response)
 
-        LLP = LegislativePeriod.objects.get(
-            roman_numeral=response.url.split('/')[-4])
+        if not self.has_changes(parl_id, LLP, response.url, ts):
+            self.logger.info(
+                green(u"Skipping Law, no changes: {}".format(
+                    title)))
+            return
 
         # Extract foreign keys
         category = LAW.CATEGORY.xt(response)
@@ -87,7 +98,8 @@ class LawsInitiativesSpider(BaseSpider):
         law_data = {
             'title': title,
             'status': status,
-            'description': description
+            'description': description,
+            'ts': ts
         }
         law_item, law_created = Law.objects.update_or_create(
             parl_id=parl_id,
@@ -124,6 +136,22 @@ class LawsInitiativesSpider(BaseSpider):
 
         if response.xpath('//h2[@id="tab-VorparlamentarischesVerfahren"]'):
             self.parse_pre_parliament_steps(response)
+
+    def has_changes(self, parl_id, legislative_period, source_link, ts):
+        if not Law.objects.filter(
+            parl_id=parl_id,
+            legislative_period=legislative_period,
+            source_link=source_link
+        ).exists():
+            return True
+
+        ts = ts.replace(tzinfo=pytz.utc)
+        if Law.objects.get(
+                parl_id=parl_id,
+                legislative_period=legislative_period,
+                source_link=source_link).ts != ts:
+            return True
+        return False
 
     def parse_keywords(self, response):
 

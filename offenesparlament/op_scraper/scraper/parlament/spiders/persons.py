@@ -13,10 +13,12 @@ from urllib import urlencode
 
 from parlament.settings import BASE_HOST
 from parlament.spiders import BaseSpider
+from parlament.resources.extractors import *
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
 from parlament.resources.extractors.opinion import *
+from parlament.resources.extractors.comittee import *
 
 from parlament.resources.util import _clean
 
@@ -27,6 +29,10 @@ from op_scraper.models import Person
 from op_scraper.models import Function
 from op_scraper.models import Mandate
 from op_scraper.models import LegislativePeriod
+from op_scraper.models import Comittee
+from op_scraper.models import ComitteeMembership
+
+import pytz
 
 
 class PersonsSpider(BaseSpider):
@@ -114,7 +120,7 @@ class PersonsSpider(BaseSpider):
             title=function_str)
 
         self.logger.info(
-            "Scraping {} persons for LLP {}".format(len(persons), llp_roman))
+            u"Scraping {} persons for LLP {}".format(len(persons), llp_roman))
 
         # Iterate all persons
         for p in persons:
@@ -122,14 +128,12 @@ class PersonsSpider(BaseSpider):
             parl_id = p['source_link'].split('/')[-2]
             p['source_link'] = "{}{}".format(BASE_HOST, p['source_link'])
 
+            changed = False
             # Create or update simple person's item
-            person_data = {
-                'reversed_name': p['reversed_name']
-            }
             person_item, created_person = Person.objects.update_or_create(
                 source_link=p['source_link'],
                 parl_id=parl_id,
-                defaults=person_data
+                reversed_name=p['reversed_name']
             )
             if created_person:
                 self.logger.info(u"Created Person {}".format(
@@ -151,26 +155,23 @@ class PersonsSpider(BaseSpider):
                         state=state_item)
                 except:
                     self.logger.info(
-                        red("Error saving Mandate {} ({})".format(function_item, party_item)))
+                        red(u"Error saving Mandate {} ({})".format(function_item, party_item)))
                     import ipdb
                     ipdb.set_trace()
+                if mandate_item not in person_item.mandates.all():
+                    changed = True
+                    person_item.mandates.add(mandate_item)
 
-                person_item.mandates.add(mandate_item)
-
-            # Do a save to update the db models
-            person_item.save()
-
-            # In case we added/modified a mandate now,
-            if p['mandates']:
+            if changed:
+                # In case we added/modified a mandate now,
                 latest_mandate_item = person_item.get_latest_mandate()
                 person_item.latest_mandate = latest_mandate_item
                 self.logger.info(
-                    cyan("Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
+                    cyan(u"Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
                 person_item.save()
 
             # First time we encounter a person, we scan her detail page too
             if not parl_id in self.persons_scraped:
-
                 # Create Detail Page request
                 req = scrapy.Request(p['source_link'],
                                      callback=self.parse_person_detail)
@@ -215,16 +216,38 @@ class PersonsSpider(BaseSpider):
 
         return state_item
 
+    def has_changes(self, parl_id, source_link, ts):
+        if not Person.objects.filter(
+            parl_id=parl_id,
+            source_link=source_link
+        ).exists():
+            return True
+
+        ts = ts.replace(tzinfo=pytz.utc)
+        if Person.objects.get(
+                parl_id=parl_id,
+                source_link=source_link).ts != ts:
+            return True
+        return False
+
     def parse_person_detail(self, response):
         """
-        Parse a persons detail page before creating the person object
+        Parse a persons detail page
         """
         person = response.meta['person']
+        full_name = PERSON.DETAIL.FULL_NAME.xt(response)
+
+        ts = GENERIC.TIMESTAMP.xt(response)
+        if not self.has_changes(person['parl_id'], person['source_link'], ts):
+            self.logger.info(
+                green(u"Skipping Person Detail, no changes: {}".format(
+                    full_name)))
+            return
+
         self.logger.info(u"Updating Person Detail {}".format(
             green(u"[{}]".format(person['reversed_name']))
         ))
 
-        full_name = PERSON.DETAIL.FULL_NAME.xt(response)
         bio_data = PERSON.DETAIL.BIO.xt(response)
 
         profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
@@ -232,6 +255,7 @@ class PersonsSpider(BaseSpider):
 
         try:
             person_data = {
+                'ts': ts,
                 'photo_link': "{}{}".format(BASE_HOST, profile_photo_url),
                 'photo_copyright': profile_photo_copyright,
                 'full_name': full_name,
@@ -252,8 +276,56 @@ class PersonsSpider(BaseSpider):
             # Instatiate slug
             person_item.slug
 
-        except:
-            self.logger.info(red("Error saving Person {}".format(full_name)))
+            # Parse the Comittee (Ausschuss) memberships for this person
+            memberships = COMITTEE.MEMBERSHIP.xt(response)
+
+            for m in memberships:
+                comittee = m['comittee']
+                if comittee['legislative_period'] is not None:
+                    llp = LegislativePeriod.objects.get(
+                        roman_numeral=comittee['legislative_period'])
+                    comittee['legislative_period'] = llp
+
+                comittee_item, created_comittee = Comittee.objects.get_or_create(
+                    **comittee)
+                if created_comittee:
+                    self.logger.info(u"Created comittee {}".format(
+                        green(u"[{}]".format(comittee))
+                    ))
+
+                function_data = {
+                    'title': m['function'],
+                    'short': m['function']
+                }
+
+                function_item, created_function = Function.objects.get_or_create(
+                    **function_data)
+                if created_function:
+                    self.logger.info(u"Created function {}".format(
+                        green(u"[{}]".format(function_item))
+                    ))
+
+                membership_data = {
+                    'date_from': m['date_from'],
+                    'comittee': comittee_item,
+                    'person': person_item,
+                    'function': function_item
+                }
+
+                membership_item, created_membership = ComitteeMembership.objects.update_or_create(
+                    defaults={
+                        'date_to': m['date_to']
+                    },
+                    **membership_data
+                )
+
+                if created_membership:
+                    self.logger.info(u"Created membership {}".format(
+                        green(u"[{}]".format(membership_item))
+                    ))
+
+        except Exception as error:
+            self.logger.info(red(u"Error saving Person {}".format(full_name)))
             import ipdb
             ipdb.set_trace()
             return

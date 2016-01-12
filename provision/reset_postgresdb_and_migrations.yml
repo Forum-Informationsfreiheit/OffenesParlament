@@ -17,8 +17,8 @@
       become: true
       become_user: postgres
 
-    - name: Makemigrations and Migrate
-    shell: "cd offenesparlament && python manage.py makemigrations && python manage.py migrate"
+    - name: Remove_Migrations Makemigrations and Migrate
+      shell: "cd offenesparlament && python remove_migrations.py && python manage.py makemigrations && python manage.py migrate"
 
     - name: Create Admin-User
       shell: cd offenesparlament && echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | ./manage.py shell

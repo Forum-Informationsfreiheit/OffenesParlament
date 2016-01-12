@@ -13,7 +13,10 @@ from urllib import urlencode
 
 from scrapy import log
 
+import pytz
+
 from parlament.spiders import BaseSpider
+from parlament.resources.extractors import *
 from parlament.resources.extractors.petition import *
 from parlament.resources.extractors.opinion import *
 
@@ -100,6 +103,7 @@ class PetitionsSpider(BaseSpider):
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
+        ts = GENERIC.TIMESTAMP.xt(response)
 
         if not (u'BI' in parl_id or u'PET' in parl_id):
             # VBG have their parl_id only in the url
@@ -113,6 +117,12 @@ class PetitionsSpider(BaseSpider):
                 roman_numeral=raw_llp)
         else:
             LLP = None
+
+        if not self.has_changes(parl_id, LLP, response.url, ts):
+            self.logger.info(
+                green(u"Skipping Petition, no changes: {}".format(
+                    title)))
+            return
 
         # save ids and stuff for internals
         if LLP not in self.idlist:
@@ -152,6 +162,7 @@ class PetitionsSpider(BaseSpider):
                 'signing_url': signing_url,
                 'signature_count': signature_count,
                 'reference': reference,
+                'ts': ts
             }
         )
 
@@ -219,6 +230,22 @@ class PetitionsSpider(BaseSpider):
             len(callback_requests))), level=log.INFO)
 
         return callback_requests
+
+    def has_changes(self, parl_id, legislative_period, source_link, ts):
+        if not Petition.objects.filter(
+            parl_id=parl_id,
+            legislative_period=legislative_period,
+            source_link=source_link
+        ).exists():
+            return True
+
+        ts = ts.replace(tzinfo=pytz.utc)
+        if Petition.objects.get(
+                parl_id=parl_id,
+                legislative_period=legislative_period,
+                source_link=source_link).ts != ts:
+            return True
+        return False
 
     def parse_keywords(self, response):
         """
@@ -482,7 +509,8 @@ class PetitionsSpider(BaseSpider):
         # find latest saved signature date
         last_signature_date = datetime.date.fromtimestamp(0)
         try:
-            last_signature_date = petition.petition_signatures.latest('date').date
+            last_signature_date = petition.petition_signatures.latest(
+                'date').date
             log.msg(u'Latest signature date saved: {}'.format(
                 green(u'{}'.format(last_signature_date))
             ))
@@ -493,20 +521,24 @@ class PetitionsSpider(BaseSpider):
         count_bulk_create = 0
 
         # signatures on the latest saved date
-        signatures_ondate = [sig for sig in signatures if sig['date'] == last_signature_date]
+        signatures_ondate = [
+            sig for sig in signatures if sig['date'] == last_signature_date]
         for signature in signatures_ondate:
             petition_signature, created = PetitionSignature.objects.get_or_create(
                 petition=petition, **signature)
             if created:
                 count_created += 1
 
-        signatures_afterdate = [sig for sig in signatures if sig['date'] > last_signature_date]
+        signatures_afterdate = [
+            sig for sig in signatures if sig['date'] > last_signature_date]
         # remove duplicates as pre-processing step for bulk_create
-        # code for de-duplication for list of dicts used from: http://stackoverflow.com/a/6281063/331559
-        signatures_afterdate = [dict(y) for y in set(tuple(x.items()) for x in signatures_afterdate)]
+        # code for de-duplication for list of dicts used from:
+        # http://stackoverflow.com/a/6281063/331559
+        signatures_afterdate = [
+            dict(y) for y in set(tuple(x.items()) for x in signatures_afterdate)]
         signature_items = []
         for signature in signatures_afterdate:
-            signature_item = PetitionSignature(petition=petition,**signature)
+            signature_item = PetitionSignature(petition=petition, **signature)
             signature_items.append(signature_item)
             count_bulk_create += 1
 

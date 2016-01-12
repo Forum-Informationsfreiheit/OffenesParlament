@@ -6,6 +6,7 @@ from haystack.management.commands import update_index
 from celery import shared_task
 
 import reversion
+from reversion.management.commands import createinitialrevisions
 from django.db import transaction
 
 DEFAULT_CRAWLER_OPTIONS = {
@@ -22,6 +23,9 @@ def scrape(spider, **kwargs):
         process.crawl(spider, **kwargs)
         # the script will block here until the crawling is finished
         process.start()
+    createinitialrevisions.Command().handle(
+        comment='Initial version',
+        batch_size=500)
     return
 
 

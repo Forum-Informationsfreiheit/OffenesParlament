@@ -5,10 +5,13 @@ from op_scraper.models import Person, Law
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
+    ts = indexes.DateTimeField(model_attr='ts', faceted=True)
     parl_id = indexes.CharField(model_attr='parl_id')
 
     source_link = indexes.CharField(model_attr='source_link')
     internal_link = indexes.CharField(model_attr='slug')
+    photo_link = indexes.CharField(model_attr='photo_link')
+    photo_copyright = indexes.CharField(model_attr='photo_copyright')
 
     birthdate = indexes.DateTimeField(model_attr='birthdate', null=True)
     deathdate = indexes.DateTimeField(model_attr='deathdate', null=True)
@@ -30,6 +33,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
 class LawIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     parl_id = indexes.CharField(model_attr='parl_id')
+    ts = indexes.DateTimeField(model_attr='ts', faceted=True)
 
     internal_link = indexes.CharField(model_attr=u'slug')
     title = indexes.CharField(model_attr='title')
@@ -39,17 +43,20 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
 
     # Related, aggregated and Multi-Value Fields
-    steps = indexes.MultiValueField()
+    steps = indexes.CharField()
     opinions = indexes.MultiValueField()
     documents = indexes.MultiValueField()
     keywords = indexes.MultiValueField(
         model_attr='keyword_titles', faceted=True)
 
+    def index_queryset(self, using=None):
+        return self.get_model().objects.filter(petition__isnull=True)
+
     def prepare_steps(self, obj):
         """
         Collects the object's step's id
         """
-        return [step.id for step in obj.steps.all()]
+        return obj.steps_by_phases_json()
 
     def prepare_opinions(self, obj):
         """

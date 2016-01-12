@@ -2,6 +2,8 @@
 
 An open-data framework for the public data of the Austrian Parliament
 
+Check out the more complete documentation over at [offenesparlament.readthedocs.org](http://offenesparlament.readthedocs.org/en/latest/).
+
 ## Installation instructions with Vagrant
 
 ### Prerequisites
