@@ -73,24 +73,24 @@ class InquiriesSpider(BaseSpider):
         # This predefined list of URLs is chosen to include all types of
         # inquiries possible in the Austrian parliament in order to provide a
         # suitable testing surface for new functions.
-        urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml",
-                "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06110/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06651/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04024/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04025/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00178/index.shtml"]
-        # urls = []
+        # urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml",
+        #         "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06110/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06651/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04024/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04025/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00178/index.shtml"]
+        urls = []
 
-        # if self.LLP:
-        #     for i in self.LLP:
-        #         for nrbr in ['NR', 'BR']:
-        #             roman_numeral = roman.toRoman(i)
-        #             options = self.URLOPTIONS.copy()
-        #             options['GP'] = roman_numeral
-        #             options['NRBR'] = nrbr
-        #             url_options = urlencode(options)
-        #             url_llp = "{}?{}".format(self.BASE_URL, url_options)
-        #             rss = feedparser.parse(url_llp)
+        if self.LLP:
+            for i in self.LLP:
+                for nrbr in ['NR', 'BR']:
+                    roman_numeral = roman.toRoman(i)
+                    options = self.URLOPTIONS.copy()
+                    options['GP'] = roman_numeral
+                    options['NRBR'] = nrbr
+                    url_options = urlencode(options)
+                    url_llp = "{}?{}".format(self.BASE_URL, url_options)
+                    rss = feedparser.parse(url_llp)
 
-        #             print "GP {}: {} inquiries from {} [{}]".format(
-        #                 roman_numeral, len(rss['entries']), nrbr, url_llp)
-        #             urls = urls + [entry['link'] for entry in rss['entries']]
+                    print "GP {}: {} inquiries from {} [{}]".format(
+                        roman_numeral, len(rss['entries']), nrbr, url_llp)
+                    urls = urls + [entry['link'] for entry in rss['entries']]
 
         return urls
 
