@@ -96,6 +96,11 @@ class CustomIndexDashboard(Dashboard):
                     'external': False,
                 },
                 {
+                    'title': _('Scrape Inquiries'),
+                    'url': '/admin/scrape/inquiries',
+                    'external': False,
+                },
+                {
                     'title': _('Scrape Petitions'),
                     'url': '/admin/scrape/petitions',
                     'external': False,

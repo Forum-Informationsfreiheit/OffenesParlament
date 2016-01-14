@@ -303,31 +303,6 @@ class Opinion(models.Model, ParlIDMixIn):
     def __unicode__(self):
         return u'{} zu {}'.format(self.entity.title, self.prelaw.parl_id)
 
-
-class Step(models.Model):
-
-    """
-    A single step in the parliamentary process
-    """
-    title = models.CharField(max_length=1023)
-    sortkey = models.CharField(max_length=6)
-    date = models.DateField()
-    protocol_url = models.URLField(max_length=255, default="")
-    source_link = models.URLField(max_length=255, default="")
-
-    # Relationships
-    phase = models.ForeignKey(Phase)
-    law = models.ForeignKey(Law, null=True, blank=True, related_name='steps')
-    opinion = models.ForeignKey(
-        Opinion, null=True, blank=True, related_name='steps')
-
-    def __unicode__(self):
-        try:
-            return remove_tags(self.title, 'a')
-        except:
-            return self.title
-
-
 class Administration(models.Model):
 
     """
@@ -512,6 +487,51 @@ class Person(Timestamped, ParlIDMixIn):
 
         return self._slug
 
+class InquiryResponse(Law):
+    sender = models.ForeignKey(Person, related_name='inquiries_answered', default="")
+
+    @property
+    def llp_roman(self):
+        return self.legislative_period.roman_numeral
+
+
+class Inquiry(Law):
+    """
+    An inquiry to the members of government
+    """
+    #Relationships
+    sender = models.ManyToManyField(Person, related_name='inquiries_sent', default="")
+    receiver = models.ForeignKey(Person, related_name='inquiries_received', default="")
+    response = models.ForeignKey(InquiryResponse, null=True, blank=True, related_name='inquiries', default="")
+
+    @property
+    def llp_roman(self):
+        return self.legislative_period.roman_numeral
+
+class Step(models.Model):
+
+    """
+    A single step in the parliamentary process
+    """
+    title = models.CharField(max_length=1023)
+    sortkey = models.CharField(max_length=6)
+    date = models.DateField()
+    protocol_url = models.URLField(max_length=255, default="")
+    source_link = models.URLField(max_length=255, default="")
+
+    # Relationships
+    phase = models.ForeignKey(Phase)
+    law = models.ForeignKey(Law, null=True, blank=True, related_name='steps')
+    opinion = models.ForeignKey(
+        Opinion, null=True, blank=True, related_name='steps')
+    inquiry = models.ForeignKey(
+        Inquiry, null=True, blank=True, related_name='steps_inquiry')
+
+    def __unicode__(self):
+        try:
+            return remove_tags(self.title, 'a')
+        except:
+            return self.title
 
 class Statement(models.Model):
 
@@ -528,7 +548,6 @@ class Statement(models.Model):
 
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
-
 
 class Verification(models.Model):
 
@@ -764,7 +783,6 @@ class DebateStatement(models.Model):
             self.index,
             self.doc_section,
             self.date)
-
 
 class Comittee(Timestamped, ParlIDMixIn):
 

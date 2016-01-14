@@ -326,6 +326,22 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Inquiry',
+            fields=[
+                ('law_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='op_scraper.Law')),
+                ('receiver', models.ForeignKey(related_name='inquiries_received', default=b'', to='op_scraper.Person')),
+            ],
+            bases=('op_scraper.law',),
+        ),
+        migrations.CreateModel(
+            name='InquiryResponse',
+            fields=[
+                ('law_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='op_scraper.Law')),
+                ('sender', models.ManyToManyField(default=b'', related_name='inquiries_answered', to='op_scraper.Person')),
+            ],
+            bases=('op_scraper.law',),
+        ),
+        migrations.CreateModel(
             name='Petition',
             fields=[
                 ('law_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='op_scraper.Law')),
@@ -492,6 +508,11 @@ class Migration(migrations.Migration):
             unique_together=set([('user', 'content')]),
         ),
         migrations.AddField(
+            model_name='step',
+            name='inquiry',
+            field=models.ForeignKey(related_name='steps_inquiry', blank=True, to='op_scraper.Inquiry', null=True),
+        ),
+        migrations.AddField(
             model_name='petitionsignature',
             name='petition',
             field=models.ForeignKey(related_name='petition_signatures', to='op_scraper.Petition'),
@@ -505,12 +526,22 @@ class Migration(migrations.Migration):
             name='law',
             unique_together=set([('parl_id', 'legislative_period')]),
         ),
+        migrations.AddField(
+            model_name='inquiry',
+            name='response',
+            field=models.ForeignKey(related_name='inquiries', default=b'', blank=True, to='op_scraper.InquiryResponse', null=True),
+        ),
+        migrations.AddField(
+            model_name='inquiry',
+            name='sender',
+            field=models.ManyToManyField(default=b'', related_name='inquiries_sent', to='op_scraper.Person'),
+        ),
         migrations.AlterUniqueTogether(
             name='comitteemeeting',
             unique_together=set([('number', 'date', 'comittee')]),
         ),
         migrations.AlterUniqueTogether(
             name='comittee',
-            unique_together=set([('parl_id', 'legislative_period', 'active')]),
-        ),
+            unique_together=set([('parl_id', 'legislative_period', 'active')])
+        )
     ]

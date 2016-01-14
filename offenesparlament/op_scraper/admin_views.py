@@ -12,7 +12,9 @@ from op_scraper.scraper.parlament.spiders.petitions import PetitionsSpider
 from op_scraper.scraper.parlament.spiders.pre_laws import PreLawsSpider
 from op_scraper.scraper.parlament.spiders.persons import PersonsSpider
 from op_scraper.scraper.parlament.spiders.statement import StatementSpider
+from op_scraper.scraper.parlament.spiders.inquiries import InquiriesSpider
 from op_scraper.scraper.parlament.spiders.comittees import ComitteesSpider
+
 
 
 SPIDERS = {
@@ -52,18 +54,23 @@ SPIDERS = {
         'scraper': ComitteesSpider,
         'has_options': True
     },
+    'inquiries': {
+        'scraper': InquiriesSpider,
+        'has_options': False
+    }
 }
 
 SPIDER_CHOICES = (
     ('llp', u'Gesetzgebungsperioden'),
     ('administrations', u'Regierungsmitglieder'),
-    ('administrations', u'RechnungshofpräsidentInnen'),
+    ('auditors', u'RechnungshofpräsidentInnen'),
     ('persons', u'Personen'),
     ('pre_laws', u'Ministerialentwürfe und Vorparlamentarische Prozesses'),
     ('laws', u'Gesetze'),
     ('petitions', u'Petitionen'),
     ('debates', u'Debatten und Statements'),
-    ('comittees', u'Ausschüsse')
+    ('comittees', u'Ausschüsse'),
+    ('inquiries', 'Parlamentarische Anfragen & Beantwortungen')
 )
 
 from django import forms
