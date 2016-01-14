@@ -50,7 +50,10 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='keyword_titles', faceted=True)
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.filter(petition__isnull=True)
+        return self.get_model()\
+            .objects.filter(petition__isnull=True)\
+            .filter(inquiry__isnull=True)\
+            .filter(inquiryresponse__isnull=True)
 
     def prepare_steps(self, obj):
         """

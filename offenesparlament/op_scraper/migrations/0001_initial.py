@@ -33,6 +33,7 @@ class Migration(migrations.Migration):
             name='Comittee',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('ts', models.DateTimeField(null=True)),
                 ('name', models.CharField(max_length=511)),
                 ('parl_id', models.CharField(max_length=30)),
                 ('source_link', models.URLField(default=b'', max_length=255)),
@@ -331,14 +332,20 @@ class Migration(migrations.Migration):
                 ('law_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='op_scraper.Law')),
                 ('receiver', models.ForeignKey(related_name='inquiries_received', default=b'', to='op_scraper.Person')),
             ],
+            options={
+                'abstract': False,
+            },
             bases=('op_scraper.law',),
         ),
         migrations.CreateModel(
             name='InquiryResponse',
             fields=[
                 ('law_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='op_scraper.Law')),
-                ('sender', models.ManyToManyField(default=b'', related_name='inquiries_answered', to='op_scraper.Person')),
+                ('sender', models.ForeignKey(related_name='inquiries_answered', default=b'', to='op_scraper.Person')),
             ],
+            options={
+                'abstract': False,
+            },
             bases=('op_scraper.law',),
         ),
         migrations.CreateModel(
@@ -542,6 +549,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='comittee',
-            unique_together=set([('parl_id', 'legislative_period', 'active')])
-        )
+            unique_together=set([('parl_id', 'legislative_period', 'active')]),
+        ),
     ]
