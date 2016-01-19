@@ -137,7 +137,10 @@ ul {
   width: 100%;
   background-color: #1e4563;
   color: white;
-  overflow: hidden; }
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  height: 50px; }
   .menu_bar .logo {
     background: url("img/offparl_logo.png") no-repeat;
     background-size: 200px 24px;
@@ -155,6 +158,9 @@ ul {
       .menu_bar nav ul.menu_bar_items li {
         display: inline-block;
         margin: 0; }
+        @media screen and (max-width: 940px) {
+          .menu_bar nav ul.menu_bar_items li {
+            padding-right: 0; } }
         .menu_bar nav ul.menu_bar_items li a {
           color: white;
           text-decoration: none;
@@ -162,13 +168,17 @@ ul {
           display: inline-block;
           line-height: 50px;
           padding: 0 15px; }
+          @media screen and (max-width: 940px) {
+            .menu_bar nav ul.menu_bar_items li a {
+              padding: 0 10px; } }
           .menu_bar nav ul.menu_bar_items li a:hover {
             color: #7fb7ea;
             background-color: initial; }
 
 .search_bar {
   width: 100%;
-  background-color: #e5e5e5; }
+  background-color: #e5e5e5;
+  margin-top: 50px; }
 
 ul.columned_linklist {
   -webkit-column-count: 3;
@@ -286,7 +296,7 @@ ul.breadcrumbs {
   margin-top: 0; }
 
 .homepage_search {
-  margin: 100px 0 100px 0; }
+  margin: 150px 0 100px 0; }
   .homepage_search .searchbar {
     position: relative;
     width: 100%;

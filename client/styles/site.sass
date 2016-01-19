@@ -4,6 +4,7 @@
 // screensizes for breakpoints
 $break_large: 1200px
 $break_medium: 940px
+$break_responsive_menu: 650px
 $break_small: 500px
 $min_margin: 30px
 
@@ -82,6 +83,9 @@ ul
   background-color: $menu_dark_blue
   color: white
   overflow: hidden
+  position: fixed
+  top: 0
+  height: 50px
   .logo
     background: url('img/offparl_logo.png') no-repeat
     background-size: 200px 24px
@@ -99,6 +103,8 @@ ul
       li
         display: inline-block
         margin: 0
+        @media screen and (max-width: $break_medium)
+          padding-right: 0
         a
           color: white
           text-decoration: none
@@ -106,6 +112,8 @@ ul
           display: inline-block
           line-height: 50px
           padding: 0 15px
+          @media screen and (max-width: $break_medium)
+            padding: 0 10px
           &:hover
             color: $light_blue
             background-color: initial
@@ -114,6 +122,7 @@ ul
 .search_bar
   width: 100%
   background-color: $light_gray
+  margin-top: 50px
 
 ul.columned_linklist
   @include column-count(3)
@@ -220,7 +229,7 @@ ul.breadcrumbs
   margin-top: 0
 
 .homepage_search
-  margin: 100px 0 100px 0
+  margin: 150px 0 100px 0
   .searchbar
     position: relative
     width: 100%
