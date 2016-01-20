@@ -98,7 +98,7 @@ $ = require('jquery');
 _ = require('underscore');
 
 $(document).ready(function() {
-  var ReactTooltip, Searchbar, anysearch_container, anysearch_container_homepage, content_container, render_results, tooltip_container;
+  var ReactTooltip, Searchbar, anysearch_container, anysearch_container_homepage, content_container, menu, render_results, toggle, tooltip_container;
   tooltip_container = document.getElementById('react_tooltip_container');
   if (tooltip_container) {
     ReactTooltip = require("react-tooltip");
@@ -112,6 +112,12 @@ $(document).ready(function() {
       }
     }), tooltip_container);
   }
+  menu = $('.menu_bar ul.main_menu');
+  toggle = $('.menu_bar .menu_responsive_sandwich');
+  toggle.on('click', function(event) {
+    event.preventDefault();
+    return menu.slideToggle();
+  });
   anysearch_container = document.getElementById('anysearch_container');
   anysearch_container_homepage = document.getElementById('anysearch_container_homepage');
   content_container = document.getElementById('content');

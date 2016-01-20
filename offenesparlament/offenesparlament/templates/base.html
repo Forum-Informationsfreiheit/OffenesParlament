@@ -50,18 +50,10 @@
 
     <div class="menu_bar">
       <div class="container">
-        <a href="/" class="logo navbar-brand">offenesparlament.at</a>
-
-          {% if messages %}
-              <ul class="messages">
-                  {% for message in messages %}
-                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          {% endif %}
-
-        <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right">
-          <ul class="menu_bar_items nav navbar-nav">
+        <nav>
+          <a href="/" class="logo navbar-brand">offenesparlament.at</a>
+          <a href="#" class="menu_responsive_sandwich">Menü</a>
+          <ul class="main_menu menu_bar_items nav navbar-nav">
             <li>
               <a href="/personen">Personen</a>
             </li>
@@ -85,6 +77,14 @@
         </div>
       </div>
     {% endblock %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     {% block container %}
     {% endblock %}

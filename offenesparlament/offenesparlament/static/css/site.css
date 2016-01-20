@@ -17,6 +17,9 @@
     display: inline-block;
     margin: 10px 10px 10px 10px;
     vertical-align: top; }
+    @media screen and (max-width: 500px) {
+      .anysearch_box .anysearch_icon {
+        display: none; } }
   .anysearch_box .anysearch_placeholder {
     position: absolute;
     line-height: 36px;
@@ -141,6 +144,10 @@ ul {
   position: fixed;
   top: 0;
   height: 50px; }
+  @media screen and (max-width: 650px) {
+    .menu_bar {
+      position: relative;
+      height: auto; } }
   .menu_bar .logo {
     background: url("img/offparl_logo.png") no-repeat;
     background-size: 200px 24px;
@@ -149,36 +156,58 @@ ul {
     width: 200px;
     height: 50px;
     display: inline-block; }
-  .menu_bar nav {
-    float: right; }
-    .menu_bar nav ul.menu_bar_items {
-      list-style: none;
-      padding: 0;
+  .menu_bar nav .menu_responsive_sandwich {
+    float: right;
+    display: none;
+    overflow: hidden;
+    background-image: url("img/icons/icon_sandwich.png");
+    background-repeat: no-repeat;
+    margin: 0;
+    line-height: 50px;
+    padding: 0 0 0 27px;
+    background-position: left center;
+    text-transform: none;
+    text-decoration: none;
+    color: white;
+    background-size: 30%; }
+    @media screen and (max-width: 650px) {
+      .menu_bar nav .menu_responsive_sandwich {
+        display: block; } }
+  .menu_bar nav ul.menu_bar_items {
+    float: right;
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+    @media screen and (max-width: 650px) {
+      .menu_bar nav ul.menu_bar_items {
+        display: none; } }
+    .menu_bar nav ul.menu_bar_items li {
+      display: inline-block;
       margin: 0; }
-      .menu_bar nav ul.menu_bar_items li {
+      @media screen and (max-width: 940px) {
+        .menu_bar nav ul.menu_bar_items li {
+          padding-right: 0; } }
+      .menu_bar nav ul.menu_bar_items li a {
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
         display: inline-block;
-        margin: 0; }
+        line-height: 50px;
+        padding: 0 15px; }
         @media screen and (max-width: 940px) {
-          .menu_bar nav ul.menu_bar_items li {
-            padding-right: 0; } }
-        .menu_bar nav ul.menu_bar_items li a {
-          color: white;
-          text-decoration: none;
-          font-size: 13px;
-          display: inline-block;
-          line-height: 50px;
-          padding: 0 15px; }
-          @media screen and (max-width: 940px) {
-            .menu_bar nav ul.menu_bar_items li a {
-              padding: 0 10px; } }
-          .menu_bar nav ul.menu_bar_items li a:hover {
-            color: #7fb7ea;
-            background-color: initial; }
+          .menu_bar nav ul.menu_bar_items li a {
+            padding: 0 10px; } }
+        .menu_bar nav ul.menu_bar_items li a:hover {
+          color: #7fb7ea;
+          background-color: initial; }
 
 .search_bar {
   width: 100%;
   background-color: #e5e5e5;
   margin-top: 50px; }
+  @media screen and (max-width: 650px) {
+    .search_bar {
+      margin-top: 0; } }
 
 ul.columned_linklist {
   -webkit-column-count: 3;

@@ -22,6 +22,13 @@ $(document).ready( () ->
       tooltip_container
     )
 
+  menu = $('.menu_bar ul.main_menu')
+  toggle = $('.menu_bar .menu_responsive_sandwich')
+  toggle.on('click', (event) ->
+    event.preventDefault()
+    menu.slideToggle()
+  )
+
   anysearch_container = document.getElementById('anysearch_container')
   anysearch_container_homepage = document.getElementById('anysearch_container_homepage')
   content_container = document.getElementById('content')
