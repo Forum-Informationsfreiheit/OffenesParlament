@@ -36,11 +36,11 @@ Vagrant.configure("2") do |config|
     config.vm.provision "bootstrap", type: "shell", path: "provision/bootstrap.sh", privileged: false
 
     # 2. DB Creation and Reset provisioner
-    node.vm.provision "reset_db", type: "ansible", playbook: "provision/reset_postgresdb.yml"
+    node.vm.provision "reset_db", type: "ansible_local", playbook: "provision/reset_postgresdb.yml"
     #, verbose: "vvv"
 
     # 3. DB Creation and Reset complete with Migrations provisioner
-    node.vm.provision "reset_db_mig", type: "ansible", playbook: "provision/reset_postgresdb_and_migrations.yml"
+    node.vm.provision "reset_db_mig", type: "ansible_local", playbook: "provision/reset_postgresdb_and_migrations.yml"
     #, verbose: "vvv"
 
   end

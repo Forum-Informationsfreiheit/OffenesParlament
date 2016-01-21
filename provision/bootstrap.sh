@@ -42,6 +42,9 @@ sudo cp /vagrant/provision/conf/supervisord.conf /etc/
 mkdir -p /vagrant/ignore/var/log
 sudo supervisord
 
+# Install specific version of ansible that works with vagrant 1.8.1
+sudo pip install ansible==1.9.4
+
 # install node.js and NPM
 # install PPA first to get recent package
 curl -sL https://deb.nodesource.com/setup | sudo bash -
