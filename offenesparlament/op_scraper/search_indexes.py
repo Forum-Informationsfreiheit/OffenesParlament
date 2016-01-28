@@ -44,8 +44,8 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Related, aggregated and Multi-Value Fields
     steps = indexes.CharField()
-    opinions = indexes.MultiValueField()
-    documents = indexes.MultiValueField()
+    opinions = indexes.CharField()
+    documents = indexes.CharField()
     keywords = indexes.MultiValueField(
         model_attr='keyword_titles', faceted=True)
 
@@ -57,7 +57,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_steps(self, obj):
         """
-        Collects the object's step's id
+        Collects the object's step's as json
         """
         return obj.steps_by_phases_json()
 
@@ -65,13 +65,13 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
         """
         Collects the object's opinions's id
         """
-        return [opinion.id for opinion in obj.opinions.all()]
+        return obj.opinions_json()
 
     def prepare_documents(self, obj):
         """
         Collects the object's documents's id
         """
-        return [document.id for document in obj.documents.all()]
+        return obj.documents_json()
 
     def get_model(self):
         return Law
