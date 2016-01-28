@@ -15,6 +15,7 @@ from django.shortcuts import render
 import xxhash
 import requests
 import uuid
+import json
 
 
 def verify(request, email, key):
@@ -148,8 +149,15 @@ def subscribe(request):
     content, created_content = SubscribedContent.objects.get_or_create(url=url)
     if created_content:
         content_response = requests.get(url)
-        content_hash = xxhash.xxh64(content_response.text).hexdigest()
-        content.latest_content_hash = content_hash
+        es_response = json.loads(content_response.text)
+        content_hashes = []
+        for res in es_response['result']:
+            content_hashes.append({
+                'parl_id': res['parl_id'],
+                'hash': xxhash.xxh64(json.dumps(res)).hexdigest(),
+            })
+        content.latest_content_hashes = json.dumps(content_hashes)
+        content.save()
 
     if not Subscription.objects.filter(user=user, content=content).exists():
         verification_hash = uuid.uuid4().hex
