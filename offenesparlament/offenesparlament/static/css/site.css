@@ -20,6 +20,21 @@
     @media screen and (max-width: 500px) {
       .anysearch_box .anysearch_icon {
         display: none; } }
+  .anysearch_box .anysearch_subscribe_form {
+    display: inline-block;
+    float: right; }
+    .anysearch_box .anysearch_subscribe_form .anysearch_subscribe_button {
+      background-image: url("img/icons/subscribe_red.svg");
+      background-repeat: no-repeat;
+      width: 17px;
+      height: 17px;
+      display: inline-block;
+      margin: 10px 10px 10px 10px;
+      vertical-align: top;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      background-color: transparent; }
   .anysearch_box .anysearch_placeholder {
     position: absolute;
     line-height: 36px;

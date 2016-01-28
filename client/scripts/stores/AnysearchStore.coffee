@@ -180,6 +180,10 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
   get_search_results: () ->
     return _search_results
 
+  get_subscription_url: () ->
+    terms = _.flatten(_.pairs(_get_terms_as_object()))
+    return '/suche/' + terms.join('/')
+
   emitChange: () ->
     this.emit(CHANGE_EVENT)
 

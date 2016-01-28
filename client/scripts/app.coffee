@@ -5,6 +5,8 @@ AnysearchStore = require './stores/AnysearchStore.coffee'
 AnysearchActions = require './actions/AnysearchActions.coffee'
 $ = require 'jquery'
 _ = require 'underscore'
+require './utils/csrf_token.coffee'
+
 
 $(document).ready( () ->
   #init tooltip react component
