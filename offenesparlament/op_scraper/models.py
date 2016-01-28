@@ -230,6 +230,47 @@ class Law(Timestamped, ParlIDMixIn):
 
         return json.dumps(phases)
 
+    def opinions_json(self):
+        """
+        Returns a json representation of the opinios
+        """
+        ops = []
+        for op in self.opinions.all():
+
+            docs = []
+            for d in op.documents.all():
+                docs.append({
+                    'title': d.title,
+                    'pdf_link': d.pdf_link,
+                    'html_link': d.html_link,
+                })
+            ops.append(
+                {
+                    'parl_id':  op.parl_id,
+                    'date':  op.date.isoformat() if op.date else '',
+                    'description':  op.description,
+                    'source_link':  op.source_link,
+                    'documents':  docs,
+                    'keywords':  [kw.title for kw in op.keywords.all()],
+                    'prelaw': op.prelaw.id,
+                }
+            )
+        return json.dumps(ops)
+
+    def documents_json(self):
+        """
+        Returns a json representation of the documents
+        """
+        docs = []
+        for doc in self.documents.all():
+
+            docs.append({
+                'title': doc.title,
+                'pdf_link': doc.pdf_link,
+                'html_link': doc.html_link,
+            })
+        return json.dumps(docs)
+
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
@@ -302,6 +343,7 @@ class Opinion(models.Model, ParlIDMixIn):
 
     def __unicode__(self):
         return u'{} zu {}'.format(self.entity.title, self.prelaw.parl_id)
+
 
 class Administration(models.Model):
 
@@ -487,8 +529,10 @@ class Person(Timestamped, ParlIDMixIn):
 
         return self._slug
 
+
 class InquiryResponse(Law):
-    sender = models.ForeignKey(Person, related_name='inquiries_answered', default="")
+    sender = models.ForeignKey(
+        Person, related_name='inquiries_answered', default="")
 
     @property
     def llp_roman(self):
@@ -496,17 +540,22 @@ class InquiryResponse(Law):
 
 
 class Inquiry(Law):
+
     """
     An inquiry to the members of government
     """
-    #Relationships
-    sender = models.ManyToManyField(Person, related_name='inquiries_sent', default="")
-    receiver = models.ForeignKey(Person, related_name='inquiries_received', default="")
-    response = models.ForeignKey(InquiryResponse, null=True, blank=True, related_name='inquiries', default="")
+    # Relationships
+    sender = models.ManyToManyField(
+        Person, related_name='inquiries_sent', default="")
+    receiver = models.ForeignKey(
+        Person, related_name='inquiries_received', default="")
+    response = models.ForeignKey(
+        InquiryResponse, null=True, blank=True, related_name='inquiries', default="")
 
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
+
 
 class Step(models.Model):
 
@@ -533,6 +582,7 @@ class Step(models.Model):
         except:
             return self.title
 
+
 class Statement(models.Model):
 
     """
@@ -548,6 +598,7 @@ class Statement(models.Model):
 
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
+
 
 class Verification(models.Model):
 
@@ -592,8 +643,7 @@ class SubscribedContent(models.Model):
     A news- or page-subscription
     """
     url = models.URLField(max_length=255, unique=True)
-    latest_content_hash = models.CharField(
-        max_length=16, null=True, blank=True)
+    latest_content_hashes = models.TextField(null=True, blank=True)
 
     # Relationships
     users = models.ManyToManyField(User, through="Subscription")
@@ -783,6 +833,7 @@ class DebateStatement(models.Model):
             self.index,
             self.doc_section,
             self.date)
+
 
 class Comittee(Timestamped, ParlIDMixIn):
 
