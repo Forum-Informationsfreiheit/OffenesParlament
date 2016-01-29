@@ -3,6 +3,7 @@ ReactDOM = require 'react-dom'
 SearchResults = require './components/SearchResults.cjsx'
 SubscriptionModal = require './components/SubscriptionModal.cjsx'
 SubscriptionModalStore = require './stores/SubscriptionModalStore.coffee'
+SubscriptionModalActions = require './actions/SubscriptionModalActions.coffee'
 AnysearchStore = require './stores/AnysearchStore.coffee'
 AnysearchActions = require './actions/AnysearchActions.coffee'
 $ = require 'jquery'
@@ -88,4 +89,13 @@ $(document).ready( () ->
       )
   SubscriptionModalStore.addChangeListener(render_modal)
   render_modal()
+
+  #activate generic HTML links that should open a subscription modal
+  $('.subscription_button').click((e) ->
+    e.preventDefault()
+    btn = $(e.target)
+    url = btn.data('subscription_url')
+    title = btn.data('subscription_title')
+    SubscriptionModalActions.showModal(url, title)
+  )
 )

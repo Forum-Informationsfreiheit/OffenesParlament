@@ -117,7 +117,7 @@ module.exports = SubscriptionModalActions;
 
 
 },{"../constants/SubscriptionModalConstants.coffee":15,"../dispatcher/AppDispatcher.coffee":16}],4:[function(require,module,exports){
-var $, AnysearchActions, AnysearchStore, React, ReactDOM, SearchResults, SubscriptionModal, SubscriptionModalStore, _;
+var $, AnysearchActions, AnysearchStore, React, ReactDOM, SearchResults, SubscriptionModal, SubscriptionModalActions, SubscriptionModalStore, _;
 
 React = require('react');
 
@@ -128,6 +128,8 @@ SearchResults = require('./components/SearchResults.cjsx');
 SubscriptionModal = require('./components/SubscriptionModal.cjsx');
 
 SubscriptionModalStore = require('./stores/SubscriptionModalStore.coffee');
+
+SubscriptionModalActions = require('./actions/SubscriptionModalActions.coffee');
 
 AnysearchStore = require('./stores/AnysearchStore.coffee');
 
@@ -204,11 +206,19 @@ $(document).ready(function() {
     }
   };
   SubscriptionModalStore.addChangeListener(render_modal);
-  return render_modal();
+  render_modal();
+  return $('.subscription_button').click(function(e) {
+    var btn, title, url;
+    e.preventDefault();
+    btn = $(e.target);
+    url = btn.data('subscription_url');
+    title = btn.data('subscription_title');
+    return SubscriptionModalActions.showModal(url, title);
+  });
 });
 
 
-},{"./actions/AnysearchActions.coffee":1,"./components/SearchResults.cjsx":5,"./components/SubscriptionModal.cjsx":6,"./components/anysearch/Searchbar.cjsx":9,"./stores/AnysearchStore.coffee":17,"./stores/SubscriptionModalStore.coffee":18,"./utils/csrf_token.coffee":20,"jquery":27,"react":"react","react-dom":30,"react-tooltip":87,"underscore":245}],5:[function(require,module,exports){
+},{"./actions/AnysearchActions.coffee":1,"./actions/SubscriptionModalActions.coffee":3,"./components/SearchResults.cjsx":5,"./components/SubscriptionModal.cjsx":6,"./components/anysearch/Searchbar.cjsx":9,"./stores/AnysearchStore.coffee":17,"./stores/SubscriptionModalStore.coffee":18,"./utils/csrf_token.coffee":20,"jquery":27,"react":"react","react-dom":30,"react-tooltip":87,"underscore":245}],5:[function(require,module,exports){
 var React, SearchResults, _;
 
 React = require('react');
