@@ -1,13 +1,18 @@
 React = require 'react'
+SubscriptionModalActions = require '../../actions/SubscriptionModalActions.coffee'
 
 
 SubscribeButton = React.createClass
 
+  _open_modal: (e) ->
+    e.preventDefault()
+    SubscriptionModalActions.showModal(@props.subscription_url, @props.subscription_title)
+
   render: ->
-    return <form className="anysearch_subscribe_form" action="/subscribe" method="POST">
-        <input type="hidden" name="subscription_url" value={@props.subscription_url} />
-        <button className="anysearch_subscribe_button" onClick={@onSubscribeClicked} type="submit"></button>
-      </form>
+    return <a
+      href="#"
+      className="anysearch_subscribe_button"
+      onClick={@_open_modal}>Suche abonnieren</a>
 
 module.exports = SubscribeButton
 

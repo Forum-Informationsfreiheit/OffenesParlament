@@ -13,6 +13,7 @@ _get_state_from_store = () ->
   return {
     terms: AnysearchStore.get_terms()
     subscription_url: AnysearchStore.get_subscription_url()
+    subscription_title: AnysearchStore.get_subscription_title()
     categories: AnysearchStore.get_categories()
     values: AnysearchStore.get_values()
     loading: AnysearchStore.is_loading()
@@ -120,7 +121,10 @@ Searchbar = React.createClass
       {placeholder}
       {terms}
       {suggest}
-      <SubscribeButton subscription_url={@state.subscription_url} />
+      <SubscribeButton
+        subscription_url={@state.subscription_url}
+        subscription_title={@state.subscription_title}
+      />
     </div>
 
   _onChange: () ->

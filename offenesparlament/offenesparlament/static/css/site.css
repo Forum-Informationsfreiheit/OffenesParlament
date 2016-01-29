@@ -20,21 +20,21 @@
     @media screen and (max-width: 500px) {
       .anysearch_box .anysearch_icon {
         display: none; } }
-  .anysearch_box .anysearch_subscribe_form {
+  .anysearch_box .anysearch_subscribe_button {
+    background-image: url("img/icons/subscribe_red.svg");
+    background-repeat: no-repeat;
+    width: 17px;
+    height: 17px;
     display: inline-block;
+    margin: 10px 10px 10px 10px;
+    vertical-align: top;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    overflow: hidden;
+    text-indent: -5000px;
     float: right; }
-    .anysearch_box .anysearch_subscribe_form .anysearch_subscribe_button {
-      background-image: url("img/icons/subscribe_red.svg");
-      background-repeat: no-repeat;
-      width: 17px;
-      height: 17px;
-      display: inline-block;
-      margin: 10px 10px 10px 10px;
-      vertical-align: top;
-      cursor: pointer;
-      border: none;
-      padding: 0;
-      background-color: transparent; }
   .anysearch_box .anysearch_placeholder {
     position: absolute;
     line-height: 36px;
@@ -111,24 +111,83 @@
   left: 0;
   right: 0;
   z-index: auto;
-  background-color: #000;
-  opacity: 0.5; }
+  background-color: #1e4563;
+  opacity: 0.8; }
 
 .subscription_modal_dialog {
   position: absolute;
-  width: 400px;
+  width: 100%;
+  max-width: 700px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border: 1px solid #e5e5e5;
   background-color: white;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  padding: 20px; }
+  padding: 40px; }
+  .subscription_modal_dialog h2 {
+    margin-top: 0; }
+  .subscription_modal_dialog input {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    box-sizing: border-box; }
+  .subscription_modal_dialog .buttons {
+    max-width: 500px;
+    width: 100%;
+    margin: 15px auto 0 auto;
+    text-align: center; }
+    @media screen and (max-width: 650px) {
+      .subscription_modal_dialog .buttons .button_ok, .subscription_modal_dialog .buttons .button_cancel {
+        width: 100%;
+        display: block;
+        margin: 5px 0; } }
+    .subscription_modal_dialog .buttons .button_ok {
+      background-image: url("img/icons/ix_ok_red.svg"); }
+      .subscription_modal_dialog .buttons .button_ok:hover, .subscription_modal_dialog .buttons .button_ok:focus {
+        background-image: url("img/icons/ix_ok_white.svg"); }
+    .subscription_modal_dialog .buttons .button_cancel {
+      color: #7f7f7f;
+      border-color: #7f7f7f;
+      background-image: url("img/icons/ix_cancel_gray.svg");
+      margin-right: 20px; }
+      @media screen and (max-width: 650px) {
+        .subscription_modal_dialog .buttons .button_cancel {
+          margin-right: 0; } }
+      .subscription_modal_dialog .buttons .button_cancel:hover, .subscription_modal_dialog .buttons .button_cancel:focus {
+        color: white;
+        background-image: url("img/icons/ix_cancel_white.svg");
+        background-color: #7f7f7f; }
+    .subscription_modal_dialog .buttons .info_text {
+      color: #7f7f7f;
+      font-size: 12px;
+      margin: 20px 0 0 0; }
+  .subscription_modal_dialog .spinner_container > span {
+    display: block;
+    position: relative;
+    margin: 30px 0 35px 0;
+    padding: 20px; }
+  .subscription_modal_dialog .status_icon_success, .subscription_modal_dialog .status_icon_error {
+    background-size: auto 100%;
+    width: 100%;
+    height: 30px;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 40px 0; }
+  .subscription_modal_dialog .status_icon_success {
+    background-image: url("img/icons/status_completed.svg"); }
+  .subscription_modal_dialog .status_icon_error {
+    background-image: url("img/icons/status_negative.svg"); }
 
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;
   overflow-y: scroll; }
+
+div {
+  box-sizing: border-box; }
 
 h1 {
   font-size: 30px;
@@ -537,7 +596,7 @@ ul.breadcrumbs {
   background-image: url("img/foi_logo.png");
   background-size: auto 43px; }
 
-.button {
+.button, .button_large {
   background-color: white;
   border: 1px solid #f55f57;
   padding: 8px 35px 8px 65px;
@@ -545,18 +604,26 @@ ul.breadcrumbs {
   text-decoration: none;
   background-repeat: no-repeat;
   background-size: 20px 20px;
-  background-position: 35px 7px;
-  display: inline-block; }
+  background-position: 35px center;
+  display: inline-block;
+  box-sizing: border-box; }
   @media screen and (max-width: 500px) {
-    .button {
+    .button, .button_large {
       padding-right: 10px;
       display: block; } }
-  .button:active, .button:visited {
+  .button:active, .button_large:active, .button:visited, .button_large:visited {
     color: #f55f57; }
-  .button:hover, .button:focus {
+  .button:hover, .button_large:hover, .button:focus, .button_large:focus {
     color: white;
     background-color: #f55f57;
     text-decoration: none; }
+
+.button_large {
+  padding: 10px 65px 10px 95px;
+  background-position: 55px center; }
+  @media screen and (max-width: 650px) {
+    .button_large {
+      background-position: 35% center; } }
 
 .button_source {
   background-image: url("img/icons/flagged_parliament_red.svg");

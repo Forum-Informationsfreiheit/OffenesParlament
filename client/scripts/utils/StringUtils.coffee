@@ -20,3 +20,16 @@ module.exports =
     else
       return category
 
+  get_search_title: (terms) ->
+    llp_string = ''
+    type_string = ''
+    rest_terms = _.omit(terms, ['llps', 'type'])
+    rest_terms_string = _.values(rest_terms).join(', ')
+    if _.has(terms, 'llps')
+      llp_string = 'Periode ' + terms['llps']
+    if _.has(terms, 'type')
+      type_string = terms['type']
+    result = _.compact([llp_string, rest_terms_string]).join(': ')
+    result = _.compact([type_string, result]).join(' in ')
+    return result
+
