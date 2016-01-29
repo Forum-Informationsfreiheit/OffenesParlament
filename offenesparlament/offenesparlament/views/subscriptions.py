@@ -131,7 +131,7 @@ def subscribe(request):
     """
     Subcribe the given email to the given URL.
     """
-    url = request.POST['subscription_url']
+    url = request.build_absolute_uri(request.POST['subscription_url'])
     title = request.POST['subscription_title']
     email = request.POST['email']
 
