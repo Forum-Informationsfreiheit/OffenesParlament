@@ -592,6 +592,7 @@ class SubscribedContent(models.Model):
     A news- or page-subscription
     """
     url = models.URLField(max_length=255, unique=True)
+    title = models.CharField(max_length=255, default="")
     latest_content_hash = models.CharField(
         max_length=16, null=True, blank=True)
 
