@@ -24,6 +24,11 @@ $(document).ready( () ->
       tooltip_container
     )
 
+  modal_container = document.getElementById('react_modal_container')
+  if modal_container
+    SubscriptionModal = require("./components/SubscriptionModal.cjsx")
+    ReactDOM.render(<SubscriptionModal/>, modal_container)
+
   menu = $('.menu_bar ul.main_menu')
   toggle = $('.menu_bar .menu_responsive_sandwich')
   toggle.on('click', (event) ->
