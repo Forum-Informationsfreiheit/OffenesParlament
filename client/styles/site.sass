@@ -24,11 +24,16 @@ $border_light_gray: rgb(221, 227, 232)
 
 
 @import './anysearch.sass'
+@import './modal.sass'
 
 
 body
   font-family: 'Source Sans Pro', sans-serif
   font-size: 14px
+  overflow-y: scroll
+
+div
+  box-sizing: border-box
 
 h1
   font-size: 30px
@@ -419,8 +424,9 @@ ul.breadcrumbs
   text-decoration: none
   background-repeat: no-repeat
   background-size: 20px 20px
-  background-position: 35px 7px
+  background-position: 35px center
   display: inline-block
+  box-sizing: border-box
   @media screen and (max-width: $break_small)
     padding-right: 10px
     display: block
@@ -430,6 +436,14 @@ ul.breadcrumbs
     color: white
     background-color: $red
     text-decoration: none
+
+.button_large
+  @extend .button
+  padding: 10px 65px 10px 95px
+  background-position: 55px center
+  @media screen and (max-width: $break_responsive_menu)
+    background-position: 35% center
+
 
 .button_source
   background-image: url('img/icons/flagged_parliament_red.svg')

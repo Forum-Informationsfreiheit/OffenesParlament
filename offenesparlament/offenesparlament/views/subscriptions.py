@@ -131,10 +131,9 @@ def unsubscribe(request, email, key):
 def subscribe(request):
     """
     Subcribe the given email to the given URL.
-
-    TODO BEN: Include Subscription title or description in POST variables
     """
-    url = request.POST['subscription_url']
+    url = request.build_absolute_uri(request.POST['subscription_url'])
+    title = request.POST['subscription_title']
     email = request.POST['email']
 
     user, created_user = User.objects.get_or_create(email=email)
@@ -146,7 +145,7 @@ def subscribe(request):
         user.verification = user_verification
         user.save()
 
-    content, created_content = SubscribedContent.objects.get_or_create(url=url)
+    content, created_content = SubscribedContent.objects.get_or_create(url=url, title=title)
     if created_content:
         content_response = requests.get(url)
         es_response = json.loads(content_response.text)
