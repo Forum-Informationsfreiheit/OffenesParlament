@@ -4,6 +4,7 @@
 // screensizes for breakpoints
 $break_large: 1200px
 $break_medium: 940px
+$break_responsive_menu: 650px
 $break_small: 500px
 $min_margin: 30px
 
@@ -23,11 +24,16 @@ $border_light_gray: rgb(221, 227, 232)
 
 
 @import './anysearch.sass'
+@import './modal.sass'
 
 
 body
   font-family: 'Source Sans Pro', sans-serif
   font-size: 14px
+  overflow-y: scroll
+
+div
+  box-sizing: border-box
 
 h1
   font-size: 30px
@@ -82,6 +88,12 @@ ul
   background-color: $menu_dark_blue
   color: white
   overflow: hidden
+  position: fixed
+  top: 0
+  height: 50px
+  @media screen and (max-width: $break_responsive_menu)
+    position: relative
+    height: auto
   .logo
     background: url('img/offparl_logo.png') no-repeat
     background-size: 200px 24px
@@ -91,14 +103,34 @@ ul
     height: 50px
     display: inline-block
   nav
-    float: right
+    .menu_responsive_sandwich
+      float: right
+      display: none
+      overflow: hidden
+      background-image: url("img/icons/icon_sandwich.png")
+      background-repeat: no-repeat
+      margin: 0
+      line-height: 50px
+      padding: 0 0 0 27px
+      background-position: left center
+      text-transform: none
+      text-decoration: none
+      color: white
+      background-size: 30%
+      @media screen and (max-width: $break_responsive_menu)
+        display: block
     ul.menu_bar_items
+      float: right
       list-style: none
       padding: 0
       margin: 0
+      @media screen and (max-width: $break_responsive_menu)
+        display: none
       li
         display: inline-block
         margin: 0
+        @media screen and (max-width: $break_medium)
+          padding-right: 0
         a
           color: white
           text-decoration: none
@@ -106,6 +138,8 @@ ul
           display: inline-block
           line-height: 50px
           padding: 0 15px
+          @media screen and (max-width: $break_medium)
+            padding: 0 10px
           &:hover
             color: $light_blue
             background-color: initial
@@ -114,6 +148,9 @@ ul
 .search_bar
   width: 100%
   background-color: $light_gray
+  margin-top: 50px
+  @media screen and (max-width: $break_responsive_menu)
+    margin-top: 0
 
 ul.columned_linklist
   @include column-count(3)
@@ -169,7 +206,7 @@ ul.breadcrumbs
     background-color: rgb(63, 146, 91)
   &.neos, &.neos-lif
     background-color: rgb(215, 76, 107)
-  &.fpoe
+  &.fpoe, &.fpk
     background-color: rgb(94, 148, 186)
   &.stronach, &.strona
     background-color: rgb(243, 188, 64)
@@ -220,7 +257,7 @@ ul.breadcrumbs
   margin-top: 0
 
 .homepage_search
-  margin: 100px 0 100px 0
+  margin: 150px 0 100px 0
   .searchbar
     position: relative
     width: 100%
@@ -387,8 +424,9 @@ ul.breadcrumbs
   text-decoration: none
   background-repeat: no-repeat
   background-size: 20px 20px
-  background-position: 35px 7px
+  background-position: 35px center
   display: inline-block
+  box-sizing: border-box
   @media screen and (max-width: $break_small)
     padding-right: 10px
     display: block
@@ -398,6 +436,14 @@ ul.breadcrumbs
     color: white
     background-color: $red
     text-decoration: none
+
+.button_large
+  @extend .button
+  padding: 10px 65px 10px 95px
+  background-position: 55px center
+  @media screen and (max-width: $break_responsive_menu)
+    background-position: 35% center
+
 
 .button_source
   background-image: url('img/icons/flagged_parliament_red.svg')

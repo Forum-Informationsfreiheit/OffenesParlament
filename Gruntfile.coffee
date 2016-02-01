@@ -32,6 +32,7 @@ module.exports = (grunt) ->
         bsFiles:
           src : [
             'offenesparlament/offenesparlament/**/*'
+            '!offenesparlament/offenesparlament/static/fonts/**/*'
             '!**/*.sqlite3'
             '!**/*.map'
             '!**/*.DS_Store'

@@ -15,6 +15,7 @@ from django.shortcuts import render
 import xxhash
 import requests
 import uuid
+import json
 
 
 def verify(request, email, key):
@@ -130,10 +131,9 @@ def unsubscribe(request, email, key):
 def subscribe(request):
     """
     Subcribe the given email to the given URL.
-
-    TODO BEN: Include Subscription title or description in POST variables
     """
-    url = request.POST['subscription_url']
+    url = request.build_absolute_uri(request.POST['subscription_url'])
+    title = request.POST['subscription_title']
     email = request.POST['email']
 
     user, created_user = User.objects.get_or_create(email=email)
@@ -145,11 +145,18 @@ def subscribe(request):
         user.verification = user_verification
         user.save()
 
-    content, created_content = SubscribedContent.objects.get_or_create(url=url)
+    content, created_content = SubscribedContent.objects.get_or_create(url=url, title=title)
     if created_content:
         content_response = requests.get(url)
-        content_hash = xxhash.xxh64(content_response.text).hexdigest()
-        content.latest_content_hash = content_hash
+        es_response = json.loads(content_response.text)
+        content_hashes = []
+        for res in es_response['result']:
+            content_hashes.append({
+                'parl_id': res['parl_id'],
+                'hash': xxhash.xxh64(json.dumps(res)).hexdigest(),
+            })
+        content.latest_content_hashes = json.dumps(content_hashes)
+        content.save()
 
     if not Subscription.objects.filter(user=user, content=content).exists():
         verification_hash = uuid.uuid4().hex

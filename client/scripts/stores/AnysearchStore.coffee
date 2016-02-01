@@ -5,6 +5,7 @@ RouterActions = require('../actions/RouterActions.coffee')
 assign = require('object-assign')
 $ = require 'jquery'
 _ = require 'underscore'
+string_utils = require '../utils/StringUtils.coffee'
 
 
 CHANGE_EVENT = 'change'
@@ -179,6 +180,12 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
 
   get_search_results: () ->
     return _search_results
+
+  get_subscription_url: () ->
+    return _get_url() + '?' + $.param(_get_terms_as_object())
+
+  get_subscription_title: () ->
+    return string_utils.get_search_title(_get_terms_as_object())
 
   emitChange: () ->
     this.emit(CHANGE_EVENT)

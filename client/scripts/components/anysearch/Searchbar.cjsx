@@ -2,6 +2,7 @@ React = require 'react'
 AutosizeInput = require 'react-input-autosize'
 Term = require './Term.cjsx'
 Suggest = require './Suggest.cjsx'
+SubscribeButton = require './SubscribeButton.cjsx'
 AnysearchActions = require '../../actions/AnysearchActions.coffee'
 AnysearchStore = require '../../stores/AnysearchStore.coffee'
 $ = require 'jquery'
@@ -11,6 +12,8 @@ _ = require 'underscore'
 _get_state_from_store = () ->
   return {
     terms: AnysearchStore.get_terms()
+    subscription_url: AnysearchStore.get_subscription_url()
+    subscription_title: AnysearchStore.get_subscription_title()
     categories: AnysearchStore.get_categories()
     values: AnysearchStore.get_values()
     loading: AnysearchStore.is_loading()
@@ -57,6 +60,11 @@ Searchbar = React.createClass
   onSearchbarClicked: (event) ->
     if event.target == @refs.searchbar or event.target == @refs.icon or event.target == @refs.placeholder
       @refs.last_term.focus()
+
+  onSubscribeClicked: (event) ->
+    event.preventDefault()
+    console.log AnysearchStore.get_subscription_url()
+ 
 
 
   render: ->
@@ -113,6 +121,10 @@ Searchbar = React.createClass
       {placeholder}
       {terms}
       {suggest}
+      <SubscribeButton
+        subscription_url={@state.subscription_url}
+        subscription_title={@state.subscription_title}
+      />
     </div>
 
   _onChange: () ->

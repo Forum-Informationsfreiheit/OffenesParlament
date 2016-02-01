@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, host: 9200, guest: 9200
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = 1024
+    vb.memory = 4096
     vb.cpus = 2
 
     # improve network connectivity
@@ -36,7 +36,11 @@ Vagrant.configure("2") do |config|
     config.vm.provision "bootstrap", type: "shell", path: "provision/bootstrap.sh", privileged: false
 
     # 2. DB Creation and Reset provisioner
-    node.vm.provision "reset_db", type: "ansible", playbook: "provision/reset_postgresdb.yml"
+    node.vm.provision "reset_db", type: "ansible_local", playbook: "provision/reset_postgresdb.yml"
+    #, verbose: "vvv"
+
+    # 3. DB Creation and Reset complete with Migrations provisioner
+    node.vm.provision "reset_db_mig", type: "ansible_local", playbook: "provision/reset_postgresdb_and_migrations.yml"
     #, verbose: "vvv"
 
   end

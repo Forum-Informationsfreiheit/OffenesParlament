@@ -29,7 +29,7 @@ class JsonSearchView(SearchView):
     """Base SearchView that returns json-data"""
 
     search_model = None
-    facet_fields = ['party']
+    facet_fields = {}
 
     def __init__(self, search_model=None):
         super(JsonSearchView, self).__init__()
@@ -90,12 +90,14 @@ class JsonSearchView(SearchView):
             start_index = query_args['offset']
             end_index = query_args[
                 'offset'] + query_args['limit'] if query_args['limit'] else None
-            # combine results and facets, limit and offset as given as parameters
+            # combine results and facets, limit and offset as given as
+            # parameters
             result_list = [
                 sr.get_stored_fields() for sr in
                 result[start_index:end_index]]
         else:
             result_list = []
+
         result = {
             'result': result_list,
             'facets': facet_counts
@@ -141,7 +143,14 @@ class JsonSearchView(SearchView):
         if self.facet_fields:
             facets = qs
             for facet_field in self.facet_fields:
-                facets = facets.facet(facet_field)
+                if self.facet_fields[facet_field]['type'] == 'date':
+                    facets = facets.date_facet(
+                        facet_field,
+                        start_date=datetime.date(1900, 1, 1),
+                        end_date=datetime.date(2050, 1, 1),
+                        gap_by='month')
+                if self.facet_fields[facet_field]['type'] == 'field':
+                    facets = facets.facet(facet_field)
             facet_counts = facets.facet_counts()
 
         # Get results and return them
@@ -163,12 +172,14 @@ class PersonSearchView(JsonSearchView):
     """Search view for the Person model"""
 
     search_model = Person
-    facet_fields = [
-        'party',
-        'birthplace',
-        'deathplace',
-        'occupation',
-        'llps']
+    facet_fields = {
+        'party': {'type': 'field'},
+        'birthplace': {'type': 'field'},
+        'deathplace': {'type': 'field'},
+        'occupation': {'type': 'field'},
+        'llps': {'type': 'field'},
+        'ts': {'type': 'date'}
+    }
 
 
 class LawSearchView(JsonSearchView):
@@ -176,8 +187,9 @@ class LawSearchView(JsonSearchView):
     """Search view for the Law model"""
 
     search_model = Law
-    facet_fields = [
-        'llps',
-        'category',
-        'keywords'
-    ]
+    facet_fields = {
+        'llps': {'type': 'field'},
+        'category': {'type': 'field'},
+        'keywords': {'type': 'field'},
+        'ts': {'type': 'date'}
+    }

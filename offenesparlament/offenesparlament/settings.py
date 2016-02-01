@@ -144,6 +144,15 @@ class BaseConfig(Configuration):
     CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'
     CELERYD_HIJACK_ROOT_LOGGER = False
 
+    # CELERYBEAT_SCHEDULE = {
+    #     'update_elastic_index': {
+    #         'task': 'tasks.update_elastic',
+    #         'schedule': crontab(minute='0', hour='6')
+    #     },
+    # }
+
+    # CELERY_TIMEZONE = 'UTC'
+
 
 class Dev(BaseConfig):
     DEBUG = True

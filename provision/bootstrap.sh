@@ -42,6 +42,12 @@ sudo cp /vagrant/provision/conf/supervisord.conf /etc/
 mkdir -p /vagrant/ignore/var/log
 sudo supervisord
 
+# Install specific version of ansible that works with vagrant 1.8.1
+sudo pip install ansible==1.9.4
+
+# Upgrade pyasn1 version so scraping works again
+sudo pip install pyasn1==0.1.9
+
 # install node.js and NPM
 # install PPA first to get recent package
 curl -sL https://deb.nodesource.com/setup | sudo bash -
@@ -55,6 +61,9 @@ sudo npm install -g grunt-cli
 
 # install sass
 sudo gem install sass
+
+# re-install setuptools. Something removed them during provisioning
+wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | sudo python
 
 #django project requirements
 cd /vagrant
