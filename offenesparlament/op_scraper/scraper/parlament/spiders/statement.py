@@ -141,11 +141,11 @@ class StatementSpider(BaseSpider):
                     self.logger.warning(
                         red(u"Person '{}' not found".format(sect['speaker_id'])))
 
-            if sect['ref_timestamp'] is not None \
-                    and len(sect['ref_timestamp']) == 2:
-                sect['date'] = sect['debate'].date.replace(
-                    minute=sect['ref_timestamp'][0],
-                    second=sect['ref_timestamp'][1])
+            # Select best timestamps for start and end and make datetime
+            start_ts = sect['time_start'] or sect['ref_timestamp']
+            end_ts = sect['time_end'] or sect['ref_timestamp']
+            sect['date'] = self._apply_ts(sect['debate'].date, start_ts)
+            sect['date_end'] = self._apply_ts(sect['debate'].date, end_ts)
 
             self.store_statement(sect, i)
 
@@ -183,3 +183,17 @@ class StatementSpider(BaseSpider):
         for key in keys:
             setattr(debate_statement, key, data[key])
         debate_statement.save()
+
+    def _apply_ts(self, date, timeparts):
+        """
+        Apply hour, minutes and possibly secconds to a date.
+        """
+        if timeparts is not None and len(timeparts) >=2:
+            ts = {'hour': timeparts[0],
+                  'minute': timeparts[1],
+                  'second': timeparts[2] \
+                            if len(timeparts) > 2 else 0}
+            date = date.replace(**ts)
+        return date
+
+

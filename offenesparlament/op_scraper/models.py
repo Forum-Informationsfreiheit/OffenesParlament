@@ -786,7 +786,8 @@ class DebateStatement(models.Model):
     """
 
     # Datime from the debate date + the most recent timestamp found in debate
-    date = models.DateTimeField(null=True)
+    date = models.DateTimeField(null=True, blank=True)
+    date_end = models.DateTimeField(null=True, blank=True)
 
     # Ref. to debate
     debate = models.ForeignKey(Debate, null=True,
@@ -808,6 +809,9 @@ class DebateStatement(models.Model):
     # Start and end pages of the statement in the transcript
     page_start = models.IntegerField(null=True)
     page_end = models.IntegerField(null=True)
+
+    time_start = models.CharField(max_length=12, null=True, blank=True)
+    time_end = models.CharField(max_length=12, null=True, blank=True)
 
     # Cleaned text, will then contain only the statement of the speaker
     full_text = models.TextField(null=True)
