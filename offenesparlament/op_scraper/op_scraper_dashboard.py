@@ -110,6 +110,11 @@ class CustomIndexDashboard(Dashboard):
                     'url': '/admin/scrape/debates',
                     'external': False,
                 },
+                {
+                    'title': _('Scrape Comittees'),
+                    'url': '/admin/scrape/comittees',
+                    'external': False,
+                },
             ]
         ))
 

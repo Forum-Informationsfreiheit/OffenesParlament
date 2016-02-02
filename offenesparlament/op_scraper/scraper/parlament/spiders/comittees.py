@@ -31,6 +31,8 @@ from op_scraper.models import Law
 
 
 class ComitteesSpider(BaseSpider):
+    ALLOWED_LLPS = range(20, 26)
+
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/AUS/filter.psp")
 
     URLOPTIONS = {
