@@ -253,7 +253,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
       "className": "top_bar"
     }), React.createElement("h1", null, "Suchergebnisse"), React.createElement("p", {
       "className": "explanation"
-    }, "Hier finden Sie eine Übersicht über alle Abgeordneten zum Nationalrat in\nder aktuellen Gesetzgebungsperiode (XXV.). Um eine genauere Auswahl zu\ntreffen, benutzen Sie die Suche."), React.createElement("ul", null, results));
+    }, "Hier finden Sie eine U\u0308bersicht u\u0308ber alle Abgeordneten zum Nationalrat in\nder aktuellen Gesetzgebungsperiode (XXV.). Um eine genauere Auswahl zu\ntreffen, benutzen Sie die Suche."), React.createElement("ul", null, results));
   }
 });
 
@@ -323,7 +323,7 @@ SubscriptionModalForm = React.createClass({displayName: "SubscriptionModalForm",
     return SubscriptionModalActions.sendData();
   },
   render: function() {
-    return React.createElement("div", null, React.createElement("h2", null, "Benachrichtigungen abonnieren"), React.createElement("p", null, "Bitte senden Sie mir Aktualisierungen für ", React.createElement("b", null, this.props.subscription_title), " an folgende E-Mail-Adresse:"), React.createElement("input", {
+    return React.createElement("div", null, React.createElement("h2", null, "Benachrichtigungen abonnieren"), React.createElement("p", null, "Bitte senden Sie mir Aktualisierungen f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " an folgende E-Mail-Adresse:"), React.createElement("input", {
       "type": "text",
       "placeholder": "Meine E-Mail-Adresse",
       "onChange": this._on_email_changed,
@@ -340,7 +340,7 @@ SubscriptionModalForm = React.createClass({displayName: "SubscriptionModalForm",
       "onClick": this._on_ok_clicked
     }, "Abonnieren"), React.createElement("p", {
       "className": "info_text"
-    }, "Wir speichern Ihre E-Mail-Adresse\nausschließlich um Ihnen Aktualisierungen zu senden und geben diese\nkeinesfalls an Dritte weiter.")));
+    }, "Wir speichern Ihre E-Mail-Adresse\nausschlie\u00dflich um Ihnen Aktualisierungen zu senden und geben diese\nkeinesfalls an Dritte weiter.")));
   }
 });
 
@@ -387,7 +387,7 @@ SubscriptionModalStatusbox = React.createClass({displayName: "SubscriptionModalS
     var message, status_icon;
     switch (this.props.server_status) {
       case Const.SERVER_STATUS_QUERYING:
-        message = React.createElement("p", null, "Ihr Abo für ", React.createElement("b", null, this.props.subscription_title), " wird eingerichtet.");
+        message = React.createElement("p", null, "Ihr Abo f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " wird eingerichtet.");
         status_icon = React.createElement("div", {
           "className": "spinner_container"
         }, React.createElement(Spinner, {
@@ -395,13 +395,13 @@ SubscriptionModalStatusbox = React.createClass({displayName: "SubscriptionModalS
         }));
         break;
       case Const.SERVER_STATUS_SUCCESS:
-        message = React.createElement("p", null, "Ihr Abo für ", React.createElement("b", null, this.props.subscription_title), " wurde eingerichtet. Sie erhalten nun ein Bestätigungs-E-Mail um Ihre E-Mail-Adresse zu bestätigen.");
+        message = React.createElement("p", null, "Ihr Abo f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " wurde eingerichtet. Sie erhalten nun ein Best\u00e4tigungs-E-Mail um Ihre E-Mail-Adresse zu best\u00e4tigen.");
         status_icon = React.createElement("div", {
           "className": "status_icon_success"
         });
         break;
       case Const.SERVER_STATUS_ERROR:
-        message = React.createElement("p", null, "Ihr Abo für ", React.createElement("b", null, this.props.subscription_title), " konnte nicht eingerichtet werden. Bitte versuchen Sie es erneut.");
+        message = React.createElement("p", null, "Ihr Abo f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " konnte nicht eingerichtet werden. Bitte versuchen Sie es erneut.");
         status_icon = React.createElement("div", {
           "className": "status_icon_error"
         });
@@ -412,7 +412,7 @@ SubscriptionModalStatusbox = React.createClass({displayName: "SubscriptionModalS
       "href": "#",
       "className": "button_large button_cancel",
       "onClick": this._on_cancel_clicked
-    }, "Schließen")));
+    }, "Schlie\u00dfen")));
   }
 });
 
@@ -570,7 +570,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
       placeholder = React.createElement("span", {
         "className": "anysearch_placeholder",
         "ref": "placeholder"
-      }, "Wonach möchten Sie suchen?");
+      }, "Wonach m\u00f6chten Sie suchen?");
     }
     return React.createElement("div", {
       "className": "anysearch_box",
@@ -797,7 +797,7 @@ keyMirror = require('keymirror');
 module.exports = keyMirror({
   SERVER_STATUS_NEUTRAL: null,
   SERVER_STATUS_QUERYING: null,
-  SERVER_STATUS_SUCCESS: null,
+  SERVER_STATUS_SUCCESS: 200,
   SERVER_STATUS_ERROR: null,
   ACTION_SHOW_MODAL: null,
   ACTION_HIDE_MODAL: null,
@@ -1677,14 +1677,12 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 }).call(this,require('_process'))
 },{"_process":30}],25:[function(require,module,exports){
-(function (global){
 /*!
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
  * @license  MIT
  */
-/* eslint-disable no-proto */
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
@@ -1724,11 +1722,7 @@ var rootParent = {}
  * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
  * get the Object implementation, which is slower but behaves correctly.
  */
-Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
-  ? global.TYPED_ARRAY_SUPPORT
-  : typedArraySupport()
-
-function typedArraySupport () {
+Buffer.TYPED_ARRAY_SUPPORT = (function () {
   function Bar () {}
   try {
     var arr = new Uint8Array(1)
@@ -1741,7 +1735,7 @@ function typedArraySupport () {
   } catch (e) {
     return false
   }
-}
+})()
 
 function kMaxLength () {
   return Buffer.TYPED_ARRAY_SUPPORT
@@ -1897,16 +1891,10 @@ function fromJsonObject (that, object) {
   return that
 }
 
-if (Buffer.TYPED_ARRAY_SUPPORT) {
-  Buffer.prototype.__proto__ = Uint8Array.prototype
-  Buffer.__proto__ = Uint8Array
-}
-
 function allocate (that, length) {
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
     that = Buffer._augment(new Uint8Array(length))
-    that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
     that.length = length
@@ -2695,7 +2683,7 @@ Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
-  this[offset] = (value & 0xff)
+  this[offset] = value
   return offset + 1
 }
 
@@ -2712,7 +2700,7 @@ Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
+    this[offset] = value
     this[offset + 1] = (value >>> 8)
   } else {
     objectWriteUInt16(this, value, offset, true)
@@ -2726,7 +2714,7 @@ Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
-    this[offset + 1] = (value & 0xff)
+    this[offset + 1] = value
   } else {
     objectWriteUInt16(this, value, offset, false)
   }
@@ -2748,7 +2736,7 @@ Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert
     this[offset + 3] = (value >>> 24)
     this[offset + 2] = (value >>> 16)
     this[offset + 1] = (value >>> 8)
-    this[offset] = (value & 0xff)
+    this[offset] = value
   } else {
     objectWriteUInt32(this, value, offset, true)
   }
@@ -2763,7 +2751,7 @@ Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
     this[offset + 2] = (value >>> 8)
-    this[offset + 3] = (value & 0xff)
+    this[offset + 3] = value
   } else {
     objectWriteUInt32(this, value, offset, false)
   }
@@ -2816,7 +2804,7 @@ Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   if (value < 0) value = 0xff + value + 1
-  this[offset] = (value & 0xff)
+  this[offset] = value
   return offset + 1
 }
 
@@ -2825,7 +2813,7 @@ Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) 
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
+    this[offset] = value
     this[offset + 1] = (value >>> 8)
   } else {
     objectWriteUInt16(this, value, offset, true)
@@ -2839,7 +2827,7 @@ Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) 
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
-    this[offset + 1] = (value & 0xff)
+    this[offset + 1] = value
   } else {
     objectWriteUInt16(this, value, offset, false)
   }
@@ -2851,7 +2839,7 @@ Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) 
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = (value & 0xff)
+    this[offset] = value
     this[offset + 1] = (value >>> 8)
     this[offset + 2] = (value >>> 16)
     this[offset + 3] = (value >>> 24)
@@ -2870,7 +2858,7 @@ Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) 
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
     this[offset + 2] = (value >>> 8)
-    this[offset + 3] = (value & 0xff)
+    this[offset + 3] = value
   } else {
     objectWriteUInt32(this, value, offset, false)
   }
@@ -3145,7 +3133,7 @@ function utf8ToBytes (string, units) {
       }
 
       // valid surrogate pair
-      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000
+      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -3223,7 +3211,6 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"base64-js":26,"ieee754":27,"is-array":28}],26:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -3807,9 +3794,7 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
+            currentQueue[queueIndex].run();
         }
         queueIndex = -1;
         len = queue.length;
@@ -3861,6 +3846,7 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
+// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');

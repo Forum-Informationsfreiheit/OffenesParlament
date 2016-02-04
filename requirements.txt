@@ -37,3 +37,4 @@ xxhash==0.4.3
 requests==2.8.1
 django-jsonify==0.3.0
 distribute==0.7.3
+datadiff==2.0.0
