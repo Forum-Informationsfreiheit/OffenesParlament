@@ -9,23 +9,17 @@ AnysearchActions = require './actions/AnysearchActions.coffee'
 $ = require 'jquery'
 _ = require 'underscore'
 require './utils/csrf_token.coffee'
+tooltip = require 'tooltip'
 
 
 $(document).ready( () ->
-  #init tooltip react component
-  tooltip_container = document.getElementById('react_tooltip_container')
-  if tooltip_container
-    ReactTooltip = require("react-tooltip")
-    ReactDOM.render(
-      React.createElement(ReactTooltip, {
-        type: 'light'
-        place: 'bottom'
-        effect: 'solid'
-        multiline: false
-        position: {bottom: -16}
-      }),
-      tooltip_container
-    )
+  #init tooltips
+  tooltip({
+    showDelay: 10
+    offset: {x: 0, y: 0}
+    style:
+      borderColor: 'white'
+  })
 
   # make menu responsive
   menu = $('.menu_bar ul.main_menu')

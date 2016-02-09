@@ -32,6 +32,14 @@ Technical Documentation
    Frontend <frontend.rst>
    Subscriptions <subscriptions.rst>
 
+Existing Scrapers
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   Inquiries <scraper/inquiries.rst>
+
 
 Indices and tables
 ==================

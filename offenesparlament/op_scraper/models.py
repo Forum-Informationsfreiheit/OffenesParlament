@@ -7,6 +7,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 import re
 import json
+import xxhash
+import requests
 
 
 class ParlIDMixIn(object):
@@ -645,10 +647,33 @@ class SubscribedContent(models.Model):
     url = models.URLField(max_length=255, unique=True)
 
     latest_content_hashes = models.TextField(null=True, blank=True)
+    latest_content = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=255, default="")
 
     # Relationships
     users = models.ManyToManyField(User, through="Subscription")
+
+    def get_content(self):
+        """
+        Executes a request to ES for this subscription's search URL
+
+        Returns the textual response (json in string)
+        """
+        content_response = requests.get(self.url)
+        return content_response.text
+
+    def generate_content_hashes(self):
+        """
+        Generate a dictionary which maps parl_ids to their respective hashes
+
+        Used for speedy comparison of changes
+        """
+        es_response = json.loads(self.get_content())
+        content_hashes = {}
+        for res in es_response['result']:
+            content_hashes[res['parl_id']] = xxhash.xxh64(
+                json.dumps(res)).hexdigest()
+        return json.dumps(content_hashes)
 
 
 class Subscription(models.Model):

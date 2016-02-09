@@ -117,7 +117,7 @@ module.exports = SubscriptionModalActions;
 
 
 },{"../constants/SubscriptionModalConstants.coffee":15,"../dispatcher/AppDispatcher.coffee":16}],4:[function(require,module,exports){
-var $, AnysearchActions, AnysearchStore, React, ReactDOM, SearchResults, SubscriptionModal, SubscriptionModalActions, SubscriptionModalStore, _;
+var $, AnysearchActions, AnysearchStore, React, ReactDOM, SearchResults, SubscriptionModal, SubscriptionModalActions, SubscriptionModalStore, _, tooltip;
 
 React = require('react');
 
@@ -141,21 +141,20 @@ _ = require('underscore');
 
 require('./utils/csrf_token.coffee');
 
+tooltip = require('tooltip');
+
 $(document).ready(function() {
-  var ReactTooltip, Searchbar, anysearch_container, anysearch_container_homepage, content_container, menu, modal_container, render_modal, render_results, toggle, tooltip_container;
-  tooltip_container = document.getElementById('react_tooltip_container');
-  if (tooltip_container) {
-    ReactTooltip = require("react-tooltip");
-    ReactDOM.render(React.createElement(ReactTooltip, {
-      type: 'light',
-      place: 'bottom',
-      effect: 'solid',
-      multiline: false,
-      position: {
-        bottom: -16
-      }
-    }), tooltip_container);
-  }
+  var Searchbar, anysearch_container, anysearch_container_homepage, content_container, menu, modal_container, render_modal, render_results, toggle;
+  tooltip({
+    showDelay: 10,
+    offset: {
+      x: 0,
+      y: 0
+    },
+    style: {
+      borderColor: 'white'
+    }
+  });
   menu = $('.menu_bar ul.main_menu');
   toggle = $('.menu_bar .menu_responsive_sandwich');
   toggle.on('click', function(event) {
@@ -218,7 +217,7 @@ $(document).ready(function() {
 });
 
 
-},{"./actions/AnysearchActions.coffee":1,"./actions/SubscriptionModalActions.coffee":3,"./components/SearchResults.cjsx":5,"./components/SubscriptionModal.cjsx":6,"./components/anysearch/Searchbar.cjsx":9,"./stores/AnysearchStore.coffee":17,"./stores/SubscriptionModalStore.coffee":18,"./utils/csrf_token.coffee":20,"jquery":27,"react":"react","react-dom":30,"react-tooltip":87,"underscore":245}],5:[function(require,module,exports){
+},{"./actions/AnysearchActions.coffee":1,"./actions/SubscriptionModalActions.coffee":3,"./components/SearchResults.cjsx":5,"./components/SubscriptionModal.cjsx":6,"./components/anysearch/Searchbar.cjsx":9,"./stores/AnysearchStore.coffee":17,"./stores/SubscriptionModalStore.coffee":18,"./utils/csrf_token.coffee":20,"jquery":31,"react":"react","react-dom":34,"tooltip":295,"underscore":306}],5:[function(require,module,exports){
 var React, SearchResults, _;
 
 React = require('react');
@@ -254,14 +253,14 @@ SearchResults = React.createClass({displayName: "SearchResults",
       "className": "top_bar"
     }), React.createElement("h1", null, "Suchergebnisse"), React.createElement("p", {
       "className": "explanation"
-    }, "Hier finden Sie eine Übersicht über alle Abgeordneten zum Nationalrat in\nder aktuellen Gesetzgebungsperiode (XXV.). Um eine genauere Auswahl zu\ntreffen, benutzen Sie die Suche."), React.createElement("ul", null, results));
+    }, "Hier finden Sie eine U\u0308bersicht u\u0308ber alle Abgeordneten zum Nationalrat in\nder aktuellen Gesetzgebungsperiode (XXV.). Um eine genauere Auswahl zu\ntreffen, benutzen Sie die Suche."), React.createElement("ul", null, results));
   }
 });
 
 module.exports = SearchResults;
 
 
-},{"react":"react","underscore":245}],6:[function(require,module,exports){
+},{"react":"react","underscore":306}],6:[function(require,module,exports){
 var Const, Modal, React, SubscriptionModal, SubscriptionModalActions, SubscriptionModalForm, SubscriptionModalStatusbox;
 
 React = require('react');
@@ -304,7 +303,7 @@ SubscriptionModal = React.createClass({displayName: "SubscriptionModal",
 module.exports = SubscriptionModal;
 
 
-},{"../actions/SubscriptionModalActions.coffee":3,"../constants/SubscriptionModalConstants.coffee":15,"./SubscriptionModalForm.cjsx":7,"./SubscriptionModalStatusbox.cjsx":8,"react":"react","react-overlays":41}],7:[function(require,module,exports){
+},{"../actions/SubscriptionModalActions.coffee":3,"../constants/SubscriptionModalConstants.coffee":15,"./SubscriptionModalForm.cjsx":7,"./SubscriptionModalStatusbox.cjsx":8,"react":"react","react-overlays":45}],7:[function(require,module,exports){
 var React, SubscriptionModalActions, SubscriptionModalForm;
 
 React = require('react');
@@ -324,7 +323,7 @@ SubscriptionModalForm = React.createClass({displayName: "SubscriptionModalForm",
     return SubscriptionModalActions.sendData();
   },
   render: function() {
-    return React.createElement("div", null, React.createElement("h2", null, "Benachrichtigungen abonnieren"), React.createElement("p", null, "Bitte senden Sie mir Aktualisierungen für ", React.createElement("b", null, this.props.subscription_title), " an folgende E-Mail-Adresse:"), React.createElement("input", {
+    return React.createElement("div", null, React.createElement("h2", null, "Benachrichtigungen abonnieren"), React.createElement("p", null, "Bitte senden Sie mir Aktualisierungen f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " an folgende E-Mail-Adresse:"), React.createElement("input", {
       "type": "text",
       "placeholder": "Meine E-Mail-Adresse",
       "onChange": this._on_email_changed,
@@ -341,7 +340,7 @@ SubscriptionModalForm = React.createClass({displayName: "SubscriptionModalForm",
       "onClick": this._on_ok_clicked
     }, "Abonnieren"), React.createElement("p", {
       "className": "info_text"
-    }, "Wir speichern Ihre E-Mail-Adresse\nausschließlich um Ihnen Aktualisierungen zu senden und geben diese\nkeinesfalls an Dritte weiter.")));
+    }, "Wir speichern Ihre E-Mail-Adresse\nausschlie\u00dflich um Ihnen Aktualisierungen zu senden und geben diese\nkeinesfalls an Dritte weiter.")));
   }
 });
 
@@ -388,7 +387,7 @@ SubscriptionModalStatusbox = React.createClass({displayName: "SubscriptionModalS
     var message, status_icon;
     switch (this.props.server_status) {
       case Const.SERVER_STATUS_QUERYING:
-        message = React.createElement("p", null, "Ihr Abo für ", React.createElement("b", null, this.props.subscription_title), " wird eingerichtet.");
+        message = React.createElement("p", null, "Ihr Abo f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " wird eingerichtet.");
         status_icon = React.createElement("div", {
           "className": "spinner_container"
         }, React.createElement(Spinner, {
@@ -396,13 +395,13 @@ SubscriptionModalStatusbox = React.createClass({displayName: "SubscriptionModalS
         }));
         break;
       case Const.SERVER_STATUS_SUCCESS:
-        message = React.createElement("p", null, "Ihr Abo für ", React.createElement("b", null, this.props.subscription_title), " wurde eingerichtet. Sie erhalten nun ein Bestätigungs-E-Mail um Ihre E-Mail-Adresse zu bestätigen.");
+        message = React.createElement("p", null, "Ihr Abo f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " wurde eingerichtet. Sie erhalten nun ein Best\u00e4tigungs-E-Mail um Ihre E-Mail-Adresse zu best\u00e4tigen.");
         status_icon = React.createElement("div", {
           "className": "status_icon_success"
         });
         break;
       case Const.SERVER_STATUS_ERROR:
-        message = React.createElement("p", null, "Ihr Abo für ", React.createElement("b", null, this.props.subscription_title), " konnte nicht eingerichtet werden. Bitte versuchen Sie es erneut.");
+        message = React.createElement("p", null, "Ihr Abo f\u00fcr ", React.createElement("b", null, this.props.subscription_title), " konnte nicht eingerichtet werden. Bitte versuchen Sie es erneut.");
         status_icon = React.createElement("div", {
           "className": "status_icon_error"
         });
@@ -413,14 +412,14 @@ SubscriptionModalStatusbox = React.createClass({displayName: "SubscriptionModalS
       "href": "#",
       "className": "button_large button_cancel",
       "onClick": this._on_cancel_clicked
-    }, "Schließen")));
+    }, "Schlie\u00dfen")));
   }
 });
 
 module.exports = SubscriptionModalStatusbox;
 
 
-},{"../actions/SubscriptionModalActions.coffee":3,"../constants/SubscriptionModalConstants.coffee":15,"react":"react","react-spin":85}],9:[function(require,module,exports){
+},{"../actions/SubscriptionModalActions.coffee":3,"../constants/SubscriptionModalConstants.coffee":15,"react":"react","react-spin":89}],9:[function(require,module,exports){
 var $, AnysearchActions, AnysearchStore, AutosizeInput, React, Searchbar, SubscribeButton, Suggest, Term, _, _get_state_from_store;
 
 React = require('react');
@@ -571,7 +570,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
       placeholder = React.createElement("span", {
         "className": "anysearch_placeholder",
         "ref": "placeholder"
-      }, "Wonach möchten Sie suchen?");
+      }, "Wonach m\u00f6chten Sie suchen?");
     }
     return React.createElement("div", {
       "className": "anysearch_box",
@@ -593,7 +592,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
 module.exports = Searchbar;
 
 
-},{"../../actions/AnysearchActions.coffee":1,"../../stores/AnysearchStore.coffee":17,"./SubscribeButton.cjsx":10,"./Suggest.cjsx":11,"./Term.cjsx":13,"jquery":27,"react":"react","react-input-autosize":31,"underscore":245}],10:[function(require,module,exports){
+},{"../../actions/AnysearchActions.coffee":1,"../../stores/AnysearchStore.coffee":17,"./SubscribeButton.cjsx":10,"./Suggest.cjsx":11,"./Term.cjsx":13,"jquery":31,"react":"react","react-input-autosize":35,"underscore":306}],10:[function(require,module,exports){
 var React, SubscribeButton, SubscriptionModalActions;
 
 React = require('react');
@@ -663,7 +662,7 @@ Suggest = React.createClass({displayName: "Suggest",
 module.exports = Suggest;
 
 
-},{"./SuggestItem.cjsx":12,"react":"react","underscore":245}],12:[function(require,module,exports){
+},{"./SuggestItem.cjsx":12,"react":"react","underscore":306}],12:[function(require,module,exports){
 var React, StringUtils, SuggestItem;
 
 React = require('react');
@@ -774,7 +773,7 @@ Term = React.createClass({displayName: "Term",
 module.exports = Term;
 
 
-},{"../../actions/AnysearchActions.coffee":1,"../../utils/StringUtils.coffee":19,"classnames":21,"jquery":27,"react":"react","react-dom":30,"react-input-autosize":31}],14:[function(require,module,exports){
+},{"../../actions/AnysearchActions.coffee":1,"../../utils/StringUtils.coffee":19,"classnames":21,"jquery":31,"react":"react","react-dom":34,"react-input-autosize":35}],14:[function(require,module,exports){
 var keyMirror;
 
 keyMirror = require('keymirror');
@@ -790,7 +789,7 @@ module.exports = keyMirror({
 });
 
 
-},{"keymirror":28}],15:[function(require,module,exports){
+},{"keymirror":32}],15:[function(require,module,exports){
 var keyMirror;
 
 keyMirror = require('keymirror');
@@ -798,7 +797,7 @@ keyMirror = require('keymirror');
 module.exports = keyMirror({
   SERVER_STATUS_NEUTRAL: null,
   SERVER_STATUS_QUERYING: null,
-  SERVER_STATUS_SUCCESS: null,
+  SERVER_STATUS_SUCCESS: 200,
   SERVER_STATUS_ERROR: null,
   ACTION_SHOW_MODAL: null,
   ACTION_HIDE_MODAL: null,
@@ -807,7 +806,7 @@ module.exports = keyMirror({
 });
 
 
-},{"keymirror":28}],16:[function(require,module,exports){
+},{"keymirror":32}],16:[function(require,module,exports){
 var AppDispatcher, Dispatcher;
 
 Dispatcher = require("flux").Dispatcher;
@@ -1148,7 +1147,7 @@ _pad_terms_with_helpers();
 module.exports = AnysearchStore;
 
 
-},{"../actions/RouterActions.coffee":2,"../constants/AnysearchConstants.coffee":14,"../dispatcher/AppDispatcher.coffee":16,"../utils/StringUtils.coffee":19,"events":25,"jquery":27,"object-assign":29,"underscore":245}],18:[function(require,module,exports){
+},{"../actions/RouterActions.coffee":2,"../constants/AnysearchConstants.coffee":14,"../dispatcher/AppDispatcher.coffee":16,"../utils/StringUtils.coffee":19,"events":29,"jquery":31,"object-assign":33,"underscore":306}],18:[function(require,module,exports){
 var $, AppDispatcher, CHANGE_EVENT, Const, EventEmitter, SubscriptionModalStore, _, _email, _query_server, _server_status, _show_modal, _subscription_title, _subscription_url, assign, csrf_utils;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
@@ -1256,7 +1255,7 @@ SubscriptionModalStore = assign({}, EventEmitter.prototype, {
 module.exports = SubscriptionModalStore;
 
 
-},{"../constants/SubscriptionModalConstants.coffee":15,"../dispatcher/AppDispatcher.coffee":16,"../utils/csrf_token.coffee":20,"events":25,"jquery":27,"object-assign":29,"underscore":245}],19:[function(require,module,exports){
+},{"../constants/SubscriptionModalConstants.coffee":15,"../dispatcher/AppDispatcher.coffee":16,"../utils/csrf_token.coffee":20,"events":29,"jquery":31,"object-assign":33,"underscore":306}],19:[function(require,module,exports){
 var _, _human_categories;
 
 _ = require('underscore');
@@ -1300,7 +1299,7 @@ module.exports = {
 };
 
 
-},{"underscore":245}],20:[function(require,module,exports){
+},{"underscore":306}],20:[function(require,module,exports){
 var getCookie, jQuery;
 
 jQuery = require('jquery');
@@ -1329,7 +1328,7 @@ module.exports = {
 };
 
 
-},{"jquery":27}],21:[function(require,module,exports){
+},{"jquery":31}],21:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -1625,7 +1624,7 @@ var Dispatcher = (function () {
 
 module.exports = Dispatcher;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":24}],24:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":24}],24:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1677,7 +1676,1789 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":26}],25:[function(require,module,exports){
+},{"_process":30}],25:[function(require,module,exports){
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+
+var base64 = require('base64-js')
+var ieee754 = require('ieee754')
+var isArray = require('is-array')
+
+exports.Buffer = Buffer
+exports.SlowBuffer = SlowBuffer
+exports.INSPECT_MAX_BYTES = 50
+Buffer.poolSize = 8192 // not used by this implementation
+
+var rootParent = {}
+
+/**
+ * If `Buffer.TYPED_ARRAY_SUPPORT`:
+ *   === true    Use Uint8Array implementation (fastest)
+ *   === false   Use Object implementation (most compatible, even IE6)
+ *
+ * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
+ * Opera 11.6+, iOS 4.2+.
+ *
+ * Due to various browser bugs, sometimes the Object implementation will be used even
+ * when the browser supports typed arrays.
+ *
+ * Note:
+ *
+ *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
+ *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+ *
+ *   - Safari 5-7 lacks support for changing the `Object.prototype.constructor` property
+ *     on objects.
+ *
+ *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+ *
+ *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+ *     incorrect length in some situations.
+
+ * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
+ * get the Object implementation, which is slower but behaves correctly.
+ */
+Buffer.TYPED_ARRAY_SUPPORT = (function () {
+  function Bar () {}
+  try {
+    var arr = new Uint8Array(1)
+    arr.foo = function () { return 42 }
+    arr.constructor = Bar
+    return arr.foo() === 42 && // typed array instances can be augmented
+        arr.constructor === Bar && // constructor can be set
+        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
+        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+  } catch (e) {
+    return false
+  }
+})()
+
+function kMaxLength () {
+  return Buffer.TYPED_ARRAY_SUPPORT
+    ? 0x7fffffff
+    : 0x3fffffff
+}
+
+/**
+ * Class: Buffer
+ * =============
+ *
+ * The Buffer constructor returns instances of `Uint8Array` that are augmented
+ * with function properties for all the node `Buffer` API functions. We use
+ * `Uint8Array` so that square bracket notation works as expected -- it returns
+ * a single octet.
+ *
+ * By augmenting the instances, we can avoid modifying the `Uint8Array`
+ * prototype.
+ */
+function Buffer (arg) {
+  if (!(this instanceof Buffer)) {
+    // Avoid going through an ArgumentsAdaptorTrampoline in the common case.
+    if (arguments.length > 1) return new Buffer(arg, arguments[1])
+    return new Buffer(arg)
+  }
+
+  this.length = 0
+  this.parent = undefined
+
+  // Common case.
+  if (typeof arg === 'number') {
+    return fromNumber(this, arg)
+  }
+
+  // Slightly less common case.
+  if (typeof arg === 'string') {
+    return fromString(this, arg, arguments.length > 1 ? arguments[1] : 'utf8')
+  }
+
+  // Unusual.
+  return fromObject(this, arg)
+}
+
+function fromNumber (that, length) {
+  that = allocate(that, length < 0 ? 0 : checked(length) | 0)
+  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+    for (var i = 0; i < length; i++) {
+      that[i] = 0
+    }
+  }
+  return that
+}
+
+function fromString (that, string, encoding) {
+  if (typeof encoding !== 'string' || encoding === '') encoding = 'utf8'
+
+  // Assumption: byteLength() return value is always < kMaxLength.
+  var length = byteLength(string, encoding) | 0
+  that = allocate(that, length)
+
+  that.write(string, encoding)
+  return that
+}
+
+function fromObject (that, object) {
+  if (Buffer.isBuffer(object)) return fromBuffer(that, object)
+
+  if (isArray(object)) return fromArray(that, object)
+
+  if (object == null) {
+    throw new TypeError('must start with number, buffer, array or string')
+  }
+
+  if (typeof ArrayBuffer !== 'undefined') {
+    if (object.buffer instanceof ArrayBuffer) {
+      return fromTypedArray(that, object)
+    }
+    if (object instanceof ArrayBuffer) {
+      return fromArrayBuffer(that, object)
+    }
+  }
+
+  if (object.length) return fromArrayLike(that, object)
+
+  return fromJsonObject(that, object)
+}
+
+function fromBuffer (that, buffer) {
+  var length = checked(buffer.length) | 0
+  that = allocate(that, length)
+  buffer.copy(that, 0, 0, length)
+  return that
+}
+
+function fromArray (that, array) {
+  var length = checked(array.length) | 0
+  that = allocate(that, length)
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+// Duplicate of fromArray() to keep fromArray() monomorphic.
+function fromTypedArray (that, array) {
+  var length = checked(array.length) | 0
+  that = allocate(that, length)
+  // Truncating the elements is probably not what people expect from typed
+  // arrays with BYTES_PER_ELEMENT > 1 but it's compatible with the behavior
+  // of the old Buffer constructor.
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+function fromArrayBuffer (that, array) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Return an augmented `Uint8Array` instance, for best performance
+    array.byteLength
+    that = Buffer._augment(new Uint8Array(array))
+  } else {
+    // Fallback: Return an object instance of the Buffer class
+    that = fromTypedArray(that, new Uint8Array(array))
+  }
+  return that
+}
+
+function fromArrayLike (that, array) {
+  var length = checked(array.length) | 0
+  that = allocate(that, length)
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+// Deserialize { type: 'Buffer', data: [1,2,3,...] } into a Buffer object.
+// Returns a zero-length buffer for inputs that don't conform to the spec.
+function fromJsonObject (that, object) {
+  var array
+  var length = 0
+
+  if (object.type === 'Buffer' && isArray(object.data)) {
+    array = object.data
+    length = checked(array.length) | 0
+  }
+  that = allocate(that, length)
+
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+function allocate (that, length) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Return an augmented `Uint8Array` instance, for best performance
+    that = Buffer._augment(new Uint8Array(length))
+  } else {
+    // Fallback: Return an object instance of the Buffer class
+    that.length = length
+    that._isBuffer = true
+  }
+
+  var fromPool = length !== 0 && length <= Buffer.poolSize >>> 1
+  if (fromPool) that.parent = rootParent
+
+  return that
+}
+
+function checked (length) {
+  // Note: cannot use `length < kMaxLength` here because that fails when
+  // length is NaN (which is otherwise coerced to zero.)
+  if (length >= kMaxLength()) {
+    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
+                         'size: 0x' + kMaxLength().toString(16) + ' bytes')
+  }
+  return length | 0
+}
+
+function SlowBuffer (subject, encoding) {
+  if (!(this instanceof SlowBuffer)) return new SlowBuffer(subject, encoding)
+
+  var buf = new Buffer(subject, encoding)
+  delete buf.parent
+  return buf
+}
+
+Buffer.isBuffer = function isBuffer (b) {
+  return !!(b != null && b._isBuffer)
+}
+
+Buffer.compare = function compare (a, b) {
+  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
+    throw new TypeError('Arguments must be Buffers')
+  }
+
+  if (a === b) return 0
+
+  var x = a.length
+  var y = b.length
+
+  var i = 0
+  var len = Math.min(x, y)
+  while (i < len) {
+    if (a[i] !== b[i]) break
+
+    ++i
+  }
+
+  if (i !== len) {
+    x = a[i]
+    y = b[i]
+  }
+
+  if (x < y) return -1
+  if (y < x) return 1
+  return 0
+}
+
+Buffer.isEncoding = function isEncoding (encoding) {
+  switch (String(encoding).toLowerCase()) {
+    case 'hex':
+    case 'utf8':
+    case 'utf-8':
+    case 'ascii':
+    case 'binary':
+    case 'base64':
+    case 'raw':
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return true
+    default:
+      return false
+  }
+}
+
+Buffer.concat = function concat (list, length) {
+  if (!isArray(list)) throw new TypeError('list argument must be an Array of Buffers.')
+
+  if (list.length === 0) {
+    return new Buffer(0)
+  }
+
+  var i
+  if (length === undefined) {
+    length = 0
+    for (i = 0; i < list.length; i++) {
+      length += list[i].length
+    }
+  }
+
+  var buf = new Buffer(length)
+  var pos = 0
+  for (i = 0; i < list.length; i++) {
+    var item = list[i]
+    item.copy(buf, pos)
+    pos += item.length
+  }
+  return buf
+}
+
+function byteLength (string, encoding) {
+  if (typeof string !== 'string') string = '' + string
+
+  var len = string.length
+  if (len === 0) return 0
+
+  // Use a for loop to avoid recursion
+  var loweredCase = false
+  for (;;) {
+    switch (encoding) {
+      case 'ascii':
+      case 'binary':
+      // Deprecated
+      case 'raw':
+      case 'raws':
+        return len
+      case 'utf8':
+      case 'utf-8':
+        return utf8ToBytes(string).length
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return len * 2
+      case 'hex':
+        return len >>> 1
+      case 'base64':
+        return base64ToBytes(string).length
+      default:
+        if (loweredCase) return utf8ToBytes(string).length // assume utf8
+        encoding = ('' + encoding).toLowerCase()
+        loweredCase = true
+    }
+  }
+}
+Buffer.byteLength = byteLength
+
+// pre-set for values that may exist in the future
+Buffer.prototype.length = undefined
+Buffer.prototype.parent = undefined
+
+function slowToString (encoding, start, end) {
+  var loweredCase = false
+
+  start = start | 0
+  end = end === undefined || end === Infinity ? this.length : end | 0
+
+  if (!encoding) encoding = 'utf8'
+  if (start < 0) start = 0
+  if (end > this.length) end = this.length
+  if (end <= start) return ''
+
+  while (true) {
+    switch (encoding) {
+      case 'hex':
+        return hexSlice(this, start, end)
+
+      case 'utf8':
+      case 'utf-8':
+        return utf8Slice(this, start, end)
+
+      case 'ascii':
+        return asciiSlice(this, start, end)
+
+      case 'binary':
+        return binarySlice(this, start, end)
+
+      case 'base64':
+        return base64Slice(this, start, end)
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return utf16leSlice(this, start, end)
+
+      default:
+        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        encoding = (encoding + '').toLowerCase()
+        loweredCase = true
+    }
+  }
+}
+
+Buffer.prototype.toString = function toString () {
+  var length = this.length | 0
+  if (length === 0) return ''
+  if (arguments.length === 0) return utf8Slice(this, 0, length)
+  return slowToString.apply(this, arguments)
+}
+
+Buffer.prototype.equals = function equals (b) {
+  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return true
+  return Buffer.compare(this, b) === 0
+}
+
+Buffer.prototype.inspect = function inspect () {
+  var str = ''
+  var max = exports.INSPECT_MAX_BYTES
+  if (this.length > 0) {
+    str = this.toString('hex', 0, max).match(/.{2}/g).join(' ')
+    if (this.length > max) str += ' ... '
+  }
+  return '<Buffer ' + str + '>'
+}
+
+Buffer.prototype.compare = function compare (b) {
+  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return 0
+  return Buffer.compare(this, b)
+}
+
+Buffer.prototype.indexOf = function indexOf (val, byteOffset) {
+  if (byteOffset > 0x7fffffff) byteOffset = 0x7fffffff
+  else if (byteOffset < -0x80000000) byteOffset = -0x80000000
+  byteOffset >>= 0
+
+  if (this.length === 0) return -1
+  if (byteOffset >= this.length) return -1
+
+  // Negative offsets start from the end of the buffer
+  if (byteOffset < 0) byteOffset = Math.max(this.length + byteOffset, 0)
+
+  if (typeof val === 'string') {
+    if (val.length === 0) return -1 // special case: looking for empty string always fails
+    return String.prototype.indexOf.call(this, val, byteOffset)
+  }
+  if (Buffer.isBuffer(val)) {
+    return arrayIndexOf(this, val, byteOffset)
+  }
+  if (typeof val === 'number') {
+    if (Buffer.TYPED_ARRAY_SUPPORT && Uint8Array.prototype.indexOf === 'function') {
+      return Uint8Array.prototype.indexOf.call(this, val, byteOffset)
+    }
+    return arrayIndexOf(this, [ val ], byteOffset)
+  }
+
+  function arrayIndexOf (arr, val, byteOffset) {
+    var foundIndex = -1
+    for (var i = 0; byteOffset + i < arr.length; i++) {
+      if (arr[byteOffset + i] === val[foundIndex === -1 ? 0 : i - foundIndex]) {
+        if (foundIndex === -1) foundIndex = i
+        if (i - foundIndex + 1 === val.length) return byteOffset + foundIndex
+      } else {
+        foundIndex = -1
+      }
+    }
+    return -1
+  }
+
+  throw new TypeError('val must be string, number or Buffer')
+}
+
+// `get` is deprecated
+Buffer.prototype.get = function get (offset) {
+  console.log('.get() is deprecated. Access using array indexes instead.')
+  return this.readUInt8(offset)
+}
+
+// `set` is deprecated
+Buffer.prototype.set = function set (v, offset) {
+  console.log('.set() is deprecated. Access using array indexes instead.')
+  return this.writeUInt8(v, offset)
+}
+
+function hexWrite (buf, string, offset, length) {
+  offset = Number(offset) || 0
+  var remaining = buf.length - offset
+  if (!length) {
+    length = remaining
+  } else {
+    length = Number(length)
+    if (length > remaining) {
+      length = remaining
+    }
+  }
+
+  // must be an even number of digits
+  var strLen = string.length
+  if (strLen % 2 !== 0) throw new Error('Invalid hex string')
+
+  if (length > strLen / 2) {
+    length = strLen / 2
+  }
+  for (var i = 0; i < length; i++) {
+    var parsed = parseInt(string.substr(i * 2, 2), 16)
+    if (isNaN(parsed)) throw new Error('Invalid hex string')
+    buf[offset + i] = parsed
+  }
+  return i
+}
+
+function utf8Write (buf, string, offset, length) {
+  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+}
+
+function asciiWrite (buf, string, offset, length) {
+  return blitBuffer(asciiToBytes(string), buf, offset, length)
+}
+
+function binaryWrite (buf, string, offset, length) {
+  return asciiWrite(buf, string, offset, length)
+}
+
+function base64Write (buf, string, offset, length) {
+  return blitBuffer(base64ToBytes(string), buf, offset, length)
+}
+
+function ucs2Write (buf, string, offset, length) {
+  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+}
+
+Buffer.prototype.write = function write (string, offset, length, encoding) {
+  // Buffer#write(string)
+  if (offset === undefined) {
+    encoding = 'utf8'
+    length = this.length
+    offset = 0
+  // Buffer#write(string, encoding)
+  } else if (length === undefined && typeof offset === 'string') {
+    encoding = offset
+    length = this.length
+    offset = 0
+  // Buffer#write(string, offset[, length][, encoding])
+  } else if (isFinite(offset)) {
+    offset = offset | 0
+    if (isFinite(length)) {
+      length = length | 0
+      if (encoding === undefined) encoding = 'utf8'
+    } else {
+      encoding = length
+      length = undefined
+    }
+  // legacy write(string, encoding, offset, length) - remove in v0.13
+  } else {
+    var swap = encoding
+    encoding = offset
+    offset = length | 0
+    length = swap
+  }
+
+  var remaining = this.length - offset
+  if (length === undefined || length > remaining) length = remaining
+
+  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
+    throw new RangeError('attempt to write outside buffer bounds')
+  }
+
+  if (!encoding) encoding = 'utf8'
+
+  var loweredCase = false
+  for (;;) {
+    switch (encoding) {
+      case 'hex':
+        return hexWrite(this, string, offset, length)
+
+      case 'utf8':
+      case 'utf-8':
+        return utf8Write(this, string, offset, length)
+
+      case 'ascii':
+        return asciiWrite(this, string, offset, length)
+
+      case 'binary':
+        return binaryWrite(this, string, offset, length)
+
+      case 'base64':
+        // Warning: maxLength not taken into account in base64Write
+        return base64Write(this, string, offset, length)
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return ucs2Write(this, string, offset, length)
+
+      default:
+        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        encoding = ('' + encoding).toLowerCase()
+        loweredCase = true
+    }
+  }
+}
+
+Buffer.prototype.toJSON = function toJSON () {
+  return {
+    type: 'Buffer',
+    data: Array.prototype.slice.call(this._arr || this, 0)
+  }
+}
+
+function base64Slice (buf, start, end) {
+  if (start === 0 && end === buf.length) {
+    return base64.fromByteArray(buf)
+  } else {
+    return base64.fromByteArray(buf.slice(start, end))
+  }
+}
+
+function utf8Slice (buf, start, end) {
+  end = Math.min(buf.length, end)
+  var res = []
+
+  var i = start
+  while (i < end) {
+    var firstByte = buf[i]
+    var codePoint = null
+    var bytesPerSequence = (firstByte > 0xEF) ? 4
+      : (firstByte > 0xDF) ? 3
+      : (firstByte > 0xBF) ? 2
+      : 1
+
+    if (i + bytesPerSequence <= end) {
+      var secondByte, thirdByte, fourthByte, tempCodePoint
+
+      switch (bytesPerSequence) {
+        case 1:
+          if (firstByte < 0x80) {
+            codePoint = firstByte
+          }
+          break
+        case 2:
+          secondByte = buf[i + 1]
+          if ((secondByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F)
+            if (tempCodePoint > 0x7F) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 3:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F)
+            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 4:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          fourthByte = buf[i + 3]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F)
+            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+              codePoint = tempCodePoint
+            }
+          }
+      }
+    }
+
+    if (codePoint === null) {
+      // we did not generate a valid codePoint so insert a
+      // replacement char (U+FFFD) and advance only 1 byte
+      codePoint = 0xFFFD
+      bytesPerSequence = 1
+    } else if (codePoint > 0xFFFF) {
+      // encode to utf16 (surrogate pair dance)
+      codePoint -= 0x10000
+      res.push(codePoint >>> 10 & 0x3FF | 0xD800)
+      codePoint = 0xDC00 | codePoint & 0x3FF
+    }
+
+    res.push(codePoint)
+    i += bytesPerSequence
+  }
+
+  return decodeCodePointsArray(res)
+}
+
+// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+// the lowest limit is Chrome, with 0x10000 args.
+// We go 1 magnitude less, for safety
+var MAX_ARGUMENTS_LENGTH = 0x1000
+
+function decodeCodePointsArray (codePoints) {
+  var len = codePoints.length
+  if (len <= MAX_ARGUMENTS_LENGTH) {
+    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
+  }
+
+  // Decode in chunks to avoid "call stack size exceeded".
+  var res = ''
+  var i = 0
+  while (i < len) {
+    res += String.fromCharCode.apply(
+      String,
+      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
+    )
+  }
+  return res
+}
+
+function asciiSlice (buf, start, end) {
+  var ret = ''
+  end = Math.min(buf.length, end)
+
+  for (var i = start; i < end; i++) {
+    ret += String.fromCharCode(buf[i] & 0x7F)
+  }
+  return ret
+}
+
+function binarySlice (buf, start, end) {
+  var ret = ''
+  end = Math.min(buf.length, end)
+
+  for (var i = start; i < end; i++) {
+    ret += String.fromCharCode(buf[i])
+  }
+  return ret
+}
+
+function hexSlice (buf, start, end) {
+  var len = buf.length
+
+  if (!start || start < 0) start = 0
+  if (!end || end < 0 || end > len) end = len
+
+  var out = ''
+  for (var i = start; i < end; i++) {
+    out += toHex(buf[i])
+  }
+  return out
+}
+
+function utf16leSlice (buf, start, end) {
+  var bytes = buf.slice(start, end)
+  var res = ''
+  for (var i = 0; i < bytes.length; i += 2) {
+    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256)
+  }
+  return res
+}
+
+Buffer.prototype.slice = function slice (start, end) {
+  var len = this.length
+  start = ~~start
+  end = end === undefined ? len : ~~end
+
+  if (start < 0) {
+    start += len
+    if (start < 0) start = 0
+  } else if (start > len) {
+    start = len
+  }
+
+  if (end < 0) {
+    end += len
+    if (end < 0) end = 0
+  } else if (end > len) {
+    end = len
+  }
+
+  if (end < start) end = start
+
+  var newBuf
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    newBuf = Buffer._augment(this.subarray(start, end))
+  } else {
+    var sliceLen = end - start
+    newBuf = new Buffer(sliceLen, undefined)
+    for (var i = 0; i < sliceLen; i++) {
+      newBuf[i] = this[i + start]
+    }
+  }
+
+  if (newBuf.length) newBuf.parent = this.parent || this
+
+  return newBuf
+}
+
+/*
+ * Need to make sure that buffer isn't trying to write out of bounds.
+ */
+function checkOffset (offset, ext, length) {
+  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
+  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
+}
+
+Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+  offset = offset | 0
+  byteLength = byteLength | 0
+  if (!noAssert) checkOffset(offset, byteLength, this.length)
+
+  var val = this[offset]
+  var mul = 1
+  var i = 0
+  while (++i < byteLength && (mul *= 0x100)) {
+    val += this[offset + i] * mul
+  }
+
+  return val
+}
+
+Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+  offset = offset | 0
+  byteLength = byteLength | 0
+  if (!noAssert) {
+    checkOffset(offset, byteLength, this.length)
+  }
+
+  var val = this[offset + --byteLength]
+  var mul = 1
+  while (byteLength > 0 && (mul *= 0x100)) {
+    val += this[offset + --byteLength] * mul
+  }
+
+  return val
+}
+
+Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 1, this.length)
+  return this[offset]
+}
+
+Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  return this[offset] | (this[offset + 1] << 8)
+}
+
+Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  return (this[offset] << 8) | this[offset + 1]
+}
+
+Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return ((this[offset]) |
+      (this[offset + 1] << 8) |
+      (this[offset + 2] << 16)) +
+      (this[offset + 3] * 0x1000000)
+}
+
+Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return (this[offset] * 0x1000000) +
+    ((this[offset + 1] << 16) |
+    (this[offset + 2] << 8) |
+    this[offset + 3])
+}
+
+Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+  offset = offset | 0
+  byteLength = byteLength | 0
+  if (!noAssert) checkOffset(offset, byteLength, this.length)
+
+  var val = this[offset]
+  var mul = 1
+  var i = 0
+  while (++i < byteLength && (mul *= 0x100)) {
+    val += this[offset + i] * mul
+  }
+  mul *= 0x80
+
+  if (val >= mul) val -= Math.pow(2, 8 * byteLength)
+
+  return val
+}
+
+Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+  offset = offset | 0
+  byteLength = byteLength | 0
+  if (!noAssert) checkOffset(offset, byteLength, this.length)
+
+  var i = byteLength
+  var mul = 1
+  var val = this[offset + --i]
+  while (i > 0 && (mul *= 0x100)) {
+    val += this[offset + --i] * mul
+  }
+  mul *= 0x80
+
+  if (val >= mul) val -= Math.pow(2, 8 * byteLength)
+
+  return val
+}
+
+Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 1, this.length)
+  if (!(this[offset] & 0x80)) return (this[offset])
+  return ((0xff - this[offset] + 1) * -1)
+}
+
+Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  var val = this[offset] | (this[offset + 1] << 8)
+  return (val & 0x8000) ? val | 0xFFFF0000 : val
+}
+
+Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length)
+  var val = this[offset + 1] | (this[offset] << 8)
+  return (val & 0x8000) ? val | 0xFFFF0000 : val
+}
+
+Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return (this[offset]) |
+    (this[offset + 1] << 8) |
+    (this[offset + 2] << 16) |
+    (this[offset + 3] << 24)
+}
+
+Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+
+  return (this[offset] << 24) |
+    (this[offset + 1] << 16) |
+    (this[offset + 2] << 8) |
+    (this[offset + 3])
+}
+
+Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+  return ieee754.read(this, offset, true, 23, 4)
+}
+
+Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length)
+  return ieee754.read(this, offset, false, 23, 4)
+}
+
+Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 8, this.length)
+  return ieee754.read(this, offset, true, 52, 8)
+}
+
+Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 8, this.length)
+  return ieee754.read(this, offset, false, 52, 8)
+}
+
+function checkInt (buf, value, offset, ext, max, min) {
+  if (!Buffer.isBuffer(buf)) throw new TypeError('buffer must be a Buffer instance')
+  if (value > max || value < min) throw new RangeError('value is out of bounds')
+  if (offset + ext > buf.length) throw new RangeError('index out of range')
+}
+
+Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset | 0
+  byteLength = byteLength | 0
+  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
+
+  var mul = 1
+  var i = 0
+  this[offset] = value & 0xFF
+  while (++i < byteLength && (mul *= 0x100)) {
+    this[offset + i] = (value / mul) & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset | 0
+  byteLength = byteLength | 0
+  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
+
+  var i = byteLength - 1
+  var mul = 1
+  this[offset + i] = value & 0xFF
+  while (--i >= 0 && (mul *= 0x100)) {
+    this[offset + i] = (value / mul) & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
+  this[offset] = value
+  return offset + 1
+}
+
+function objectWriteUInt16 (buf, value, offset, littleEndian) {
+  if (value < 0) value = 0xffff + value + 1
+  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; i++) {
+    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
+      (littleEndian ? i : 1 - i) * 8
+  }
+}
+
+Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = value
+    this[offset + 1] = (value >>> 8)
+  } else {
+    objectWriteUInt16(this, value, offset, true)
+  }
+  return offset + 2
+}
+
+Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 8)
+    this[offset + 1] = value
+  } else {
+    objectWriteUInt16(this, value, offset, false)
+  }
+  return offset + 2
+}
+
+function objectWriteUInt32 (buf, value, offset, littleEndian) {
+  if (value < 0) value = 0xffffffff + value + 1
+  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; i++) {
+    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
+  }
+}
+
+Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset + 3] = (value >>> 24)
+    this[offset + 2] = (value >>> 16)
+    this[offset + 1] = (value >>> 8)
+    this[offset] = value
+  } else {
+    objectWriteUInt32(this, value, offset, true)
+  }
+  return offset + 4
+}
+
+Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 24)
+    this[offset + 1] = (value >>> 16)
+    this[offset + 2] = (value >>> 8)
+    this[offset + 3] = value
+  } else {
+    objectWriteUInt32(this, value, offset, false)
+  }
+  return offset + 4
+}
+
+Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) {
+    var limit = Math.pow(2, 8 * byteLength - 1)
+
+    checkInt(this, value, offset, byteLength, limit - 1, -limit)
+  }
+
+  var i = 0
+  var mul = 1
+  var sub = value < 0 ? 1 : 0
+  this[offset] = value & 0xFF
+  while (++i < byteLength && (mul *= 0x100)) {
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) {
+    var limit = Math.pow(2, 8 * byteLength - 1)
+
+    checkInt(this, value, offset, byteLength, limit - 1, -limit)
+  }
+
+  var i = byteLength - 1
+  var mul = 1
+  var sub = value < 0 ? 1 : 0
+  this[offset + i] = value & 0xFF
+  while (--i >= 0 && (mul *= 0x100)) {
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
+  }
+
+  return offset + byteLength
+}
+
+Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
+  if (value < 0) value = 0xff + value + 1
+  this[offset] = value
+  return offset + 1
+}
+
+Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = value
+    this[offset + 1] = (value >>> 8)
+  } else {
+    objectWriteUInt16(this, value, offset, true)
+  }
+  return offset + 2
+}
+
+Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 8)
+    this[offset + 1] = value
+  } else {
+    objectWriteUInt16(this, value, offset, false)
+  }
+  return offset + 2
+}
+
+Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = value
+    this[offset + 1] = (value >>> 8)
+    this[offset + 2] = (value >>> 16)
+    this[offset + 3] = (value >>> 24)
+  } else {
+    objectWriteUInt32(this, value, offset, true)
+  }
+  return offset + 4
+}
+
+Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+  value = +value
+  offset = offset | 0
+  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
+  if (value < 0) value = 0xffffffff + value + 1
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 24)
+    this[offset + 1] = (value >>> 16)
+    this[offset + 2] = (value >>> 8)
+    this[offset + 3] = value
+  } else {
+    objectWriteUInt32(this, value, offset, false)
+  }
+  return offset + 4
+}
+
+function checkIEEE754 (buf, value, offset, ext, max, min) {
+  if (value > max || value < min) throw new RangeError('value is out of bounds')
+  if (offset + ext > buf.length) throw new RangeError('index out of range')
+  if (offset < 0) throw new RangeError('index out of range')
+}
+
+function writeFloat (buf, value, offset, littleEndian, noAssert) {
+  if (!noAssert) {
+    checkIEEE754(buf, value, offset, 4, 3.4028234663852886e+38, -3.4028234663852886e+38)
+  }
+  ieee754.write(buf, value, offset, littleEndian, 23, 4)
+  return offset + 4
+}
+
+Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
+  return writeFloat(this, value, offset, true, noAssert)
+}
+
+Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
+  return writeFloat(this, value, offset, false, noAssert)
+}
+
+function writeDouble (buf, value, offset, littleEndian, noAssert) {
+  if (!noAssert) {
+    checkIEEE754(buf, value, offset, 8, 1.7976931348623157E+308, -1.7976931348623157E+308)
+  }
+  ieee754.write(buf, value, offset, littleEndian, 52, 8)
+  return offset + 8
+}
+
+Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
+  return writeDouble(this, value, offset, true, noAssert)
+}
+
+Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
+  return writeDouble(this, value, offset, false, noAssert)
+}
+
+// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
+Buffer.prototype.copy = function copy (target, targetStart, start, end) {
+  if (!start) start = 0
+  if (!end && end !== 0) end = this.length
+  if (targetStart >= target.length) targetStart = target.length
+  if (!targetStart) targetStart = 0
+  if (end > 0 && end < start) end = start
+
+  // Copy 0 bytes; we're done
+  if (end === start) return 0
+  if (target.length === 0 || this.length === 0) return 0
+
+  // Fatal error conditions
+  if (targetStart < 0) {
+    throw new RangeError('targetStart out of bounds')
+  }
+  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
+  if (end < 0) throw new RangeError('sourceEnd out of bounds')
+
+  // Are we oob?
+  if (end > this.length) end = this.length
+  if (target.length - targetStart < end - start) {
+    end = target.length - targetStart + start
+  }
+
+  var len = end - start
+  var i
+
+  if (this === target && start < targetStart && targetStart < end) {
+    // descending copy from end
+    for (i = len - 1; i >= 0; i--) {
+      target[i + targetStart] = this[i + start]
+    }
+  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+    // ascending copy from start
+    for (i = 0; i < len; i++) {
+      target[i + targetStart] = this[i + start]
+    }
+  } else {
+    target._set(this.subarray(start, start + len), targetStart)
+  }
+
+  return len
+}
+
+// fill(value, start=0, end=buffer.length)
+Buffer.prototype.fill = function fill (value, start, end) {
+  if (!value) value = 0
+  if (!start) start = 0
+  if (!end) end = this.length
+
+  if (end < start) throw new RangeError('end < start')
+
+  // Fill 0 bytes; we're done
+  if (end === start) return
+  if (this.length === 0) return
+
+  if (start < 0 || start >= this.length) throw new RangeError('start out of bounds')
+  if (end < 0 || end > this.length) throw new RangeError('end out of bounds')
+
+  var i
+  if (typeof value === 'number') {
+    for (i = start; i < end; i++) {
+      this[i] = value
+    }
+  } else {
+    var bytes = utf8ToBytes(value.toString())
+    var len = bytes.length
+    for (i = start; i < end; i++) {
+      this[i] = bytes[i % len]
+    }
+  }
+
+  return this
+}
+
+/**
+ * Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
+ * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
+ */
+Buffer.prototype.toArrayBuffer = function toArrayBuffer () {
+  if (typeof Uint8Array !== 'undefined') {
+    if (Buffer.TYPED_ARRAY_SUPPORT) {
+      return (new Buffer(this)).buffer
+    } else {
+      var buf = new Uint8Array(this.length)
+      for (var i = 0, len = buf.length; i < len; i += 1) {
+        buf[i] = this[i]
+      }
+      return buf.buffer
+    }
+  } else {
+    throw new TypeError('Buffer.toArrayBuffer not supported in this browser')
+  }
+}
+
+// HELPER FUNCTIONS
+// ================
+
+var BP = Buffer.prototype
+
+/**
+ * Augment a Uint8Array *instance* (not the Uint8Array class!) with Buffer methods
+ */
+Buffer._augment = function _augment (arr) {
+  arr.constructor = Buffer
+  arr._isBuffer = true
+
+  // save reference to original Uint8Array set method before overwriting
+  arr._set = arr.set
+
+  // deprecated
+  arr.get = BP.get
+  arr.set = BP.set
+
+  arr.write = BP.write
+  arr.toString = BP.toString
+  arr.toLocaleString = BP.toString
+  arr.toJSON = BP.toJSON
+  arr.equals = BP.equals
+  arr.compare = BP.compare
+  arr.indexOf = BP.indexOf
+  arr.copy = BP.copy
+  arr.slice = BP.slice
+  arr.readUIntLE = BP.readUIntLE
+  arr.readUIntBE = BP.readUIntBE
+  arr.readUInt8 = BP.readUInt8
+  arr.readUInt16LE = BP.readUInt16LE
+  arr.readUInt16BE = BP.readUInt16BE
+  arr.readUInt32LE = BP.readUInt32LE
+  arr.readUInt32BE = BP.readUInt32BE
+  arr.readIntLE = BP.readIntLE
+  arr.readIntBE = BP.readIntBE
+  arr.readInt8 = BP.readInt8
+  arr.readInt16LE = BP.readInt16LE
+  arr.readInt16BE = BP.readInt16BE
+  arr.readInt32LE = BP.readInt32LE
+  arr.readInt32BE = BP.readInt32BE
+  arr.readFloatLE = BP.readFloatLE
+  arr.readFloatBE = BP.readFloatBE
+  arr.readDoubleLE = BP.readDoubleLE
+  arr.readDoubleBE = BP.readDoubleBE
+  arr.writeUInt8 = BP.writeUInt8
+  arr.writeUIntLE = BP.writeUIntLE
+  arr.writeUIntBE = BP.writeUIntBE
+  arr.writeUInt16LE = BP.writeUInt16LE
+  arr.writeUInt16BE = BP.writeUInt16BE
+  arr.writeUInt32LE = BP.writeUInt32LE
+  arr.writeUInt32BE = BP.writeUInt32BE
+  arr.writeIntLE = BP.writeIntLE
+  arr.writeIntBE = BP.writeIntBE
+  arr.writeInt8 = BP.writeInt8
+  arr.writeInt16LE = BP.writeInt16LE
+  arr.writeInt16BE = BP.writeInt16BE
+  arr.writeInt32LE = BP.writeInt32LE
+  arr.writeInt32BE = BP.writeInt32BE
+  arr.writeFloatLE = BP.writeFloatLE
+  arr.writeFloatBE = BP.writeFloatBE
+  arr.writeDoubleLE = BP.writeDoubleLE
+  arr.writeDoubleBE = BP.writeDoubleBE
+  arr.fill = BP.fill
+  arr.inspect = BP.inspect
+  arr.toArrayBuffer = BP.toArrayBuffer
+
+  return arr
+}
+
+var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
+
+function base64clean (str) {
+  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  // Node converts strings with length < 2 to ''
+  if (str.length < 2) return ''
+  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+  while (str.length % 4 !== 0) {
+    str = str + '='
+  }
+  return str
+}
+
+function stringtrim (str) {
+  if (str.trim) return str.trim()
+  return str.replace(/^\s+|\s+$/g, '')
+}
+
+function toHex (n) {
+  if (n < 16) return '0' + n.toString(16)
+  return n.toString(16)
+}
+
+function utf8ToBytes (string, units) {
+  units = units || Infinity
+  var codePoint
+  var length = string.length
+  var leadSurrogate = null
+  var bytes = []
+
+  for (var i = 0; i < length; i++) {
+    codePoint = string.charCodeAt(i)
+
+    // is surrogate component
+    if (codePoint > 0xD7FF && codePoint < 0xE000) {
+      // last char was a lead
+      if (!leadSurrogate) {
+        // no lead yet
+        if (codePoint > 0xDBFF) {
+          // unexpected trail
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+          continue
+        } else if (i + 1 === length) {
+          // unpaired lead
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+          continue
+        }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
+      }
+
+      // 2 leads in a row
+      if (codePoint < 0xDC00) {
+        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+    }
+
+    leadSurrogate = null
+
+    // encode utf8
+    if (codePoint < 0x80) {
+      if ((units -= 1) < 0) break
+      bytes.push(codePoint)
+    } else if (codePoint < 0x800) {
+      if ((units -= 2) < 0) break
+      bytes.push(
+        codePoint >> 0x6 | 0xC0,
+        codePoint & 0x3F | 0x80
+      )
+    } else if (codePoint < 0x10000) {
+      if ((units -= 3) < 0) break
+      bytes.push(
+        codePoint >> 0xC | 0xE0,
+        codePoint >> 0x6 & 0x3F | 0x80,
+        codePoint & 0x3F | 0x80
+      )
+    } else if (codePoint < 0x110000) {
+      if ((units -= 4) < 0) break
+      bytes.push(
+        codePoint >> 0x12 | 0xF0,
+        codePoint >> 0xC & 0x3F | 0x80,
+        codePoint >> 0x6 & 0x3F | 0x80,
+        codePoint & 0x3F | 0x80
+      )
+    } else {
+      throw new Error('Invalid code point')
+    }
+  }
+
+  return bytes
+}
+
+function asciiToBytes (str) {
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    // Node's code seems to be doing this and not & 0x7F..
+    byteArray.push(str.charCodeAt(i) & 0xFF)
+  }
+  return byteArray
+}
+
+function utf16leToBytes (str, units) {
+  var c, hi, lo
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    if ((units -= 2) < 0) break
+
+    c = str.charCodeAt(i)
+    hi = c >> 8
+    lo = c % 256
+    byteArray.push(lo)
+    byteArray.push(hi)
+  }
+
+  return byteArray
+}
+
+function base64ToBytes (str) {
+  return base64.toByteArray(base64clean(str))
+}
+
+function blitBuffer (src, dst, offset, length) {
+  for (var i = 0; i < length; i++) {
+    if ((i + offset >= dst.length) || (i >= src.length)) break
+    dst[i + offset] = src[i]
+  }
+  return i
+}
+
+},{"base64-js":26,"ieee754":27,"is-array":28}],26:[function(require,module,exports){
+var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+;(function (exports) {
+	'use strict';
+
+  var Arr = (typeof Uint8Array !== 'undefined')
+    ? Uint8Array
+    : Array
+
+	var PLUS   = '+'.charCodeAt(0)
+	var SLASH  = '/'.charCodeAt(0)
+	var NUMBER = '0'.charCodeAt(0)
+	var LOWER  = 'a'.charCodeAt(0)
+	var UPPER  = 'A'.charCodeAt(0)
+	var PLUS_URL_SAFE = '-'.charCodeAt(0)
+	var SLASH_URL_SAFE = '_'.charCodeAt(0)
+
+	function decode (elt) {
+		var code = elt.charCodeAt(0)
+		if (code === PLUS ||
+		    code === PLUS_URL_SAFE)
+			return 62 // '+'
+		if (code === SLASH ||
+		    code === SLASH_URL_SAFE)
+			return 63 // '/'
+		if (code < NUMBER)
+			return -1 //no match
+		if (code < NUMBER + 10)
+			return code - NUMBER + 26 + 26
+		if (code < UPPER + 26)
+			return code - UPPER
+		if (code < LOWER + 26)
+			return code - LOWER + 26
+	}
+
+	function b64ToByteArray (b64) {
+		var i, j, l, tmp, placeHolders, arr
+
+		if (b64.length % 4 > 0) {
+			throw new Error('Invalid string. Length must be a multiple of 4')
+		}
+
+		// the number of equal signs (place holders)
+		// if there are two placeholders, than the two characters before it
+		// represent one byte
+		// if there is only one, then the three characters before it represent 2 bytes
+		// this is just a cheap hack to not do indexOf twice
+		var len = b64.length
+		placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0
+
+		// base64 is 4/3 + up to two characters of the original data
+		arr = new Arr(b64.length * 3 / 4 - placeHolders)
+
+		// if there are placeholders, only get up to the last complete 4 chars
+		l = placeHolders > 0 ? b64.length - 4 : b64.length
+
+		var L = 0
+
+		function push (v) {
+			arr[L++] = v
+		}
+
+		for (i = 0, j = 0; i < l; i += 4, j += 3) {
+			tmp = (decode(b64.charAt(i)) << 18) | (decode(b64.charAt(i + 1)) << 12) | (decode(b64.charAt(i + 2)) << 6) | decode(b64.charAt(i + 3))
+			push((tmp & 0xFF0000) >> 16)
+			push((tmp & 0xFF00) >> 8)
+			push(tmp & 0xFF)
+		}
+
+		if (placeHolders === 2) {
+			tmp = (decode(b64.charAt(i)) << 2) | (decode(b64.charAt(i + 1)) >> 4)
+			push(tmp & 0xFF)
+		} else if (placeHolders === 1) {
+			tmp = (decode(b64.charAt(i)) << 10) | (decode(b64.charAt(i + 1)) << 4) | (decode(b64.charAt(i + 2)) >> 2)
+			push((tmp >> 8) & 0xFF)
+			push(tmp & 0xFF)
+		}
+
+		return arr
+	}
+
+	function uint8ToBase64 (uint8) {
+		var i,
+			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+			output = "",
+			temp, length
+
+		function encode (num) {
+			return lookup.charAt(num)
+		}
+
+		function tripletToBase64 (num) {
+			return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F)
+		}
+
+		// go through the array every three bytes, we'll deal with trailing stuff later
+		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
+			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
+			output += tripletToBase64(temp)
+		}
+
+		// pad the end with zeros, but make sure to not forget the extra bytes
+		switch (extraBytes) {
+			case 1:
+				temp = uint8[uint8.length - 1]
+				output += encode(temp >> 2)
+				output += encode((temp << 4) & 0x3F)
+				output += '=='
+				break
+			case 2:
+				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1])
+				output += encode(temp >> 10)
+				output += encode((temp >> 4) & 0x3F)
+				output += encode((temp << 2) & 0x3F)
+				output += '='
+				break
+		}
+
+		return output
+	}
+
+	exports.toByteArray = b64ToByteArray
+	exports.fromByteArray = uint8ToBase64
+}(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
+
+},{}],27:[function(require,module,exports){
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
+
+  i += d
+
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
+
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+  value = Math.abs(value)
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0
+    e = eMax
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2)
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--
+      c *= 2
+    }
+    if (e + eBias >= 1) {
+      value += rt / c
+    } else {
+      value += rt * Math.pow(2, 1 - eBias)
+    }
+    if (value * c >= 2) {
+      e++
+      c /= 2
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0
+      e = eMax
+    } else if (e + eBias >= 1) {
+      m = (value * c - 1) * Math.pow(2, mLen)
+      e = e + eBias
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128
+}
+
+},{}],28:[function(require,module,exports){
+
+/**
+ * isArray
+ */
+
+var isArray = Array.isArray;
+
+/**
+ * toString
+ */
+
+var str = Object.prototype.toString;
+
+/**
+ * Whether or not the given `val`
+ * is an array.
+ *
+ * example:
+ *
+ *        isArray([]);
+ *        // > true
+ *        isArray(arguments);
+ *        // > false
+ *        isArray('');
+ *        // > false
+ *
+ * @param {mixed} val
+ * @return {bool}
+ */
+
+module.exports = isArray || function (val) {
+  return !! val && '[object Array]' == str.call(val);
+};
+
+},{}],29:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1980,7 +3761,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],26:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2013,9 +3794,7 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
+            currentQueue[queueIndex].run();
         }
         queueIndex = -1;
         len = queue.length;
@@ -2067,13 +3846,14 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
+// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
 
-},{}],27:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -11285,7 +13065,7 @@ return jQuery;
 
 }));
 
-},{}],28:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -11340,7 +13120,7 @@ var keyMirror = function(obj) {
 
 module.exports = keyMirror;
 
-},{}],29:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -11381,12 +13161,12 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],30:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":124}],31:[function(require,module,exports){
+},{"react/lib/ReactDOM":125}],35:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -11506,7 +13286,7 @@ var AutosizeInput = React.createClass({
 });
 
 module.exports = AutosizeInput;
-},{"react":"react"}],32:[function(require,module,exports){
+},{"react":"react"}],36:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -11805,7 +13585,7 @@ Affix.defaultProps = {
 
 exports['default'] = Affix;
 module.exports = exports['default'];
-},{"./utils/addEventListener":42,"./utils/getDocumentHeight":46,"./utils/ownerDocument":50,"./utils/ownerWindow":51,"classnames":21,"dom-helpers/query/height":62,"dom-helpers/query/offset":64,"dom-helpers/query/offsetParent":65,"dom-helpers/query/scrollTop":68,"dom-helpers/util/requestAnimationFrame":79,"react":"react","react-dom":30}],33:[function(require,module,exports){
+},{"./utils/addEventListener":46,"./utils/getDocumentHeight":50,"./utils/ownerDocument":54,"./utils/ownerWindow":55,"classnames":21,"dom-helpers/query/height":66,"dom-helpers/query/offset":68,"dom-helpers/query/offsetParent":69,"dom-helpers/query/scrollTop":72,"dom-helpers/util/requestAnimationFrame":83,"react":"react","react-dom":34}],37:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12050,7 +13830,7 @@ AutoAffix.defaultProps = {
 
 exports['default'] = AutoAffix;
 module.exports = exports['default'];
-},{"./Affix":32,"./utils/addEventListener":42,"./utils/getContainer":45,"./utils/getDocumentHeight":46,"./utils/ownerDocument":50,"./utils/ownerWindow":51,"dom-helpers/query/offset":64,"dom-helpers/util/requestAnimationFrame":79,"react":"react","react-prop-types/lib/mountable":83}],34:[function(require,module,exports){
+},{"./Affix":36,"./utils/addEventListener":46,"./utils/getContainer":49,"./utils/getDocumentHeight":50,"./utils/ownerDocument":54,"./utils/ownerWindow":55,"dom-helpers/query/offset":68,"dom-helpers/util/requestAnimationFrame":83,"react":"react","react-prop-types/lib/mountable":87}],38:[function(require,module,exports){
 /*eslint-disable react/prop-types */
 'use strict';
 
@@ -12516,7 +14296,7 @@ Modal.manager = modalManager;
 
 exports['default'] = Modal;
 module.exports = exports['default'];
-},{"./ModalManager":35,"./Portal":37,"./utils/addEventListener":42,"./utils/addFocusListener":43,"./utils/getContainer":45,"./utils/ownerDocument":50,"dom-helpers/activeElement":52,"dom-helpers/query/contains":61,"dom-helpers/util/inDOM":78,"react":"react","react-prop-types/lib/elementType":82,"react-prop-types/lib/mountable":83,"warning":84}],35:[function(require,module,exports){
+},{"./ModalManager":39,"./Portal":41,"./utils/addEventListener":46,"./utils/addFocusListener":47,"./utils/getContainer":49,"./utils/ownerDocument":54,"dom-helpers/activeElement":56,"dom-helpers/query/contains":65,"dom-helpers/util/inDOM":82,"react":"react","react-prop-types/lib/elementType":86,"react-prop-types/lib/mountable":87,"warning":88}],39:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12673,7 +14453,7 @@ var ModalManager = (function () {
 
 exports['default'] = ModalManager;
 module.exports = exports['default'];
-},{"./utils/isOverflowing":47,"./utils/manageAriaHidden":48,"dom-helpers/class":55,"dom-helpers/style":70,"dom-helpers/util/scrollbarSize":80}],36:[function(require,module,exports){
+},{"./utils/isOverflowing":51,"./utils/manageAriaHidden":52,"dom-helpers/class":59,"dom-helpers/style":74,"dom-helpers/util/scrollbarSize":84}],40:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12869,7 +14649,7 @@ Overlay.propTypes = _extends({}, _Portal2['default'].propTypes, _Position2['defa
 
 exports['default'] = Overlay;
 module.exports = exports['default'];
-},{"./Portal":37,"./Position":38,"./RootCloseWrapper":39,"react":"react","react-prop-types/lib/elementType":82}],37:[function(require,module,exports){
+},{"./Portal":41,"./Position":42,"./RootCloseWrapper":43,"react":"react","react-prop-types/lib/elementType":86}],41:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12993,7 +14773,7 @@ var Portal = _react2['default'].createClass({
 
 exports['default'] = Portal;
 module.exports = exports['default'];
-},{"./utils/getContainer":45,"./utils/ownerDocument":50,"react":"react","react-dom":30,"react-prop-types/lib/mountable":83}],38:[function(require,module,exports){
+},{"./utils/getContainer":49,"./utils/ownerDocument":54,"react":"react","react-dom":34,"react-prop-types/lib/mountable":87}],42:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13192,7 +14972,7 @@ Position.defaultProps = {
 
 exports['default'] = Position;
 module.exports = exports['default'];
-},{"./utils/getContainer":45,"./utils/overlayPositionUtils":49,"./utils/ownerDocument":50,"classnames":21,"react":"react","react-dom":30,"react-prop-types/lib/mountable":83}],39:[function(require,module,exports){
+},{"./utils/getContainer":49,"./utils/overlayPositionUtils":53,"./utils/ownerDocument":54,"classnames":21,"react":"react","react-dom":34,"react-prop-types/lib/mountable":87}],43:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13352,7 +15132,7 @@ RootCloseWrapper.propTypes = {
   noWrap: _react2['default'].PropTypes.bool
 };
 module.exports = exports['default'];
-},{"./utils/addEventListener":42,"./utils/createChainedFunction":44,"./utils/ownerDocument":50,"react":"react","react-dom":30}],40:[function(require,module,exports){
+},{"./utils/addEventListener":46,"./utils/createChainedFunction":48,"./utils/ownerDocument":54,"react":"react","react-dom":34}],44:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13690,7 +15470,7 @@ Transition.defaultProps = {
 };
 
 exports['default'] = Transition;
-},{"classnames":21,"dom-helpers/events/on":58,"dom-helpers/transition/properties":72,"react":"react","react-dom":30}],41:[function(require,module,exports){
+},{"classnames":21,"dom-helpers/events/on":62,"dom-helpers/transition/properties":76,"react":"react","react-dom":34}],45:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13738,7 +15518,7 @@ var _Transition2 = require('./Transition');
 var _Transition3 = _interopRequireDefault(_Transition2);
 
 exports.Transition = _Transition3['default'];
-},{"./Affix":32,"./AutoAffix":33,"./Modal":34,"./Overlay":36,"./Portal":37,"./Position":38,"./Transition":40}],42:[function(require,module,exports){
+},{"./Affix":36,"./AutoAffix":37,"./Modal":38,"./Overlay":40,"./Portal":41,"./Position":42,"./Transition":44}],46:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13763,7 +15543,7 @@ exports['default'] = function (node, event, handler) {
 };
 
 module.exports = exports['default'];
-},{"dom-helpers/events/off":57,"dom-helpers/events/on":58}],43:[function(require,module,exports){
+},{"dom-helpers/events/off":61,"dom-helpers/events/on":62}],47:[function(require,module,exports){
 /**
  * Firefox doesn't have a focusin event so using capture is easiest way to get bubbling
  * IE8 can't do addEventListener, but does have onfocusin, so we use that in ie8
@@ -13795,7 +15575,7 @@ function addFocusListener(handler) {
 }
 
 module.exports = exports['default'];
-},{}],44:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /**
  * Safe chained function
  *
@@ -13837,7 +15617,7 @@ function createChainedFunction() {
 
 exports['default'] = createChainedFunction;
 module.exports = exports['default'];
-},{}],45:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13855,7 +15635,7 @@ function getContainer(container, defaultContainer) {
 }
 
 module.exports = exports['default'];
-},{"react-dom":30}],46:[function(require,module,exports){
+},{"react-dom":34}],50:[function(require,module,exports){
 /**
  * Get the height of the document
  *
@@ -13870,7 +15650,7 @@ exports["default"] = function (doc) {
 };
 
 module.exports = exports["default"];
-},{}],47:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13911,7 +15691,7 @@ function isOverflowing(container) {
 }
 
 module.exports = exports['default'];
-},{"dom-helpers/ownerDocument":59,"dom-helpers/query/isWindow":63}],48:[function(require,module,exports){
+},{"dom-helpers/ownerDocument":63,"dom-helpers/query/isWindow":67}],52:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -13959,7 +15739,7 @@ function showSiblings(container, mountNode) {
     return ariaHidden(false, node);
   });
 }
-},{}],49:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -14094,7 +15874,7 @@ function getLeftDelta(left, overlayWidth, container, padding) {
 }
 exports['default'] = utils;
 module.exports = exports['default'];
-},{"./ownerDocument":50,"dom-helpers/query/offset":64,"dom-helpers/query/position":66,"dom-helpers/query/scrollTop":68}],50:[function(require,module,exports){
+},{"./ownerDocument":54,"dom-helpers/query/offset":68,"dom-helpers/query/position":70,"dom-helpers/query/scrollTop":72}],54:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -14114,7 +15894,7 @@ exports['default'] = function (componentOrElement) {
 };
 
 module.exports = exports['default'];
-},{"dom-helpers/ownerDocument":59,"react-dom":30}],51:[function(require,module,exports){
+},{"dom-helpers/ownerDocument":63,"react-dom":34}],55:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -14134,7 +15914,7 @@ exports['default'] = function (componentOrElement) {
 };
 
 module.exports = exports['default'];
-},{"dom-helpers/ownerWindow":60,"react-dom":30}],52:[function(require,module,exports){
+},{"dom-helpers/ownerWindow":64,"react-dom":34}],56:[function(require,module,exports){
 'use strict';
 
 var babelHelpers = require('./util/babelHelpers.js');
@@ -14159,19 +15939,19 @@ function activeElement() {
 }
 
 module.exports = exports['default'];
-},{"./ownerDocument":59,"./util/babelHelpers.js":73}],53:[function(require,module,exports){
+},{"./ownerDocument":63,"./util/babelHelpers.js":77}],57:[function(require,module,exports){
 'use strict';
 var hasClass = require('./hasClass');
 
 module.exports = function addClass(element, className) {
   if (element.classList) element.classList.add(className);else if (!hasClass(element)) element.className = element.className + ' ' + className;
 };
-},{"./hasClass":54}],54:[function(require,module,exports){
+},{"./hasClass":58}],58:[function(require,module,exports){
 'use strict';
 module.exports = function hasClass(element, className) {
   if (element.classList) return !!className && element.classList.contains(className);else return (' ' + element.className + ' ').indexOf(' ' + className + ' ') !== -1;
 };
-},{}],55:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -14179,13 +15959,13 @@ module.exports = {
   removeClass: require('./removeClass'),
   hasClass: require('./hasClass')
 };
-},{"./addClass":53,"./hasClass":54,"./removeClass":56}],56:[function(require,module,exports){
+},{"./addClass":57,"./hasClass":58,"./removeClass":60}],60:[function(require,module,exports){
 'use strict';
 
 module.exports = function removeClass(element, className) {
   if (element.classList) element.classList.remove(className);else element.className = element.className.replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), '$1').replace(/\s+/g, ' ').replace(/^\s*|\s*$/g, '');
 };
-},{}],57:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 var canUseDOM = require('../util/inDOM');
 var off = function off() {};
@@ -14203,7 +15983,7 @@ if (canUseDOM) {
 }
 
 module.exports = off;
-},{"../util/inDOM":78}],58:[function(require,module,exports){
+},{"../util/inDOM":82}],62:[function(require,module,exports){
 'use strict';
 var canUseDOM = require('../util/inDOM');
 var on = function on() {};
@@ -14220,7 +16000,7 @@ if (canUseDOM) {
 }
 
 module.exports = on;
-},{"../util/inDOM":78}],59:[function(require,module,exports){
+},{"../util/inDOM":82}],63:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -14231,7 +16011,7 @@ function ownerDocument(node) {
 }
 
 module.exports = exports["default"];
-},{}],60:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 var babelHelpers = require('./util/babelHelpers.js');
@@ -14249,7 +16029,7 @@ function ownerWindow(node) {
 }
 
 module.exports = exports['default'];
-},{"./ownerDocument":59,"./util/babelHelpers.js":73}],61:[function(require,module,exports){
+},{"./ownerDocument":63,"./util/babelHelpers.js":77}],65:[function(require,module,exports){
 'use strict';
 var canUseDOM = require('../util/inDOM');
 
@@ -14270,7 +16050,7 @@ var contains = (function () {
 })();
 
 module.exports = contains;
-},{"../util/inDOM":78}],62:[function(require,module,exports){
+},{"../util/inDOM":82}],66:[function(require,module,exports){
 'use strict';
 
 var offset = require('./offset'),
@@ -14280,13 +16060,13 @@ module.exports = function height(node, client) {
   var win = getWindow(node);
   return win ? win.innerHeight : client ? node.clientHeight : offset(node).height;
 };
-},{"./isWindow":63,"./offset":64}],63:[function(require,module,exports){
+},{"./isWindow":67,"./offset":68}],67:[function(require,module,exports){
 'use strict';
 
 module.exports = function getWindow(node) {
   return node === node.window ? node : node.nodeType === 9 ? node.defaultView || node.parentWindow : false;
 };
-},{}],64:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 var contains = require('./contains'),
     getWindow = require('./isWindow'),
@@ -14317,7 +16097,7 @@ module.exports = function offset(node) {
 
   return box;
 };
-},{"../ownerDocument":59,"./contains":61,"./isWindow":63}],65:[function(require,module,exports){
+},{"../ownerDocument":63,"./contains":65,"./isWindow":67}],69:[function(require,module,exports){
 'use strict';
 
 var babelHelpers = require('../util/babelHelpers.js');
@@ -14349,7 +16129,7 @@ function offsetParent(node) {
 }
 
 module.exports = exports['default'];
-},{"../ownerDocument":59,"../style":70,"../util/babelHelpers.js":73}],66:[function(require,module,exports){
+},{"../ownerDocument":63,"../style":74,"../util/babelHelpers.js":77}],70:[function(require,module,exports){
 'use strict';
 
 var babelHelpers = require('../util/babelHelpers.js');
@@ -14407,7 +16187,7 @@ function position(node, offsetParent) {
 }
 
 module.exports = exports['default'];
-},{"../style":70,"../util/babelHelpers.js":73,"./offset":64,"./offsetParent":65,"./scrollLeft":67,"./scrollTop":68}],67:[function(require,module,exports){
+},{"../style":74,"../util/babelHelpers.js":77,"./offset":68,"./offsetParent":69,"./scrollLeft":71,"./scrollTop":72}],71:[function(require,module,exports){
 'use strict';
 var getWindow = require('./isWindow');
 
@@ -14418,7 +16198,7 @@ module.exports = function scrollTop(node, val) {
 
   if (win) win.scrollTo(val, 'pageYOffset' in win ? win.pageYOffset : win.document.documentElement.scrollTop);else node.scrollLeft = val;
 };
-},{"./isWindow":63}],68:[function(require,module,exports){
+},{"./isWindow":67}],72:[function(require,module,exports){
 'use strict';
 var getWindow = require('./isWindow');
 
@@ -14429,7 +16209,7 @@ module.exports = function scrollTop(node, val) {
 
   if (win) win.scrollTo('pageXOffset' in win ? win.pageXOffset : win.document.documentElement.scrollLeft, val);else node.scrollTop = val;
 };
-},{"./isWindow":63}],69:[function(require,module,exports){
+},{"./isWindow":67}],73:[function(require,module,exports){
 'use strict';
 
 var babelHelpers = require('../util/babelHelpers.js');
@@ -14478,7 +16258,7 @@ module.exports = function _getComputedStyle(node) {
     }
   };
 };
-},{"../util/babelHelpers.js":73,"../util/camelizeStyle":75}],70:[function(require,module,exports){
+},{"../util/babelHelpers.js":77,"../util/camelizeStyle":79}],74:[function(require,module,exports){
 'use strict';
 
 var camelize = require('../util/camelizeStyle'),
@@ -14503,13 +16283,13 @@ module.exports = function style(node, property, value) {
 
   node.style.cssText += ';' + css;
 };
-},{"../util/camelizeStyle":75,"../util/hyphenateStyle":77,"./getComputedStyle":69,"./removeStyle":71}],71:[function(require,module,exports){
+},{"../util/camelizeStyle":79,"../util/hyphenateStyle":81,"./getComputedStyle":73,"./removeStyle":75}],75:[function(require,module,exports){
 'use strict';
 
 module.exports = function removeStyle(node, key) {
   return 'removeProperty' in node.style ? node.style.removeProperty(key) : node.style.removeAttribute(key);
 };
-},{}],72:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 'use strict';
 var canUseDOM = require('../util/inDOM');
 
@@ -14565,7 +16345,7 @@ function getTransitionProperties() {
 
   return { end: endEvent, prefix: prefix };
 }
-},{"../util/inDOM":78}],73:[function(require,module,exports){
+},{"../util/inDOM":82}],77:[function(require,module,exports){
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports"], factory);
@@ -14597,7 +16377,7 @@ function getTransitionProperties() {
     return target;
   };
 })
-},{}],74:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 "use strict";
 
 var rHyphen = /-(.)/g;
@@ -14607,7 +16387,7 @@ module.exports = function camelize(string) {
     return chr.toUpperCase();
   });
 };
-},{}],75:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -14621,7 +16401,7 @@ var msPattern = /^-ms-/;
 module.exports = function camelizeStyleName(string) {
   return camelize(string.replace(msPattern, 'ms-'));
 };
-},{"./camelize":74}],76:[function(require,module,exports){
+},{"./camelize":78}],80:[function(require,module,exports){
 'use strict';
 
 var rUpper = /([A-Z])/g;
@@ -14629,7 +16409,7 @@ var rUpper = /([A-Z])/g;
 module.exports = function hyphenate(string) {
   return string.replace(rUpper, '-$1').toLowerCase();
 };
-},{}],77:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -14644,10 +16424,10 @@ var msPattern = /^ms-/;
 module.exports = function hyphenateStyleName(string) {
   return hyphenate(string).replace(msPattern, "-ms-");
 };
-},{"./hyphenate":76}],78:[function(require,module,exports){
+},{"./hyphenate":80}],82:[function(require,module,exports){
 'use strict';
 module.exports = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-},{}],79:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 'use strict';
 
 var canUseDOM = require('./inDOM');
@@ -14694,7 +16474,7 @@ compatRaf.cancel = function (id) {
 };
 
 module.exports = compatRaf;
-},{"./inDOM":78}],80:[function(require,module,exports){
+},{"./inDOM":82}],84:[function(require,module,exports){
 'use strict';
 
 var canUseDOM = require('./inDOM');
@@ -14720,7 +16500,7 @@ module.exports = function (recalc) {
 
   return size;
 };
-},{"./inDOM":78}],81:[function(require,module,exports){
+},{"./inDOM":82}],85:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -14755,7 +16535,7 @@ function createChainableTypeChecker(validate) {
 
   return chainedCheckType;
 }
-},{}],82:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -14797,7 +16577,7 @@ function validate(props, propName, componentName) {
 
 exports['default'] = _common.createChainableTypeChecker(validate);
 module.exports = exports['default'];
-},{"./common":81,"react":"react"}],83:[function(require,module,exports){
+},{"./common":85,"react":"react"}],87:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -14825,7 +16605,7 @@ function validate(props, propName, componentName) {
 
 exports['default'] = _common.createChainableTypeChecker(validate);
 module.exports = exports['default'];
-},{"./common":81}],84:[function(require,module,exports){
+},{"./common":85}],88:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -14889,7 +16669,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":26}],85:[function(require,module,exports){
+},{"_process":30}],89:[function(require,module,exports){
 var React = require('react');
 var Spinner = require('spin.js');
 
@@ -14922,7 +16702,7 @@ var ReactSpinner = React.createClass({
 });
 
 module.exports = ReactSpinner;
-},{"react":"react","spin.js":86}],86:[function(require,module,exports){
+},{"react":"react","spin.js":90}],90:[function(require,module,exports){
 /**
  * Copyright (c) 2011-2014 Felix Gnass
  * Licensed under the MIT license
@@ -15301,494 +17081,7 @@ module.exports = ReactSpinner;
 
 }));
 
-},{}],87:[function(require,module,exports){
-'use strict';
-
-exports.__esModule = true;
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = require('react-dom');
-
-var _classnames = require('classnames');
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _style = require('./style');
-
-var _style2 = _interopRequireDefault(_style);
-
-var ReactTooltip = (function (_Component) {
-  _inherits(ReactTooltip, _Component);
-
-  ReactTooltip.prototype._bind = function _bind() {
-    var _this = this;
-
-    for (var _len = arguments.length, handlers = Array(_len), _key = 0; _key < _len; _key++) {
-      handlers[_key] = arguments[_key];
-    }
-
-    handlers.forEach(function (handler) {
-      return _this[handler] = _this[handler].bind(_this);
-    });
-  };
-
-  ReactTooltip.hide = function hide() {
-    window.dispatchEvent(new window.Event('__react_tooltip_hide_event'));
-  };
-
-  ReactTooltip.rebuild = function rebuild() {
-    window.dispatchEvent(new window.Event('__react_tooltip_rebuild_event'));
-  };
-
-  _createClass(ReactTooltip, null, [{
-    key: 'displayName',
-    value: 'ReactTooltip',
-    enumerable: true
-  }, {
-    key: 'eventHideMark',
-    value: 'hide' + Date.now(),
-    enumerable: true
-  }, {
-    key: 'eventRebuildMark',
-    value: 'rebuild' + Date.now(),
-    enumerable: true
-  }]);
-
-  function ReactTooltip(props) {
-    _classCallCheck(this, ReactTooltip);
-
-    _Component.call(this, props);
-    this._bind('showTooltip', 'updateTooltip', 'hideTooltip');
-    this.mount = true;
-    this.state = {
-      show: false,
-      multilineCount: 0,
-      placeholder: '',
-      x: 'NONE',
-      y: 'NONE',
-      place: '',
-      type: '',
-      effect: '',
-      multiline: false,
-      offset: {},
-      extraClass: '',
-      html: false,
-      delayHide: 0
-    };
-  }
-
-  ReactTooltip.prototype.componentDidMount = function componentDidMount() {
-    this.bindListener();
-    this.setStyleHeader();
-    /* Add window event listener for hide and rebuild */
-    window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
-    window.addEventListener('__react_tooltip_hide_event', this.globalHide.bind(this), false);
-
-    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-    window.addEventListener('__react_tooltip_rebuild_event', this.globalRebuild.bind(this), false);
-  };
-
-  /**
-   *  Method for window.addEventListener
-   **/
-
-  ReactTooltip.prototype.globalHide = function globalHide() {
-    if (this.mount) {
-      this.hideTooltip();
-    }
-  };
-
-  ReactTooltip.prototype.globalRebuild = function globalRebuild() {
-    if (this.mount) {
-      this.unbindListener();
-      this.bindListener();
-    }
-  };
-
-  ReactTooltip.prototype.componentWillUnmount = function componentWillUnmount() {
-    this.unbindListener();
-    this.mount = false;
-    window.removeEventListener('__react_tooltip_hide_event', this.globalHide);
-    window.removeEventListener('__react_tooltip_rebuild_event', this.globalRebuild);
-  };
-
-  ReactTooltip.prototype.componentWillUpdate = function componentWillUpdate() {
-    this.unbindListener();
-  };
-
-  ReactTooltip.prototype.componentDidUpdate = function componentDidUpdate() {
-    this.updatePosition();
-    this.bindListener();
-  };
-
-  ReactTooltip.prototype.bindListener = function bindListener() {
-    var id = this.props.id;
-
-    var targetArray = undefined;
-
-    if (id === undefined) {
-      targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
-    } else {
-      targetArray = document.querySelectorAll('[data-tip][data-for="' + id + '"]');
-    }
-
-    for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-      targetArray[i].addEventListener('mouseenter', this.showTooltip, false);
-
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-      targetArray[i].addEventListener('mousemove', this.updateTooltip, false);
-
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
-      targetArray[i].addEventListener('mouseleave', this.hideTooltip, false);
-    }
-  };
-
-  ReactTooltip.prototype.unbindListener = function unbindListener() {
-    var targetArray = document.querySelectorAll('[data-tip]');
-    for (var i = 0; i < targetArray.length; i++) {
-      targetArray[i].removeEventListener('mouseenter', this.showTooltip);
-      targetArray[i].removeEventListener('mousemove', this.updateTooltip);
-      targetArray[i].removeEventListener('mouseleave', this.hideTooltip);
-    }
-  };
-
-  /**
-   * When mouse enter, show update
-   */
-
-  ReactTooltip.prototype.showTooltip = function showTooltip(e) {
-    e.stopPropagation();
-    var originTooltip = e.target.getAttribute('data-tip');
-    /* Detect multiline */
-    var regexp = /<br\s*\/?>/;
-    var multiline = e.target.getAttribute('data-multiline') ? e.target.getAttribute('data-multiline') : this.props.multiline ? this.props.multiline : false;
-    var tooltipText = undefined;
-    var multilineCount = 0;
-    if (!multiline || multiline === 'false' || !regexp.test(originTooltip)) {
-      tooltipText = originTooltip;
-    } else {
-      tooltipText = originTooltip.split(regexp).map(function (d, i) {
-        multilineCount += 1;
-        return _react2['default'].createElement(
-          'span',
-          { key: i, className: 'multi-line' },
-          d
-        );
-      });
-    }
-    /* Define extra class */
-    var extraClass = e.target.getAttribute('data-class') ? e.target.getAttribute('data-class') : '';
-    extraClass = this.props['class'] ? this.props['class'] + ' ' + extraClass : extraClass;
-    this.setState({
-      placeholder: tooltipText,
-      multilineCount: multilineCount,
-      place: e.target.getAttribute('data-place') ? e.target.getAttribute('data-place') : this.props.place ? this.props.place : 'top',
-      type: e.target.getAttribute('data-type') ? e.target.getAttribute('data-type') : this.props.type ? this.props.type : 'dark',
-      effect: e.target.getAttribute('data-effect') ? e.target.getAttribute('data-effect') : this.props.effect ? this.props.effect : 'float',
-      offset: e.target.getAttribute('data-offset') ? e.target.getAttribute('data-offset') : this.props.offset ? this.props.offset : {},
-      extraClass: extraClass,
-      multiline: multiline,
-      html: e.target.getAttribute('data-html') ? e.target.getAttribute('data-html') : this.props.html ? this.props.html : false,
-      delayHide: e.target.getAttribute('data-delay-hide') ? e.target.getAttribute('data-delay-hide') : this.props.delayHide ? this.props.delayHide : 0
-    });
-    this.updateTooltip(e);
-  };
-
-  /**
-   * When mouse hover, updatetooltip
-   */
-
-  ReactTooltip.prototype.updateTooltip = function updateTooltip(e) {
-    e.stopPropagation();
-    if (this.trim(this.state.placeholder).length > 0) {
-      var place = this.state.place;
-
-      var node = _reactDom.findDOMNode(this);
-      if (this.state.effect === 'float') {
-        // const offsetY = e.clientY
-        this.setState({
-          show: true,
-          x: e.clientX,
-          y: e.clientY
-        });
-      } else if (this.state.effect === 'solid') {
-        var boundingClientRect = e.target.getBoundingClientRect();
-        var targetTop = boundingClientRect.top;
-        var targetLeft = boundingClientRect.left;
-        var tipWidth = node.clientWidth;
-        var tipHeight = node.clientHeight;
-        var targetWidth = e.target.clientWidth;
-        var targetHeight = e.target.clientHeight;
-        var x = undefined;
-        var y = undefined;
-        if (place === 'top') {
-          x = targetLeft - tipWidth / 2 + targetWidth / 2;
-          y = targetTop - tipHeight - 8;
-        } else if (place === 'bottom') {
-          x = targetLeft - tipWidth / 2 + targetWidth / 2;
-          y = targetTop + targetHeight + 8;
-        } else if (place === 'left') {
-          x = targetLeft - tipWidth - 6;
-          y = targetTop + targetHeight / 2 - tipHeight / 2;
-        } else if (place === 'right') {
-          x = targetLeft + targetWidth + 6;
-          y = targetTop + targetHeight / 2 - tipHeight / 2;
-        }
-        this.setState({
-          show: true,
-          x: x,
-          y: y
-        });
-      }
-    }
-  };
-
-  /**
-   * When mouse leave, hide tooltip
-   */
-
-  ReactTooltip.prototype.hideTooltip = function hideTooltip() {
-    var _this2 = this;
-
-    var delayHide = this.state.delayHide;
-
-    setTimeout(function () {
-      _this2.setState({
-        show: false
-      });
-    }, parseInt(delayHide, 10));
-  };
-
-  /**
-   * Execute in componentDidUpdate, used in the render function, move out for server rending
-   */
-
-  ReactTooltip.prototype.updatePosition = function updatePosition() {
-    var node = _reactDom.findDOMNode(this);
-
-    var tipWidth = node.clientWidth;
-    var tipHeight = node.clientHeight;
-    var _state = this.state;
-    var effect = _state.effect;
-    var place = _state.place;
-    var offset = _state.offset;
-
-    var offsetFromEffect = {};
-
-    if (effect === 'float') {
-      offsetFromEffect.top = {
-        x: -(tipWidth / 2),
-        y: -tipHeight
-      };
-      offsetFromEffect.bottom = {
-        x: -(tipWidth / 2),
-        y: 15
-      };
-      offsetFromEffect.left = {
-        x: -(tipWidth + 15),
-        y: -(tipHeight / 2)
-      };
-      offsetFromEffect.right = {
-        x: 10,
-        y: -(tipHeight / 2)
-      };
-    }
-    var xPosition = 0;
-    var yPosition = 0;
-
-    if (Object.prototype.toString.apply(offset) === '[object String]') {
-      offset = JSON.parse(offset.toString().replace(/\'/g, '\"'));
-    }
-    for (var key in offset) {
-      if (key === 'top') {
-        yPosition -= parseInt(offset[key], 10);
-      } else if (key === 'bottom') {
-        yPosition += parseInt(offset[key], 10);
-      } else if (key === 'left') {
-        xPosition -= parseInt(offset[key], 10);
-      } else if (key === 'right') {
-        xPosition += parseInt(offset[key], 10);
-      }
-    }
-    /* When tooltip over the screen */
-    var offsetEffectX = effect === 'solid' ? 0 : place ? offsetFromEffect[place].x : 0;
-    var offsetEffectY = effect === 'solid' ? 0 : place ? offsetFromEffect[place].y : 0;
-    var styleLeft = this.state.x + offsetEffectX + xPosition;
-    var styleTop = this.state.y + offsetEffectY + yPosition;
-    var windoWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-
-    /* Solid use this method will get Uncaught RangeError: Maximum call stack size exceeded */
-    if (effect === 'float') {
-      if (styleLeft < 0 && this.state.x + offsetFromEffect['right'].x + xPosition <= windoWidth) {
-        this.setState({
-          place: 'right'
-        });
-        return;
-      } else if (styleLeft + tipWidth > windoWidth && this.state.x + offsetFromEffect['left'].x + xPosition >= 0) {
-        this.setState({
-          place: 'left'
-        });
-        return;
-      } else if (styleTop < 0 && this.state.y + offsetFromEffect['bottom'].y + yPosition + tipHeight < windowHeight) {
-        this.setState({
-          place: 'bottom'
-        });
-        return;
-      } else if (styleTop + tipHeight >= windowHeight && this.state.y + offsetFromEffect['top'].y + yPosition >= 0) {
-        this.setState({
-          place: 'top'
-        });
-        return;
-      }
-    }
-
-    node.style.left = styleLeft + 'px';
-    node.style.top = styleTop + 'px';
-  };
-
-  /**
-   * Set style tag in header
-   * Insert style by this way
-   */
-
-  ReactTooltip.prototype.setStyleHeader = function setStyleHeader() {
-    if (!document.getElementsByTagName('head')[0].querySelector('style[id="react-tooltip"]')) {
-      var tag = document.createElement('style');
-      tag.id = 'react-tooltip';
-      tag.innerHTML = _style2['default'];
-      document.getElementsByTagName('head')[0].appendChild(tag);
-    }
-  };
-
-  ReactTooltip.prototype.render = function render() {
-    var _state2 = this.state;
-    var placeholder = _state2.placeholder;
-    var extraClass = _state2.extraClass;
-    var html = _state2.html;
-
-    var tooltipClass = _classnames2['default']('__react_component_tooltip', { 'show': this.state.show }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
-
-    if (html) {
-      return _react2['default'].createElement('span', { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip', dangerouslySetInnerHTML: { __html: placeholder } });
-    } else {
-      var content = this.props.children ? this.props.children : placeholder;
-      return _react2['default'].createElement(
-        'span',
-        { className: tooltipClass + ' ' + extraClass, 'data-id': 'tooltip' },
-        content
-      );
-    }
-  };
-
-  ReactTooltip.prototype.trim = function trim(string) {
-    if (Object.prototype.toString.call(string) !== '[object String]') {
-      return string;
-    }
-    var newString = string.split('');
-    var firstCount = 0;
-    var lastCount = 0;
-    for (var i = 0; i < string.length; i++) {
-      if (string[i] !== ' ') {
-        break;
-      }
-      firstCount++;
-    }
-    for (var i = string.length - 1; i >= 0; i--) {
-      if (string[i] !== ' ') {
-        break;
-      }
-      lastCount++;
-    }
-    newString.splice(0, firstCount);
-    newString.splice(-lastCount, lastCount);
-    return newString.join('');
-  };
-
-  return ReactTooltip;
-})(_react.Component);
-
-exports['default'] = ReactTooltip;
-
-ReactTooltip.propTypes = {
-  children: _react.PropTypes.any,
-  place: _react.PropTypes.string,
-  type: _react.PropTypes.string,
-  effect: _react.PropTypes.string,
-  offset: _react.PropTypes.object,
-  multiline: _react.PropTypes.bool,
-  'class': _react.PropTypes.string,
-  id: _react.PropTypes.string,
-  html: _react.PropTypes.bool,
-  delayHide: _react.PropTypes.number
-};
-module.exports = exports['default'];
-
-},{"./style":88,"classnames":89,"react":"react","react-dom":30}],88:[function(require,module,exports){
-'use strict';
-
-exports.__esModule = true;
-exports['default'] = '.__react_component_tooltip{border-radius:3px;display:inline-block;font-size:13px;left:-999em;opacity:0;padding:8px 21px;position:fixed;pointer-events:none;transition:opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;top:-999em;visibility:hidden;z-index:999}.__react_component_tooltip:after{content:"";width:0;height:0;position:absolute}.__react_component_tooltip.show{opacity:0.9;margin-top:0px;margin-left:0px;visibility:visible}.__react_component_tooltip.type-dark{color:#fff;background-color:#222}.__react_component_tooltip.type-dark.place-top:after{border-top:8px solid #222}.__react_component_tooltip.type-dark.place-bottom:after{border-bottom:8px solid #222}.__react_component_tooltip.type-dark.place-left:after{border-left:6px solid #222}.__react_component_tooltip.type-dark.place-right:after{border-right:6px solid #222}.__react_component_tooltip.type-success{color:#fff;background-color:#8DC572}.__react_component_tooltip.type-success.place-top:after{border-top:8px solid #8DC572}.__react_component_tooltip.type-success.place-bottom:after{border-bottom:8px solid #8DC572}.__react_component_tooltip.type-success.place-left:after{border-left:6px solid #8DC572}.__react_component_tooltip.type-success.place-right:after{border-right:6px solid #8DC572}.__react_component_tooltip.type-warning{color:#fff;background-color:#F0AD4E}.__react_component_tooltip.type-warning.place-top:after{border-top:8px solid #F0AD4E}.__react_component_tooltip.type-warning.place-bottom:after{border-bottom:8px solid #F0AD4E}.__react_component_tooltip.type-warning.place-left:after{border-left:6px solid #F0AD4E}.__react_component_tooltip.type-warning.place-right:after{border-right:6px solid #F0AD4E}.__react_component_tooltip.type-error{color:#fff;background-color:#BE6464}.__react_component_tooltip.type-error.place-top:after{border-top:8px solid #BE6464}.__react_component_tooltip.type-error.place-bottom:after{border-bottom:8px solid #BE6464}.__react_component_tooltip.type-error.place-left:after{border-left:6px solid #BE6464}.__react_component_tooltip.type-error.place-right:after{border-right:6px solid #BE6464}.__react_component_tooltip.type-info{color:#fff;background-color:#337AB7}.__react_component_tooltip.type-info.place-top:after{border-top:8px solid #337AB7}.__react_component_tooltip.type-info.place-bottom:after{border-bottom:8px solid #337AB7}.__react_component_tooltip.type-info.place-left:after{border-left:6px solid #337AB7}.__react_component_tooltip.type-info.place-right:after{border-right:6px solid #337AB7}.__react_component_tooltip.type-light{color:#222;background-color:#fff}.__react_component_tooltip.type-light.place-top:after{border-top:8px solid #fff}.__react_component_tooltip.type-light.place-bottom:after{border-bottom:8px solid #fff}.__react_component_tooltip.type-light.place-left:after{border-left:6px solid #fff}.__react_component_tooltip.type-light.place-right:after{border-right:6px solid #fff}.__react_component_tooltip.place-top{margin-top:-10px}.__react_component_tooltip.place-top:after{border-left:10px solid transparent;border-right:10px solid transparent;bottom:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-bottom{margin-top:10px}.__react_component_tooltip.place-bottom:after{border-left:10px solid transparent;border-right:10px solid transparent;top:-8px;left:50%;margin-left:-10px}.__react_component_tooltip.place-left{margin-left:-10px}.__react_component_tooltip.place-left:after{border-top:6px solid transparent;border-bottom:6px solid transparent;right:-6px;top:50%;margin-top:-5px}.__react_component_tooltip.place-right{margin-left:10px}.__react_component_tooltip.place-right:after{border-top:6px solid transparent;border-bottom:6px solid transparent;left:-6px;top:50%;margin-top:-5px}.__react_component_tooltip .multi-line{display:block;padding:2px 0px;text-align:center}';
-module.exports = exports['default'];
-
-},{}],89:[function(require,module,exports){
-/*!
-  Copyright (c) 2015 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-
-function classNames() {
-	var classes = '';
-	var arg;
-
-	for (var i = 0; i < arguments.length; i++) {
-		arg = arguments[i];
-		if (!arg) {
-			continue;
-		}
-
-		if ('string' === typeof arg || 'number' === typeof arg) {
-			classes += ' ' + arg;
-		} else if (Object.prototype.toString.call(arg) === '[object Array]') {
-			classes += ' ' + classNames.apply(null, arg);
-		} else if ('object' === typeof arg) {
-			for (var key in arg) {
-				if (!arg.hasOwnProperty(key) || !arg[key]) {
-					continue;
-				}
-				classes += ' ' + key;
-			}
-		}
-	}
-	return classes.substr(1);
-}
-
-// safely export classNames for node / browserify
-if (typeof module !== 'undefined' && module.exports) {
-	module.exports = classNames;
-}
-
-// safely export classNames for RequireJS
-if (typeof define !== 'undefined' && define.amd) {
-	define('classnames', [], function() {
-		return classNames;
-	});
-}
-
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15825,7 +17118,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactMount":154,"./findDOMNode":197,"fbjs/lib/focusNode":227}],91:[function(require,module,exports){
+},{"./ReactMount":155,"./findDOMNode":198,"fbjs/lib/focusNode":228}],92:[function(require,module,exports){
 /**
  * Copyright 2013-2015 Facebook, Inc.
  * All rights reserved.
@@ -16231,7 +17524,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventConstants":103,"./EventPropagators":107,"./FallbackCompositionState":108,"./SyntheticCompositionEvent":179,"./SyntheticInputEvent":183,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/keyOf":237}],92:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPropagators":108,"./FallbackCompositionState":109,"./SyntheticCompositionEvent":180,"./SyntheticInputEvent":184,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/keyOf":238}],93:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16371,7 +17664,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16549,7 +17842,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":92,"./ReactPerf":160,"./dangerousStyleValue":194,"_process":26,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/camelizeStyleName":221,"fbjs/lib/hyphenateStyleName":232,"fbjs/lib/memoizeStringOnly":239,"fbjs/lib/warning":244}],94:[function(require,module,exports){
+},{"./CSSProperty":93,"./ReactPerf":161,"./dangerousStyleValue":195,"_process":30,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/camelizeStyleName":222,"fbjs/lib/hyphenateStyleName":233,"fbjs/lib/memoizeStringOnly":240,"fbjs/lib/warning":245}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16645,7 +17938,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./PooledClass":112,"_process":26,"fbjs/lib/invariant":233}],95:[function(require,module,exports){
+},{"./Object.assign":112,"./PooledClass":113,"_process":30,"fbjs/lib/invariant":234}],96:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16967,7 +18260,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventConstants":103,"./EventPluginHub":104,"./EventPropagators":107,"./ReactUpdates":172,"./SyntheticEvent":181,"./getEventTarget":203,"./isEventSupported":208,"./isTextInputElement":209,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/keyOf":237}],96:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPluginHub":105,"./EventPropagators":108,"./ReactUpdates":173,"./SyntheticEvent":182,"./getEventTarget":204,"./isEventSupported":209,"./isTextInputElement":210,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/keyOf":238}],97:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16991,7 +18284,7 @@ var ClientReactRootIndex = {
 };
 
 module.exports = ClientReactRootIndex;
-},{}],97:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17123,7 +18416,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":100,"./ReactMultiChildUpdateTypes":156,"./ReactPerf":160,"./setInnerHTML":213,"./setTextContent":214,"_process":26,"fbjs/lib/invariant":233}],98:[function(require,module,exports){
+},{"./Danger":101,"./ReactMultiChildUpdateTypes":157,"./ReactPerf":161,"./setInnerHTML":214,"./setTextContent":215,"_process":30,"fbjs/lib/invariant":234}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17360,7 +18653,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],99:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],100:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17588,7 +18881,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":98,"./ReactPerf":160,"./quoteAttributeValueForBrowser":211,"_process":26,"fbjs/lib/warning":244}],100:[function(require,module,exports){
+},{"./DOMProperty":99,"./ReactPerf":161,"./quoteAttributeValueForBrowser":212,"_process":30,"fbjs/lib/warning":245}],101:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17736,7 +19029,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/createNodesFromMarkup":224,"fbjs/lib/emptyFunction":225,"fbjs/lib/getMarkupWrap":229,"fbjs/lib/invariant":233}],101:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/createNodesFromMarkup":225,"fbjs/lib/emptyFunction":226,"fbjs/lib/getMarkupWrap":230,"fbjs/lib/invariant":234}],102:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17764,7 +19057,7 @@ var keyOf = require('fbjs/lib/keyOf');
 var DefaultEventPluginOrder = [keyOf({ ResponderEventPlugin: null }), keyOf({ SimpleEventPlugin: null }), keyOf({ TapEventPlugin: null }), keyOf({ EnterLeaveEventPlugin: null }), keyOf({ ChangeEventPlugin: null }), keyOf({ SelectEventPlugin: null }), keyOf({ BeforeInputEventPlugin: null })];
 
 module.exports = DefaultEventPluginOrder;
-},{"fbjs/lib/keyOf":237}],102:[function(require,module,exports){
+},{"fbjs/lib/keyOf":238}],103:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17889,7 +19182,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventConstants":103,"./EventPropagators":107,"./ReactMount":154,"./SyntheticMouseEvent":185,"fbjs/lib/keyOf":237}],103:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPropagators":108,"./ReactMount":155,"./SyntheticMouseEvent":186,"fbjs/lib/keyOf":238}],104:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17982,7 +19275,7 @@ var EventConstants = {
 };
 
 module.exports = EventConstants;
-},{"fbjs/lib/keyMirror":236}],104:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":237}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18264,7 +19557,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":105,"./EventPluginUtils":106,"./ReactErrorUtils":145,"./accumulateInto":191,"./forEachAccumulated":199,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],105:[function(require,module,exports){
+},{"./EventPluginRegistry":106,"./EventPluginUtils":107,"./ReactErrorUtils":146,"./accumulateInto":192,"./forEachAccumulated":200,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],106:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18487,7 +19780,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],106:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],107:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18692,7 +19985,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":103,"./ReactErrorUtils":145,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],107:[function(require,module,exports){
+},{"./EventConstants":104,"./ReactErrorUtils":146,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],108:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18830,7 +20123,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":103,"./EventPluginHub":104,"./accumulateInto":191,"./forEachAccumulated":199,"_process":26,"fbjs/lib/warning":244}],108:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPluginHub":105,"./accumulateInto":192,"./forEachAccumulated":200,"_process":30,"fbjs/lib/warning":245}],109:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -18926,7 +20219,7 @@ assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./Object.assign":111,"./PooledClass":112,"./getTextContentAccessor":206}],109:[function(require,module,exports){
+},{"./Object.assign":112,"./PooledClass":113,"./getTextContentAccessor":207}],110:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19159,7 +20452,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":98,"fbjs/lib/ExecutionEnvironment":219}],110:[function(require,module,exports){
+},{"./DOMProperty":99,"fbjs/lib/ExecutionEnvironment":220}],111:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19296,7 +20589,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":162,"./ReactPropTypes":163,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],111:[function(require,module,exports){
+},{"./ReactPropTypeLocations":163,"./ReactPropTypes":164,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],112:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -19344,7 +20637,7 @@ function assign(target, sources) {
 }
 
 module.exports = assign;
-},{}],112:[function(require,module,exports){
+},{}],113:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19466,7 +20759,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],113:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],114:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19507,7 +20800,7 @@ React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
 React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
-},{"./Object.assign":111,"./ReactDOM":124,"./ReactDOMServer":134,"./ReactIsomorphic":152,"./deprecated":195}],114:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactDOM":125,"./ReactDOMServer":135,"./ReactIsomorphic":153,"./deprecated":196}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19546,7 +20839,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":151,"./findDOMNode":197,"_process":26,"fbjs/lib/warning":244}],115:[function(require,module,exports){
+},{"./ReactInstanceMap":152,"./findDOMNode":198,"_process":30,"fbjs/lib/warning":245}],116:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19871,7 +21164,7 @@ ReactPerf.measureMethods(ReactBrowserEventEmitter, 'ReactBrowserEventEmitter', {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventConstants":103,"./EventPluginHub":104,"./EventPluginRegistry":105,"./Object.assign":111,"./ReactEventEmitterMixin":146,"./ReactPerf":160,"./ViewportMetrics":190,"./isEventSupported":208}],116:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPluginHub":105,"./EventPluginRegistry":106,"./Object.assign":112,"./ReactEventEmitterMixin":147,"./ReactPerf":161,"./ViewportMetrics":191,"./isEventSupported":209}],117:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -19996,7 +21289,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":165,"./instantiateReactComponent":207,"./shouldUpdateReactComponent":215,"./traverseAllChildren":216,"_process":26,"fbjs/lib/warning":244}],117:[function(require,module,exports){
+},{"./ReactReconciler":166,"./instantiateReactComponent":208,"./shouldUpdateReactComponent":216,"./traverseAllChildren":217,"_process":30,"fbjs/lib/warning":245}],118:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20179,7 +21472,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":112,"./ReactElement":141,"./traverseAllChildren":216,"fbjs/lib/emptyFunction":225}],118:[function(require,module,exports){
+},{"./PooledClass":113,"./ReactElement":142,"./traverseAllChildren":217,"fbjs/lib/emptyFunction":226}],119:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20953,7 +22246,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactComponent":119,"./ReactElement":141,"./ReactNoopUpdateQueue":158,"./ReactPropTypeLocationNames":161,"./ReactPropTypeLocations":162,"_process":26,"fbjs/lib/emptyObject":226,"fbjs/lib/invariant":233,"fbjs/lib/keyMirror":236,"fbjs/lib/keyOf":237,"fbjs/lib/warning":244}],119:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactComponent":120,"./ReactElement":142,"./ReactNoopUpdateQueue":159,"./ReactPropTypeLocationNames":162,"./ReactPropTypeLocations":163,"_process":30,"fbjs/lib/emptyObject":227,"fbjs/lib/invariant":234,"fbjs/lib/keyMirror":237,"fbjs/lib/keyOf":238,"fbjs/lib/warning":245}],120:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21078,7 +22371,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":158,"./canDefineProperty":193,"_process":26,"fbjs/lib/emptyObject":226,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],120:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":159,"./canDefineProperty":194,"_process":30,"fbjs/lib/emptyObject":227,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],121:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21120,7 +22413,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./ReactDOMIDOperations":129,"./ReactMount":154}],121:[function(require,module,exports){
+},{"./ReactDOMIDOperations":130,"./ReactMount":155}],122:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -21174,7 +22467,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],122:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],123:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21871,7 +23164,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactComponentEnvironment":121,"./ReactCurrentOwner":123,"./ReactElement":141,"./ReactInstanceMap":151,"./ReactPerf":160,"./ReactPropTypeLocationNames":161,"./ReactPropTypeLocations":162,"./ReactReconciler":165,"./ReactUpdateQueue":171,"./shouldUpdateReactComponent":215,"_process":26,"fbjs/lib/emptyObject":226,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],123:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactComponentEnvironment":122,"./ReactCurrentOwner":124,"./ReactElement":142,"./ReactInstanceMap":152,"./ReactPerf":161,"./ReactPropTypeLocationNames":162,"./ReactPropTypeLocations":163,"./ReactReconciler":166,"./ReactUpdateQueue":172,"./shouldUpdateReactComponent":216,"_process":30,"fbjs/lib/emptyObject":227,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],124:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21902,7 +23195,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],124:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21997,7 +23290,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":123,"./ReactDOMTextComponent":135,"./ReactDefaultInjection":138,"./ReactInstanceHandles":150,"./ReactMount":154,"./ReactPerf":160,"./ReactReconciler":165,"./ReactUpdates":172,"./ReactVersion":173,"./findDOMNode":197,"./renderSubtreeIntoContainer":212,"_process":26,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/warning":244}],125:[function(require,module,exports){
+},{"./ReactCurrentOwner":124,"./ReactDOMTextComponent":136,"./ReactDefaultInjection":139,"./ReactInstanceHandles":151,"./ReactMount":155,"./ReactPerf":161,"./ReactReconciler":166,"./ReactUpdates":173,"./ReactVersion":174,"./findDOMNode":198,"./renderSubtreeIntoContainer":213,"_process":30,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/warning":245}],126:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22048,7 +23341,7 @@ var ReactDOMButton = {
 };
 
 module.exports = ReactDOMButton;
-},{}],126:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23013,7 +24306,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":90,"./CSSPropertyOperations":93,"./DOMProperty":98,"./DOMPropertyOperations":99,"./EventConstants":103,"./Object.assign":111,"./ReactBrowserEventEmitter":115,"./ReactComponentBrowserEnvironment":120,"./ReactDOMButton":125,"./ReactDOMInput":130,"./ReactDOMOption":131,"./ReactDOMSelect":132,"./ReactDOMTextarea":136,"./ReactMount":154,"./ReactMultiChild":155,"./ReactPerf":160,"./ReactUpdateQueue":171,"./canDefineProperty":193,"./escapeTextContentForBrowser":196,"./isEventSupported":208,"./setInnerHTML":213,"./setTextContent":214,"./validateDOMNesting":217,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/keyOf":237,"fbjs/lib/shallowEqual":242,"fbjs/lib/warning":244}],127:[function(require,module,exports){
+},{"./AutoFocusUtils":91,"./CSSPropertyOperations":94,"./DOMProperty":99,"./DOMPropertyOperations":100,"./EventConstants":104,"./Object.assign":112,"./ReactBrowserEventEmitter":116,"./ReactComponentBrowserEnvironment":121,"./ReactDOMButton":126,"./ReactDOMInput":131,"./ReactDOMOption":132,"./ReactDOMSelect":133,"./ReactDOMTextarea":137,"./ReactMount":155,"./ReactMultiChild":156,"./ReactPerf":161,"./ReactUpdateQueue":172,"./canDefineProperty":194,"./escapeTextContentForBrowser":197,"./isEventSupported":209,"./setInnerHTML":214,"./setTextContent":215,"./validateDOMNesting":218,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/keyOf":238,"fbjs/lib/shallowEqual":243,"fbjs/lib/warning":245}],128:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23193,7 +24486,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":141,"./ReactElementValidator":142,"_process":26,"fbjs/lib/mapObject":238}],128:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactElementValidator":143,"_process":30,"fbjs/lib/mapObject":239}],129:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23212,7 +24505,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],129:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23309,7 +24602,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":97,"./DOMPropertyOperations":99,"./ReactMount":154,"./ReactPerf":160,"_process":26,"fbjs/lib/invariant":233}],130:[function(require,module,exports){
+},{"./DOMChildrenOperations":98,"./DOMPropertyOperations":100,"./ReactMount":155,"./ReactPerf":161,"_process":30,"fbjs/lib/invariant":234}],131:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23465,7 +24758,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":110,"./Object.assign":111,"./ReactDOMIDOperations":129,"./ReactMount":154,"./ReactUpdates":172,"_process":26,"fbjs/lib/invariant":233}],131:[function(require,module,exports){
+},{"./LinkedValueUtils":111,"./Object.assign":112,"./ReactDOMIDOperations":130,"./ReactMount":155,"./ReactUpdates":173,"_process":30,"fbjs/lib/invariant":234}],132:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23554,7 +24847,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactChildren":117,"./ReactDOMSelect":132,"_process":26,"fbjs/lib/warning":244}],132:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactChildren":118,"./ReactDOMSelect":133,"_process":30,"fbjs/lib/warning":245}],133:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23745,7 +25038,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":110,"./Object.assign":111,"./ReactMount":154,"./ReactUpdates":172,"_process":26,"fbjs/lib/warning":244}],133:[function(require,module,exports){
+},{"./LinkedValueUtils":111,"./Object.assign":112,"./ReactMount":155,"./ReactUpdates":173,"_process":30,"fbjs/lib/warning":245}],134:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23958,7 +25251,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":205,"./getTextContentAccessor":206,"fbjs/lib/ExecutionEnvironment":219}],134:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":206,"./getTextContentAccessor":207,"fbjs/lib/ExecutionEnvironment":220}],135:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23985,7 +25278,7 @@ var ReactDOMServer = {
 };
 
 module.exports = ReactDOMServer;
-},{"./ReactDefaultInjection":138,"./ReactServerRendering":169,"./ReactVersion":173}],135:[function(require,module,exports){
+},{"./ReactDefaultInjection":139,"./ReactServerRendering":170,"./ReactVersion":174}],136:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24115,7 +25408,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":97,"./DOMPropertyOperations":99,"./Object.assign":111,"./ReactComponentBrowserEnvironment":120,"./ReactMount":154,"./escapeTextContentForBrowser":196,"./setTextContent":214,"./validateDOMNesting":217,"_process":26}],136:[function(require,module,exports){
+},{"./DOMChildrenOperations":98,"./DOMPropertyOperations":100,"./Object.assign":112,"./ReactComponentBrowserEnvironment":121,"./ReactMount":155,"./escapeTextContentForBrowser":197,"./setTextContent":215,"./validateDOMNesting":218,"_process":30}],137:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24231,7 +25524,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":110,"./Object.assign":111,"./ReactDOMIDOperations":129,"./ReactUpdates":172,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],137:[function(require,module,exports){
+},{"./LinkedValueUtils":111,"./Object.assign":112,"./ReactDOMIDOperations":130,"./ReactUpdates":173,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24299,7 +25592,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./Object.assign":111,"./ReactUpdates":172,"./Transaction":189,"fbjs/lib/emptyFunction":225}],138:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactUpdates":173,"./Transaction":190,"fbjs/lib/emptyFunction":226}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24399,7 +25692,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":91,"./ChangeEventPlugin":95,"./ClientReactRootIndex":96,"./DefaultEventPluginOrder":101,"./EnterLeaveEventPlugin":102,"./HTMLDOMPropertyConfig":109,"./ReactBrowserComponentMixin":114,"./ReactComponentBrowserEnvironment":120,"./ReactDOMComponent":126,"./ReactDOMTextComponent":135,"./ReactDefaultBatchingStrategy":137,"./ReactDefaultPerf":139,"./ReactEventListener":147,"./ReactInjection":148,"./ReactInstanceHandles":150,"./ReactMount":154,"./ReactReconcileTransaction":164,"./SVGDOMPropertyConfig":174,"./SelectEventPlugin":175,"./ServerReactRootIndex":176,"./SimpleEventPlugin":177,"_process":26,"fbjs/lib/ExecutionEnvironment":219}],139:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":92,"./ChangeEventPlugin":96,"./ClientReactRootIndex":97,"./DefaultEventPluginOrder":102,"./EnterLeaveEventPlugin":103,"./HTMLDOMPropertyConfig":110,"./ReactBrowserComponentMixin":115,"./ReactComponentBrowserEnvironment":121,"./ReactDOMComponent":127,"./ReactDOMTextComponent":136,"./ReactDefaultBatchingStrategy":138,"./ReactDefaultPerf":140,"./ReactEventListener":148,"./ReactInjection":149,"./ReactInstanceHandles":151,"./ReactMount":155,"./ReactReconcileTransaction":165,"./SVGDOMPropertyConfig":175,"./SelectEventPlugin":176,"./ServerReactRootIndex":177,"./SimpleEventPlugin":178,"_process":30,"fbjs/lib/ExecutionEnvironment":220}],140:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24637,7 +25930,7 @@ var ReactDefaultPerf = {
 };
 
 module.exports = ReactDefaultPerf;
-},{"./DOMProperty":98,"./ReactDefaultPerfAnalysis":140,"./ReactMount":154,"./ReactPerf":160,"fbjs/lib/performanceNow":241}],140:[function(require,module,exports){
+},{"./DOMProperty":99,"./ReactDefaultPerfAnalysis":141,"./ReactMount":155,"./ReactPerf":161,"fbjs/lib/performanceNow":242}],141:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24837,7 +26130,7 @@ var ReactDefaultPerfAnalysis = {
 };
 
 module.exports = ReactDefaultPerfAnalysis;
-},{"./Object.assign":111}],141:[function(require,module,exports){
+},{"./Object.assign":112}],142:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -25087,7 +26380,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactCurrentOwner":123,"./canDefineProperty":193,"_process":26}],142:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactCurrentOwner":124,"./canDefineProperty":194,"_process":30}],143:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -25371,7 +26664,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":123,"./ReactElement":141,"./ReactPropTypeLocationNames":161,"./ReactPropTypeLocations":162,"./canDefineProperty":193,"./getIteratorFn":204,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],143:[function(require,module,exports){
+},{"./ReactCurrentOwner":124,"./ReactElement":142,"./ReactPropTypeLocationNames":162,"./ReactPropTypeLocations":163,"./canDefineProperty":194,"./getIteratorFn":205,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],144:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -25423,7 +26716,7 @@ assign(ReactEmptyComponent.prototype, {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{"./Object.assign":111,"./ReactElement":141,"./ReactEmptyComponentRegistry":144,"./ReactReconciler":165}],144:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactElement":142,"./ReactEmptyComponentRegistry":145,"./ReactReconciler":166}],145:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -25472,7 +26765,7 @@ var ReactEmptyComponentRegistry = {
 };
 
 module.exports = ReactEmptyComponentRegistry;
-},{}],145:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25552,7 +26845,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":26}],146:[function(require,module,exports){
+},{"_process":30}],147:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25591,7 +26884,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":104}],147:[function(require,module,exports){
+},{"./EventPluginHub":105}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25803,7 +27096,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./Object.assign":111,"./PooledClass":112,"./ReactInstanceHandles":150,"./ReactMount":154,"./ReactUpdates":172,"./getEventTarget":203,"fbjs/lib/EventListener":218,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/getUnboundedScrollPosition":230}],148:[function(require,module,exports){
+},{"./Object.assign":112,"./PooledClass":113,"./ReactInstanceHandles":151,"./ReactMount":155,"./ReactUpdates":173,"./getEventTarget":204,"fbjs/lib/EventListener":219,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/getUnboundedScrollPosition":231}],149:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25842,7 +27135,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":98,"./EventPluginHub":104,"./ReactBrowserEventEmitter":115,"./ReactClass":118,"./ReactComponentEnvironment":121,"./ReactEmptyComponent":143,"./ReactNativeComponent":157,"./ReactPerf":160,"./ReactRootIndex":167,"./ReactUpdates":172}],149:[function(require,module,exports){
+},{"./DOMProperty":99,"./EventPluginHub":105,"./ReactBrowserEventEmitter":116,"./ReactClass":119,"./ReactComponentEnvironment":122,"./ReactEmptyComponent":144,"./ReactNativeComponent":158,"./ReactPerf":161,"./ReactRootIndex":168,"./ReactUpdates":173}],150:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25967,7 +27260,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":133,"fbjs/lib/containsNode":222,"fbjs/lib/focusNode":227,"fbjs/lib/getActiveElement":228}],150:[function(require,module,exports){
+},{"./ReactDOMSelection":134,"fbjs/lib/containsNode":223,"fbjs/lib/focusNode":228,"fbjs/lib/getActiveElement":229}],151:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26272,7 +27565,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":167,"_process":26,"fbjs/lib/invariant":233}],151:[function(require,module,exports){
+},{"./ReactRootIndex":168,"_process":30,"fbjs/lib/invariant":234}],152:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26320,7 +27613,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],152:[function(require,module,exports){
+},{}],153:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26397,7 +27690,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactChildren":117,"./ReactClass":118,"./ReactComponent":119,"./ReactDOMFactories":127,"./ReactElement":141,"./ReactElementValidator":142,"./ReactPropTypes":163,"./ReactVersion":173,"./onlyChild":210,"_process":26}],153:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactChildren":118,"./ReactClass":119,"./ReactComponent":120,"./ReactDOMFactories":128,"./ReactElement":142,"./ReactElementValidator":143,"./ReactPropTypes":164,"./ReactVersion":174,"./onlyChild":211,"_process":30}],154:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26443,7 +27736,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":192}],154:[function(require,module,exports){
+},{"./adler32":193}],155:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27296,7 +28589,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":98,"./Object.assign":111,"./ReactBrowserEventEmitter":115,"./ReactCurrentOwner":123,"./ReactDOMFeatureFlags":128,"./ReactElement":141,"./ReactEmptyComponentRegistry":144,"./ReactInstanceHandles":150,"./ReactInstanceMap":151,"./ReactMarkupChecksum":153,"./ReactPerf":160,"./ReactReconciler":165,"./ReactUpdateQueue":171,"./ReactUpdates":172,"./instantiateReactComponent":207,"./setInnerHTML":213,"./shouldUpdateReactComponent":215,"./validateDOMNesting":217,"_process":26,"fbjs/lib/containsNode":222,"fbjs/lib/emptyObject":226,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],155:[function(require,module,exports){
+},{"./DOMProperty":99,"./Object.assign":112,"./ReactBrowserEventEmitter":116,"./ReactCurrentOwner":124,"./ReactDOMFeatureFlags":129,"./ReactElement":142,"./ReactEmptyComponentRegistry":145,"./ReactInstanceHandles":151,"./ReactInstanceMap":152,"./ReactMarkupChecksum":154,"./ReactPerf":161,"./ReactReconciler":166,"./ReactUpdateQueue":172,"./ReactUpdates":173,"./instantiateReactComponent":208,"./setInnerHTML":214,"./shouldUpdateReactComponent":216,"./validateDOMNesting":218,"_process":30,"fbjs/lib/containsNode":223,"fbjs/lib/emptyObject":227,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],156:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27795,7 +29088,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":116,"./ReactComponentEnvironment":121,"./ReactCurrentOwner":123,"./ReactMultiChildUpdateTypes":156,"./ReactReconciler":165,"./flattenChildren":198,"_process":26}],156:[function(require,module,exports){
+},{"./ReactChildReconciler":117,"./ReactComponentEnvironment":122,"./ReactCurrentOwner":124,"./ReactMultiChildUpdateTypes":157,"./ReactReconciler":166,"./flattenChildren":199,"_process":30}],157:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27828,7 +29121,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 });
 
 module.exports = ReactMultiChildUpdateTypes;
-},{"fbjs/lib/keyMirror":236}],157:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":237}],158:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -27925,7 +29218,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"_process":26,"fbjs/lib/invariant":233}],158:[function(require,module,exports){
+},{"./Object.assign":112,"_process":30,"fbjs/lib/invariant":234}],159:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -28046,7 +29339,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/warning":244}],159:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/warning":245}],160:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28140,7 +29433,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],160:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],161:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28239,7 +29532,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":26}],161:[function(require,module,exports){
+},{"_process":30}],162:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28266,7 +29559,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":26}],162:[function(require,module,exports){
+},{"_process":30}],163:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28289,7 +29582,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":236}],163:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":237}],164:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28646,7 +29939,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":141,"./ReactPropTypeLocationNames":161,"./getIteratorFn":204,"fbjs/lib/emptyFunction":225}],164:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactPropTypeLocationNames":162,"./getIteratorFn":205,"fbjs/lib/emptyFunction":226}],165:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28798,7 +30091,7 @@ assign(ReactReconcileTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
-},{"./CallbackQueue":94,"./Object.assign":111,"./PooledClass":112,"./ReactBrowserEventEmitter":115,"./ReactDOMFeatureFlags":128,"./ReactInputSelection":149,"./Transaction":189}],165:[function(require,module,exports){
+},{"./CallbackQueue":95,"./Object.assign":112,"./PooledClass":113,"./ReactBrowserEventEmitter":116,"./ReactDOMFeatureFlags":129,"./ReactInputSelection":150,"./Transaction":190}],166:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28906,7 +30199,7 @@ var ReactReconciler = {
 };
 
 module.exports = ReactReconciler;
-},{"./ReactRef":166}],166:[function(require,module,exports){
+},{"./ReactRef":167}],167:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28985,7 +30278,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":159}],167:[function(require,module,exports){
+},{"./ReactOwner":160}],168:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29015,7 +30308,7 @@ var ReactRootIndex = {
 };
 
 module.exports = ReactRootIndex;
-},{}],168:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -29039,7 +30332,7 @@ var ReactServerBatchingStrategy = {
 };
 
 module.exports = ReactServerBatchingStrategy;
-},{}],169:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29125,7 +30418,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":137,"./ReactElement":141,"./ReactInstanceHandles":150,"./ReactMarkupChecksum":153,"./ReactServerBatchingStrategy":168,"./ReactServerRenderingTransaction":170,"./ReactUpdates":172,"./instantiateReactComponent":207,"_process":26,"fbjs/lib/emptyObject":226,"fbjs/lib/invariant":233}],170:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":138,"./ReactElement":142,"./ReactInstanceHandles":151,"./ReactMarkupChecksum":154,"./ReactServerBatchingStrategy":169,"./ReactServerRenderingTransaction":171,"./ReactUpdates":173,"./instantiateReactComponent":208,"_process":30,"fbjs/lib/emptyObject":227,"fbjs/lib/invariant":234}],171:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -29213,7 +30506,7 @@ assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
-},{"./CallbackQueue":94,"./Object.assign":111,"./PooledClass":112,"./Transaction":189,"fbjs/lib/emptyFunction":225}],171:[function(require,module,exports){
+},{"./CallbackQueue":95,"./Object.assign":112,"./PooledClass":113,"./Transaction":190,"fbjs/lib/emptyFunction":226}],172:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -29473,7 +30766,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactCurrentOwner":123,"./ReactElement":141,"./ReactInstanceMap":151,"./ReactUpdates":172,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],172:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactCurrentOwner":124,"./ReactElement":142,"./ReactInstanceMap":152,"./ReactUpdates":173,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],173:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29699,7 +30992,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":94,"./Object.assign":111,"./PooledClass":112,"./ReactPerf":160,"./ReactReconciler":165,"./Transaction":189,"_process":26,"fbjs/lib/invariant":233}],173:[function(require,module,exports){
+},{"./CallbackQueue":95,"./Object.assign":112,"./PooledClass":113,"./ReactPerf":161,"./ReactReconciler":166,"./Transaction":190,"_process":30,"fbjs/lib/invariant":234}],174:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29714,7 +31007,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '0.14.3';
-},{}],174:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29842,7 +31135,7 @@ var SVGDOMPropertyConfig = {
 };
 
 module.exports = SVGDOMPropertyConfig;
-},{"./DOMProperty":98}],175:[function(require,module,exports){
+},{"./DOMProperty":99}],176:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30044,7 +31337,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventConstants":103,"./EventPropagators":107,"./ReactInputSelection":149,"./SyntheticEvent":181,"./isTextInputElement":209,"fbjs/lib/ExecutionEnvironment":219,"fbjs/lib/getActiveElement":228,"fbjs/lib/keyOf":237,"fbjs/lib/shallowEqual":242}],176:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPropagators":108,"./ReactInputSelection":150,"./SyntheticEvent":182,"./isTextInputElement":210,"fbjs/lib/ExecutionEnvironment":220,"fbjs/lib/getActiveElement":229,"fbjs/lib/keyOf":238,"fbjs/lib/shallowEqual":243}],177:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30074,7 +31367,7 @@ var ServerReactRootIndex = {
 };
 
 module.exports = ServerReactRootIndex;
-},{}],177:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30664,7 +31957,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":103,"./EventPropagators":107,"./ReactMount":154,"./SyntheticClipboardEvent":178,"./SyntheticDragEvent":180,"./SyntheticEvent":181,"./SyntheticFocusEvent":182,"./SyntheticKeyboardEvent":184,"./SyntheticMouseEvent":185,"./SyntheticTouchEvent":186,"./SyntheticUIEvent":187,"./SyntheticWheelEvent":188,"./getEventCharCode":200,"_process":26,"fbjs/lib/EventListener":218,"fbjs/lib/emptyFunction":225,"fbjs/lib/invariant":233,"fbjs/lib/keyOf":237}],178:[function(require,module,exports){
+},{"./EventConstants":104,"./EventPropagators":108,"./ReactMount":155,"./SyntheticClipboardEvent":179,"./SyntheticDragEvent":181,"./SyntheticEvent":182,"./SyntheticFocusEvent":183,"./SyntheticKeyboardEvent":185,"./SyntheticMouseEvent":186,"./SyntheticTouchEvent":187,"./SyntheticUIEvent":188,"./SyntheticWheelEvent":189,"./getEventCharCode":201,"_process":30,"fbjs/lib/EventListener":219,"fbjs/lib/emptyFunction":226,"fbjs/lib/invariant":234,"fbjs/lib/keyOf":238}],179:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30704,7 +31997,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":181}],179:[function(require,module,exports){
+},{"./SyntheticEvent":182}],180:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30742,7 +32035,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":181}],180:[function(require,module,exports){
+},{"./SyntheticEvent":182}],181:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30780,7 +32073,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":185}],181:[function(require,module,exports){
+},{"./SyntheticMouseEvent":186}],182:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30960,7 +32253,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./PooledClass":112,"_process":26,"fbjs/lib/emptyFunction":225,"fbjs/lib/warning":244}],182:[function(require,module,exports){
+},{"./Object.assign":112,"./PooledClass":113,"_process":30,"fbjs/lib/emptyFunction":226,"fbjs/lib/warning":245}],183:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30998,7 +32291,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":187}],183:[function(require,module,exports){
+},{"./SyntheticUIEvent":188}],184:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31037,7 +32330,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":181}],184:[function(require,module,exports){
+},{"./SyntheticEvent":182}],185:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31123,7 +32416,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":187,"./getEventCharCode":200,"./getEventKey":201,"./getEventModifierState":202}],185:[function(require,module,exports){
+},{"./SyntheticUIEvent":188,"./getEventCharCode":201,"./getEventKey":202,"./getEventModifierState":203}],186:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31197,7 +32490,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":187,"./ViewportMetrics":190,"./getEventModifierState":202}],186:[function(require,module,exports){
+},{"./SyntheticUIEvent":188,"./ViewportMetrics":191,"./getEventModifierState":203}],187:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31244,7 +32537,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":187,"./getEventModifierState":202}],187:[function(require,module,exports){
+},{"./SyntheticUIEvent":188,"./getEventModifierState":203}],188:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31305,7 +32598,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":181,"./getEventTarget":203}],188:[function(require,module,exports){
+},{"./SyntheticEvent":182,"./getEventTarget":204}],189:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31361,7 +32654,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":185}],189:[function(require,module,exports){
+},{"./SyntheticMouseEvent":186}],190:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31595,7 +32888,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],190:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],191:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31623,7 +32916,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],191:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -31685,7 +32978,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":26,"fbjs/lib/invariant":233}],192:[function(require,module,exports){
+},{"_process":30,"fbjs/lib/invariant":234}],193:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31728,7 +33021,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],193:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31755,7 +33048,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":26}],194:[function(require,module,exports){
+},{"_process":30}],195:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31811,7 +33104,7 @@ function dangerousStyleValue(name, value) {
 }
 
 module.exports = dangerousStyleValue;
-},{"./CSSProperty":92}],195:[function(require,module,exports){
+},{"./CSSProperty":93}],196:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31862,7 +33155,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"_process":26,"fbjs/lib/warning":244}],196:[function(require,module,exports){
+},{"./Object.assign":112,"_process":30,"fbjs/lib/warning":245}],197:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31901,7 +33194,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],197:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31953,7 +33246,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":123,"./ReactInstanceMap":151,"./ReactMount":154,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],198:[function(require,module,exports){
+},{"./ReactCurrentOwner":124,"./ReactInstanceMap":152,"./ReactMount":155,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],199:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32004,7 +33297,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":216,"_process":26,"fbjs/lib/warning":244}],199:[function(require,module,exports){
+},{"./traverseAllChildren":217,"_process":30,"fbjs/lib/warning":245}],200:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32034,7 +33327,7 @@ var forEachAccumulated = function (arr, cb, scope) {
 };
 
 module.exports = forEachAccumulated;
-},{}],200:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32085,7 +33378,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],201:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32189,7 +33482,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":200}],202:[function(require,module,exports){
+},{"./getEventCharCode":201}],203:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32234,7 +33527,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],203:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32264,7 +33557,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],204:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32305,7 +33598,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],205:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32379,7 +33672,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],206:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32413,7 +33706,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":219}],207:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":220}],208:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32528,7 +33821,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"./ReactCompositeComponent":122,"./ReactEmptyComponent":143,"./ReactNativeComponent":157,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],208:[function(require,module,exports){
+},{"./Object.assign":112,"./ReactCompositeComponent":123,"./ReactEmptyComponent":144,"./ReactNativeComponent":158,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],209:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32589,7 +33882,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":219}],209:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":220}],210:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32630,7 +33923,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],210:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32666,7 +33959,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":141,"_process":26,"fbjs/lib/invariant":233}],211:[function(require,module,exports){
+},{"./ReactElement":142,"_process":30,"fbjs/lib/invariant":234}],212:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32693,7 +33986,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":196}],212:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":197}],213:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32710,7 +34003,7 @@ module.exports = quoteAttributeValueForBrowser;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":154}],213:[function(require,module,exports){
+},{"./ReactMount":155}],214:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32801,7 +34094,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"fbjs/lib/ExecutionEnvironment":219}],214:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":220}],215:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32842,7 +34135,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":196,"./setInnerHTML":213,"fbjs/lib/ExecutionEnvironment":219}],215:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":197,"./setInnerHTML":214,"fbjs/lib/ExecutionEnvironment":220}],216:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32886,7 +34179,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],216:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33078,7 +34371,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":123,"./ReactElement":141,"./ReactInstanceHandles":150,"./getIteratorFn":204,"_process":26,"fbjs/lib/invariant":233,"fbjs/lib/warning":244}],217:[function(require,module,exports){
+},{"./ReactCurrentOwner":124,"./ReactElement":142,"./ReactInstanceHandles":151,"./getIteratorFn":205,"_process":30,"fbjs/lib/invariant":234,"fbjs/lib/warning":245}],218:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -33444,7 +34737,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":111,"_process":26,"fbjs/lib/emptyFunction":225,"fbjs/lib/warning":244}],218:[function(require,module,exports){
+},{"./Object.assign":112,"_process":30,"fbjs/lib/emptyFunction":226,"fbjs/lib/warning":245}],219:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33531,7 +34824,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":225,"_process":26}],219:[function(require,module,exports){
+},{"./emptyFunction":226,"_process":30}],220:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33568,7 +34861,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],220:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33601,7 +34894,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],221:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33642,7 +34935,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":220}],222:[function(require,module,exports){
+},{"./camelize":221}],223:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33698,7 +34991,7 @@ function containsNode(_x, _x2) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":235}],223:[function(require,module,exports){
+},{"./isTextNode":236}],224:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33784,7 +35077,7 @@ function createArrayFromMixed(obj) {
 }
 
 module.exports = createArrayFromMixed;
-},{"./toArray":243}],224:[function(require,module,exports){
+},{"./toArray":244}],225:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33871,7 +35164,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":219,"./createArrayFromMixed":223,"./getMarkupWrap":229,"./invariant":233,"_process":26}],225:[function(require,module,exports){
+},{"./ExecutionEnvironment":220,"./createArrayFromMixed":224,"./getMarkupWrap":230,"./invariant":234,"_process":30}],226:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33910,7 +35203,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],226:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33933,7 +35226,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":26}],227:[function(require,module,exports){
+},{"_process":30}],228:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33960,7 +35253,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],228:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33994,7 +35287,7 @@ function getActiveElement() /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],229:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34092,7 +35385,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":219,"./invariant":233,"_process":26}],230:[function(require,module,exports){
+},{"./ExecutionEnvironment":220,"./invariant":234,"_process":30}],231:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34131,7 +35424,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34165,7 +35458,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],232:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34205,7 +35498,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":231}],233:[function(require,module,exports){
+},{"./hyphenate":232}],234:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34257,7 +35550,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":26}],234:[function(require,module,exports){
+},{"_process":30}],235:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34281,7 +35574,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],235:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34307,7 +35600,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":234}],236:[function(require,module,exports){
+},{"./isNode":235}],237:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34358,7 +35651,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":233,"_process":26}],237:[function(require,module,exports){
+},{"./invariant":234,"_process":30}],238:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34394,7 +35687,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],238:[function(require,module,exports){
+},{}],239:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34446,7 +35739,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],239:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34478,7 +35771,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],240:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34502,7 +35795,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":219}],241:[function(require,module,exports){
+},{"./ExecutionEnvironment":220}],242:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34532,7 +35825,7 @@ if (!curPerformance || !curPerformance.now) {
 var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
-},{"./performance":240}],242:[function(require,module,exports){
+},{"./performance":241}],243:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34583,7 +35876,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],243:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34643,7 +35936,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":233,"_process":26}],244:[function(require,module,exports){
+},{"./invariant":234,"_process":30}],245:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -34703,7 +35996,3893 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":225,"_process":26}],245:[function(require,module,exports){
+},{"./emptyFunction":226,"_process":30}],246:[function(require,module,exports){
+(function (Buffer){
+var clone = (function() {
+'use strict';
+
+/**
+ * Clones (copies) an Object using deep copying.
+ *
+ * This function supports circular references by default, but if you are certain
+ * there are no circular references in your object, you can save some CPU time
+ * by calling clone(obj, false).
+ *
+ * Caution: if `circular` is false and `parent` contains circular references,
+ * your program may enter an infinite loop and crash.
+ *
+ * @param `parent` - the object to be cloned
+ * @param `circular` - set to true if the object to be cloned may contain
+ *    circular references. (optional - true by default)
+ * @param `depth` - set to a number if the object is only to be cloned to
+ *    a particular depth. (optional - defaults to Infinity)
+ * @param `prototype` - sets the prototype to be used when cloning an object.
+ *    (optional - defaults to parent prototype).
+*/
+function clone(parent, circular, depth, prototype) {
+  var filter;
+  if (typeof circular === 'object') {
+    depth = circular.depth;
+    prototype = circular.prototype;
+    filter = circular.filter;
+    circular = circular.circular
+  }
+  // maintain two arrays for circular references, where corresponding parents
+  // and children have the same index
+  var allParents = [];
+  var allChildren = [];
+
+  var useBuffer = typeof Buffer != 'undefined';
+
+  if (typeof circular == 'undefined')
+    circular = true;
+
+  if (typeof depth == 'undefined')
+    depth = Infinity;
+
+  // recurse this function so we don't reset allParents and allChildren
+  function _clone(parent, depth) {
+    // cloning null always returns null
+    if (parent === null)
+      return null;
+
+    if (depth == 0)
+      return parent;
+
+    var child;
+    var proto;
+    if (typeof parent != 'object') {
+      return parent;
+    }
+
+    if (clone.__isArray(parent)) {
+      child = [];
+    } else if (clone.__isRegExp(parent)) {
+      child = new RegExp(parent.source, __getRegExpFlags(parent));
+      if (parent.lastIndex) child.lastIndex = parent.lastIndex;
+    } else if (clone.__isDate(parent)) {
+      child = new Date(parent.getTime());
+    } else if (useBuffer && Buffer.isBuffer(parent)) {
+      child = new Buffer(parent.length);
+      parent.copy(child);
+      return child;
+    } else {
+      if (typeof prototype == 'undefined') {
+        proto = Object.getPrototypeOf(parent);
+        child = Object.create(proto);
+      }
+      else {
+        child = Object.create(prototype);
+        proto = prototype;
+      }
+    }
+
+    if (circular) {
+      var index = allParents.indexOf(parent);
+
+      if (index != -1) {
+        return allChildren[index];
+      }
+      allParents.push(parent);
+      allChildren.push(child);
+    }
+
+    for (var i in parent) {
+      var attrs;
+      if (proto) {
+        attrs = Object.getOwnPropertyDescriptor(proto, i);
+      }
+
+      if (attrs && attrs.set == null) {
+        continue;
+      }
+      child[i] = _clone(parent[i], depth - 1);
+    }
+
+    return child;
+  }
+
+  return _clone(parent, depth);
+}
+
+/**
+ * Simple flat clone using prototype, accepts only objects, usefull for property
+ * override on FLAT configuration object (no nested props).
+ *
+ * USE WITH CAUTION! This may not behave as you wish if you do not know how this
+ * works.
+ */
+clone.clonePrototype = function clonePrototype(parent) {
+  if (parent === null)
+    return null;
+
+  var c = function () {};
+  c.prototype = parent;
+  return new c();
+};
+
+// private utility functions
+
+function __objToStr(o) {
+  return Object.prototype.toString.call(o);
+};
+clone.__objToStr = __objToStr;
+
+function __isDate(o) {
+  return typeof o === 'object' && __objToStr(o) === '[object Date]';
+};
+clone.__isDate = __isDate;
+
+function __isArray(o) {
+  return typeof o === 'object' && __objToStr(o) === '[object Array]';
+};
+clone.__isArray = __isArray;
+
+function __isRegExp(o) {
+  return typeof o === 'object' && __objToStr(o) === '[object RegExp]';
+};
+clone.__isRegExp = __isRegExp;
+
+function __getRegExpFlags(re) {
+  var flags = '';
+  if (re.global) flags += 'g';
+  if (re.ignoreCase) flags += 'i';
+  if (re.multiline) flags += 'm';
+  return flags;
+};
+clone.__getRegExpFlags = __getRegExpFlags;
+
+return clone;
+})();
+
+if (typeof module === 'object' && module.exports) {
+  module.exports = clone;
+}
+
+}).call(this,require("buffer").Buffer)
+},{"buffer":25}],247:[function(require,module,exports){
+/*!
+ * escape-html
+ * Copyright(c) 2012-2013 TJ Holowaychuk
+ * Copyright(c) 2015 Andreas Lubbe
+ * Copyright(c) 2015 Tiancheng "Timothy" Gu
+ * MIT Licensed
+ */
+
+'use strict';
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var matchHtmlRegExp = /["'&<>]/;
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = escapeHtml;
+
+/**
+ * Escape special characters in the given string of html.
+ *
+ * @param  {string} string The string to escape for inserting into HTML
+ * @return {string}
+ * @public
+ */
+
+function escapeHtml(string) {
+  var str = '' + string;
+  var match = matchHtmlRegExp.exec(str);
+
+  if (!match) {
+    return str;
+  }
+
+  var escape;
+  var html = '';
+  var index = 0;
+  var lastIndex = 0;
+
+  for (index = match.index; index < str.length; index++) {
+    switch (str.charCodeAt(index)) {
+      case 34: // "
+        escape = '&quot;';
+        break;
+      case 38: // &
+        escape = '&amp;';
+        break;
+      case 39: // '
+        escape = '&#39;';
+        break;
+      case 60: // <
+        escape = '&lt;';
+        break;
+      case 62: // >
+        escape = '&gt;';
+        break;
+      default:
+        continue;
+    }
+
+    if (lastIndex !== index) {
+      html += str.substring(lastIndex, index);
+    }
+
+    lastIndex = index + 1;
+    html += escape;
+  }
+
+  return lastIndex !== index
+    ? html + str.substring(lastIndex, index)
+    : html;
+}
+
+},{}],248:[function(require,module,exports){
+'use strict';
+
+var proto = Element.prototype;
+var vendor = proto.matches
+  || proto.matchesSelector
+  || proto.webkitMatchesSelector
+  || proto.mozMatchesSelector
+  || proto.msMatchesSelector
+  || proto.oMatchesSelector;
+
+module.exports = match;
+
+/**
+ * Match `el` to `selector`.
+ *
+ * @param {Element} el
+ * @param {String} selector
+ * @return {Boolean}
+ * @api public
+ */
+
+function match(el, selector) {
+  if (vendor) return vendor.call(el, selector);
+  var nodes = el.parentNode.querySelectorAll(selector);
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i] == el) return true;
+  }
+  return false;
+}
+},{}],249:[function(require,module,exports){
+'use strict';
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function ToObject(val) {
+	if (val == null) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function ownEnumerableKeys(obj) {
+	var keys = Object.getOwnPropertyNames(obj);
+
+	if (Object.getOwnPropertySymbols) {
+		keys = keys.concat(Object.getOwnPropertySymbols(obj));
+	}
+
+	return keys.filter(function (key) {
+		return propIsEnumerable.call(obj, key);
+	});
+}
+
+module.exports = Object.assign || function (target, source) {
+	var from;
+	var keys;
+	var to = ToObject(target);
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = arguments[s];
+		keys = ownEnumerableKeys(Object(from));
+
+		for (var i = 0; i < keys.length; i++) {
+			to[keys[i]] = from[keys[i]];
+		}
+	}
+
+	return to;
+};
+
+},{}],250:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var el
+
+module.exports = function(){
+
+	if(!el && !!global.document){
+	  	el = global.document.createElement('div')
+	}
+
+	if (!el){
+		el = {style: {}}
+	}
+
+	return el
+}
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],251:[function(require,module,exports){
+'use strict';
+
+var toUpperFirst = require('./toUpperFirst')
+var getPrefix    = require('./getPrefix')
+var properties   = require('./prefixProps')
+
+/**
+ * Returns the given key prefixed, if the property is found in the prefixProps map.
+ *
+ * Does not test if the property supports the given value unprefixed.
+ * If you need this, use './getPrefixed' instead
+ */
+module.exports = function(key, value){
+
+	if (!properties[key]){
+		return key
+	}
+
+	var prefix = getPrefix(key)
+
+	return prefix?
+				prefix + toUpperFirst(key):
+				key
+}
+},{"./getPrefix":253,"./prefixProps":260,"./toUpperFirst":261}],252:[function(require,module,exports){
+'use strict';
+
+var getPrefix     = require('./getPrefix')
+var forcePrefixed = require('./forcePrefixed')
+var el            = require('./el')
+
+var MEMORY = {}
+var STYLE
+var ELEMENT
+
+module.exports = function(key, value, force){
+
+    ELEMENT = ELEMENT || el()
+    STYLE   = STYLE   ||  ELEMENT.style
+
+    var k = key + ': ' + value
+
+    if (MEMORY[k]){
+        return MEMORY[k]
+    }
+
+    var prefix
+    var prefixed
+    var prefixedValue
+
+    if (force || !(key in STYLE)){
+
+        prefix = getPrefix('appearance')
+
+        if (prefix){
+            prefixed = forcePrefixed(key, value)
+
+            prefixedValue = '-' + prefix.toLowerCase() + '-' + value
+
+            if (prefixed in STYLE){
+                ELEMENT.style[prefixed] = ''
+                ELEMENT.style[prefixed] = prefixedValue
+
+                if (ELEMENT.style[prefixed] !== ''){
+                    value = prefixedValue
+                }
+            }
+        }
+    }
+
+    MEMORY[k] = value
+
+    return value
+}
+},{"./el":250,"./forcePrefixed":251,"./getPrefix":253}],253:[function(require,module,exports){
+'use strict';
+
+var toUpperFirst = require('./toUpperFirst')
+var prefixes     = ["ms", "Moz", "Webkit", "O"]
+
+var el = require('./el')
+
+var ELEMENT
+var PREFIX
+
+module.exports = function(key){
+
+	if (PREFIX !== undefined){
+		return PREFIX
+	}
+
+	ELEMENT = ELEMENT || el()
+
+	var i = 0
+	var len = prefixes.length
+	var tmp
+	var prefix
+
+	for (; i < len; i++){
+		prefix = prefixes[i]
+		tmp = prefix + toUpperFirst(key)
+
+		if (typeof ELEMENT.style[tmp] != 'undefined'){
+			return PREFIX = prefix
+		}
+	}
+
+	return PREFIX
+}
+},{"./el":250,"./toUpperFirst":261}],254:[function(require,module,exports){
+'use strict';
+
+var getStylePrefixed = require('./getStylePrefixed')
+var properties       = require('./prefixProps')
+
+module.exports = function(key, value){
+
+	if (!properties[key]){
+		return key
+	}
+
+	return getStylePrefixed(key, value)
+}
+},{"./getStylePrefixed":255,"./prefixProps":260}],255:[function(require,module,exports){
+'use strict';
+
+var toUpperFirst = require('./toUpperFirst')
+var getPrefix    = require('./getPrefix')
+var el           = require('./el')
+
+var MEMORY = {}
+var STYLE
+var ELEMENT
+
+var PREFIX
+
+module.exports = function(key, value){
+
+    ELEMENT = ELEMENT || el()
+    STYLE   = STYLE   || ELEMENT.style
+
+    var k = key// + ': ' + value
+
+    if (MEMORY[k]){
+        return MEMORY[k]
+    }
+
+    var prefix
+    var prefixed
+
+    if (!(key in STYLE)){//we have to prefix
+
+        // if (PREFIX){
+        //     prefix = PREFIX
+        // } else {
+            prefix = getPrefix('appearance')
+
+        //     if (prefix){
+        //         prefix = PREFIX = prefix.toLowerCase()
+        //     }
+        // }
+
+        if (prefix){
+            prefixed = prefix + toUpperFirst(key)
+
+            if (prefixed in STYLE){
+                key = prefixed
+            }
+        }
+    }
+
+    MEMORY[k] = key
+
+    return key
+}
+},{"./el":250,"./getPrefix":253,"./toUpperFirst":261}],256:[function(require,module,exports){
+'use strict';
+
+module.exports = function(obj, prop){
+	return Object.prototype.hasOwnProperty.call(obj, prop)
+}
+
+},{}],257:[function(require,module,exports){
+'use strict';
+
+var hasOwn      = require('./hasOwn')
+var getPrefixed = require('./getPrefixed')
+
+var map      = require('./map')
+var plugable = require('./plugable')
+
+function plugins(key, value){
+
+	var result = {
+		key  : key,
+		value: value
+	}
+
+	;(RESULT.plugins || []).forEach(function(fn){
+
+		var tmp = map(function(res){
+			return fn(key, value, res)
+		}, result)
+
+		if (tmp){
+			result = tmp
+		}
+	})
+
+	return result
+}
+
+function normalize(key, value){
+
+	var result = plugins(key, value)
+
+	return map(function(result){
+		return {
+			key  : getPrefixed(result.key, result.value),
+			value: result.value
+		}
+	}, result)
+
+	return result
+}
+
+var RESULT = function(style){
+
+	var k
+	var item
+	var result = {}
+
+	for (k in style) if (hasOwn(style, k)){
+		item = normalize(k, style[k])
+
+		if (!item){
+			continue
+		}
+
+		map(function(item){
+			result[item.key] = item.value
+		}, item)
+	}
+
+	return result
+}
+
+module.exports = plugable(RESULT)
+},{"./getPrefixed":254,"./hasOwn":256,"./map":258,"./plugable":259}],258:[function(require,module,exports){
+'use strict';
+
+module.exports = function(fn, item){
+
+	if (!item){
+		return
+	}
+
+	if (Array.isArray(item)){
+		return item.map(fn).filter(function(x){
+			return !!x
+		})
+	} else {
+		return fn(item)
+	}
+}
+},{}],259:[function(require,module,exports){
+'use strict';
+
+var getCssPrefixedValue = require('./getCssPrefixedValue')
+
+module.exports = function(target){
+	target.plugins = target.plugins || [
+		(function(){
+			var values = {
+				'flex':1,
+				'inline-flex':1
+			}
+
+			return function(key, value){
+				if (key === 'display' && value in values){
+					return {
+						key  : key,
+						value: getCssPrefixedValue(key, value, true)
+					}
+				}
+			}
+		})()
+	]
+
+	target.plugin = function(fn){
+		target.plugins = target.plugins || []
+
+		target.plugins.push(fn)
+	}
+
+	return target
+}
+},{"./getCssPrefixedValue":252}],260:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+  'alignItems': 1,
+  'justifyContent': 1,
+  'flex': 1,
+  'flexFlow': 1,
+  'flexGrow': 1,
+  'flexShrink': 1,
+  'flexBasis': 1,
+  'flexDirection': 1,
+  'flexWrap': 1,
+  'alignContent': 1,
+  'alignSelf': 1,
+
+  'userSelect': 1,
+  'transform': 1,
+  'transition': 1,
+  'transformOrigin': 1,
+  'transformStyle': 1,
+  'transitionProperty': 1,
+  'transitionDuration': 1,
+  'transitionTimingFunction': 1,
+  'transitionDelay': 1,
+  'borderImage': 1,
+  'borderImageSlice': 1,
+  'boxShadow': 1,
+  'backgroundClip': 1,
+  'backfaceVisibility': 1,
+  'perspective': 1,
+  'perspectiveOrigin': 1,
+  'animation': 1,
+  'animationDuration': 1,
+  'animationName': 1,
+  'animationDelay': 1,
+  'animationDirection': 1,
+  'animationIterationCount': 1,
+  'animationTimingFunction': 1,
+  'animationPlayState': 1,
+  'animationFillMode': 1,
+  'appearance': 1
+}
+
+},{}],261:[function(require,module,exports){
+'use strict';
+
+module.exports = function(str){
+	return str?
+			str.charAt(0).toUpperCase() + str.slice(1):
+			''
+}
+},{}],262:[function(require,module,exports){
+'use strict';
+
+var Region = require('region')
+
+/**
+ *
+ * Aligns this region to the given region
+ * @param {Region} region
+ * @param {String} alignPositions For available positions, see {@link #getPoint}
+ *
+ *     eg: 'tr-bl'
+ *
+ * @return this
+ */
+Region.prototype.alignToRegion = function(region, alignPositions){
+    Region.align(this, region, alignPositions)
+
+    return this
+}
+
+/**
+ * Aligns this region to the given point, in the anchor position
+ * @param {Object} point eg: {x: 20, y: 600}
+ * @param {Number} point.x
+ * @param {Number} point.y
+ *
+ * @param {String} anchor For available positions, see {@link #getPoint}
+ *
+ *     eg: 'bl'
+ *
+ * @return this
+ */
+ Region.prototype.alignToPoint = function(point, anchor){
+    Region.alignToPoint(this, point, anchor)
+
+    return this
+}
+},{"region":267}],263:[function(require,module,exports){
+'use strict'
+
+var Region = require('region')
+
+/**
+ * @static
+ * Aligns the source region to the target region, so as to correspond to the given alignment.
+ *
+ * NOTE that this method makes changes on the sourceRegion in order for it to be aligned as specified.
+ *
+ * @param {Region} sourceRegion
+ * @param {Region} targetRegion
+ *
+ * @param {String} align A string with 2 valid align positions, eg: 'tr-bl'.
+ * For valid positions, see {@link Region#getPoint}
+ *
+ * Having 2 regions, we need to be able to align them as we wish:
+ *
+ * for example, if we have
+ *
+ *       source    target
+ *       ________________
+ *       ____
+ *      |    |     ________
+ *      |____|    |        |
+ *                |        |
+ *                |________|
+ *
+ * and we align 't-t', we get:
+ *
+ *       source    target
+ *       _________________
+ *
+ *       ____      ________
+ *      |    |    |        |
+ *      |____|    |        |
+ *                |________|
+ *
+ *  In this case, the source was moved down to be aligned to the top of the target
+ *
+ *
+ * and if we align 'tc-tc' we get
+ *
+ *       source     target
+ *       __________________
+ *
+ *                 ________
+ *                | |    | |
+ *                | |____| |
+ *                |________|
+ *
+ *  Since the source was moved to have the top-center point to be the same with target top-center
+ *
+ *
+ *
+ * @return {RegionClass} The Region class
+ */
+Region.align = function(sourceRegion, targetRegion, align){
+
+    targetRegion = Region.from(targetRegion)
+
+    align = (align || 'c-c').split('-')
+
+    //<debug>
+    if (align.length != 2){
+        console.warn('Incorrect region alignment! The align parameter need to be in the form \'br-c\', that is, a - separated string!', align)
+    }
+    //</debug>
+
+    return Region.alignToPoint(sourceRegion, targetRegion.getPoint(align[1]), align[0])
+}
+
+/**
+ * Modifies the given region to be aligned to the point, as specified by anchor
+ *
+ * @param {Region} region The region to align to the point
+ * @param {Object} point The point to be used as a reference
+ * @param {Number} point.x
+ * @param {Number} point.y
+ * @param {String} anchor The position where to anchor the region to the point. See {@link #getPoint} for available options/
+ *
+ * @return {Region} the given region
+ */
+Region.alignToPoint = function(region, point, anchor){
+
+    region = Region.from(region)
+
+    var sourcePoint = region.getPoint(anchor)
+    var count       = 0
+    var shiftObj    = {}
+
+    if (
+            sourcePoint.x != null &&
+            point.x != null
+        ){
+
+            count++
+            shiftObj.left = point.x - sourcePoint.x
+    }
+
+    if (
+            sourcePoint.y != null &&
+            point.y != null
+        ){
+            count++
+            shiftObj.top = point.y - sourcePoint.y
+    }
+
+    if (count){
+
+        region.shift(shiftObj)
+
+    }
+
+    return region
+}
+},{"region":267}],264:[function(require,module,exports){
+'use strict'
+
+var Region = require('region')
+
+/**
+ *
+ * This method is trying to align the sourceRegion to the targetRegion, given the alignment positions
+ * and the offsets. It only modifies the sourceRegion
+ *
+ * This is all well and easy, but if there is a constrainTo region, the algorithm has to take it into account.
+ * In this case, it works as follows.
+ *
+ *  * start with the first alignment position. Aligns the region, adds the offset and then check for the constraint.
+ *  * if the constraint condition is ok, return the position.
+ *  * otherwise, remember the intersection area, if the regions are intersecting.
+ *  * then go to the next specified align position, and so on, computing the maximum intersection area.
+ *
+ * If no alignment fits the constrainRegion, the sourceRegion will be resized to match it,
+ * using the position with the maximum intersection area.
+ *
+ * Since we have computed the index of the position with the max intersection area, take that position,
+ * and align the sourceRegion accordingly. Then resize the sourceRegion to the intersection, and reposition
+ * it again, since resizing it might have destroyed the alignment.
+ *
+ * Return the position.
+ *
+ * @param {Region} sourceRegion
+ * @param {Region} targetRegion
+ * @param {String[]} positions
+ * @param {Object} config
+ * @param {Array} config.offset
+ * @param {Region} config.constrain
+ * @param {Boolean/Object} config.sync
+ *
+ * @return {String/Undefined} the chosen position for the alignment, or undefined if no position found
+ */
+function ALIGN_TO_NORMALIZED(sourceRegion, targetRegion, positions, config){
+
+    targetRegion = Region.from(targetRegion)
+
+    config = config  || {}
+
+    var constrainTo = config.constrain,
+        syncOption  = config.sync,
+        offsets     = config.offset || [],
+        syncWidth   = false,
+        syncHeight  = false,
+        sourceClone = sourceRegion.clone()
+
+    /*
+     * Prepare the method arguments: positions, offsets, constrain and sync options
+     */
+    if (!Array.isArray(positions)){
+        positions = positions? [positions]: []
+    }
+
+    if (!Array.isArray(offsets)){
+        offsets = offsets? [offsets]: []
+    }
+
+    if (constrainTo){
+        constrainTo = constrainTo === true?
+                                Region.getDocRegion():
+                                constrainTo.getRegion()
+    }
+
+    if (syncOption){
+
+        if (syncOption.size){
+            syncWidth  = true
+            syncHeight = true
+        } else {
+            syncWidth  = syncOption === true?
+                            true:
+                            syncOption.width || false
+
+            syncHeight = syncOption === true?
+                            true:
+                            syncOption.height || false
+        }
+    }
+
+    if (syncWidth){
+        sourceClone.setWidth(targetRegion.getWidth())
+    }
+    if (syncHeight){
+        sourceClone.setHeight(targetRegion.getHeight())
+
+    }
+
+    var offset,
+        i = 0,
+        len = positions.length,
+        pos,
+        intersection,
+        itArea,
+        maxArea = -1,
+        maxAreaIndex = -1
+
+    for (; i < len; i++){
+        pos     = positions[i]
+        offset  = offsets[i]
+
+        sourceClone.alignToRegion(targetRegion, pos)
+
+        if (offset){
+            if (!Array.isArray(offset)){
+                offset = offsets[i] = [offset.x || offset.left, offset.y || offset.top]
+            }
+
+            sourceClone.shift({
+                left: offset[0],
+                top : offset[1]
+            })
+        }
+
+        //the source region is already aligned in the correct position
+
+        if (constrainTo){
+            //if we have a constrain region, test for the constrain
+            intersection = sourceClone.getIntersection(constrainTo)
+
+            if ( intersection && intersection.equals(sourceClone) ) {
+                //constrain respected, so return (the aligned position)
+
+                sourceRegion.set(sourceClone)
+                return pos
+            } else {
+
+                //the constrain was not respected, so continue trying
+                if (intersection && ((itArea = intersection.getArea()) > maxArea)){
+                    maxArea      = itArea
+                    maxAreaIndex = i
+                }
+            }
+
+        } else {
+            sourceRegion.set(sourceClone)
+            return pos
+        }
+    }
+
+    //no alignment respected the constraints
+    if (~maxAreaIndex){
+        pos     = positions[maxAreaIndex]
+        offset  = offsets[maxAreaIndex]
+
+        sourceClone.alignToRegion(targetRegion, pos)
+
+        if (offset){
+            sourceClone.shift({
+                left: offset[0],
+                top : offset[1]
+            })
+        }
+
+        //we are sure an intersection exists, because of the way the maxAreaIndex was computed
+        intersection = sourceClone.getIntersection(constrainTo)
+
+        sourceClone.setRegion(intersection)
+        sourceClone.alignToRegion(targetRegion, pos)
+
+        if (offset){
+            sourceClone.shift({
+                left: offset[0],
+                top : offset[1]
+            })
+        }
+
+        sourceRegion.set(sourceClone)
+
+        return pos
+    }
+
+}
+
+module.exports = ALIGN_TO_NORMALIZED
+},{"region":267}],265:[function(require,module,exports){
+'use strict'
+
+var ALIGN_TO_NORMALIZED = require('./alignToNormalized')
+
+var Region = require('region')
+
+/**
+ * @localdoc Given source and target regions, and the given alignments required, returns a region that is the resulting allignment.
+ * Does not modify the sourceRegion.
+ *
+ * Example
+ *
+ *      var sourceRegion = zippy.getInstance({
+ *          alias  : 'z.region',
+ *          top    : 10,
+ *          left   : 10,
+ *          bottom : 40,
+ *          right  : 100
+ *      })
+ *
+ *      var targetRegion = zippy.getInstance({
+ *          alias  : 'z.region',
+ *          top    : 10,
+ *          left   : 10,
+ *          bottom : 40,
+ *          right  : 100
+ *      })
+ *      //has top-left at (10,10)
+ *      //and bottom-right at (40, 100)
+ *
+ *      var alignRegion = alignable.COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, 'tl-br')
+ *
+ *      //alignRegion will be a clone of sourceRegion, but will have the
+ *      //top-left corner aligned with bottom-right of targetRegion
+ *
+ *      alignRegion.get() // => { top: 40, left: 100, bottom: 70, right: 190 }
+ *
+ * @param  {Region} sourceRegion The source region to align to targetRegion
+ * @param  {Region} targetRegion The target region to which to align the sourceRegion
+ * @param  {String/String[]} positions    A string ( delimited by "-" characters ) or an array of strings with the position to try, in the order of their priority.
+ * See Region#getPoint for a list of available positions. They can be combined in any way.
+ * @param  {Object} config      A config object with other configuration for the alignment
+ * @param  {Object/Object[]} config.offset      Optional offsets. Either an object or an array with a different offset for each position
+ * @param  {Element/Region/Boolean} config.constrain  The constrain to region or element. If the boolean true, Region.getDocRegion() will be used
+ * @param  {Object/Boolean} config.sync   A boolean object that indicates whether to sync sourceRegion and targetRegion sizes (width/height or both). Can be
+ *
+ *  * true - in order to sync both width and height
+ *  * { width: true }  - to only sync width
+ *  * { height: true } - to only sync height
+ *  * { size: true }   - to sync both width and height
+ *
+ * @return {Object} an object with the following keys:
+ *
+ *  * position - the position where the alignment was made. One of the given positions
+ *  * region   - the region where the alignment is in place
+ *  * positionChanged - boolean value indicating if the position of the returned region is different from the position of sourceRegion
+ *  * widthChanged    - boolean value indicating if the width of the returned region is different from the width of sourceRegion
+ *  * heightChanged   - boolean value indicating if the height of the returned region is different from the height of sourceRegion
+ */
+function COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, positions, config){
+    sourceRegion = Region.from(sourceRegion)
+
+    var sourceClone = sourceRegion.clone()
+    var position    = ALIGN_TO_NORMALIZED(sourceClone, targetRegion, positions, config)
+
+    return {
+        position        : position,
+        region          : sourceClone,
+        widthChanged    : sourceClone.getWidth() != sourceRegion.getWidth(),
+        heightChanged   : sourceClone.getHeight() != sourceRegion.getHeight(),
+        positionChanged : sourceClone.equalsPosition(sourceRegion)
+    }
+}
+
+
+module.exports = COMPUTE_ALIGN_REGION
+},{"./alignToNormalized":264,"region":267}],266:[function(require,module,exports){
+'use strict';
+
+var Region = require('region')
+
+require('./Region.static')
+require('./Region.proto')
+
+var COMPUTE_ALIGN_REGION = require('./computeAlignRegion')
+
+/**
+ * region-align module exposes methods for aligning {@link Element} and {@link Region} instances
+ *
+ * The #alignTo method aligns this to the target element/region using the specified positions. See #alignTo for a graphical example.
+ *
+ *
+ *      var div = Element.select('div.first')
+ *
+ *      div.alignTo(Element.select('body') , 'br-br')
+ *
+ *      //aligns the div to be in the bottom-right corner of the body
+ *
+ * Other useful methods
+ *
+ *  * {@link #alignRegions} - aligns a given source region to a target region
+ *  * {@link #COMPUTE_ALIGN_REGION} - given a source region and a target region, and alignment positions, returns a clone of the source region, but aligned to satisfy the given alignments
+ */
+
+
+/**
+ * Aligns sourceRegion to targetRegion. It modifies the sourceRegion in order to perform the correct alignment.
+ * See #COMPUTE_ALIGN_REGION for details and examples.
+ *
+ * This method calls #COMPUTE_ALIGN_REGION passing to it all its arguments. The #COMPUTE_ALIGN_REGION method returns a region that is properly aligned.
+ * If this returned region position/size differs from sourceRegion, then the sourceRegion is modified to be an exact copy of the aligned region.
+ *
+ * @inheritdoc #COMPUTE_ALIGN_REGION
+ * @return {String} the position used for alignment
+ */
+Region.alignRegions = function(sourceRegion, targetRegion, positions, config){
+
+    var result        = COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, positions, config)
+    var alignedRegion = result.region
+
+    if ( !alignedRegion.equals(sourceRegion) ) {
+        sourceRegion.setRegion(alignedRegion)
+    }
+
+    return result.position
+
+}
+
+    /**
+     *
+     * The #alignTo method aligns this to the given target region, using the specified alignment position(s).
+     * You can also specify a constrain for the alignment.
+     *
+     * Example
+     *
+     *      BIG
+     *      ________________________
+     *      |  _______              |
+     *      | |       |             |
+     *      | |   A   |             |
+     *      | |       |      _____  |
+     *      | |_______|     |     | |
+     *      |               |  B  | |
+     *      |               |     | |
+     *      |_______________|_____|_|
+     *
+     * Assume the *BIG* outside rectangle is our constrain region, and you want to align the *A* rectangle
+     * to the *B* rectangle. Ideally, you'll want their tops to be aligned, and *A* to be placed at the right side of *B*
+     *
+     *
+     *      //so we would align them using
+     *
+     *      A.alignTo(B, 'tl-tr', { constrain: BIG })
+     *
+     * But this would result in
+     *
+     *       BIG
+     *      ________________________
+     *      |                       |
+     *      |                       |
+     *      |                       |
+     *      |                _____ _|_____
+     *      |               |     | .     |
+     *      |               |  B  | . A   |
+     *      |               |     | .     |
+     *      |_______________|_____|_._____|
+     *
+     *
+     * Which is not what we want. So we specify an array of options to try
+     *
+     *      A.alignTo(B, ['tl-tr', 'tr-tl'], { constrain: BIG })
+     *
+     * So by this we mean: try to align A(top,left) with B(top,right) and stick to the BIG constrain. If this is not possible,
+     * try the next option: align A(top,right) with B(top,left)
+     *
+     * So this is what we end up with
+     *
+     *      BIG
+     *      ________________________
+     *      |                       |
+     *      |                       |
+     *      |                       |
+     *      |        _______ _____  |
+     *      |       |       |     | |
+     *      |       |   A   |  B  | |
+     *      |       |       |     | |
+     *      |_______|_______|_____|_|
+     *
+     *
+     * Which is a lot better!
+     *
+     * @param {Element/Region} target The target to which to align this alignable.
+     *
+     * @param {String[]/String} positions The positions for the alignment.
+     *
+     * Example:
+     *
+     *      'br-tl'
+     *      ['br-tl','br-tr','cx-tc']
+     *
+     * This method will try to align using the first position. But if there is a constrain region, that position might not satisfy the constrain.
+     * If this is the case, the next positions will be tried. If one of them satifies the constrain, it will be used for aligning and it will be returned from this method.
+     *
+     * If no position matches the contrain, the one with the largest intersection of the source region with the constrain will be used, and this alignable will be resized to fit the constrain region.
+     *
+     * @param {Object} config A config object with other configuration for this method
+     *
+     * @param {Array[]/Object[]/Object} config.offset The offset to use for aligning. If more that one offset is specified, then offset at a given index is used with the position at the same index.
+     *
+     * An offset can have the following form:
+     *
+     *      [left_offset, top_offset]
+     *      {left: left_offset, top: top_offset}
+     *      {x: left_offset, y: top_offset}
+     *
+     * You can pass one offset or an array of offsets. In case you pass just one offset,
+     * it cannot have the array form, so you cannot call
+     *
+     *      this.alignTo(target, positions, [10, 20])
+     *
+     * If you do, it will not be considered. Instead, please use
+     *
+     *      this.alignTo(target, positions, {x: 10, y: 20})
+     *
+     * Or
+     *
+     *      this.alignTo(target, positions, [[10, 20]] )
+     *
+     * @param {Boolean/Element/Region} config.constrain If boolean, target will be constrained to the document region, otherwise,
+     * getRegion will be called on this argument to determine the region we need to constrain to.
+     *
+     * @param {Boolean/Object} config.sync Either boolean or an object with {width, height}. If it is boolean,
+     * both width and height will be synced. If directions are specified, will only sync the direction which is specified as true
+     *
+     * @return {String}
+     *
+     */
+Region.prototype.alignTo = function(target, positions, config){
+
+    config = config || {}
+
+    var sourceRegion = this
+    var targetRegion = Region.from(target)
+
+    var result = COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, positions, config)
+    var resultRegion = result.region
+
+    if (!resultRegion.equalsSize(sourceRegion)){
+        this.setSize(resultRegion.getSize())
+    }
+    if (!resultRegion.equalsPosition(sourceRegion)){
+        this.setPosition(resultRegion.getPosition(), { absolute: !!config.absolute })
+    }
+
+    return result.position
+}
+
+module.exports = Region
+},{"./Region.proto":262,"./Region.static":263,"./computeAlignRegion":265,"region":267}],267:[function(require,module,exports){
+module.exports = require('./src')
+},{"./src":272}],268:[function(require,module,exports){
+'use strict'
+
+var hasOwn = Object.prototype.hasOwnProperty
+
+function curry(fn, n){
+
+    if (typeof n !== 'number'){
+        n = fn.length
+    }
+
+    function getCurryClosure(prevArgs){
+
+        function curryClosure() {
+
+            var len  = arguments.length
+            var args = [].concat(prevArgs)
+
+            if (len){
+                args.push.apply(args, arguments)
+            }
+
+            if (args.length < n){
+                return getCurryClosure(args)
+            }
+
+            return fn.apply(this, args)
+        }
+
+        return curryClosure
+    }
+
+    return getCurryClosure([])
+}
+
+
+module.exports = curry(function(object, property){
+    return hasOwn.call(object, property)
+})
+},{}],269:[function(require,module,exports){
+module.exports = function(){
+
+    'use strict';
+
+    var fns = {}
+
+    return function(len){
+
+        if ( ! fns [len ] ) {
+
+            var args = []
+            var i    = 0
+
+            for (; i < len; i++ ) {
+                args.push( 'a[' + i + ']')
+            }
+
+            fns[len] = new Function(
+                            'c',
+                            'a',
+                            'return new c(' + args.join(',') + ')'
+                        )
+        }
+
+        return fns[len]
+    }
+
+}()
+},{}],270:[function(require,module,exports){
+var getInstantiatorFunction = require('./getInstantiatorFunction')
+
+module.exports = function(fn, args){
+	return getInstantiatorFunction(args.length)(fn, args)
+}
+},{"./getInstantiatorFunction":269}],271:[function(require,module,exports){
+'use strict';
+
+function ToObject(val) {
+	if (val == null) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+module.exports = Object.assign || function (target, source) {
+	var from;
+	var keys;
+	var to = ToObject(target);
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = arguments[s];
+		keys = Object.keys(Object(from));
+
+		for (var i = 0; i < keys.length; i++) {
+			to[keys[i]] = from[keys[i]];
+		}
+	}
+
+	return to;
+};
+
+},{}],272:[function(require,module,exports){
+'use strict';
+
+var hasOwn    = require('hasown')
+var newify    = require('newify')
+
+var assign      = require('object-assign');
+var EventEmitter = require('events').EventEmitter
+
+var inherits = require('./inherits')
+var VALIDATE = require('./validate')
+
+var objectToString = Object.prototype.toString
+
+var isObject = function(value){
+    return objectToString.apply(value) === '[object Object]'
+}
+
+function copyList(source, target, list){
+    if (source){
+        list.forEach(function(key){
+            if (hasOwn(source, key)){
+                target[key] = source[key]
+            }
+        })
+    }
+
+    return target
+}
+
+/**
+ * @class Region
+ *
+ * The Region is an abstraction that allows the developer to refer to rectangles on the screen,
+ * and move them around, make diffs and unions, detect intersections, compute areas, etc.
+ *
+ * ## Creating a region
+ *      var region = require('region')({
+ *          top  : 10,
+ *          left : 10,
+ *          bottom: 100,
+ *          right : 100
+ *      })
+ *      //this region is a square, 90x90, starting from (10,10) to (100,100)
+ *
+ *      var second = require('region')({ top: 10, left: 100, right: 200, bottom: 60})
+ *      var union  = region.getUnion(second)
+ *
+ *      //the "union" region is a union between "region" and "second"
+ */
+
+var POINT_POSITIONS = {
+        cy: 'YCenter',
+        cx: 'XCenter',
+        t : 'Top',
+        tc: 'TopCenter',
+        tl: 'TopLeft',
+        tr: 'TopRight',
+        b : 'Bottom',
+        bc: 'BottomCenter',
+        bl: 'BottomLeft',
+        br: 'BottomRight',
+        l : 'Left',
+        lc: 'LeftCenter',
+        r : 'Right',
+        rc: 'RightCenter',
+        c : 'Center'
+    }
+
+/**
+ * @constructor
+ *
+ * Construct a new Region.
+ *
+ * Example:
+ *
+ *      var r = new Region({ top: 10, left: 20, bottom: 100, right: 200 })
+ *
+ *      //or, the same, but with numbers (can be used with new or without)
+ *
+ *      r = Region(10, 200, 100, 20)
+ *
+ *      //or, with width and height
+ *
+ *      r = Region({ top: 10, left: 20, width: 180, height: 90})
+ *
+ * @param {Number|Object} top The top pixel position, or an object with top, left, bottom, right properties. If an object is passed,
+ * instead of having bottom and right, it can have width and height.
+ *
+ * @param {Number} right The right pixel position
+ * @param {Number} bottom The bottom pixel position
+ * @param {Number} left The left pixel position
+ *
+ * @return {Region} this
+ */
+var REGION = function(top, right, bottom, left){
+
+    if (!(this instanceof REGION)){
+        return newify(REGION, arguments)
+    }
+
+    EventEmitter.call(this)
+
+    if (isObject(top)){
+        copyList(top, this, ['top','right','bottom','left'])
+
+        if (top.bottom == null && top.height != null){
+            this.bottom = this.top + top.height
+        }
+        if (top.right == null && top.width != null){
+            this.right = this.left + top.width
+        }
+
+        if (top.emitChangeEvents){
+            this.emitChangeEvents = top.emitChangeEvents
+        }
+    } else {
+        this.top    = top
+        this.right  = right
+        this.bottom = bottom
+        this.left   = left
+    }
+
+    this[0] = this.left
+    this[1] = this.top
+
+    VALIDATE(this)
+}
+
+inherits(REGION, EventEmitter)
+
+assign(REGION.prototype, {
+
+    /**
+     * @cfg {Boolean} emitChangeEvents If this is set to true, the region
+     * will emit 'changesize' and 'changeposition' whenever the size or the position changs
+     */
+    emitChangeEvents: false,
+
+    /**
+     * Returns this region, or a clone of this region
+     * @param  {Boolean} [clone] If true, this method will return a clone of this region
+     * @return {Region}       This region, or a clone of this
+     */
+    getRegion: function(clone){
+        return clone?
+                    this.clone():
+                    this
+    },
+
+    /**
+     * Sets the properties of this region to those of the given region
+     * @param {Region/Object} reg The region or object to use for setting properties of this region
+     * @return {Region} this
+     */
+    setRegion: function(reg){
+
+        if (reg instanceof REGION){
+            this.set(reg.get())
+        } else {
+            this.set(reg)
+        }
+
+        return this
+    },
+
+    /**
+     * Returns true if this region is valid, false otherwise
+     *
+     * @param  {Region} region The region to check
+     * @return {Boolean}        True, if the region is valid, false otherwise.
+     * A region is valid if
+     *  * left <= right  &&
+     *  * top  <= bottom
+     */
+    validate: function(){
+        return REGION.validate(this)
+    },
+
+    _before: function(){
+        if (this.emitChangeEvents){
+            return copyList(this, {}, ['left','top','bottom','right'])
+        }
+    },
+
+    _after: function(before){
+        if (this.emitChangeEvents){
+
+            if(this.top != before.top || this.left != before.left) {
+                this.emitPositionChange()
+            }
+
+            if(this.right != before.right || this.bottom != before.bottom) {
+                this.emitSizeChange()
+            }
+        }
+    },
+
+    notifyPositionChange: function(){
+        this.emit('changeposition', this)
+    },
+
+    emitPositionChange: function(){
+        this.notifyPositionChange()
+    },
+
+    notifySizeChange: function(){
+        this.emit('changesize', this)
+    },
+
+    emitSizeChange: function(){
+        this.notifySizeChange()
+    },
+
+    /**
+     * Add the given amounts to each specified side. Example
+     *
+     *      region.add({
+     *          top: 50,    //add 50 px to the top side
+     *          bottom: -100    //substract 100 px from the bottom side
+     *      })
+     *
+     * @param {Object} directions
+     * @param {Number} [directions.top]
+     * @param {Number} [directions.left]
+     * @param {Number} [directions.bottom]
+     * @param {Number} [directions.right]
+     *
+     * @return {Region} this
+     */
+    add: function(directions){
+
+        var before = this._before()
+        var direction
+
+        for (direction in directions) if ( hasOwn(directions, direction) ) {
+            this[direction] += directions[direction]
+        }
+
+        this[0] = this.left
+        this[1] = this.top
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * The same as {@link #add}, but substracts the given values
+     * @param {Object} directions
+     * @param {Number} [directions.top]
+     * @param {Number} [directions.left]
+     * @param {Number} [directions.bottom]
+     * @param {Number} [directions.right]
+     *
+     * @return {Region} this
+     */
+    substract: function(directions){
+
+        var before = this._before()
+        var direction
+
+        for (direction in directions) if (hasOwn(directions, direction) ) {
+            this[direction] -= directions[direction]
+        }
+
+        this[0] = this.left
+        this[1] = this.top
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Retrieves the size of the region.
+     * @return {Object} An object with {width, height}, corresponding to the width and height of the region
+     */
+    getSize: function(){
+        return {
+            width  : this.width,
+            height : this.height
+        }
+    },
+
+    /**
+     * Move the region to the given position and keeps the region width and height.
+     *
+     * @param {Object} position An object with {top, left} properties. The values in {top,left} are used to move the region by the given amounts.
+     * @param {Number} [position.left]
+     * @param {Number} [position.top]
+     *
+     * @return {Region} this
+     */
+    setPosition: function(position){
+        var width  = this.width
+        var height = this.height
+
+        if (position.left != undefined){
+            position.right  = position.left + width
+        }
+
+        if (position.top != undefined){
+            position.bottom = position.top  + height
+        }
+
+        return this.set(position)
+    },
+
+    /**
+     * Sets both the height and the width of this region to the given size.
+     *
+     * @param {Number} size The new size for the region
+     * @return {Region} this
+     */
+    setSize: function(size){
+        if (size.height != undefined && size.width != undefined){
+            return this.set({
+                right  : this.left + size.width,
+                bottom : this.top  + size.height
+            })
+        }
+
+        if (size.width != undefined){
+            this.setWidth(size.width)
+        }
+
+        if (size.height != undefined){
+            this.setHeight(size.height)
+        }
+
+        return this
+    },
+
+
+
+    /**
+     * @chainable
+     *
+     * Sets the width of this region
+     * @param {Number} width The new width for this region
+     * @return {Region} this
+     */
+    setWidth: function(width){
+        return this.set({
+            right: this.left + width
+        })
+    },
+
+    /**
+     * @chainable
+     *
+     * Sets the height of this region
+     * @param {Number} height The new height for this region
+     * @return {Region} this
+     */
+    setHeight: function(height){
+        return this.set({
+            bottom: this.top + height
+        })
+    },
+
+    /**
+     * Sets the given properties on this region
+     *
+     * @param {Object} directions an object containing top, left, and EITHER bottom, right OR width, height
+     * @param {Number} [directions.top]
+     * @param {Number} [directions.left]
+     *
+     * @param {Number} [directions.bottom]
+     * @param {Number} [directions.right]
+     *
+     * @param {Number} [directions.width]
+     * @param {Number} [directions.height]
+     *
+     *
+     * @return {Region} this
+     */
+    set: function(directions){
+        var before = this._before()
+
+        copyList(directions, this, ['left','top','bottom','right'])
+
+        if (directions.bottom == null && directions.height != null){
+            this.bottom = this.top + directions.height
+        }
+        if (directions.right == null && directions.width != null){
+            this.right = this.left + directions.width
+        }
+
+        this[0] = this.left
+        this[1] = this.top
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Retrieves the given property from this region. If no property is given, return an object
+     * with {left, top, right, bottom}
+     *
+     * @param {String} [dir] the property to retrieve from this region
+     * @return {Number/Object}
+     */
+    get: function(dir){
+        return dir? this[dir]:
+                    copyList(this, {}, ['left','right','top','bottom'])
+    },
+
+    /**
+     * Shifts this region to either top, or left or both.
+     * Shift is similar to {@link #add} by the fact that it adds the given dimensions to top/left sides, but also adds the given dimensions
+     * to bottom and right
+     *
+     * @param {Object} directions
+     * @param {Number} [directions.top]
+     * @param {Number} [directions.left]
+     *
+     * @return {Region} this
+     */
+    shift: function(directions){
+
+        var before = this._before()
+
+        if (directions.top){
+            this.top    += directions.top
+            this.bottom += directions.top
+        }
+
+        if (directions.left){
+            this.left  += directions.left
+            this.right += directions.left
+        }
+
+        this[0] = this.left
+        this[1] = this.top
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Same as {@link #shift}, but substracts the given values
+     * @chainable
+     *
+     * @param {Object} directions
+     * @param {Number} [directions.top]
+     * @param {Number} [directions.left]
+     *
+     * @return {Region} this
+     */
+    unshift: function(directions){
+
+        if (directions.top){
+            directions.top *= -1
+        }
+
+        if (directions.left){
+            directions.left *= -1
+        }
+
+        return this.shift(directions)
+    },
+
+    /**
+     * Compare this region and the given region. Return true if they have all the same size and position
+     * @param  {Region} region The region to compare with
+     * @return {Boolean}       True if this and region have same size and position
+     */
+    equals: function(region){
+        return this.equalsPosition(region) && this.equalsSize(region)
+    },
+
+    /**
+     * Returns true if this region has the same bottom,right properties as the given region
+     * @param  {Region/Object} size The region to compare against
+     * @return {Boolean}       true if this region is the same size as the given size
+     */
+    equalsSize: function(size){
+        var isInstance = size instanceof REGION
+
+        var s = {
+            width: size.width == null && isInstance?
+                    size.getWidth():
+                    size.width,
+
+            height: size.height == null && isInstance?
+                    size.getHeight():
+                    size.height
+        }
+        return this.getWidth() == s.width && this.getHeight() == s.height
+    },
+
+    /**
+     * Returns true if this region has the same top,left properties as the given region
+     * @param  {Region} region The region to compare against
+     * @return {Boolean}       true if this.top == region.top and this.left == region.left
+     */
+    equalsPosition: function(region){
+        return this.top == region.top && this.left == region.left
+    },
+
+    /**
+     * Adds the given ammount to the left side of this region
+     * @param {Number} left The ammount to add
+     * @return {Region} this
+     */
+    addLeft: function(left){
+        var before = this._before()
+
+        this.left = this[0] = this.left + left
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Adds the given ammount to the top side of this region
+     * @param {Number} top The ammount to add
+     * @return {Region} this
+     */
+    addTop: function(top){
+        var before = this._before()
+
+        this.top = this[1] = this.top + top
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Adds the given ammount to the bottom side of this region
+     * @param {Number} bottom The ammount to add
+     * @return {Region} this
+     */
+    addBottom: function(bottom){
+        var before = this._before()
+
+        this.bottom += bottom
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Adds the given ammount to the right side of this region
+     * @param {Number} right The ammount to add
+     * @return {Region} this
+     */
+    addRight: function(right){
+        var before = this._before()
+
+        this.right += right
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Minimize the top side.
+     * @return {Region} this
+     */
+    minTop: function(){
+        return this.expand({top: 1})
+    },
+    /**
+     * Minimize the bottom side.
+     * @return {Region} this
+     */
+    maxBottom: function(){
+        return this.expand({bottom: 1})
+    },
+    /**
+     * Minimize the left side.
+     * @return {Region} this
+     */
+    minLeft: function(){
+        return this.expand({left: 1})
+    },
+    /**
+     * Maximize the right side.
+     * @return {Region} this
+     */
+    maxRight: function(){
+        return this.expand({right: 1})
+    },
+
+    /**
+     * Expands this region to the dimensions of the given region, or the document region, if no region is expanded.
+     * But only expand the given sides (any of the four can be expanded).
+     *
+     * @param {Object} directions
+     * @param {Boolean} [directions.top]
+     * @param {Boolean} [directions.bottom]
+     * @param {Boolean} [directions.left]
+     * @param {Boolean} [directions.right]
+     *
+     * @param {Region} [region] the region to expand to, defaults to the document region
+     * @return {Region} this region
+     */
+    expand: function(directions, region){
+        var docRegion = region || REGION.getDocRegion()
+        var list      = []
+        var direction
+        var before = this._before()
+
+        for (direction in directions) if ( hasOwn(directions, direction) ) {
+            list.push(direction)
+        }
+
+        copyList(docRegion, this, list)
+
+        this[0] = this.left
+        this[1] = this.top
+
+        this._after(before)
+
+        return this
+    },
+
+    /**
+     * Returns a clone of this region
+     * @return {Region} A new region, with the same position and dimension as this region
+     */
+    clone: function(){
+        return new REGION({
+                    top    : this.top,
+                    left   : this.left,
+                    right  : this.right,
+                    bottom : this.bottom
+                })
+    },
+
+    /**
+     * Returns true if this region contains the given point
+     * @param {Number/Object} x the x coordinate of the point
+     * @param {Number} [y] the y coordinate of the point
+     *
+     * @return {Boolean} true if this region constains the given point, false otherwise
+     */
+    containsPoint: function(x, y){
+        if (arguments.length == 1){
+            y = x.y
+            x = x.x
+        }
+
+        return this.left <= x  &&
+               x <= this.right &&
+               this.top <= y   &&
+               y <= this.bottom
+    },
+
+    /**
+     *
+     * @param region
+     *
+     * @return {Boolean} true if this region contains the given region, false otherwise
+     */
+    containsRegion: function(region){
+        return this.containsPoint(region.left, region.top)    &&
+               this.containsPoint(region.right, region.bottom)
+    },
+
+    /**
+     * Returns an object with the difference for {top, bottom} positions betwen this and the given region,
+     *
+     * See {@link #diff}
+     * @param  {Region} region The region to use for diff
+     * @return {Object}        {top,bottom}
+     */
+    diffHeight: function(region){
+        return this.diff(region, {top: true, bottom: true})
+    },
+
+    /**
+     * Returns an object with the difference for {left, right} positions betwen this and the given region,
+     *
+     * See {@link #diff}
+     * @param  {Region} region The region to use for diff
+     * @return {Object}        {left,right}
+     */
+    diffWidth: function(region){
+        return this.diff(region, {left: true, right: true})
+    },
+
+    /**
+     * Returns an object with the difference in sizes for the given directions, between this and region
+     *
+     * @param  {Region} region     The region to use for diff
+     * @param  {Object} directions An object with the directions to diff. Can have any of the following keys:
+     *  * left
+     *  * right
+     *  * top
+     *  * bottom
+     *
+     * @return {Object} and object with the same keys as the directions object, but the values being the
+     * differences between this region and the given region
+     */
+    diff: function(region, directions){
+        var result = {}
+        var dirName
+
+        for (dirName in directions) if ( hasOwn(directions, dirName) ) {
+            result[dirName] = this[dirName] - region[dirName]
+        }
+
+        return result
+    },
+
+    /**
+     * Returns the position, in {left,top} properties, of this region
+     *
+     * @return {Object} {left,top}
+     */
+    getPosition: function(){
+        return {
+            left: this.left,
+            top : this.top
+        }
+    },
+
+    /**
+     * Returns the point at the given position from this region.
+     *
+     * @param {String} position Any of:
+     *
+     *  * 'cx' - See {@link #getPointXCenter}
+     *  * 'cy' - See {@link #getPointYCenter}
+     *  * 'b'  - See {@link #getPointBottom}
+     *  * 'bc' - See {@link #getPointBottomCenter}
+     *  * 'l'  - See {@link #getPointLeft}F
+     *  * 'lc' - See {@link #getPointLeftCenter}
+     *  * 't'  - See {@link #getPointTop}
+     *  * 'tc' - See {@link #getPointTopCenter}
+     *  * 'r'  - See {@link #getPointRight}
+     *  * 'rc' - See {@link #getPointRightCenter}
+     *  * 'c'  - See {@link #getPointCenter}
+     *  * 'tl' - See {@link #getPointTopLeft}
+     *  * 'bl' - See {@link #getPointBottomLeft}
+     *  * 'br' - See {@link #getPointBottomRight}
+     *  * 'tr' - See {@link #getPointTopRight}
+     *
+     * @param {Boolean} asLeftTop
+     *
+     * @return {Object} either an object with {x,y} or {left,top} if asLeftTop is true
+     */
+    getPoint: function(position, asLeftTop){
+
+        //<debug>
+        if (!POINT_POSITIONS[position]) {
+            console.warn('The position ', position, ' could not be found! Available options are tl, bl, tr, br, l, r, t, b.');
+        }
+        //</debug>
+
+        var method = 'getPoint' + POINT_POSITIONS[position],
+            result = this[method]()
+
+        if (asLeftTop){
+            return {
+                left : result.x,
+                top  : result.y
+            }
+        }
+
+        return result
+    },
+
+    /**
+     * Returns a point with x = null and y being the middle of the left region segment
+     * @return {Object} {x,y}
+     */
+    getPointYCenter: function(){
+        return { x: null, y: this.top + this.getHeight() / 2 }
+    },
+
+    /**
+     * Returns a point with y = null and x being the middle of the top region segment
+     * @return {Object} {x,y}
+     */
+    getPointXCenter: function(){
+        return { x: this.left + this.getWidth() / 2, y: null }
+    },
+
+    /**
+     * Returns a point with x = null and y the region top position on the y axis
+     * @return {Object} {x,y}
+     */
+    getPointTop: function(){
+        return { x: null, y: this.top }
+    },
+
+    /**
+     * Returns a point that is the middle point of the region top segment
+     * @return {Object} {x,y}
+     */
+    getPointTopCenter: function(){
+        return { x: this.left + this.getWidth() / 2, y: this.top }
+    },
+
+    /**
+     * Returns a point that is the top-left point of the region
+     * @return {Object} {x,y}
+     */
+    getPointTopLeft: function(){
+        return { x: this.left, y: this.top}
+    },
+
+    /**
+     * Returns a point that is the top-right point of the region
+     * @return {Object} {x,y}
+     */
+    getPointTopRight: function(){
+        return { x: this.right, y: this.top}
+    },
+
+    /**
+     * Returns a point with x = null and y the region bottom position on the y axis
+     * @return {Object} {x,y}
+     */
+    getPointBottom: function(){
+        return { x: null, y: this.bottom }
+    },
+
+    /**
+     * Returns a point that is the middle point of the region bottom segment
+     * @return {Object} {x,y}
+     */
+    getPointBottomCenter: function(){
+        return { x: this.left + this.getWidth() / 2, y: this.bottom }
+    },
+
+    /**
+     * Returns a point that is the bottom-left point of the region
+     * @return {Object} {x,y}
+     */
+    getPointBottomLeft: function(){
+        return { x: this.left, y: this.bottom}
+    },
+
+    /**
+     * Returns a point that is the bottom-right point of the region
+     * @return {Object} {x,y}
+     */
+    getPointBottomRight: function(){
+        return { x: this.right, y: this.bottom}
+    },
+
+    /**
+     * Returns a point with y = null and x the region left position on the x axis
+     * @return {Object} {x,y}
+     */
+    getPointLeft: function(){
+        return { x: this.left, y: null }
+    },
+
+    /**
+     * Returns a point that is the middle point of the region left segment
+     * @return {Object} {x,y}
+     */
+    getPointLeftCenter: function(){
+        return { x: this.left, y: this.top + this.getHeight() / 2 }
+    },
+
+    /**
+     * Returns a point with y = null and x the region right position on the x axis
+     * @return {Object} {x,y}
+     */
+    getPointRight: function(){
+        return { x: this.right, y: null }
+    },
+
+    /**
+     * Returns a point that is the middle point of the region right segment
+     * @return {Object} {x,y}
+     */
+    getPointRightCenter: function(){
+        return { x: this.right, y: this.top + this.getHeight() / 2 }
+    },
+
+    /**
+     * Returns a point that is the center of the region
+     * @return {Object} {x,y}
+     */
+    getPointCenter: function(){
+        return { x: this.left + this.getWidth() / 2, y: this.top + this.getHeight() / 2 }
+    },
+
+    /**
+     * @return {Number} returns the height of the region
+     */
+    getHeight: function(){
+        return this.bottom - this.top
+    },
+
+    /**
+     * @return {Number} returns the width of the region
+     */
+    getWidth: function(){
+        return this.right - this.left
+    },
+
+    /**
+     * @return {Number} returns the top property of the region
+     */
+    getTop: function(){
+        return this.top
+    },
+
+    /**
+     * @return {Number} returns the left property of the region
+     */
+    getLeft: function(){
+        return this.left
+    },
+
+    /**
+     * @return {Number} returns the bottom property of the region
+     */
+    getBottom: function(){
+        return this.bottom
+    },
+
+    /**
+     * @return {Number} returns the right property of the region
+     */
+    getRight: function(){
+        return this.right
+    },
+
+    /**
+     * Returns the area of the region
+     * @return {Number} the computed area
+     */
+    getArea: function(){
+        return this.getWidth() * this.getHeight()
+    },
+
+    constrainTo: function(contrain){
+        var intersect = this.getIntersection(contrain)
+        var shift
+
+        if (!intersect || !intersect.equals(this)){
+
+            var contrainWidth  = contrain.getWidth(),
+                contrainHeight = contrain.getHeight()
+
+            if (this.getWidth() > contrainWidth){
+                this.left = contrain.left
+                this.setWidth(contrainWidth)
+            }
+
+            if (this.getHeight() > contrainHeight){
+                this.top = contrain.top
+                this.setHeight(contrainHeight)
+            }
+
+            shift = {}
+
+            if (this.right > contrain.right){
+                shift.left = contrain.right - this.right
+            }
+
+            if (this.bottom > contrain.bottom){
+                shift.top = contrain.bottom - this.bottom
+            }
+
+            if (this.left < contrain.left){
+                shift.left = contrain.left - this.left
+            }
+
+            if (this.top < contrain.top){
+                shift.top = contrain.top - this.top
+            }
+
+            this.shift(shift)
+
+            return true
+        }
+
+        return false
+    },
+
+    __IS_REGION: true
+
+    /**
+     * @property {Number} top
+     */
+
+    /**
+     * @property {Number} right
+     */
+
+    /**
+     * @property {Number} bottom
+     */
+
+    /**
+     * @property {Number} left
+     */
+
+    /**
+     * @property {Number} [0] the top property
+     */
+
+    /**
+     * @property {Number} [1] the left property
+     */
+
+    /**
+     * @method getIntersection
+     * Returns a region that is the intersection of this region and the given region
+     * @param  {Region} region The region to intersect with
+     * @return {Region}        The intersection region
+     */
+
+    /**
+     * @method getUnion
+     * Returns a region that is the union of this region with the given region
+     * @param  {Region} region  The region to make union with
+     * @return {Region}        The union region. The smallest region that contains both this and the given region.
+     */
+
+})
+
+Object.defineProperties(REGION.prototype, {
+    width: {
+        get: function(){
+            return this.getWidth()
+        },
+        set: function(width){
+            return this.setWidth(width)
+        }
+    },
+    height: {
+        get: function(){
+            return this.getHeight()
+        },
+        set: function(height){
+            return this.setHeight(height)
+        }
+    }
+})
+
+require('./statics')(REGION)
+
+module.exports = REGION
+},{"./inherits":273,"./statics":274,"./validate":275,"events":29,"hasown":268,"newify":270,"object-assign":271}],273:[function(require,module,exports){
+'use strict';
+
+module.exports = function(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+            value       : ctor,
+            enumerable  : false,
+            writable    : true,
+            configurable: true
+        }
+    })
+}
+},{}],274:[function(require,module,exports){
+'use strict';
+
+var hasOwn   = require('hasown')
+var VALIDATE = require('./validate')
+
+module.exports = function(REGION){
+
+    var MAX = Math.max
+    var MIN = Math.min
+
+    var statics = {
+        init: function(){
+            var exportAsNonStatic = {
+                getIntersection      : true,
+                getIntersectionArea  : true,
+                getIntersectionHeight: true,
+                getIntersectionWidth : true,
+                getUnion             : true
+            }
+            var thisProto = REGION.prototype
+            var newName
+
+            var exportHasOwn = hasOwn(exportAsNonStatic)
+            var methodName
+
+            for (methodName in exportAsNonStatic) if (exportHasOwn(methodName)) {
+                newName = exportAsNonStatic[methodName]
+                if (typeof newName != 'string'){
+                    newName = methodName
+                }
+
+                ;(function(proto, methodName, protoMethodName){
+
+                    proto[methodName] = function(region){
+                        //<debug>
+                        if (!REGION[protoMethodName]){
+                            console.warn('cannot find method ', protoMethodName,' on ', REGION)
+                        }
+                        //</debug>
+                        return REGION[protoMethodName](this, region)
+                    }
+
+                })(thisProto, newName, methodName);
+            }
+        },
+
+        validate: VALIDATE,
+
+        /**
+         * Returns the region corresponding to the documentElement
+         * @return {Region} The region corresponding to the documentElement. This region is the maximum region visible on the screen.
+         */
+        getDocRegion: function(){
+            return REGION.fromDOM(document.documentElement)
+        },
+
+        from: function(reg){
+            if (reg.__IS_REGION){
+                return reg
+            }
+
+            if (typeof document != 'undefined'){
+                if (typeof HTMLElement != 'undefined' && reg instanceof HTMLElement){
+                    return REGION.fromDOM(reg)
+                }
+
+                if (reg.type && typeof reg.pageX !== 'undefined' && typeof reg.pageY !== 'undefined'){
+                    return REGION.fromEvent(reg)
+                }
+            }
+
+            return REGION(reg)
+        },
+
+        fromEvent: function(event){
+            return REGION.fromPoint({
+                x: event.pageX,
+                y: event.pageY
+            })
+        },
+
+        fromDOM: function(dom){
+            var rect = dom.getBoundingClientRect()
+            // var docElem = document.documentElement
+            // var win     = window
+
+            // var top  = rect.top + win.pageYOffset - docElem.clientTop
+            // var left = rect.left + win.pageXOffset - docElem.clientLeft
+
+            return new REGION({
+                top   : rect.top,
+                left  : rect.left,
+                bottom: rect.bottom,
+                right : rect.right
+            })
+        },
+
+        /**
+         * @static
+         * Returns a region that is the intersection of the given two regions
+         * @param  {Region} first  The first region
+         * @param  {Region} second The second region
+         * @return {Region/Boolean}        The intersection region or false if no intersection found
+         */
+        getIntersection: function(first, second){
+
+            var area = this.getIntersectionArea(first, second)
+
+            if (area){
+                return new REGION(area)
+            }
+
+            return false
+        },
+
+        getIntersectionWidth: function(first, second){
+            var minRight  = MIN(first.right, second.right)
+            var maxLeft   = MAX(first.left,  second.left)
+
+            if (maxLeft < minRight){
+                return minRight  - maxLeft
+            }
+
+            return 0
+        },
+
+        getIntersectionHeight: function(first, second){
+            var maxTop    = MAX(first.top,   second.top)
+            var minBottom = MIN(first.bottom,second.bottom)
+
+            if (maxTop  < minBottom){
+                return minBottom - maxTop
+            }
+
+            return 0
+        },
+
+        getIntersectionArea: function(first, second){
+            var maxTop    = MAX(first.top,   second.top)
+            var minRight  = MIN(first.right, second.right)
+            var minBottom = MIN(first.bottom,second.bottom)
+            var maxLeft   = MAX(first.left,  second.left)
+
+            if (
+                    maxTop  < minBottom &&
+                    maxLeft < minRight
+                ){
+                return {
+                    top    : maxTop,
+                    right  : minRight,
+                    bottom : minBottom,
+                    left   : maxLeft,
+
+                    width  : minRight  - maxLeft,
+                    height : minBottom - maxTop
+                }
+            }
+
+            return false
+        },
+
+        /**
+         * @static
+         * Returns a region that is the union of the given two regions
+         * @param  {Region} first  The first region
+         * @param  {Region} second The second region
+         * @return {Region}        The union region. The smallest region that contains both given regions.
+         */
+        getUnion: function(first, second){
+            var top    = MIN(first.top,   second.top)
+            var right  = MAX(first.right, second.right)
+            var bottom = MAX(first.bottom,second.bottom)
+            var left   = MIN(first.left,  second.left)
+
+            return new REGION(top, right, bottom, left)
+        },
+
+        /**
+         * @static
+         * Returns a region. If the reg argument is a region, returns it, otherwise return a new region built from the reg object.
+         *
+         * @param  {Region} reg A region or an object with either top, left, bottom, right or
+         * with top, left, width, height
+         * @return {Region} A region
+         */
+        getRegion: function(reg){
+            return REGION.from(reg)
+        },
+
+        /**
+         * Creates a region that corresponds to a point.
+         *
+         * @param  {Object} xy The point
+         * @param  {Number} xy.x
+         * @param  {Number} xy.y
+         *
+         * @return {Region}    The new region, with top==xy.y, bottom = xy.y and left==xy.x, right==xy.x
+         */
+        fromPoint: function(xy){
+            return new REGION({
+                        top    : xy.y,
+                        bottom : xy.y,
+                        left   : xy.x,
+                        right  : xy.x
+                    })
+        }
+    }
+
+    Object.keys(statics).forEach(function(key){
+        REGION[key] = statics[key]
+    })
+
+    REGION.init()
+}
+},{"./validate":275,"hasown":268}],275:[function(require,module,exports){
+'use strict';
+
+/**
+ * @static
+ * Returns true if the given region is valid, false otherwise.
+ * @param  {Region} region The region to check
+ * @return {Boolean}        True, if the region is valid, false otherwise.
+ * A region is valid if
+ *  * left <= right  &&
+ *  * top  <= bottom
+ */
+module.exports = function validate(region){
+
+    var isValid = true
+
+    if (region.right < region.left){
+        isValid = false
+        region.right = region.left
+    }
+
+    if (region.bottom < region.top){
+        isValid = false
+        region.bottom = region.top
+    }
+
+    return isValid
+}
+},{}],276:[function(require,module,exports){
+'use strict'
+
+module.exports = {
+   prefixProperties: require('./src/prefixProperties') ,
+   cssUnitless: require('./src/cssUnitless') ,
+   object: require('./src/toStyleObject'),
+   string: require('./src/toStyleString')
+}
+},{"./src/cssUnitless":278,"./src/prefixProperties":283,"./src/toStyleObject":291,"./src/toStyleString":292}],277:[function(require,module,exports){
+module.exports = require('./prefixer')()
+},{"./prefixer":284}],278:[function(require,module,exports){
+'use exports'
+
+//make sure properties are in hyphenated form
+
+module.exports = {
+    'animation'    : 1,
+    'column-count' : 1,
+    'columns'      : 1,
+    'font-weight'  : 1,
+    'opacity'      : 1,
+    'order  '      : 1,
+    'z-index'      : 1,
+    'zoom'         : 1,
+    'flex'         : 1,
+    'box-flex'     : 1,
+    'transform'    : 1,
+    'perspective'  : 1,
+    'box-pack'     : 1,
+    'box-align'    : 1,
+    'colspan'      : 1,
+    'rowspan'      : 1
+}
+},{}],279:[function(require,module,exports){
+'use strict'
+
+var objectHasOwn = Object.prototype.hasOwnProperty
+
+module.exports = function(object, propertyName){
+    return objectHasOwn.call(object, propertyName)
+}
+},{}],280:[function(require,module,exports){
+'use strict'
+
+var objectToString = Object.prototype.toString
+
+module.exports = function(v) {
+    return objectToString.apply(v) === '[object Function]'
+}
+
+},{}],281:[function(require,module,exports){
+'use strict'
+
+var objectToString = Object.prototype.toString
+
+module.exports = function(v){
+    return !!v && objectToString.call(v) === '[object Object]'
+}
+
+
+},{}],282:[function(require,module,exports){
+'use strict';
+
+var toUpperFirst = require('./stringUtils/toUpperFirst')
+
+var re         = /^(Moz|Webkit|Khtml|O|ms|Icab)(?=[A-Z])/
+
+var docStyle   = typeof document == 'undefined'?
+                    {}:
+                    document.documentElement.style
+
+var prefixInfo = (function(){
+
+    var prefix = (function(){
+
+            for (var prop in docStyle) {
+                if( re.test(prop) ) {
+                    // test is faster than match, so it's better to perform
+                    // that on the lot and match only when necessary
+                    return  prop.match(re)[0]
+                }
+            }
+
+            // Nothing found so far? Webkit does not enumerate over the CSS properties of the style object.
+            // However (prop in style) returns the correct value, so we'll have to test for
+            // the precence of a specific property
+            if ('WebkitOpacity' in docStyle){
+                return 'Webkit'
+            }
+
+            if ('KhtmlOpacity' in docStyle) {
+                return 'Khtml'
+            }
+
+            return ''
+        })(),
+
+    lower = prefix.toLowerCase()
+
+    return {
+        style       : prefix,
+        css       : '-' + lower + '-',
+        dom       : ({
+            Webkit: 'WebKit',
+            ms    : 'MS',
+            o     : 'WebKit'
+        })[prefix] || toUpperFirst(prefix)
+    }
+
+})()
+
+module.exports = prefixInfo
+},{"./stringUtils/toUpperFirst":290}],283:[function(require,module,exports){
+module.exports = {
+    'border-radius'              : 1,
+    'border-top-left-radius'     : 1,
+    'border-top-right-radius'    : 1,
+    'border-bottom-left-radius'  : 1,
+    'border-bottom-right-radius' : 1,
+    'box-shadow'                 : 1,
+    'order'                      : 1,
+    'flex'                       : function(name, prefix){
+        return [prefix + 'box-flex']
+    },
+    'box-flex'                   : 1,
+    'box-align'                  : 1,
+    'animation'                  : 1,
+    'animation-duration'         : 1,
+    'animation-name'             : 1,
+    'transition'                 : 1,
+    'transition-duration'        : 1,
+    'transform'                  : 1,
+    'transform-style'            : 1,
+    'transform-origin'           : 1,
+    'backface-visibility'        : 1,
+    'perspective'                : 1,
+    'box-pack'                   : 1
+}
+},{}],284:[function(require,module,exports){
+'use strict'
+
+var camelize     = require('./stringUtils/camelize')
+var hyphenate    = require('./stringUtils/hyphenate')
+var toLowerFirst = require('./stringUtils/toLowerFirst')
+var toUpperFirst = require('./stringUtils/toUpperFirst')
+
+var prefixInfo = require('./prefixInfo')
+var prefixProperties = require('./prefixProperties')
+
+var docStyle = typeof document == 'undefined'?
+                {}:
+                document.documentElement.style
+
+module.exports = function(asStylePrefix){
+
+    return function(name, config){
+        config = config || {}
+
+        var styleName = toLowerFirst(camelize(name)),
+            cssName   = hyphenate(name),
+
+            theName   = asStylePrefix?
+                            styleName:
+                            cssName,
+
+            thePrefix = prefixInfo.style?
+                            asStylePrefix?
+                                prefixInfo.style:
+                                prefixInfo.css
+                            :
+                            ''
+
+        if ( styleName in docStyle ) {
+            return config.asString?
+                              theName :
+                            [ theName ]
+        }
+
+        //not a valid style name, so we'll return the value with a prefix
+
+        var upperCased     = theName,
+            prefixProperty = prefixProperties[cssName],
+            result         = []
+
+        if (asStylePrefix){
+            upperCased = toUpperFirst(theName)
+        }
+
+        if (typeof prefixProperty == 'function'){
+            var prefixedCss = prefixProperty(theName, thePrefix) || []
+            if (prefixedCss && !Array.isArray(prefixedCss)){
+                prefixedCss = [prefixedCss]
+            }
+
+            if (prefixedCss.length){
+                prefixedCss = prefixedCss.map(function(property){
+                    return asStylePrefix?
+                                toLowerFirst(camelize(property)):
+                                hyphenate(property)
+
+                })
+            }
+
+            result = result.concat(prefixedCss)
+        }
+
+        if (thePrefix){
+            result.push(thePrefix + upperCased)
+        }
+
+        result.push(theName)
+
+        if (config.asString || result.length == 1){
+            return result[0]
+        }
+
+        return result
+    }
+}
+},{"./prefixInfo":282,"./prefixProperties":283,"./stringUtils/camelize":285,"./stringUtils/hyphenate":287,"./stringUtils/toLowerFirst":289,"./stringUtils/toUpperFirst":290}],285:[function(require,module,exports){
+'use strict'
+
+var toCamelFn = function(str, letter){
+       return letter ? letter.toUpperCase(): ''
+   }
+
+var hyphenRe = require('./hyphenRe')
+
+module.exports = function(str){
+   return str?
+          str.replace(hyphenRe, toCamelFn):
+          ''
+}
+},{"./hyphenRe":286}],286:[function(require,module,exports){
+module.exports = /[-\s]+(.)?/g
+},{}],287:[function(require,module,exports){
+'use strict'
+
+var separate = require('./separate')
+
+module.exports = function(name){
+   return separate(name).toLowerCase()
+}
+},{"./separate":288}],288:[function(require,module,exports){
+'use strict'
+
+var doubleColonRe      = /::/g
+var upperToLowerRe     = /([A-Z]+)([A-Z][a-z])/g
+var lowerToUpperRe     = /([a-z\d])([A-Z])/g
+var underscoreToDashRe = /_/g
+
+module.exports = function(name, separator){
+
+   return name?
+           name.replace(doubleColonRe, '/')
+                .replace(upperToLowerRe, '$1_$2')
+                .replace(lowerToUpperRe, '$1_$2')
+                .replace(underscoreToDashRe, separator || '-')
+            :
+            ''
+}
+},{}],289:[function(require,module,exports){
+'use strict'
+
+module.exports = function(value){
+    return value.length?
+                value.charAt(0).toLowerCase() + value.substring(1):
+                value
+}
+},{}],290:[function(require,module,exports){
+'use strict'
+
+module.exports = function(value){
+    return value.length?
+                value.charAt(0).toUpperCase() + value.substring(1):
+                value
+}
+},{}],291:[function(require,module,exports){
+'use strict'
+
+var prefixInfo  = require('./prefixInfo')
+var cssPrefixFn = require('./cssPrefix')
+
+var HYPHENATE   = require('./stringUtils/hyphenate')
+var CAMELIZE   = require('./stringUtils/camelize')
+var HAS_OWN     = require('./hasOwn')
+var IS_OBJECT   = require('./isObject')
+var IS_FUNCTION = require('./isFunction')
+
+var applyPrefix = function(target, property, value, normalizeFn){
+    cssPrefixFn(property).forEach(function(p){
+        target[normalizeFn? normalizeFn(p): p] = value
+    })
+}
+
+var toObject = function(str){
+    str = (str || '').split(';')
+
+    var result = {}
+
+    str.forEach(function(item){
+        var split = item.split(':')
+
+        if (split.length == 2){
+            result[split[0].trim()] = split[1].trim()
+        }
+    })
+
+    return result
+}
+
+var CONFIG = {
+    cssUnitless: require('./cssUnitless')
+}
+
+/**
+ * @ignore
+ * @method toStyleObject
+ *
+ * @param  {Object} styles The object to convert to a style object.
+ * @param  {Object} [config]
+ * @param  {Boolean} [config.addUnits=true] True if you want to add units when numerical values are encountered.
+ * @param  {Object}  config.cssUnitless An object whose keys represent css numerical property names that will not be appended with units.
+ * @param  {Object}  config.prefixProperties An object whose keys represent css property names that should be prefixed
+ * @param  {String}  config.cssUnit='px' The css unit to append to numerical values. Defaults to 'px'
+ * @param  {String}  config.normalizeName A function that normalizes a name to a valid css property name
+ * @param  {String}  config.scope
+ *
+ * @return {Object} The object, normalized with css style names
+ */
+var TO_STYLE_OBJECT = function(styles, config, prepend, result){
+
+    if (typeof styles == 'string'){
+        styles = toObject(styles)
+    }
+
+    config = config || CONFIG
+
+    config.cssUnitless = config.cssUnitless || CONFIG.cssUnitless
+
+    result = result || {}
+
+    var scope    = config.scope || {},
+
+        //configs
+        addUnits = config.addUnits != null?
+                            config.addUnits:
+                            scope && scope.addUnits != null?
+                                scope.addUnits:
+                                true,
+
+        cssUnitless      = (config.cssUnitless != null?
+                                config.cssUnitless:
+                                scope?
+                                    scope.cssUnitless:
+                                    null) || {},
+        cssUnit          = (config.cssUnit || scope? scope.cssUnit: null) || 'px',
+        prefixProperties = (config.prefixProperties || (scope? scope.prefixProperties: null)) || {},
+
+        camelize    = config.camelize,
+        normalizeFn = camelize? CAMELIZE: HYPHENATE
+
+    // Object.keys(cssUnitless).forEach(function(key){
+    //     cssUnitless[normalizeFn(key)] = 1
+    // })
+
+    var processed,
+        styleName,
+
+        propName,
+        propValue,
+        propCssUnit,
+        propType,
+        propIsNumber,
+
+        fnPropValue,
+        prefix
+
+    for (propName in styles) if (HAS_OWN(styles, propName)) {
+
+        propValue = styles[ propName ]
+
+        //the hyphenated style name (css property name)
+        styleName = HYPHENATE(prepend? prepend + propName: propName)
+
+        processed = false
+        prefix    = false
+
+        if (IS_FUNCTION(propValue)) {
+
+            //a function can either return a css value
+            //or an object with { value, prefix, name }
+            fnPropValue = propValue.call(scope || styles, propValue, propName, styleName, styles)
+
+            if (IS_OBJECT(fnPropValue) && fnPropValue.value != null){
+
+                propValue = fnPropValue.value
+                prefix    = fnPropValue.prefix
+                styleName = fnPropValue.name?
+                                HYPHENATE(fnPropValue.name):
+                                styleName
+
+            } else {
+                propValue = fnPropValue
+            }
+        }
+
+        propType     = typeof propValue
+        propIsNumber = propType == 'number' || (propType == 'string' && propValue != '' && propValue * 1 == propValue)
+
+        if (propValue == null || styleName == null || styleName === ''){
+            continue
+        }
+
+        if (propIsNumber || propType == 'string'){
+           processed = true
+        }
+
+        if (!processed && propValue.value != null && propValue.prefix){
+           processed = true
+           prefix    = propValue.prefix
+           propValue = propValue.value
+        }
+
+        // hyphenStyleName = camelize? HYPHENATE(styleName): styleName
+
+        if (processed){
+
+            prefix = prefix || !!prefixProperties[styleName]
+
+            if (propIsNumber){
+                propValue = addUnits && !(styleName in cssUnitless) ?
+                                propValue + cssUnit:
+                                propValue + ''//change it to a string, so that jquery does not append px or other units
+            }
+
+            //special border treatment
+            if (
+                    (
+                     styleName == 'border' ||
+                    (!styleName.indexOf('border')
+                        &&
+                        !~styleName.indexOf('radius')
+                        &&
+                        !~styleName.indexOf('width'))
+                    ) &&
+                    propIsNumber
+                ){
+
+                styleName = styleName + '-width'
+            }
+
+            //special border radius treatment
+            if (!styleName.indexOf('border-radius-')){
+                styleName.replace(/border(-radius)(-(.*))/, function(str, radius, theRest){
+                    var positions = {
+                        '-top'    : ['-top-left',      '-top-right' ],
+                        '-left'   : ['-top-left',    '-bottom-left' ],
+                        '-right'  : ['-top-right',   '-bottom-right'],
+                        '-bottom' : ['-bottom-left', '-bottom-right']
+                    }
+
+                    if (theRest in positions){
+                        styleName = []
+
+                        positions[theRest].forEach(function(pos){
+                            styleName.push('border' + pos + radius)
+                        })
+                    } else {
+                        styleName = 'border'+ theRest + radius
+                    }
+
+                })
+
+                if (Array.isArray(styleName)){
+                    styleName.forEach(function(styleName){
+                        if (prefix){
+                            applyPrefix(result, styleName, propValue, normalizeFn)
+                        } else {
+                            result[normalizeFn(styleName)] = propValue
+                        }
+                    })
+
+                    continue
+                }
+            }
+
+            if (prefix){
+                applyPrefix(result, styleName, propValue, normalizeFn)
+            } else {
+                result[normalizeFn(styleName)] = propValue
+            }
+
+        } else {
+            //the propValue must be an object, so go down the hierarchy
+            TO_STYLE_OBJECT(propValue, config, styleName + '-', result)
+        }
+    }
+
+    return result
+}
+
+module.exports = TO_STYLE_OBJECT
+},{"./cssPrefix":277,"./cssUnitless":278,"./hasOwn":279,"./isFunction":280,"./isObject":281,"./prefixInfo":282,"./stringUtils/camelize":285,"./stringUtils/hyphenate":287}],292:[function(require,module,exports){
+'use strict'
+
+var toStyleObject = require('./toStyleObject')
+var hasOwn        = require('./hasOwn')
+
+/**
+ * @ignore
+ * @method toStyleString
+ *
+ * @param  {Object} styles The object to convert to a style string.
+ * @param  {Object} config
+ * @param  {Boolean} config.addUnits=true True if you want to add units when numerical values are encountered. Defaults to true
+ * @param  {Object}  config.cssUnitless An object whose keys represent css numerical property names that will not be appended with units.
+ * @param  {Object}  config.prefixProperties An object whose keys represent css property names that should be prefixed
+ * @param  {String}  config.cssUnit='px' The css unit to append to numerical values. Defaults to 'px'
+ * @param  {String}  config.scope
+ *
+ * @return {Object} The object, normalized with css style names
+ */
+module.exports = function(styles, config){
+    styles = toStyleObject(styles, config)
+
+    var result = []
+    var prop
+
+    for(prop in styles) if (hasOwn(styles, prop)){
+        result.push(prop + ': ' + styles[prop])
+    }
+
+    return result.join('; ')
+}
+},{"./hasOwn":279,"./toStyleObject":291}],293:[function(require,module,exports){
+'use strict';
+
+var assign = require('object-assign')
+var clone  = require('clone')
+
+var DEFAULT = {
+    attrName: 'data-tooltip',
+    throttle: 10,
+    showDelay: 500,
+    offset: {
+        x: 5,
+        y: 5
+    },
+    hideOnChange: true,
+    hideOnChangeDelay: 500,
+    className: 'tooltip',
+    style: {
+        padding: 5,
+        border: '1px solid gray',
+        background: 'white',
+
+    	boxSizing    : 'border-box',
+    	pointerEvents: 'none',
+    	position     : 'absolute',
+    	visibility   : 'hidden',
+    	display      : 'inline-block',
+        transform    : 'translate3d(0px, 0px, 0px)',
+    	transition   : 'opacity 0.3s'//, top 0.2s, left 0.2s'
+    },
+    visibleStyle: {
+        opacity:1,
+        visibility: 'visible'
+    },
+    hiddenStyle : {
+        opacity: 0
+    },
+    alignPositions: null
+}
+
+var preparePositions = require('./preparePositions')
+
+var id = 0
+
+module.exports = function(values){
+    values = values || {}
+
+    var style        = assign({}, DEFAULT.style, values.style)
+    var visibleStyle = assign({}, DEFAULT.visibleStyle, values.visibleStyle)
+    var hiddenStyle  = assign({}, DEFAULT.hiddenStyle, values.hiddenStyle)
+
+    var config = clone(assign({}, DEFAULT, values))
+
+    config.style        = style
+    config.visibleStyle = visibleStyle
+    config.hiddenStyle  = hiddenStyle
+
+    config.selector = '[' + config.attrName + ']'
+
+    config.alignPositions = preparePositions(config.alignPositions)
+    config.target = config.target || document.documentElement
+
+    config.id = id++
+
+    return config
+}
+},{"./preparePositions":300,"clone":246,"object-assign":249}],294:[function(require,module,exports){
+'use strict';
+
+var matches = require('matches-selector')
+
+module.exports = function(root, selector){
+
+	return function(event){
+
+	    var target = event.target
+
+	    while (target) {
+	    	if (matches(target, selector)){
+	    		return target
+	    	}
+
+	    	if (target == root){
+	    		return
+	    	}
+
+	        target = target.parentNode
+	    }
+
+	}
+}
+},{"matches-selector":248}],295:[function(require,module,exports){
+'use strict';
+
+var throttle  = require('./throttle')
+var targetFn  = require('./target')
+var configure = require('./config')
+
+var mouseenter = require('./mouseenter')
+var mouseleave = require('./mouseleave')
+
+var TOOLTIP = function(cfg){
+
+	var config = configure(cfg)
+	var target = targetFn(config)
+	var root   = config.target
+	var t      = config.throttle
+
+	//make the target && protection since it might be destroyed by that time
+    var onMouseOver = throttle(function(eventTarget){
+        target && target.set(eventTarget)
+    }, t)
+
+    var onMouseOut = throttle(function(eventTarget){
+
+        target && target.hold()
+        setTimeout(function(){
+            if (target && target.onHold()){
+                target.set(null)
+            }
+        }, t)
+
+    }, t)
+
+    var removeMouseEnter = mouseenter(root, config.selector, onMouseOver)
+    var removeMouseLeave = mouseleave(root, config.selector, onMouseOut)
+
+    var onMouseMove = throttle(function(){
+        var currentTarget = target.getCurrentTarget()
+
+        if (currentTarget && !currentTarget.parentNode){
+            target.set(null)
+        }
+    }, 200)
+
+    root.addEventListener('mousemove', onMouseMove)
+
+    return {
+        destroy: function(){
+
+        	target.destroy()
+
+            removeMouseEnter()
+            removeMouseLeave()
+            root.removeEventListener('mousemove', onMouseMove)
+
+			root   = null
+			target = null
+			config = null
+        }
+    }
+}
+
+module.exports = TOOLTIP
+},{"./config":293,"./mouseenter":297,"./mouseleave":298,"./target":302,"./throttle":303}],296:[function(require,module,exports){
+'use strict';
+
+module.exports = function mapObject(obj, fn){
+
+    var result = {}
+
+    Object.keys(obj).forEach(function(key){
+        result[key] = fn(obj[key])
+    })
+
+    return result
+}
+},{}],297:[function(require,module,exports){
+'use strict';
+
+var testEventMatches = require('../eventMatches');
+
+function returnTrue(){
+    return true
+}
+
+function contains(haystack, needle) {
+    var targ = needle
+    while (targ && targ !== haystack) {
+        targ = targ.parentNode
+    }
+    return targ !== haystack
+}
+
+module.exports = function(el, selector, fn, config){
+
+    var eventMatches = testEventMatches(el, selector)
+
+    var onMouseOver = function(event){
+        var target = event.target
+        var related = event.relatedTarget
+
+        // console.log(event.target, event.relatedTarget)
+
+        // has() returns true if we move into target from related,
+        // where related is a child of target
+
+        var match
+
+        // if (!related || (related !== target && has(target, related))){
+            if (match = eventMatches(event)){
+                fn(match, event)
+            }
+        // }
+    }
+
+    el.addEventListener('mouseover', onMouseOver)
+
+    return function(){
+        el.removeEventListener('mouseover', onMouseOver)
+    }
+}
+
+},{"../eventMatches":294}],298:[function(require,module,exports){
+'use strict';
+
+var testEventMatches = require('../eventMatches');
+
+function returnTrue(){
+    return true
+}
+
+function contains(haystack, needle) {
+    var targ = needle
+    while (targ && targ !== haystack) {
+        targ = targ.parentNode
+    }
+    return targ !== haystack
+}
+
+module.exports = function(el, selector, fn, config){
+
+    var has = config && config.allowNested?
+                returnTrue:
+                contains
+
+    var eventMatches = testEventMatches(el, selector)
+
+    var onMouseOut = function(event){
+        var target = event.target
+        var related = event.relatedTarget
+
+        // console.log(event.target, event.relatedTarget)
+
+        // has() returns true if we move into target from related, 
+        // where related is a child of target
+
+        var match
+
+        if (!related || (related !== target && has(target, related))){
+            if (match = eventMatches(event)){
+                fn(match, event)
+            }
+        }
+    }
+
+    el.addEventListener('mouseout', onMouseOut)
+
+    return function(){
+        el.removeEventListener('mouseout', onMouseOut)
+    }
+}
+
+},{"../eventMatches":294}],299:[function(require,module,exports){
+'use strict';
+
+module.exports = function(str){
+
+	var result = {}
+
+	str.split(';').forEach(function(style){
+		var parts = style.split(':')
+
+		if (parts.length){
+			result[parts[0].trim()] = parts[1].trim()
+		}
+	})
+
+	return result
+}
+},{}],300:[function(require,module,exports){
+'use strict';
+
+var TRANSLATE_POS = {
+    top: 'bc-tc',
+    bottom: 'tc-bc',
+    left: 'rc-lc',
+    right: 'lc-rc',
+    topleft: 'br-tl',
+    topright: 'bl-tr',
+    bottomleft: 'tr-bl',
+    bottomright: 'tl-br'
+}
+
+module.exports = function preparePositions(positions){
+    positions = positions || [
+        'topleft',
+        'topright',
+        'bottomleft',
+        'bottomright',
+        'top',
+        'bottom'
+    ]
+
+    return positions.map(function(pos){
+        pos = pos.trim()
+        return TRANSLATE_POS[pos] || pos
+    }).filter(function(pos){
+        return !!pos
+    })
+}
+},{}],301:[function(require,module,exports){
+'use strict';
+
+var toStyleObject = require('to-style').object
+var normalize     = require('react-style-normalizer')
+var assign = require('object-assign')
+
+function toStyle(style){
+	return toStyleObject(normalize(style))
+}
+
+function setStyle(element, style){
+
+	style = toStyle(style)
+
+	Object.keys(style).forEach(function(key){
+	    element.style[key] = style[key]
+	})
+
+	return element
+}
+
+module.exports = function(element, style /*, style2 */){
+
+	var args = [].slice.call(arguments, 1)
+
+	var styles = [{}].concat(args).map(toStyle)
+
+	var style = assign.apply(null, styles)
+
+	setStyle(element, style)
+
+	return element
+}
+},{"object-assign":249,"react-style-normalizer":257,"to-style":276}],302:[function(require,module,exports){
+'use strict';
+
+var Region = require('region-align')
+
+var assign = require('object-assign');
+var escape = require('escape-html')
+
+var setStyle         = require('./setStyle')
+var toOffset         = require('./toOffset')
+var parseAsStyle     = require('./parseAsStyle')
+var tooltipElement   = require('./tooltipElement')
+var preparePositions = require('./preparePositions')
+var mapObject        = require('./mapObject')
+
+function emptyObject(obj){
+    return mapObject(obj, function(){
+        return ''
+    })
+}
+
+module.exports = function(config){
+
+    var prevStyle
+
+    function showTooltip(target){
+
+        var tooltip = target.getAttribute(config.attrName)
+
+        var el = tooltipElement(config)
+        el.innerHTML = config.escape? escape(tooltip): tooltip
+
+        var positions    = config.alignPositions
+        var elRegion     = Region.from(el)
+        var targetRegion = Region.from(target)
+
+        var attrPosition = target.getAttribute(config.attrName + '-positions')
+        var attrStyle    = target.getAttribute(config.attrName + '-style')
+
+        var style = assign({}, prevStyle, config.style)
+
+        if (attrStyle){
+            attrStyle = parseAsStyle(attrStyle)
+            prevStyle = emptyObject(attrStyle)
+
+            assign(style, attrStyle)
+        }
+
+        if (attrPosition){
+            positions = preparePositions(attrPosition.split(';'))
+        }
+
+        var res = elRegion.alignTo(targetRegion, positions, {
+            offset: toOffset(config.offset, positions),
+            constrain: true
+        })
+
+        var scrollTop = document.body.scrollTop || 0
+        var scrollLeft = document.body.scrollLeft || 0
+
+        setStyle(el, style, config.visibleStyle, {
+            top : elRegion.top + scrollTop,
+            left: elRegion.left + scrollLeft
+        })
+    }
+
+    function clearTooltip(){
+        setStyle(
+            tooltipElement(config),
+            config.hiddenStyle
+        )
+    }
+
+    var currentTarget
+
+    var withTarget = (function(){
+
+        var prevId
+
+        return function(target){
+
+            if (target != currentTarget){
+                if (prevId){
+                    clearTimeout(prevId)
+                    prevId = null
+                }
+
+                if (target){
+
+                    if (config.showDelay){
+
+                        prevId = setTimeout(function(){
+                            prevId = null
+                            showTooltip(target)
+                        }, config.showDelay)
+                    } else {
+                        showTooltip(target)
+                    }
+
+                } else {
+                    clearTooltip()
+                }
+            }
+
+            currentTarget = target
+        }
+    })()
+
+    var setter = (function(){
+        var lastValue
+        var PREV_ID
+
+        return function setter(value){
+
+            if (value == lastValue){
+                return
+            }
+
+            lastValue = value
+
+            if (config.hideOnChange){
+
+                if (PREV_ID || value){
+
+                    if (PREV_ID){
+                        clearTimeout(PREV_ID)
+                    }
+
+                    PREV_ID = setTimeout(function(){
+                        PREV_ID = null
+                        withTarget(lastValue)
+                    }, config.hideOnChangeDelay)
+                }
+
+                value = null
+            }
+
+            withTarget(value)
+        }
+
+    })()
+
+    var HOLD = false
+
+    return {
+
+        destroy: function(){
+            tooltipElement.destroy(config)
+        },
+
+        hold: function() {
+            HOLD = true
+        },
+
+        onHold: function() {
+            return HOLD
+        },
+
+        set: function(value){
+            HOLD = false
+            setter(value)
+        },
+
+        getCurrentTarget: function(){
+            return currentTarget
+        }
+    }
+
+}
+},{"./mapObject":296,"./parseAsStyle":299,"./preparePositions":300,"./setStyle":301,"./toOffset":304,"./tooltipElement":305,"escape-html":247,"object-assign":249,"region-align":266}],303:[function(require,module,exports){
+'use strict';
+
+module.exports = function(fn, delay, scope) {
+    var timeoutId = -1
+    var self
+    var args
+
+    if (delay === undefined){
+        delay = 0
+    }
+
+    if (delay < 0){
+        return fn
+    }
+
+    return function () {
+
+        self = scope || this
+        args = arguments
+
+        if (timeoutId !== -1) {
+            //the function was called once again in the delay interval
+        } else {
+            timeoutId = setTimeout(function () {
+                fn.apply(self, args)
+
+                self = null
+                timeoutId = -1
+            }, delay)
+        }
+
+    }
+
+}
+},{}],304:[function(require,module,exports){
+'use strict';
+
+var signs = {
+	t: { 
+		x: 1,
+		y: 1
+	},
+	l: {
+		x: 1,
+		y: 1
+	},
+	b: {
+		x: 1,
+		y: -1
+	},
+	r: {
+		x: -1,
+		y: 1
+	}
+}
+
+/**
+ * Given the offset (x,y, or left,top or array), returns an array of offsets, for each given position
+ *
+ * For example, if we align br-tl, it means we align br of tooltip to tl of target,
+ * so for this position we should return an offset of {-x,-y} of the original offset
+ * 
+ * @param  {Object}
+ * @param  {Array}
+ * @return {Array}
+ */
+module.exports = function(offset, positions){
+
+	if (!offset){
+		return
+	}
+
+	var array
+
+	if (Array.isArray(offset)){
+		array = offset
+	}
+
+	array = offset.x != undefined?
+			[offset.x, offset.y]:
+			[offset.left, offset.top]
+
+	var x = array[0]
+	var y = array[1]
+
+	return positions.map(function(pos){
+		var parts = pos.split('-')
+
+		var first = parts[0]
+
+		var side1 = first[0]
+		var side2 = first[1]
+
+		var sign1 = signs[side1]
+		var sign2 = signs[side2]
+
+		var xSign = 1
+		var ySign = 1
+
+		if (sign1){
+			xSign *= sign1.x
+			ySign *= sign1.y
+		}
+		if (sign2){
+			xSign *= sign2.x
+			ySign *= sign2.y
+		}
+
+		return [x * xSign, y * ySign]
+	})
+}
+},{}],305:[function(require,module,exports){
+'use strict';
+
+var setStyle = require('./setStyle')
+var map      = {}
+
+var result = function(config){
+
+    var element = map[config.id]
+
+    if (!element){
+        element = setStyle(document.createElement('div'), config.style || {})
+        element.className = config.className
+
+        if (config.appendTooltip){
+            config.appendTooltip(element)
+        } else {
+            document.body.appendChild(element)
+        }
+        map[config.id] = element
+    }
+
+    return element
+}
+
+result.destroy = function(config){
+	var element = map[config.id]
+
+	if (element){
+		var parent = element.parentNode
+		parent && parent.removeChild(element)
+	}
+}
+
+module.exports = result
+},{"./setStyle":301}],306:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -36258,4 +41437,4 @@ module.exports = warning;
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":113}]},{},[4]);
+},{"./lib/React":114}]},{},[4]);

@@ -57,15 +57,18 @@ class JsonSearchView(SearchView):
                         request.GET['offset']))
                 pass
 
-        query_args['limit'] = ES_DEFAULT_LIMIT
         if 'limit' in request.GET and request.GET['limit']:
             try:
-                query_args['limit'] = int(request.GET['limit'])
+                limit = int(request.GET['limit'])
+                if limit > 0:
+                    query_args['limit'] = limit
             except ValueError:
                 logging.warn(
-                    "Illegal query argument received: offset={}".format(
-                        request.GET['offset']))
+                    "Illegal query argument received: limit={}".format(
+                        request.GET['limit']))
                 pass
+        else:
+            query_args['limit'] = ES_DEFAULT_LIMIT
 
         if 'only_facets' in request.GET:
             query_args['only_facets'] = True
@@ -86,15 +89,18 @@ class JsonSearchView(SearchView):
 
         # don't limit/offset empty results when we only return facets
         if 'only_facets' not in query_args:
-            # calculate offset end
-            start_index = query_args['offset']
-            end_index = query_args[
-                'offset'] + query_args['limit'] if query_args['limit'] else None
-            # combine results and facets, limit and offset as given as
-            # parameters
+            if 'limit' in query_args and query_args['limit']:
+                # calculate offset end
+                start_index = query_args['offset']
+                end_index = query_args[
+                    'offset'] + query_args['limit']
+                # combine results and facets, limit and offset as given as
+                # parameters
+                result = result[start_index:end_index]
+
             result_list = [
                 sr.get_stored_fields() for sr in
-                result[start_index:end_index]]
+                result]
         else:
             result_list = []
 
