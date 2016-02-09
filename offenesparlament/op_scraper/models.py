@@ -854,9 +854,6 @@ class DebateStatement(models.Model):
     # Name of speaker (useful for cases without person-ref for speaker?)
     speaker_name = models.CharField(max_length=255, null=True)
 
-    # For debug reasons, can contain extracted data as JSON string
-    debugdump = models.TextField(null=True)
-
     def __unicode__(self):
         return u'{}, {}-{}, {}'.format(
             # self.person.full_name if self.person else '-',
