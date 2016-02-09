@@ -140,6 +140,8 @@ class StatementSpider(BaseSpider):
                 except Person.DoesNotExist:
                     self.logger.warning(
                         red(u"Person '{}' not found".format(sect['speaker_id'])))
+            else:
+                sect['person'] = None
 
             # Select best timestamps for start and end and make datetime
             start_ts = sect['time_start'] or sect['ref_timestamp']
@@ -171,8 +173,6 @@ class StatementSpider(BaseSpider):
         Save (update or insert) debate_statement to ORM
         """
         data['index'] = index
-        data['debugdump'] = json.dumps([data[k] for k in ['links',
-                                                          'ref_timestamp']])
         try:
             debate_statement = DebateStatement.objects.get(
                 debate=data['debate'], doc_section=data['doc_section'])
