@@ -247,11 +247,27 @@ class InquiriesSpider(BaseSpider):
             doc_items.append(doc)
         return doc_items
 
+    def parse_response_docs(self, response):
+
+        docs = INQUIRY.RESPONSEDOCS.xt(response)
+
+        # Create all docs we don't yet have in the DB
+        doc_items = []
+        for document in docs:
+            doc, created = Document.objects.get_or_create(
+                title=document['title'],
+                html_link=document['html_url'],
+                pdf_link=document['pdf_url'],
+                stripped_html=None
+            )
+            doc_items.append(doc)
+        return doc_items
+
     def parse_steps(self, response):
         """
             Callback function to parse the single-page history for normal inquiries
         """
-
+        response_link = []
         inquiry_item = response.meta['inquiry_item']
 
         # Get or created a default-phase for inquiries, because there are no phases in
@@ -264,10 +280,9 @@ class InquiriesSpider(BaseSpider):
 
         steps = INQUIRY.STEPS.xt(response)
 
-        if "Schriftliche Beantwortung" in steps[-1]["title"]:
-            response_link = INQUIRY.RESPONSE_LINK.xt(response)
-        else:
-            response_link = 0
+        for step in steps:
+            if "Schriftliche Beantwortung" in step["title"]:
+                response_link = INQUIRY.RESPONSE_LINK.xt(response)
 
         for step in steps:
             step_item, created = Step.objects.update_or_create(
@@ -280,7 +295,10 @@ class InquiriesSpider(BaseSpider):
                 source_link=response.url
             )
             step_item.save()
-        return response_link
+        if response_link:
+            return response_link
+        else: 
+            return
 
     def parse_parliament_steps(self, response):
         """
@@ -398,7 +416,7 @@ class InquiriesSpider(BaseSpider):
         )
 
         # Attach foreign Keys
-        inquiryresponse_item.documents = self.parse_docs(response)
+        inquiryresponse_item.documents = self.parse_response_docs(response)
         inquiryresponse_item.category = cat
 
         # Save InquiryResponse object
