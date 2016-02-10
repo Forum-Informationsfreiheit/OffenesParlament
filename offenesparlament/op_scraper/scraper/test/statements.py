@@ -372,13 +372,13 @@ class TestMergeParagraphs(unittest.TestCase):
 class TestParagraph(unittest.TestCase):
     def test_get_timestamp(self):
         p = Paragraph.createFromString('<p class="RB">12.45.07</p>')
-        self.assertEquals(p.get_timestamp(), [12, 45, 07])
+        self.assertEquals(p.get_timestamp(), [12, 45, 7])
         p = Paragraph.createFromString('<p class="RB"><!--.-->12.45.07</p>')
-        self.assertEquals(p.get_timestamp(), [12, 45, 07])
+        self.assertEquals(p.get_timestamp(), [12, 45, 7])
         p = Paragraph.createFromString('<p class="RB">12.45</p>')
         self.assertEquals(p.get_timestamp(), [12, 45])
         p = Paragraph.createFromString('<p class="RE">12.45.07</p>')
-        self.assertEquals(p.get_timestamp(), [12, 45, 07])
+        self.assertEquals(p.get_timestamp(), [12, 45, 7])
         p = Paragraph.createFromString('<p class="RE">12.45</p>')
         self.assertEquals(p.get_timestamp(), [12, 45])
         p = Paragraph.createFromString('<p class="MsoNormal">12.45</p>')
