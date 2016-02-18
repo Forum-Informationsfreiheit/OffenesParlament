@@ -531,6 +531,39 @@ class Person(Timestamped, ParlIDMixIn):
 
         return self._slug
 
+    # JSON for ES Index Generation
+    @property
+    def mandates_json(self):
+        mandates = []
+        for mand in self.mandates.all():
+            mandate = {}
+            mandate['llp'] = unicode(mand.legislative_period)
+            if mand.function:
+                mandate['function'] = {
+                    "title": mand.function.title,
+                    "short": mand.function.short,
+                }
+            if mand.state:
+                mandate['state'] = {
+                    "title": mand.state.title,
+                    "name": mand.state.name,
+                }
+            if mand.party:
+                mandate['party'] = {
+                    "title": mand.state.title,
+                    "name": mand.state.name,
+                }
+
+            # If we have given start- and end-dates, take them
+            # else take the ones from the legislative period
+            if mand.start_date or mand.end_date:
+                mandate['start_date'] = mand.start_date
+                mandate['end_date'] = mand.end_date
+            else:
+                mandate['start_date'] = mand.legislative_period.start_date
+                mandate['end_date'] = mand.legislative_period.end_date
+
+
 
 class InquiryResponse(Law):
     sender = models.ForeignKey(
@@ -682,7 +715,8 @@ class Subscription(models.Model):
     A single subscription of content for a user
     """
     user = models.ForeignKey(User)
-    content = models.ForeignKey(SubscribedContent)
+    content = models.ForeignKey(
+        SubscribedContent, related_name='subscriptions')
 
     # Relationships
     verification = models.OneToOneField(Verification, null=True, blank=True)
