@@ -538,6 +538,30 @@ class Person(Timestamped, ParlIDMixIn):
         for mand in self.mandates.all():
             mandate = {}
             mandate['llp'] = unicode(mand.legislative_period)
+
+            # If we have given start- and end-dates, take them
+            # else take the ones from the legislative period
+            if mand.start_date or mand.end_date:
+                mandate['start_date'] = mand.start_date.isoformat()
+                mandate[
+                    'end_date'] = mand.end_date.isoformat() if mand.end_date else None
+            elif mand.legislative_period:
+                llp = mand.legislative_period
+                mandate['start_date'] = llp.start_date.isoformat()
+                mandate[
+                    'end_date'] = llp.end_date.isoformat() if llp.end_date else None
+
+            if mand.administration:
+                adm = mand.administration
+                mandate['administration'] = {
+                    "title": adm.title,
+                    "start_date": adm.start_date.isoformat(),
+                    "end_date": adm.end_date.isoformat() if adm.end_date else None,
+                }
+                mandate['start_date'] = adm.start_date.isoformat()
+                mandate[
+                    'end_date'] = adm.end_date.isoformat() if adm.end_date else None
+
             if mand.function:
                 mandate['function'] = {
                     "title": mand.function.title,
@@ -554,15 +578,17 @@ class Person(Timestamped, ParlIDMixIn):
                     "name": mand.state.name,
                 }
 
-            # If we have given start- and end-dates, take them
-            # else take the ones from the legislative period
-            if mand.start_date or mand.end_date:
-                mandate['start_date'] = mand.start_date
-                mandate['end_date'] = mand.end_date
-            else:
-                mandate['start_date'] = mand.legislative_period.start_date
-                mandate['end_date'] = mand.legislative_period.end_date
+            mandates.append(mandate)
+        return json.dumps(mandates)
 
+    @property
+    def statements_json(self):
+        statements = []
+        for st in self.statements.all():
+            statement = {}
+
+            statements.append(statement)
+        return json.dumps(statements)
 
 
 class InquiryResponse(Law):

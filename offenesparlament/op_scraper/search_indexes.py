@@ -27,15 +27,13 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     llps = indexes.CharField(model_attr='llps_facet', faceted=True)
 
     # Secondary Items
-    mandates = indexes.MultiValueField(model_attr='mandates', faceted=True)
+    mandates = indexes.CharField()
 
     def prepare_mandates(self, obj):
         """
         Collects the object's step's as json
         """
-        import ipdb
-        ipdb.set_trace()
-        return []
+        return obj.mandates_json
 
     def get_model(self):
         return Person
