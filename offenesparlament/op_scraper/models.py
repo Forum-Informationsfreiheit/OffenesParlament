@@ -275,7 +275,10 @@ class Law(Timestamped, ParlIDMixIn):
 
     @property
     def llp_roman(self):
-        return self.legislative_period.roman_numeral
+        if self.legislative_period:
+            return self.legislative_period.roman_numeral
+        else:
+            return None
 
     @property
     def llps_facet(self):
@@ -295,13 +298,21 @@ class Law(Timestamped, ParlIDMixIn):
     @property
     def slug(self):
         if not self._slug:
-            self._slug = reverse(
-                'gesetz_detail',
-                kwargs={
-                    'parl_id': self.parl_id_urlsafe,
-                    'ggp': self.llp_roman
-                }
-            )
+            if self.llp_roman:
+                self._slug = reverse(
+                    'gesetz_detail',
+                    kwargs={
+                        'parl_id': self.parl_id_urlsafe,
+                        'ggp': self.llp_roman
+                    }
+                )
+            else:
+                self._slug = reverse(
+                    'gesetz_detail',
+                    kwargs={
+                        'parl_id': self.parl_id_urlsafe
+                    }
+                )
             self.save()
 
         return self._slug
@@ -585,8 +596,17 @@ class Person(Timestamped, ParlIDMixIn):
     def statements_json(self):
         statements = []
         for st in self.statements.all():
-            statement = {}
-
+            statement = {
+                "type": st.speech_type,
+                "date": st.step.date.isoformat(),
+                "law": st.step.law.title if st.step.law else None,
+                "law_id": st.step.law.id if st.step.law else None,
+                "law_slug": st.step.law.slug if st.step.law else None,
+                "inquiry": st.step.inquiry.title if st.step.inquiry else None,
+                "inquiry_id": st.step.inquiry.id if st.step.inquiry else None,
+                "inquiry_slug": st.step.inquiry.slug if st.step.inquiry else None,
+                "protocol_url": st.protocol_url,
+            }
             statements.append(statement)
         return json.dumps(statements)
 
@@ -615,7 +635,10 @@ class Inquiry(Law):
 
     @property
     def llp_roman(self):
-        return self.legislative_period.roman_numeral
+        if self.legislative_period:
+            return self.legislative_period.roman_numeral
+        else:
+            return None
 
 
 class Step(models.Model):

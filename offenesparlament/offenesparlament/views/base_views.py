@@ -39,9 +39,9 @@ def gesetze_list(request):
 def person_list_with_ggp(request, ggp):
     llp = _ensure_ggp_is_set(request, ggp)
     person_list = Person.objects \
-            .filter(mandates__legislative_period=llp) \
-            .order_by('reversed_name') \
-            .select_related('latest_mandate__party')
+        .filter(mandates__legislative_period=llp) \
+        .order_by('reversed_name') \
+        .select_related('latest_mandate__party')
     context = {'person_list': person_list}
     return render(request, 'person_list.html', context)
 
@@ -87,11 +87,16 @@ def person_detail(request, parl_id, name):
     return render(request, 'person_detail.html', context)
 
 
-def gesetz_detail(request, parl_id, ggp):
+def gesetz_detail(request, parl_id, ggp=None):
     parl_id_restored = '({})'.format(
         parl_id.replace('-', '/').replace('_', ' '))
-    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
-    gesetz = Law.objects.get(parl_id=parl_id_restored, legislative_period=llp)
+    if ggp:
+        llp = LegislativePeriod.objects.get(roman_numeral=ggp)
+        gesetz = Law.objects.get(
+            parl_id=parl_id_restored, legislative_period=llp)
+    else:
+        llp = None
+        gesetz = Law.objects.get(parl_id=parl_id, legislative_period=llp)
     context = {'law': gesetz}
     return render(request, 'gesetz_detail.html', context)
 
@@ -116,5 +121,6 @@ def _ensure_ggp_is_set(request, ggp_roman_numeral=None):
         llp = LegislativePeriod.objects.get_current()
         request.session['ggp_roman_numeral'] = llp.roman_numeral
         request.session['ggp_facet_repr'] = llp.facet_repr
-    llp = LegislativePeriod.objects.get(roman_numeral=request.session['ggp_roman_numeral'])
+    llp = LegislativePeriod.objects.get(
+        roman_numeral=request.session['ggp_roman_numeral'])
     return llp
