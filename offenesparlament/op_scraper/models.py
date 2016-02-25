@@ -275,7 +275,10 @@ class Law(Timestamped, ParlIDMixIn):
 
     @property
     def llp_roman(self):
-        return self.legislative_period.roman_numeral
+        if self.legislative_period:
+            return self.legislative_period.roman_numeral
+        else:
+            return None
 
     @property
     def llps_facet(self):
@@ -295,13 +298,21 @@ class Law(Timestamped, ParlIDMixIn):
     @property
     def slug(self):
         if not self._slug:
-            self._slug = reverse(
-                'gesetz_detail',
-                kwargs={
-                    'parl_id': self.parl_id_urlsafe,
-                    'ggp': self.llp_roman
-                }
-            )
+            if self.llp_roman:
+                self._slug = reverse(
+                    'gesetz_detail',
+                    kwargs={
+                        'parl_id': self.parl_id_urlsafe,
+                        'ggp': self.llp_roman
+                    }
+                )
+            else:
+                self._slug = reverse(
+                    'gesetz_detail',
+                    kwargs={
+                        'parl_id': self.parl_id_urlsafe
+                    }
+                )
             self.save()
 
         return self._slug
@@ -531,6 +542,74 @@ class Person(Timestamped, ParlIDMixIn):
 
         return self._slug
 
+    # JSON for ES Index Generation
+    @property
+    def mandates_json(self):
+        mandates = []
+        for mand in self.mandates.all():
+            mandate = {}
+            mandate['llp'] = unicode(mand.legislative_period)
+
+            # If we have given start- and end-dates, take them
+            # else take the ones from the legislative period
+            if mand.start_date or mand.end_date:
+                mandate['start_date'] = mand.start_date.isoformat()
+                mandate[
+                    'end_date'] = mand.end_date.isoformat() if mand.end_date else None
+            elif mand.legislative_period:
+                llp = mand.legislative_period
+                mandate['start_date'] = llp.start_date.isoformat()
+                mandate[
+                    'end_date'] = llp.end_date.isoformat() if llp.end_date else None
+
+            if mand.administration:
+                adm = mand.administration
+                mandate['administration'] = {
+                    "title": adm.title,
+                    "start_date": adm.start_date.isoformat(),
+                    "end_date": adm.end_date.isoformat() if adm.end_date else None,
+                }
+                mandate['start_date'] = adm.start_date.isoformat()
+                mandate[
+                    'end_date'] = adm.end_date.isoformat() if adm.end_date else None
+
+            if mand.function:
+                mandate['function'] = {
+                    "title": mand.function.title,
+                    "short": mand.function.short,
+                }
+            if mand.state:
+                mandate['state'] = {
+                    "title": mand.state.title,
+                    "name": mand.state.name,
+                }
+            if mand.party:
+                mandate['party'] = {
+                    "title": mand.state.title,
+                    "name": mand.state.name,
+                }
+
+            mandates.append(mandate)
+        return json.dumps(mandates)
+
+    @property
+    def statements_json(self):
+        statements = []
+        for st in self.statements.all():
+            statement = {
+                "type": st.speech_type,
+                "date": st.step.date.isoformat(),
+                "law": st.step.law.title if st.step.law else None,
+                "law_id": st.step.law.id if st.step.law else None,
+                "law_slug": st.step.law.slug if st.step.law else None,
+                "inquiry": st.step.inquiry.title if st.step.inquiry else None,
+                "inquiry_id": st.step.inquiry.id if st.step.inquiry else None,
+                "inquiry_slug": st.step.inquiry.slug if st.step.inquiry else None,
+                "protocol_url": st.protocol_url,
+            }
+            statements.append(statement)
+        return json.dumps(statements)
+
 
 class InquiryResponse(Law):
     sender = models.ForeignKey(
@@ -556,7 +635,10 @@ class Inquiry(Law):
 
     @property
     def llp_roman(self):
-        return self.legislative_period.roman_numeral
+        if self.legislative_period:
+            return self.legislative_period.roman_numeral
+        else:
+            return None
 
 
 class Step(models.Model):
@@ -682,7 +764,8 @@ class Subscription(models.Model):
     A single subscription of content for a user
     """
     user = models.ForeignKey(User)
-    content = models.ForeignKey(SubscribedContent)
+    content = models.ForeignKey(
+        SubscribedContent, related_name='subscriptions')
 
     # Relationships
     verification = models.OneToOneField(Verification, null=True, blank=True)

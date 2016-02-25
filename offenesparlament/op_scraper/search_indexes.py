@@ -24,7 +24,23 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     occupation = indexes.CharField(
         model_attr='occupation', faceted=True, null=True)
     party = indexes.CharField(model_attr='party', faceted=True, null=True)
-    llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
+    llps = indexes.CharField(model_attr='llps_facet', faceted=True)
+
+    # Secondary Items
+    mandates = indexes.CharField()
+    statements = indexes.CharField()
+
+    def prepare_mandates(self, obj):
+        """
+        Collects the object's mandates as json
+        """
+        return obj.mandates_json
+
+    def prepare_statements(self, obj):
+        """
+        Collects the object's statements's as json
+        """
+        return obj.statements_json
 
     def get_model(self):
         return Person

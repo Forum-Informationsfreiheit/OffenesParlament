@@ -5,12 +5,14 @@ from datadiff import diff
 
 def check_subscriptions():
     changes = {}
-    for sub in Subscription.objects.all():
-        old_hashes = sub.content.latest_content_hashes
-        cur_hashes = sub.content.generate_content_hashes()
+    for content in SubscribedContent.objects.all():
+        import ipdb
+        ipdb.set_trace()
+        old_hashes = content.latest_content_hashes
+        cur_hashes = content.generate_content_hashes()
 
-        old_content = sub.content.latest_content
-        cur_content = sub.content.get_content()
+        old_content = content.latest_content
+        cur_content = content.get_content()
 
         # no changes, skip to the next one
         if old_hashes == cur_hashes:
