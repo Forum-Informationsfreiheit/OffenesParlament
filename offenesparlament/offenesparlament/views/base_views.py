@@ -4,7 +4,8 @@ from op_scraper.models import Person
 from op_scraper.models import Law
 from op_scraper.models import LegislativePeriod
 from op_scraper.models import Keyword
-from django.db.models import Count, Max
+from op_scraper.models import Inquiry
+from django.db.models import Count, Max, Min, Q
 
 import datetime
 
@@ -72,6 +73,26 @@ def keyword_list_with_ggp(request, ggp):
     context = {'top10_keywords': top10_keywords, 'keywords': keywords}
     return render(request, 'keyword_list.html', context)
 
+def inquiry_detail(request, inq_id, ggp=None):
+    if ggp is not None:
+        inquiry = Inquiry.objects.annotate(first_date=Min('steps_inquiry__date')).annotate(last_date=Max('steps_inquiry__date')).filter(parl_id=inq_id, law_ptr__legislative_period__roman_numeral=ggp).first()
+    else:
+        inquiry = Inquiry.objects.annotate(first_date=Min('steps_inquiry__date')).annotate(last_date=Max('steps_inquiry__date')).filter(parl_id=inq_id).first()
+    inquiry_type_verbal = inquiry.parl_id.split('_')[0][0] == 'M'
+    inquiry_sender = inquiry.sender
+    documents = inquiry.documents
+    inquiry_response = inquiry.response
+    mandates_receiver = inquiry.receiver.mandates
+    # mandates_receiver_filtered = mandates_receiver.filter(legislative_period__in=LegislativePeriod.objects.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True)))
+    mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True))
+    steps = inquiry.steps_inquiry.order_by('-date')
+    for step in steps:
+      step.title = step.title.replace("/PAKT/","https://www.parlament.gv.at/PAKT/")
+      step.title = step.title.replace("/WWER/","https://www.parlament.gv.at/WWER/")
+    context = {'inquiry': inquiry, 'documents': documents, 'inquiry_response': inquiry_response, \
+        'inquiry_sender': inquiry_sender, 'steps': steps, 'inquiry_type_verbal': inquiry_type_verbal, \
+        'mandates_receiver_filtered': mandates_receiver_filtered}
+    return render(request, 'inquiry_detail.html', context)
 
 def person_detail(request, parl_id, name):
     person = Person.objects.get(parl_id=parl_id)
@@ -83,7 +104,9 @@ def person_detail(request, parl_id, name):
         .filter(steps__statements__person=person) \
         .annotate(last_update=Max('steps__date')) \
         .order_by('-last_update')
-    context = {'person': person, 'keywords': keywords, 'laws': laws}
+    inquiries_sent = person.inquiries_sent \
+        .annotate(first_date=Min('steps_inquiry__date')).order_by('-first_date')
+    context = {'person': person, 'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
     return render(request, 'person_detail.html', context)
 
 

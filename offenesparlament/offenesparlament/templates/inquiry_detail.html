@@ -1,0 +1,140 @@
+{% extends "base_content.html" %}
+
+{% block title %}
+
+{{ inquiry.title }}
+
+{% endblock %}
+
+{% block content %}
+
+<div style="clear: both">
+  <h3>
+    {% if inquiry_type_verbal == True %}Mündliche{% else %}Schriftliche{% endif %} Anfrage betreffend<br>
+    {{ inquiry.title }}
+  </h3>
+
+  <div id="anfragetitel" style="float: left; display: inline-block; width:48%;">
+    <h3>gestellt von
+      {% for sender in inquiry.sender.all %}{% if forloop.first == false %}, {% endif %}
+      <a href="{{ sender.slug }}">{{ sender.full_name }}</a>
+      {% if sender.party.short %}
+        <span class="party_tag {{ sender.party.short_css_class }}">{{ sender.party.short }}</span>
+      {% endif %}
+      {% endfor %} am {{ inquiry.first_date }} <a href="{{ inquiry.source_link }}" class="icon_link icon_parliament">Parlamentsseite</a></h3>
+  </div>
+
+{% if inquiry_type_verbal == False %}
+  <div id="antworttitel" style="float: right; display: inline-block; width:48%;">
+    <div>
+    {% if inquiry_response != null %}
+      <h3>beantwortet von
+      {% if inquiry_response.sender.slug %}
+        <a href="{{ inquiry_response.sender.slug }}">{{ inquiry_response.sender.full_name }}</a> {% for mandate in mandates_receiver_filtered.all %} {{ mandate.function.title }} {% endfor %}
+      {% else %}
+        {{ inquiry_response.sender.full_name }} {% for mandate in mandates_receiver_filtered.all %} {{ mandate.function.title }} {% endfor %}
+      {% endif %}
+      {% if inquiry_response.sender.party.short %}
+        <span class="party_tag {{ inquiry_response.sender.party.short_css_class }}">{{ inquiry_response.sender.party.short }}</span>
+      {% endif %}
+      am {{ inquiry.last_date }} <a href="{{ inquiry_response.source_link }}" class="icon_link icon_parliament">Parlamentsseite</a></h3>
+    {% else %}
+      <h3>es wurde noch keine Antwort von
+        {% if inquiry.receiver.slug %}
+          <a href="{{ inquiry.receiver.slug }}">{{ inquiry.receiver.full_name }} {% for mandate in mandates_receiver_filtered.all %} {{ mandate.function.title }} {% endfor %}</a>
+        {% else %}
+          {{ inquiry.receiver.full_name }} {% for mandate in mandates_receiver_filtered.all %} {{ mandate.function.title }} {% endfor %}
+        {% endif %}
+        gegeben.
+      </h3>
+    {% endif %}
+    </div>
+  </div>
+{% endif %}
+</div>
+
+{% if inquiry_type_verbal == False %}
+  <div style="clear: both">
+  <div id="anfrage" style="float: left; display: inline-block; width:48%;">
+
+  {% for doc in documents.all %}
+
+  {% if doc.html_link != '' %}
+  <!-- sadly firefox does not like html in embed
+    <embed src="http://www.parlament.gv.at{{ doc.html_link }}" width="100%" height="300px"/>
+    <embed type="application/xhtml+xml" src="http://www.parlament.gv.at{{ doc.html_link }}" width="100%" height="300px"/>
+  -->
+  <div style="height: 500px">
+    <iframe
+      src="http://www.parlament.gv.at{{ doc.html_link }}"
+      width="100%"
+      height="100%"
+      style="border: 1px dotted #1e4563">Dein Browser unterstuetzt kein iframe.</iframe>
+  </div>
+  {% endif %}
+
+  {% if doc.pdf_link != '' %}
+    <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" id="inq_pdf_show_{{forloop.counter}}" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none'">PDF '{{ doc.title }}' anzeigen</a>
+    <div style="display: none" id="inq_pdf_container_{{forloop.counter}}">
+      <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('inq_pdf_show_{{forloop.counter}}').style['display']=null;">PDF '{{ doc.title }}' verbergen</a>
+      <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" width="100%" height="600px" id="pdf{{ forloop.counter }}"/>
+    </div>
+  {% endif %}
+
+  {% empty %}
+      <p>Leider existieren keine Dokumente zu dieser Anfrage.</p>
+  {% endfor %}
+  </div>
+
+  <div id="antwort" style="float: right; display: inline-block; width:48%;">
+
+  {% for doc in inquiry_response.documents.all %}
+
+  {% if doc.html_link != '' %}
+    <div style="height: 500px">
+      <iframe src="http://www.parlament.gv.at{{ doc.html_link }}"
+      width="100%"
+      height="100%"
+      style="border: 1px dotted #1e4563">Dein Browser unterstuetzt kein iframe.</iframe>
+    </div>
+  {% endif %}
+
+  {% if doc.pdf_link != '' %}
+    <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" id="res_pdf_show_{{forloop.counter}}" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none'">PDF '{{ doc.title }}' anzeigen</a>
+    <div style="display: none" id="res_pdf_container_{{forloop.counter}}">
+      <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('res_pdf_show_{{forloop.counter}}').style['display']=null;">PDF '{{ doc.title }}' verbergen</a>
+      <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" width="100%" height="600px" id="pdf{{ forloop.counter }}"/>
+    </div>
+  {% endif %}
+
+  {% empty %}
+      <p>Leider existieren keine Dokumente zu dieser Beantwortung.</p>
+  {% endfor %}
+
+  </div>
+
+  </div>
+{% endif %}
+
+<div class="section" style="clear: both; padding-top: 20px">
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Stand der parlamentarischen Behandlung</th>
+        <th>Protokoll</th>
+    </thead>
+    <tbody>
+      {% for step in steps %}
+      <tr>
+        <td>{{ step.date }}</td>
+        {{ step.title | safe}}
+        <td>{% if step.protocol_url != '' %}<a href="{{ step.protocol_url }}">Protokollseite</a>{% endif %}</td>
+      </tr>
+      {% endfor%}
+    <tbody>
+  </table>
+</div>
+
+
+{% endblock %}
