@@ -143,3 +143,7 @@ class SubscriptionAdmin(BaseAdmin):
 class SubscribedContentAdmin(BaseAdmin):
     list_display = ('title', 'url')
 
+
+@admin.register(Comittee)
+class ComitteeAdmin(BaseAdmin):
+    list_display = ('name', 'source_link')
