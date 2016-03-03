@@ -36,7 +36,7 @@ from op_scraper.models import LegislativePeriod
 class LawsInitiativesSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/RGES/filter.psp")
 
-    ALLOWED_LLPS = range(20, 26)
+    ALLOWED_g = range(20, 26)
 
     URLOPTIONS = {
         'view': 'RSS',
@@ -221,7 +221,8 @@ class LawsInitiativesSpider(BaseSpider):
                     title=step['title']['text'],
                     sortkey=step['sortkey'],
                     date=step['date'],
-                    protocol_url=step['protocol_url'][0],
+                    protocol_url=step['protocol_url'][
+                        0] if step['protocol_url'] else u'',
                     law=law_item,
                     phase=phase_item,
                     source_link=response.url
