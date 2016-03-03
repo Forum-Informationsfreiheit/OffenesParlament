@@ -43,9 +43,23 @@ class JsonSearchView(SearchView):
         query_args = {
             'facet_filters': {}
         }
+
+        for facet_field in self.facet_fields:
+            if facet_field in request.GET and request.GET[facet_field]:
+                query_args['facet_filters'][
+                    facet_field] = request.GET[facet_field]
+
         # Do we have a query or are we just getting all of them?
         if 'q' in request.GET and request.GET['q']:
             query_args['q'] = request.GET['q']
+        # Do we want a single item (parl_id, parl_id + llp)?
+        elif 'parl_id' in request.GET and request.GET['parl_id']:
+            query_args['parl_id'] = request.GET['parl_id']
+            if 'llps_numeric' in request.GET and request.GET['llps_numeric']:
+                query_args['llps_numeric'] = request.GET['llps_numeric']
+            # In case of a single item, return immediately and ignore all other
+            # parameters
+            return query_args
 
         query_args['offset'] = 0
         if 'offset' in request.GET and request.GET['offset']:
@@ -72,11 +86,6 @@ class JsonSearchView(SearchView):
 
         if 'only_facets' in request.GET:
             query_args['only_facets'] = True
-
-        for facet_field in self.facet_fields:
-            if facet_field in request.GET and request.GET[facet_field]:
-                query_args['facet_filters'][
-                    facet_field] = request.GET[facet_field]
 
         return query_args
 
@@ -105,9 +114,10 @@ class JsonSearchView(SearchView):
             result_list = []
 
         result = {
-            'result': result_list,
-            'facets': facet_counts
+            'result': result_list
         }
+        if facet_counts:
+            result['facets'] = facet_counts
 
         json_result = json.dumps(result, cls=QuerySetEncoder)
 
@@ -128,6 +138,11 @@ class JsonSearchView(SearchView):
             # fuzzify search
             qry = u'{}~'.format(qry.replace(' ', '~ '))
             qs = qs.auto_query(qry)
+        elif 'parl_id' in query_args:
+            qs = qs.filter(parl_id=query_args['parl_id'])
+            if 'llps_numeric' in query_args:
+                qs = qs.filter(llps_numeric=query_args['llps_numeric'])
+            return (qs.all(), None)
 
         # Filter by facets
         if query_args['facet_filters']:

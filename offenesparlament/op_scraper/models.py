@@ -285,6 +285,10 @@ class Law(Timestamped, ParlIDMixIn):
         return [self.legislative_period.facet_repr]
 
     @property
+    def llps_facet_numeric(self):
+        return [self.legislative_period.number]
+
+    @property
     def keyword_titles(self):
         return [kw.title for kw in self.keywords.all()]
 
@@ -503,6 +507,10 @@ class Person(Timestamped, ParlIDMixIn):
     @property
     def llps_facet(self):
         return [llp.facet_repr for llp in self.llps]
+
+    @property
+    def llps_facet_numeric(self):
+        return [llp.number for llp in self.llps]
 
     def get_latest_mandate(self):
         """

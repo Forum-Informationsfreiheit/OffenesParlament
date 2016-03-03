@@ -25,6 +25,8 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='occupation', faceted=True, null=True)
     party = indexes.CharField(model_attr='party', faceted=True, null=True)
     llps = indexes.CharField(model_attr='llps_facet', faceted=True)
+    llps_numeric = indexes.MultiValueField(
+        model_attr='llps_facet_numeric', faceted=True)
 
     # Secondary Items
     mandates = indexes.CharField()
@@ -57,6 +59,8 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     category = indexes.CharField(
         model_attr='category__title', faceted=True, null=True)
     llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
+    llps_numeric = indexes.MultiValueField(
+        model_attr='llps_facet_numeric', faceted=True)
 
     # Related, aggregated and Multi-Value Fields
     steps = indexes.CharField()
