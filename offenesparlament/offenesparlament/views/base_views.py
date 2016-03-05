@@ -6,6 +6,9 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Keyword
 from django.db.models import Count, Max
 
+from offenesparlament.views.search import PersonSearchView
+from op_scraper.search_indexes import extract_json_fields
+
 import datetime
 
 
@@ -83,7 +86,17 @@ def person_detail(request, parl_id, name):
         .filter(steps__statements__person=person) \
         .annotate(last_update=Max('steps__date')) \
         .order_by('-last_update')
-    context = {'person': person, 'keywords': keywords, 'laws': laws}
+
+    psv = PersonSearchView()
+    (result, facets) = psv.get_queryset({'parl_id': parl_id})
+    if len(result):
+        es_person = result[0].get_stored_fields()
+        es_person = extract_json_fields(es_person, 'person')
+    else:
+        # FIXME Return meaningful error?
+        es_person = None
+    context = {'person': person, 'es_person': es_person,
+               'keywords': keywords, 'laws': laws}
     return render(request, 'person_detail.html', context)
 
 
