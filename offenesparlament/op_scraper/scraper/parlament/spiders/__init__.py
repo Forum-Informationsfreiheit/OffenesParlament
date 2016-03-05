@@ -26,8 +26,16 @@ class BaseSpider(scrapy.Spider):
 
     allowed_domains = ["parlament.gv.at"]
 
+    IGNORE_TIMESTAMP = False
+
+    SCRAPED_COUNTER = 0
+    TOTAL_COUNTER = 0
+
     def __init__(self, **kw):
         super(BaseSpider, self).__init__(**kw)
+
+        if 'ignore_timestamp' in kw:
+            self.IGNORE_TIMESTAMP = True
 
         # shut off annoying debug level core api messages
         import scrapy
@@ -72,5 +80,5 @@ class BaseSpider(scrapy.Spider):
                 print "GP {}: {} laws".format(
                     roman_numeral, len(rss['entries']))
                 urls = urls + [entry['link'] for entry in rss['entries']]
-
+        self.TOTAL_COUNTER = len(urls)
         return urls

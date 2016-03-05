@@ -131,6 +131,12 @@ python manage.py scrape crawl -a llp=21 laws_initiatives
 
 to only scrape that period. Careful though: scraping of periods before the 20th legislative period is not possible as of yet (since there are no machine-readable documents available).
 
+Furthermore, all of the scrapers try to utilize the parlament website's timestamp to skip objects that haven't changed since the were last scraped. To suppress this behaviour for a complete upgrade, add a `ignore_timestamp` parameter like so:
+
+```
+python manage.py scrape crawl -a ignore_timestamp=True laws_initiatives
+```
+
 ## ElasticSearch and Re-Indexing
 
 For now, reindexing (or updating the index, for that matter), is only done manually. To have all data indexed, just run:
