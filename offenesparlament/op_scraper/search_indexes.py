@@ -1,6 +1,22 @@
 from haystack import indexes
 
 from op_scraper.models import Person, Law
+import json
+
+# maintain list of which fields are json-content
+JSON_FIELDS = {
+    'person': ['mandates', 'statements', 'debate_statements']
+}
+
+
+def extract_json_fields(result, type):
+    for field in JSON_FIELDS[type]:
+        try:
+            result[field] = json.loads(result[field])
+        except:
+            # didn't work, maybe not json data after all? anywho, no harm done
+            pass
+    return result
 
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
@@ -31,6 +47,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     # Secondary Items
     mandates = indexes.CharField()
     statements = indexes.CharField()
+    debate_statements = indexes.CharField()
 
     def prepare_mandates(self, obj):
         """
@@ -43,6 +60,12 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
         Collects the object's statements's as json
         """
         return obj.statements_json
+
+    def prepare_debate_statements(self, obj):
+        """
+        Collects the object's statements's as json
+        """
+        return obj.debate_statements_json
 
     def get_model(self):
         return Person

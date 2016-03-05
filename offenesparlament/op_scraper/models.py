@@ -10,6 +10,12 @@ import json
 import xxhash
 import requests
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 class ParlIDMixIn(object):
 
@@ -615,8 +621,50 @@ class Person(Timestamped, ParlIDMixIn):
                 "inquiry_slug": st.step.inquiry.slug if st.step.inquiry else None,
                 "protocol_url": st.protocol_url,
             }
+            if st.protocol_url and self.debate_statements.count():
+                try:
+                    page_number = int(
+                        re.match('^.*SEITE_(\d+).*$', st.protocol_url).group(1))
+
+                    dsq = self.debate_statements\
+                        .filter(page_start=page_number)\
+                        .filter(date__year=st.step.date.year)\
+                        .filter(date__month=st.step.date.month)\
+                        .filter(date__day=st.step.date.day)
+                    if dsq.count() >= 1:
+                        statement['debate_statement'] = [
+                            ds.id for ds in dsq.all()]
+                    elif not dsq.count():
+                        # no matching debatestatement found
+                        pass
+                except Exception as e:
+                    # something went wrong
+                    logger.warn("Problem finding debate_statement: {}".format(
+                        e.message))
+                    pass
             statements.append(statement)
         return json.dumps(statements)
+
+    @property
+    def debate_statements_json(self):
+        debate_statements = []
+        for st in self.debate_statements.all():
+            statement = {
+                'id': st.id,
+                'speaker_role': st.speaker_role,
+                'full_text': st.full_text,
+                'annotated_text': st.annotated_text,
+                'text_type': st.text_type,
+                'datetime': st.date.isoformat(),
+                'debate_title': st.debate.title,
+                'debate_date': st.debate.date.date().isoformat(),
+                'debate_type': st.debate.debate_type,
+                'debate_llp': st.debate.llp.facet_repr,
+                'debate_protocol_url': st.debate.protocol_url,
+                'debate_detail_url': st.debate.detail_url,
+            }
+            debate_statements.append(statement)
+        return json.dumps(debate_statements)
 
 
 class InquiryResponse(Law):
@@ -681,7 +729,7 @@ class Statement(models.Model):
     A Person's statemtn or comment as part of a Step
     """
     speech_type = models.CharField(max_length=255)
-    protocol_url = models.URLField(max_length=255, default="")
+    protocol_url = models.URLField(max_length=255, default="", null=True)
     index = models.IntegerField(default=1)
 
     # Relationships
