@@ -68,6 +68,7 @@ class LawsInitiativesSpider(BaseSpider):
         self.print_debug()
 
     def parse(self, response):
+        self.SCRAPED_COUNTER += 1
 
         LLP = LegislativePeriod.objects.get(
             roman_numeral=response.url.split('/')[-4])
@@ -78,9 +79,11 @@ class LawsInitiativesSpider(BaseSpider):
         parl_id = LAW.PARL_ID.xt(response)
         status = LAW.STATUS.xt(response)
 
-        if not self.has_changes(parl_id, LLP, response.url, ts):
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
-                green(u"Skipping Law, no changes: {}".format(
+                green(u"Skipping Law {} of {}, no changes: {}".format(
+                    self.SCRAPED_COUNTER,
+                    self.TOTAL_COUNTER,
                     title)))
             return
 
@@ -116,11 +119,13 @@ class LawsInitiativesSpider(BaseSpider):
 
         # Log our progress
         if law_created:
-            logtext = u"Created {} with id {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Created {} with id {}, LLP {} @ {}"
         else:
-            logtext = u"Updated {} with id {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Updated {} with id {}, LLP {} @ {}"
 
         logtext = logtext.format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             red(title),
             cyan(u"[{}]".format(parl_id)),
             green(str(LLP)),
@@ -239,23 +244,24 @@ class LawsInitiativesSpider(BaseSpider):
                             person_item = pq.first()
                             st_data = {
                                 'speech_type': stmnt['statement_type'],
-                                'protocol_url': stmnt['protocol_link']
+                                'protocol_url': stmnt['protocol_link'][0] if stmnt['protocol_link'] else None
                             }
+
                             st_item, st_created = Statement.objects.update_or_create(
                                 index=stmnt['index'],
                                 person=person_item,
                                 step=step_item,
                                 defaults=st_data)
-                            if st_created:
-                                log.msg(u"Created Statement by {} on {}".format(
-                                    green(
-                                        u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
-                            else:
-                                log.msg(u"Updated Statement by {} on {}".format(
-                                    green(
-                                        u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
+                            # if st_created:
+                            #     log.msg(u"Created Statement by {} on {}".format(
+                            #         green(
+                            #             u'[{}]'.format(person_item.full_name)),
+                            #         step_item.date))
+                            # else:
+                            #     log.msg(u"Updated Statement by {} on {}".format(
+                            #         green(
+                            #             u'[{}]'.format(person_item.full_name)),
+                            #         step_item.date))
                         else:
                             # We can't save statements if we can't find the
                             # Person
