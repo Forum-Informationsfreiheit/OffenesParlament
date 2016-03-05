@@ -110,7 +110,7 @@ class InquiriesSpider(BaseSpider):
         else:
             LLP = LegislativePeriod.objects.get(
                 roman_numeral=response.url.split('/')[-4])
-        if not self.has_changes(parl_id, LLP, response.url, ts):
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
                 green(u"Skipping Inquiry, no changes: {}".format(
                     title)))
@@ -297,7 +297,7 @@ class InquiriesSpider(BaseSpider):
             step_item.save()
         if response_link:
             return response_link
-        else: 
+        else:
             return
 
     def parse_parliament_steps(self, response):

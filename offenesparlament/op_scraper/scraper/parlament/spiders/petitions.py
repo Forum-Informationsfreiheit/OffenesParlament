@@ -118,7 +118,7 @@ class PetitionsSpider(BaseSpider):
         else:
             LLP = None
 
-        if not self.has_changes(parl_id, LLP, response.url, ts):
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
                 green(u"Skipping Petition, no changes: {}".format(
                     title)))
