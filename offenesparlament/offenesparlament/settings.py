@@ -71,6 +71,8 @@ class BaseConfig(Configuration):
             'ENGINE': 'offenesparlament.search_backend.FuzzyElasticsearchSearchEngine',
             'URL': 'http://localhost:9200/',
             'INDEX_NAME': 'haystack',
+            'TIMEOUT': 60,
+            'BATCH_SIZE': 200,
         },
     }
 
