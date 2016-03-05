@@ -55,8 +55,8 @@ class JsonSearchView(SearchView):
         # Do we want a single item (parl_id, parl_id + llp)?
         elif 'parl_id' in request.GET and request.GET['parl_id']:
             query_args['parl_id'] = request.GET['parl_id']
-            if 'llps_numeric' in request.GET and request.GET['llps_numeric']:
-                query_args['llps_numeric'] = request.GET['llps_numeric']
+            if 'llp_numeric' in request.GET and request.GET['llp_numeric']:
+                query_args['llp_numeric'] = request.GET['llp_numeric']
             # In case of a single item, return immediately and ignore all other
             # parameters
             return query_args
@@ -140,8 +140,8 @@ class JsonSearchView(SearchView):
             qs = qs.auto_query(qry)
         elif 'parl_id' in query_args:
             qs = qs.filter(parl_id=query_args['parl_id'])
-            if 'llps_numeric' in query_args:
-                qs = qs.filter(llps_numeric=query_args['llps_numeric'])
+            if 'llp_numeric' in query_args:
+                qs = qs.filter(llps_numeric=query_args['llp_numeric'])
             return (qs.all(), None)
 
         # Filter by facets
