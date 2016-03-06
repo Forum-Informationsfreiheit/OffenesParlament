@@ -935,6 +935,24 @@ class Debate(models.Model):
     nr = models.IntegerField(null=True)
     llp = models.ForeignKey(LegislativePeriod, null=True, blank=True)
 
+    @property
+    def statements_full_text(self):
+        return [
+            [
+                st.index,
+                st.doc_section,
+                st.text_type,
+                st.time_start,
+                st.time_end,
+                st.person.parl_id if st.person else None,
+                st.speaker_role,
+                st.speaker_name,
+                st.full_text
+            ]
+            for st
+            in self.debate_statements.order_by('index').all()
+        ]
+
     def __unicode__(self):
         return self.title
 

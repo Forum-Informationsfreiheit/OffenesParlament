@@ -21,6 +21,11 @@ def extract_json_fields(result, type):
 
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
+    FIELDSETS = {
+        'all': ['text', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements'],
+        'list': ['text', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric'],
+    }
+
     text = indexes.CharField(document=True, use_template=True)
     ts = indexes.DateTimeField(model_attr='ts', faceted=True)
     parl_id = indexes.CharField(model_attr='parl_id')
@@ -73,6 +78,12 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
 
 
 class LawIndex(indexes.SearchIndex, indexes.Indexable):
+
+    FIELDSETS = {
+        'all': ['text', 'parl_id', 'ts', 'internal_link', 'title', 'description', 'category', 'llps', 'llps_numeric', 'steps', 'opinions', 'documents', 'keywords'],
+        'list': ['text', 'parl_id', 'ts', 'internal_link', 'title', 'description', 'category', 'llps', 'llps_numeric', 'steps', 'opinions', 'documents', 'keywords'],
+    }
+
     text = indexes.CharField(document=True, use_template=True)
     parl_id = indexes.CharField(model_attr='parl_id')
     ts = indexes.DateTimeField(model_attr='ts', faceted=True)
@@ -86,7 +97,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     llps_numeric = indexes.MultiValueField(
         model_attr='llps_facet_numeric', faceted=True)
 
-    # Related, aggregated and Multi-Value Fields
+    # Related, aggregated and Multi - Value Fields
     steps = indexes.CharField()
     opinions = indexes.CharField()
     documents = indexes.CharField()
@@ -122,6 +133,11 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
 
 class DebateIndex(indexes.SearchIndex, indexes.Indexable):
+    FIELDSETS = {
+        'all': ['text', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements'],
+        'list': ['text', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp'],
+    }
+
     text = indexes.CharField(document=True, use_template=True)
 
     date = indexes.DateTimeField(model_attr='date', faceted=True)
@@ -136,11 +152,19 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     # internal_link = indexes.CharField(model_attr=u'slug')
 
     # Related, aggregated and Multi-Value Fields
+    statements = indexes.MultiValueField()
+
     # steps = indexes.CharField()
     # opinions = indexes.CharField()
     # documents = indexes.CharField()
     # keywords = indexes.MultiValueField(
     #     model_attr='keyword_titles', faceted=True)
+
+    def prepare_statements(self, obj):
+        """
+        Collects the object's statements's as json
+        """
+        return obj.statements_full_text
 
     def get_model(self):
         return Debate

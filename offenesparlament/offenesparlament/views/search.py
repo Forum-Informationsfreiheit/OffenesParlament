@@ -87,6 +87,9 @@ class JsonSearchView(SearchView):
         if 'only_facets' in request.GET:
             query_args['only_facets'] = True
 
+        if 'detail' in request.GET:
+            query_args['detail'] = True
+
         return query_args
 
     def get(self, request, *args, **kwargs):
@@ -106,10 +109,13 @@ class JsonSearchView(SearchView):
                 # combine results and facets, limit and offset as given as
                 # parameters
                 result = result[start_index:end_index]
-
-            result_list = [
-                sr.get_stored_fields() for sr in
-                result]
+            if 'detail' in query_args:
+                result_list = self.build_result_set(result, 'all')
+            else:
+                result_list = self.build_result_set(result, 'list')
+            # result_list = [
+            #     sr.get_stored_fields() for sr in
+            #     result]
         else:
             result_list = []
 
@@ -122,6 +128,15 @@ class JsonSearchView(SearchView):
         json_result = json.dumps(result, cls=QuerySetEncoder)
 
         return HttpResponse(json_result, content_type='application/json')
+
+    def build_result_set(self, result, set_name):
+        result_list = []
+        for sr in result:
+            result_list_entry = {}
+            for field in sr.searchindex.FIELDSETS[set_name]:
+                result_list_entry[field] = getattr(sr, field)
+            result_list.append(result_list_entry)
+        return result_list
 
     def get_queryset(self, query_args):
         # Create new queryset

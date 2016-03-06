@@ -87,13 +87,23 @@ def person_detail(request, parl_id, name):
         .annotate(last_update=Max('steps__date')) \
         .order_by('-last_update')
 
+    # instantiate appropriate search view
     psv = PersonSearchView()
+    # query ES
     (result, facets) = psv.get_queryset({'parl_id': parl_id})
+    # only proceed if we actually found something
     if len(result):
-        es_person = result[0].get_stored_fields()
+        # since this is a detail page, return all the fields from the index
+        es_person = psv.build_result_set(result, 'all')[0]
+        # extract the fields that are in JSON-Format for easier manipulation in
+        # the template
         es_person = extract_json_fields(es_person, 'person')
     else:
-        # FIXME Return meaningful error?
+        # In Future, we might want to _only_ hit the database when we do not
+        # find our person via the search index
+        # That way, if the person is in the index, we can serve the page faster,
+        # but we still have a fallback in case the index isn't up2date for some
+        # reason
         es_person = None
     context = {'person': person, 'es_person': es_person,
                'keywords': keywords, 'laws': laws}
