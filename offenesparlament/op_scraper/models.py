@@ -713,8 +713,6 @@ class Step(models.Model):
     law = models.ForeignKey(Law, null=True, blank=True, related_name='steps')
     opinion = models.ForeignKey(
         Opinion, null=True, blank=True, related_name='steps')
-    inquiry = models.ForeignKey(
-        Inquiry, null=True, blank=True, related_name='steps_inquiry')
 
     def __unicode__(self):
         try:

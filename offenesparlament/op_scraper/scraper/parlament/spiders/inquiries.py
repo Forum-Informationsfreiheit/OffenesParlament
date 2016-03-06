@@ -62,6 +62,12 @@ class InquiriesSpider(BaseSpider):
     def __init__(self, **kw):
         super(InquiriesSpider, self).__init__(**kw)
 
+        if 'llp' in kw:
+            try:
+                self.LLP = [int(kw['llp'])]
+            except:
+                pass
+
         self.start_urls = self.get_urls()
         self.cookies_seen = set()
         self.idlist = {}
@@ -88,13 +94,15 @@ class InquiriesSpider(BaseSpider):
                     url_llp = "{}?{}".format(self.BASE_URL, url_options)
                     rss = feedparser.parse(url_llp)
 
-                    print "GP {}: {} inquiries from {} [{}]".format(
-                        roman_numeral, len(rss['entries']), nrbr, url_llp)
+                    print "GP {}: {} inquiries from {}".format(
+                        roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-
+        self.TOTAL_COUNTER = len(urls)
         return urls
 
     def parse(self, response):
+        self.SCRAPED_COUNTER += 1
+
         source_link = response.url
         category = INQUIRY.CATEGORY.xt(response)
         parl_id = response.url.split('/')[-2]
@@ -112,7 +120,9 @@ class InquiriesSpider(BaseSpider):
                 roman_numeral=response.url.split('/')[-4])
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
-                green(u"Skipping Inquiry, no changes: {}".format(
+                green(u"[{} of {}] Skipping Inquiry, no changes: {}".format(
+                    self.SCRAPED_COUNTER,
+                    self.TOTAL_COUNTER,
                     title)))
             return
 
@@ -182,11 +192,13 @@ class InquiriesSpider(BaseSpider):
         inquiry_item.save()
 
         if inquiry_created:
-            logtext = u"Created Inquiry {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Created Inquiry {} with ID {}, LLP {} @ {}"
         else:
-            logtext = u"Updated Inquiry {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Updated Inquiry {} with ID {}, LLP {} @ {}"
 
         logtext = logtext.format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             cyan(title),
             cyan(u"{}".format(parl_id)),
             green(str(LLP)),
@@ -195,8 +207,8 @@ class InquiriesSpider(BaseSpider):
         )
         log.msg(logtext, level=log.INFO)
 
-        log.msg(green("Open Callback requests: {}".format(
-            len(callback_requests))), level=log.INFO)
+        # log.msg(green("Open Callback requests: {}".format(
+        #   len(callback_requests))), level=log.INFO)
 
         return callback_requests
 
@@ -290,7 +302,7 @@ class InquiriesSpider(BaseSpider):
                 sortkey=step['sortkey'],
                 date=step['date'],
                 protocol_url=step['protocol_url'],
-                inquiry=inquiry_item,
+                law=inquiry_item,
                 phase=phase_item,
                 source_link=response.url
             )
@@ -324,7 +336,7 @@ class InquiriesSpider(BaseSpider):
                     sortkey=step['sortkey'],
                     date=step['date'],
                     protocol_url=step['protocol_url'],
-                    inquiry=inquiry_item,
+                    law=inquiry_item,
                     phase=phase_item,
                     source_link=response.url
                 )
@@ -423,11 +435,13 @@ class InquiriesSpider(BaseSpider):
         inquiryresponse_item.save()
 
         if inquiryresponse_created:
-            logtext = u"Created InquiryResponse {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Created InquiryResponse {} with ID {}, LLP {} @ {}"
         else:
-            logtext = u"Updated InquiryResponse {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Updated InquiryResponse {} with ID {}, LLP {} @ {}"
 
         logtext = logtext.format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             cyan(title),
             cyan(u"{}".format(parl_id)),
             green(str(LLP)),
