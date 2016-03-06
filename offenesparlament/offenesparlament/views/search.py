@@ -44,6 +44,12 @@ class JsonSearchView(SearchView):
             'facet_filters': {}
         }
 
+        if 'fieldset' in request.GET:
+            query_args['fieldset'] = request.GET['fieldset']
+
+        if 'only_facets' in request.GET:
+            query_args['only_facets'] = True
+
         for facet_field in self.facet_fields:
             if facet_field in request.GET and request.GET[facet_field]:
                 query_args['facet_filters'][
@@ -84,12 +90,6 @@ class JsonSearchView(SearchView):
         else:
             query_args['limit'] = ES_DEFAULT_LIMIT
 
-        if 'only_facets' in request.GET:
-            query_args['only_facets'] = True
-
-        if 'detail' in request.GET:
-            query_args['detail'] = True
-
         return query_args
 
     def get(self, request, *args, **kwargs):
@@ -109,10 +109,12 @@ class JsonSearchView(SearchView):
                 # combine results and facets, limit and offset as given as
                 # parameters
                 result = result[start_index:end_index]
-            if 'detail' in query_args:
-                result_list = self.build_result_set(result, 'all')
+
+            if 'fieldset' in query_args:
+                result_list = self.build_result_set(
+                    result, query_args['fieldset'])
             else:
-                result_list = self.build_result_set(result, 'list')
+                result_list = self.build_result_set(result)
             # result_list = [
             #     sr.get_stored_fields() for sr in
             #     result]
@@ -129,10 +131,15 @@ class JsonSearchView(SearchView):
 
         return HttpResponse(json_result, content_type='application/json')
 
-    def build_result_set(self, result, set_name):
+    def build_result_set(self, result, set_name='list'):
+
         result_list = []
         for sr in result:
+            # reset the default in case we don't know that fieldset
+            if set_name not in sr.searchindex.FIELDSETS:
+                set_name = 'list'
             result_list_entry = {}
+
             for field in sr.searchindex.FIELDSETS[set_name]:
                 result_list_entry[field] = getattr(sr, field)
             result_list.append(result_list_entry)
