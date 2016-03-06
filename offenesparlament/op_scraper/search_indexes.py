@@ -1,11 +1,12 @@
 from haystack import indexes
 
-from op_scraper.models import Person, Law
+from op_scraper.models import Person, Law, Debate
 import json
 
 # maintain list of which fields are json-content
 JSON_FIELDS = {
-    'person': ['mandates', 'statements', 'debate_statements']
+    'person': ['mandates', 'statements', 'debate_statements'],
+    'law': ['steps', 'opinions', 'documents'],
 }
 
 
@@ -118,3 +119,28 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Law
+
+
+class DebateIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+
+    date = indexes.DateTimeField(model_attr='date', faceted=True)
+    title = indexes.CharField(model_attr='title')
+    debate_type = indexes.CharField(model_attr='debate_type', faceted=True)
+    protocol_url = indexes.CharField(model_attr='protocol_url')
+    detail_url = indexes.CharField(model_attr='detail_url')
+    nr = indexes.IntegerField(model_attr='nr', null=True)
+    llp = indexes.IntegerField(model_attr='llp__number', faceted=True)
+
+    # soon
+    # internal_link = indexes.CharField(model_attr=u'slug')
+
+    # Related, aggregated and Multi-Value Fields
+    # steps = indexes.CharField()
+    # opinions = indexes.CharField()
+    # documents = indexes.CharField()
+    # keywords = indexes.MultiValueField(
+    #     model_attr='keyword_titles', faceted=True)
+
+    def get_model(self):
+        return Debate

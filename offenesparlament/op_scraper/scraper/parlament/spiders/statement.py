@@ -47,12 +47,15 @@ class StatementSpider(BaseSpider):
 
     ALLOWED_LLPS = range(20, 26)
 
+    DEBATETYPES = ['NR', 'BR']
+
     name = "statement"
 
     def __init__(self, **kw):
         super(StatementSpider, self).__init__(**kw)
 
-        self.DEBATETYPE = kw['type'] if 'type' in kw else 'NR'
+        if 'type' in kw and kw['type'] in self.DEBATETYPES:
+            self.DEBATETYPES = [kw['type']]
         if 'llp' in kw and kw['llp'] != 'all':
             try:
                 self.LLP = [roman.toRoman(int(kw['llp']))]
@@ -73,30 +76,31 @@ class StatementSpider(BaseSpider):
 
         callback_requests = []
         for llp in self.LLP:
-            params = {'view': 'RSS',
-                      'jsMode': 'RSS',
-                      'xdocumentUri': '/PAKT/STPROT/index.shtml',
-                      'NRBRBV': self.DEBATETYPE,
-                      'NUR_VORL': 'N',
-                      'R_PLSO': 'PL',
-                      'GP': llp,
-                      'FBEZ': 'FP_011',
-                      'listeId': '211',
-                      }
+            for nrbr in self.DEBATETYPES:
+                params = {'view': 'RSS',
+                          'jsMode': 'RSS',
+                          'xdocumentUri': '/PAKT/STPROT/index.shtml',
+                          'NRBRBV': nrbr,
+                          'NUR_VORL': 'N',
+                          'R_PLSO': 'PL',
+                          'GP': llp,
+                          'FBEZ': 'FP_011',
+                          'listeId': '211',
+                          }
 
-            llp_item = None
-            try:
-                llp_item = LegislativePeriod.objects.get(
-                    roman_numeral=params['GP'])
-            except LegislativePeriod.DoesNotExist:
-                self.logger.warning(
-                    red(u"LLP '{}' not found".format(params['GP'])))
+                llp_item = None
+                try:
+                    llp_item = LegislativePeriod.objects.get(
+                        roman_numeral=params['GP'])
+                except LegislativePeriod.DoesNotExist:
+                    self.logger.warning(
+                        red(u"LLP '{}' not found".format(params['GP'])))
 
-            feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
-            callback_requests.append(
-                scrapy.Request(feed_url,
-                               callback=self.parse_debatelist,
-                               meta={'llp': llp_item, 'type': params['NRBRBV']}))
+                feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
+                callback_requests.append(
+                    scrapy.Request(feed_url,
+                                   callback=self.parse_debatelist,
+                                   meta={'llp': llp_item, 'type': params['NRBRBV']}))
 
         return callback_requests
 

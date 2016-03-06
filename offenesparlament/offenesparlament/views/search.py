@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 from haystack.query import SearchQuerySet
 
-from op_scraper.models import Person, Law
+from op_scraper.models import Person, Law, Debate
 from offenesparlament.constants import ES_DEFAULT_LIMIT
 
 # import the logging library
@@ -213,4 +213,16 @@ class LawSearchView(JsonSearchView):
         'category': {'type': 'field'},
         'keywords': {'type': 'field'},
         'ts': {'type': 'date'}
+    }
+
+
+class DebateSearchView(JsonSearchView):
+
+    """Search view for the Debate model"""
+
+    search_model = Debate
+    facet_fields = {
+        'llp': {'type': 'field'},
+        'debate_type': {'type': 'field'},
+        'date': {'type': 'date'}
     }

@@ -615,10 +615,8 @@ class Person(Timestamped, ParlIDMixIn):
                 "date": st.step.date.isoformat(),
                 "law": st.step.law.title if st.step.law else None,
                 "law_id": st.step.law.id if st.step.law else None,
+                "law_category": st.step.law.category.title if st.step.law else None,
                 "law_slug": st.step.law.slug if st.step.law else None,
-                "inquiry": st.step.inquiry.title if st.step.inquiry else None,
-                "inquiry_id": st.step.inquiry.id if st.step.inquiry else None,
-                "inquiry_slug": st.step.inquiry.slug if st.step.inquiry else None,
                 "protocol_url": st.protocol_url,
             }
             if st.protocol_url and self.debate_statements.count():
