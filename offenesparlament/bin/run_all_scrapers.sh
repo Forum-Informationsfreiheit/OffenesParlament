@@ -10,3 +10,6 @@ python manage.py scrape crawl comittees
 python manage.py scrape crawl inquiries
 python manage.py scrape crawl petitions
 python manage.py scrape crawl statement
+
+# run es rebuild
+python manage.py rebuild_index --noinput
