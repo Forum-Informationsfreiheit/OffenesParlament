@@ -1261,7 +1261,6 @@ _query_server = function() {
   _server_status = Const.SERVER_STATUS_QUERYING;
   return $.ajax({
     url: '/subscribe',
-    dataType: 'json',
     method: 'POST',
     data: {
       csrfmiddlewaretoken: csrf_utils.get_csrf_token(),
