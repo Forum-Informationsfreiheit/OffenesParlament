@@ -33,3 +33,6 @@ module.exports =
     result = _.compact([type_string, result]).join(' in ')
     return result
 
+  capitalize_first_letter: (input) ->
+    return input.charAt(0).toUpperCase() + input.slice(1)
+

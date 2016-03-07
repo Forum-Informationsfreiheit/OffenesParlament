@@ -6,6 +6,7 @@ assign = require('object-assign')
 $ = require 'jquery'
 _ = require 'underscore'
 string_utils = require '../utils/StringUtils.coffee'
+deparam = require('jquery-deparam')
 
 
 CHANGE_EVENT = 'change'
@@ -20,6 +21,7 @@ _suggested_values = []
 _search_results = null
 _setup_complete = false
 _was_edited_by_user = false
+_current_search_url = ''
 
 
 _process_edit = () ->
@@ -101,7 +103,7 @@ _get_terms_as_object = (excluded_term) ->
       return [term.category, _parse_term_value(term.value, term.category)]
   )))
 
-_get_url = () ->
+_get_search_api_endpoint = () ->
   type_term = _get_term_by_category('type')
   if type_term?
     switch type_term.value
@@ -111,10 +113,20 @@ _get_url = () ->
         return '/gesetze/search'
   return '/search'
 
+_get_search_humanfacing_endpoint = () ->
+  type_term = _get_term_by_category('type')
+  if type_term?
+    switch type_term.value
+      when 'Personen'
+        return '/suche/personen'
+      when 'Gesetze'
+        return '/suche/gesetze'
+  return '/suche'
+
 _update_search_results = () ->
   _loading = true
   $.ajax
-    url: _get_url()
+    url: _get_search_api_endpoint()
     dataType: 'json'
     data: _get_terms_as_object()
     success: (response) ->
@@ -133,7 +145,7 @@ _update_facets = (selected_term_id) ->
   term = _get_term(selected_term_id)
   if term?
     $.ajax
-      url: _get_url()
+      url: _get_search_api_endpoint()
       dataType: 'json'
       data: _.extend({only_facets: 1}, _get_terms_as_object(term))
       success: (response) ->
@@ -163,6 +175,22 @@ _update_suggested_categories = (fields, selected_term_id) ->
       return ( (not _.contains(used_categories, cat)) or cat == selected_term.category )
     )
 
+_replace_search = (type, query) ->
+  _terms = []
+  query_obj = {}
+  if _.isString(query)
+    query_obj = deparam(query)
+  if _.has(query_obj, 'llps')
+    _add_term('llps', query_obj['llps'], false, true)
+    query_obj = _.omit(query_obj, 'llps')
+  if _.isString(type)
+    _add_term('type', string_utils.capitalize_first_letter(type))
+  _.each(query_obj, (value, key) ->
+    _add_term(key, value)
+  )
+  _pad_terms_with_helpers()
+  _debounced_update_search_results()
+
 
 AnysearchStore = assign({}, EventEmitter.prototype, {
 
@@ -181,8 +209,21 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
   get_search_results: () ->
     return _search_results
 
+  get_search_ui_url: () ->
+    type_term = _get_term_by_category('type')
+    endpoint = '/suche'
+    if type_term?
+      switch type_term.value
+        when 'Personen'
+          endpoint = '/suche/personen'
+        when 'Gesetze'
+          endpoint = '/suche/gesetze'
+    params = _.omit(_get_terms_as_object(), (value) -> _.isEmpty(value))
+    params = _.omit(params, 'type')
+    return _get_search_humanfacing_endpoint() + '?' + $.param(params)
+
   get_subscription_url: () ->
-    return _get_url() + '?' + $.param(_get_terms_as_object())
+    return _get_search_api_endpoint() + '?' + $.param(_get_terms_as_object())
 
   get_subscription_title: () ->
     return string_utils.get_search_title(_get_terms_as_object())
@@ -216,8 +257,16 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
       when AnysearchConstants.UPDATE_FACETS
         _update_facets(payload.selected_term_id)
         AnysearchStore.emitChange()
+      when AnysearchConstants.OVERRIDE_SEARCH
+        _replace_search(payload.type, payload.query)
+        AnysearchStore.emitChange()
       when AnysearchConstants.SEARCHBAR_SETUP_COMPLETE
+        _current_search_url = AnysearchStore.get_search_ui_url()
         _setup_complete = true
+    new_search_url = AnysearchStore.get_search_ui_url()
+    if _setup_complete and _current_search_url != new_search_url
+      RouterActions.changeRoute(new_search_url)
+      _current_search_url = new_search_url
     return true # No errors. Needed by promise in Dispatcher.
   )
 })

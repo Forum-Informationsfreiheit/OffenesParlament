@@ -30,6 +30,8 @@ urlpatterns = patterns(
     url(r'^schlagworte/(?P<keyword>.+)/$',
         base_views.keyword_detail, name='keyword_detail'),
 
+    url(r'^suche/(.*)/?$', base_views.generic_search_view, name='generic_search_view'),
+
     # Search Urls
     url(r'^search/?$',
         search.JsonSearchView.as_view()),

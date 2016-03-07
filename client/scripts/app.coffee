@@ -10,6 +10,7 @@ $ = require 'jquery'
 _ = require 'underscore'
 require './utils/csrf_token.coffee'
 tooltip = require 'tooltip'
+app_router = require('./utils/router.coffee')
 
 
 $(document).ready( () ->
@@ -67,6 +68,8 @@ $(document).ready( () ->
       )
   AnysearchStore.addChangeListener(render_results)
   render_results()
+
+  app_router.start()
 
   # modal component to display subscription-modals
   render_modal = () ->
