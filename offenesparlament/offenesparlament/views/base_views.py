@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 from django.shortcuts import render, redirect
-from op_scraper.models import Person
+from op_scraper.models import Person, Petition
 from op_scraper.models import Law
 from op_scraper.models import LegislativePeriod
 from op_scraper.models import Keyword
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Min
 
 from offenesparlament.views.search import PersonSearchView
 from op_scraper.search_indexes import extract_json_fields
@@ -29,6 +29,35 @@ def person_list(request):
     return redirect('person_list_with_ggp', ggp=llp.roman_numeral)
 
 
+def petition_list(request):
+    llp = _ensure_ggp_is_set(request)
+    return redirect('petition_list_with_ggp', ggp=llp.roman_numeral)
+
+
+def petition_list_with_ggp(request, ggp):
+    llp = _ensure_ggp_is_set(request, ggp)
+    petition_list = Petition.objects \
+            .filter(legislative_period=llp) \
+            .annotate(last_update=Max('steps__date')) \
+            .order_by('-last_update')
+    context = {'petition_list': petition_list}
+    return render(request, 'petition_list.html', context)
+
+
+def petition_detail(request, parl_id, ggp=None):
+    parl_id_restored = '({})'.format(
+        parl_id.replace('-', '/').replace('_', ' '))
+    if ggp:
+        llp = LegislativePeriod.objects.get(roman_numeral=ggp)
+        petition = Petition.objects.get(
+            parl_id=parl_id_restored, legislative_period=llp)
+    else:
+        llp = None
+        petition = Petition.objects.get(parl_id=parl_id, legislative_period=llp)
+    context = {'law': petition}
+    return render(request, 'petition_detail.html', context)
+
+
 def keyword_list(request):
     llp = _ensure_ggp_is_set(request)
     return redirect('keyword_list_with_ggp', ggp=llp.roman_numeral)
@@ -45,6 +74,15 @@ def person_list_with_ggp(request, ggp):
         .filter(mandates__legislative_period=llp) \
         .order_by('reversed_name') \
         .select_related('latest_mandate__party')
+    context = {'person_list': person_list}
+    return render(request, 'person_list.html', context)
+
+def person_list_with_ggp(request, ggp):
+    llp = _ensure_ggp_is_set(request, ggp)
+    person_list = Person.objects \
+            .filter(mandates__legislative_period=llp) \
+            .order_by('reversed_name') \
+            .select_related('latest_mandate__party')
     context = {'person_list': person_list}
     return render(request, 'person_list.html', context)
 
@@ -122,6 +160,14 @@ def gesetz_detail(request, parl_id, ggp=None):
         gesetz = Law.objects.get(parl_id=parl_id, legislative_period=llp)
     context = {'law': gesetz}
     return render(request, 'gesetz_detail.html', context)
+
+def petition_signatures(request, parl_id, ggp):
+    parl_id_restored = '({})'.format(
+        parl_id.replace('-', '/').replace('_', ' '))
+    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
+    petition = Petition.objects.get(parl_id=parl_id_restored, legislative_period=llp)
+    context = {'petition': petition, 'signatures' : petition.petition_signatures.order_by('-date').all()}
+    return render(request, 'petition_signatures.html', context)
 
 
 def keyword_detail(request, keyword):

@@ -29,7 +29,12 @@ urlpatterns = patterns(
         base_views.keyword_list_with_ggp, name='keyword_list_with_ggp'),
     url(r'^schlagworte/(?P<keyword>.+)/$',
         base_views.keyword_detail, name='keyword_detail'),
-
+    url(r'^petitions/$', base_views.petition_list, name='petition_list'),
+    url(r'^petitions/(?P<ggp>[XVIMCD]{1,})/$', base_views.petition_list_with_ggp, name='petition_list_with_ggp'),
+    url(r'^petitions/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})/$',
+        base_views.petition_detail, name='petiton_detail'),
+    url(r'^signatures/petitions/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})/$',
+        base_views.petition_signatures, name='petition_signatures'),
     # Search Urls
     url(r'^search/?$',
         search.JsonSearchView.as_view()),

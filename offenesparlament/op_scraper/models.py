@@ -17,12 +17,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+
 class ParlIDMixIn(object):
 
     @property
     def parl_id_urlsafe(self):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
+class CONSTANTS():
+    PETITIONS_LINK_NAME="petitions"
+    LAWS_LINK_NAME="gesetze"
 
 class Timestamped(models.Model):
     ts = models.DateTimeField(null=True)
@@ -856,6 +860,10 @@ class Petition(Law):
     # Relationships
     reference = models.OneToOneField(
         "self", blank=True, null=True, related_name='redistribution')
+
+    def real_slug(self):
+        #slug contains a link to the law-detail page (gesetze)
+        return self.slug.replace(CONSTANTS.LAWS_LINK_NAME, CONSTANTS.PETITIONS_LINK_NAME)
 
     def __unicode__(self):
         return u'{} eingebracht von {}'.format(
