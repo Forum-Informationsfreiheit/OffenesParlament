@@ -194,6 +194,7 @@ $(document).ready(function() {
     results = AnysearchStore.get_search_results();
     if (content_container && results) {
       SearchResults = require("./components/SearchResults.cjsx");
+      document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at";
       return ReactDOM.render(React.createElement(SearchResults, {
         results: results
       }), content_container);

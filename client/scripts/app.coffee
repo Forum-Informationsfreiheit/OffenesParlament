@@ -62,6 +62,7 @@ $(document).ready( () ->
     results = AnysearchStore.get_search_results()
     if content_container and results
       SearchResults = require("./components/SearchResults.cjsx")
+      document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at"
       ReactDOM.render(
         React.createElement(SearchResults, {results: results}),
         content_container
