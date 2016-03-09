@@ -64,7 +64,11 @@ $(document).ready( () ->
       SearchResults = require("./components/SearchResults.cjsx")
       document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at"
       ReactDOM.render(
-        React.createElement(SearchResults, {results: results}),
+        React.createElement(SearchResults, {
+          results: results
+          subscription_url: AnysearchStore.get_subscription_url()
+          subscription_title: AnysearchStore.get_subscription_title()
+        }),
         content_container
       )
   AnysearchStore.addChangeListener(render_results)

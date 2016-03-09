@@ -196,7 +196,9 @@ $(document).ready(function() {
       SearchResults = require("./components/SearchResults.cjsx");
       document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at";
       return ReactDOM.render(React.createElement(SearchResults, {
-        results: results
+        results: results,
+        subscription_url: AnysearchStore.get_subscription_url(),
+        subscription_title: AnysearchStore.get_subscription_title()
       }), content_container);
     }
   };
@@ -230,9 +232,11 @@ $(document).ready(function() {
 
 
 },{"./actions/AnysearchActions.coffee":1,"./actions/SubscriptionModalActions.coffee":3,"./components/SearchResults.cjsx":5,"./components/SubscriptionModal.cjsx":6,"./components/anysearch/Searchbar.cjsx":9,"./stores/AnysearchStore.coffee":17,"./stores/SubscriptionModalStore.coffee":18,"./utils/csrf_token.coffee":20,"./utils/router.coffee":21,"jquery":34,"react":"react","react-dom":37,"tooltip":298,"underscore":309}],5:[function(require,module,exports){
-var React, SearchResults, _;
+var React, SearchResults, SubscriptionModalActions, _;
 
 React = require('react');
+
+SubscriptionModalActions = require('../actions/SubscriptionModalActions.coffee');
 
 _ = require('underscore');
 
@@ -242,19 +246,24 @@ SearchResults = React.createClass({displayName: "SearchResults",
   },
   componentDidMount: function() {},
   componentWillUnmount: function() {},
+  _open_subscription_modal: function(e) {
+    e.preventDefault();
+    return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.subscription_title);
+  },
   render: function() {
     var results;
+    console.log(this.props.results);
     results = _.map(this.props.results, (function(_this) {
       return function(r) {
         if (r.title != null) {
           return React.createElement("li", {
-            "key": r.title
+            "key": r.parl_id
           }, React.createElement("a", {
             "href": r.internal_link
           }, r.title));
         } else if (r.full_name != null) {
           return React.createElement("li", {
-            "key": r.full_name
+            "key": r.parl_id
           }, React.createElement("a", {
             "href": r.internal_link
           }, r.full_name));
@@ -263,16 +272,24 @@ SearchResults = React.createClass({displayName: "SearchResults",
     })(this));
     return React.createElement("div", null, React.createElement("div", {
       "className": "top_bar"
-    }), React.createElement("h1", null, "Suchergebnisse"), React.createElement("p", {
-      "className": "explanation"
-    }, "Hier finden Sie eine Übersicht über alle Abgeordneten zum Nationalrat in\nder aktuellen Gesetzgebungsperiode (XXV.). Um eine genauere Auswahl zu\ntreffen, benutzen Sie die Suche."), React.createElement("ul", null, results));
+    }, React.createElement("ul", {
+      "className": "breadcrumbs"
+    }, React.createElement("li", null, React.createElement("a", {
+      "href": "/"
+    }, "Startseite")), React.createElement("li", null, "Suche"))), React.createElement("div", {
+      "className": "title_with_button"
+    }, React.createElement("h1", null, "Suchergebnisse"), React.createElement("a", {
+      "href": "#",
+      "className": "button button_notifications",
+      "onClick": this._open_subscription_modal
+    }, "Benachrichtigung aktivieren")), React.createElement("ul", null, results));
   }
 });
 
 module.exports = SearchResults;
 
 
-},{"react":"react","underscore":309}],6:[function(require,module,exports){
+},{"../actions/SubscriptionModalActions.coffee":3,"react":"react","underscore":309}],6:[function(require,module,exports){
 var Const, Modal, React, SubscriptionModal, SubscriptionModalActions, SubscriptionModalForm, SubscriptionModalStatusbox;
 
 React = require('react');
