@@ -29,7 +29,9 @@ class JsonSearchView(SearchView):
     """Base SearchView that returns json-data"""
 
     search_model = None
-    facet_fields = {}
+    facet_fields = {
+        'llps': {'type': 'field'},
+    }
 
     def __init__(self, search_model=None):
         super(JsonSearchView, self).__init__()
