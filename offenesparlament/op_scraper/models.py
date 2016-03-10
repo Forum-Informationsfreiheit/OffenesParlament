@@ -635,10 +635,10 @@ class Person(Timestamped, ParlIDMixIn):
                     elif not dsq.count():
                         # no matching debatestatement found
                         pass
-                except Exception as e:
+                except:
                     # something went wrong
-                    logger.warn("Problem finding debate_statement: {}".format(
-                        e.message))
+                    # logger.warn("Problem finding debate_statement: {}".format(
+                    #     e.message))
                     pass
             statements.append(statement)
         return json.dumps(statements)
