@@ -63,9 +63,7 @@ Searchbar = React.createClass
 
   onSubscribeClicked: (event) ->
     event.preventDefault()
-    console.log AnysearchStore.get_subscription_url()
- 
-
+    AnysearchStore.get_subscription_url()
 
   render: ->
     last_key = @state.terms.length - 1

@@ -252,7 +252,6 @@ SearchResults = React.createClass({displayName: "SearchResults",
   },
   render: function() {
     var results;
-    console.log(this.props.results);
     results = _.map(this.props.results, (function(_this) {
       return function(r) {
         if (r.title != null) {
@@ -532,7 +531,7 @@ Searchbar = React.createClass({displayName: "Searchbar",
   },
   onSubscribeClicked: function(event) {
     event.preventDefault();
-    return console.log(AnysearchStore.get_subscription_url());
+    return AnysearchStore.get_subscription_url();
   },
   render: function() {
     var items, last_key, placeholder, suggest, terms;
@@ -1025,6 +1024,8 @@ _get_search_api_endpoint = function() {
         return '/personen/search';
       case 'Gesetze':
         return '/gesetze/search';
+      case 'Debatten':
+        return '/debatten/search';
     }
   }
   return '/search';
@@ -1039,6 +1040,8 @@ _get_search_humanfacing_endpoint = function() {
         return '/suche/personen';
       case 'Gesetze':
         return '/suche/gesetze';
+      case 'Debatten':
+        return '/suche/debatten';
     }
   }
   return '/suche';
@@ -1090,7 +1093,7 @@ _update_facets = function(selected_term_id) {
               }
             }));
           } else if (term.category === 'type') {
-            return _suggested_values = ['Personen', 'Gesetze'];
+            return _suggested_values = ['Personen', 'Gesetze', 'Debatten'];
           } else {
             return _suggested_values = [];
           }
@@ -1162,18 +1165,7 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     return _search_results;
   },
   get_search_ui_url: function() {
-    var endpoint, params, type_term;
-    type_term = _get_term_by_category('type');
-    endpoint = '/suche';
-    if (type_term != null) {
-      switch (type_term.value) {
-        case 'Personen':
-          endpoint = '/suche/personen';
-          break;
-        case 'Gesetze':
-          endpoint = '/suche/gesetze';
-      }
-    }
+    var params;
     params = _.omit(_get_terms_as_object(), function(value) {
       return _.isEmpty(value);
     });
@@ -1367,7 +1359,8 @@ _human_categories = {
   q: 'Text',
   category: 'Kategorie',
   keywords: 'Schlagwort',
-  type: 'Suchtyp'
+  type: 'Suchtyp',
+  debate_type: 'Art der Debatte'
 };
 
 module.exports = {

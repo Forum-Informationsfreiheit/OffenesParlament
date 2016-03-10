@@ -11,6 +11,7 @@ _human_categories =
   category: 'Kategorie'
   keywords: 'Schlagwort'
   type: 'Suchtyp'
+  debate_type: 'Art der Debatte'
 
 
 module.exports =
