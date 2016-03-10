@@ -105,8 +105,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='keyword_titles', faceted=True)
 
     def index_queryset(self, using=None):
-        return self.get_model()\
-            .objects.filter(petition__isnull=True)\
+        return self.get_model().objects\
             .filter(inquiry__isnull=True)\
             .filter(inquiryresponse__isnull=True)
 
@@ -151,7 +150,7 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     # soon
     # internal_link = indexes.CharField(model_attr=u'slug')
 
-    # Related, aggregated and Multi-Value Fields
+    # Related, aggregated and Multi - Value Fields
     statements = indexes.MultiValueField()
 
     def prepare_statements(self, obj):

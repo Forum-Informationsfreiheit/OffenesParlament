@@ -288,11 +288,17 @@ class Law(Timestamped, ParlIDMixIn):
 
     @property
     def llps_facet(self):
-        return [self.legislative_period.facet_repr]
+        if self.legislative_period:
+            return [self.legislative_period.facet_repr]
+        else:
+            return []
 
     @property
     def llps_facet_numeric(self):
-        return [self.legislative_period.number]
+        if self.legislative_period:
+            return [self.legislative_period.number]
+        else:
+            return []
 
     @property
     def keyword_titles(self):
