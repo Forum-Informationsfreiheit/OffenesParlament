@@ -19,7 +19,6 @@ SearchResults = React.createClass
     SubscriptionModalActions.showModal(@props.subscription_url, @props.subscription_title)
 
   render: ->
-    console.log @props.results
     results = _.map(@props.results, (r) =>
       if r.title?
         return <li key={r.parl_id}><a href={r.internal_link}>{r.title}</a></li>

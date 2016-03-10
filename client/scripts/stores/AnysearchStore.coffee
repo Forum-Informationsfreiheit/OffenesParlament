@@ -111,6 +111,8 @@ _get_search_api_endpoint = () ->
         return '/personen/search'
       when 'Gesetze'
         return '/gesetze/search'
+      when 'Debatten'
+        return '/debatten/search'
   return '/search'
 
 _get_search_humanfacing_endpoint = () ->
@@ -121,6 +123,8 @@ _get_search_humanfacing_endpoint = () ->
         return '/suche/personen'
       when 'Gesetze'
         return '/suche/gesetze'
+      when 'Debatten'
+        return '/suche/debatten'
   return '/suche'
 
 _update_search_results = () ->
@@ -157,7 +161,7 @@ _update_facets = (selected_term_id) ->
               else return null
             ))
           else if term.category == 'type'
-            _suggested_values = ['Personen', 'Gesetze']
+            _suggested_values = ['Personen', 'Gesetze', 'Debatten']
           else
             _suggested_values = []
       complete: () ->
@@ -210,14 +214,6 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     return _search_results
 
   get_search_ui_url: () ->
-    type_term = _get_term_by_category('type')
-    endpoint = '/suche'
-    if type_term?
-      switch type_term.value
-        when 'Personen'
-          endpoint = '/suche/personen'
-        when 'Gesetze'
-          endpoint = '/suche/gesetze'
     params = _.omit(_get_terms_as_object(), (value) -> _.isEmpty(value))
     params = _.omit(params, 'type')
     return _get_search_humanfacing_endpoint() + '?' + $.param(params)
