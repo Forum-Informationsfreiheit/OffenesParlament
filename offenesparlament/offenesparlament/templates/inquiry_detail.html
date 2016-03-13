@@ -108,7 +108,12 @@
   {% endif %}
 
   {% empty %}
-      <p>Leider existieren keine Dokumente zu dieser Beantwortung.</p>
+    <div style="text-align: center; width=100%;
+      height: 504px; ">
+      <p style="position: relative; top: 50%; transform: translateY(-50%);">
+        <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
+      </p>
+    </div>
   {% endfor %}
 
   </div>
