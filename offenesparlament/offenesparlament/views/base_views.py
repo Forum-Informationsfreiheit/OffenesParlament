@@ -82,17 +82,20 @@ def keyword_list_with_ggp(request, ggp):
 
 def inquiry_detail(request, inq_id, ggp=None):
     if ggp is not None:
-        inquiry = Inquiry.objects.annotate(first_date=Min('steps_inquiry__date')).annotate(last_date=Max('steps_inquiry__date')).filter(parl_id=inq_id, law_ptr__legislative_period__roman_numeral=ggp).first()
+        inquiry = Inquiry.objects.annotate(first_date=Min('steps__date')).annotate(last_date=Max('steps__date')).filter(parl_id=inq_id, law_ptr__legislative_period__roman_numeral=ggp).first()
     else:
-        inquiry = Inquiry.objects.annotate(first_date=Min('steps_inquiry__date')).annotate(last_date=Max('steps_inquiry__date')).filter(parl_id=inq_id).first()
+        inquiry = Inquiry.objects.annotate(first_date=Min('steps__date')).annotate(last_date=Max('steps__date')).filter(parl_id=inq_id).first()
     inquiry_type_verbal = inquiry.parl_id.split('_')[0][0] == 'M'
     inquiry_sender = inquiry.sender
     documents = inquiry.documents
     inquiry_response = inquiry.response
     mandates_receiver = inquiry.receiver.mandates
     # mandates_receiver_filtered = mandates_receiver.filter(legislative_period__in=LegislativePeriod.objects.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True)))
-    mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True))
-    steps = inquiry.steps_inquiry.order_by('-date')
+    # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True))
+    mandates_receiver_filtered = {}
+    if inquiry.first_date is not None:
+      mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.last_date) | Q(end_date__isnull=True))
+    steps = inquiry.steps.order_by('-date')
     for step in steps:
       step.title = step.title.replace("/PAKT/","https://www.parlament.gv.at/PAKT/")
       step.title = step.title.replace("/WWER/","https://www.parlament.gv.at/WWER/")
@@ -132,7 +135,7 @@ def person_detail(request, parl_id, name):
         es_person = None
     # move inquiries_sent o other view
     inquiries_sent = person.inquiries_sent \
-        .annotate(first_date=Min('steps_inquiry__date')).order_by('-first_date')
+        .annotate(first_date=Min('steps__date')).order_by('-first_date')
 
     context = {'person': person, 'es_person': es_person,
                'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
