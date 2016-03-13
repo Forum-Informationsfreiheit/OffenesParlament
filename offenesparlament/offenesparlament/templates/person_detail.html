@@ -61,7 +61,7 @@
 
   {% include 'partials/keywordbox.html' with keywords=keywords tooltip="Zu diesen Schlagworten hatte die/der Parlamentarier_in in den letzten 4 Wochen am meisten Aktivität" %}
 
-  {% if inquiries_sent.all %}
+  {% if inquiries_sent %}
     <div class="section">
       <h2>Parlamentarische Anfragen</h2>
       <table>
@@ -81,9 +81,9 @@
             <td>
               {{inq.title}}</br>
               {% if inq.law_ptr.legislative_period %}
-                <a href="/anfragen/{{inq.llp_roman}}/{{inq.parl_id_urlsafe}}/" class="icon_link icon_law">Zur Anfrage</a>
+                <a href="/gesetze/{{inq.llp_roman}}/{{inq.parl_id_urlsafe}}/" class="icon_link icon_law">Zur Anfrage</a>
               {% else %}
-                <a href="/anfragen/{{inq.parl_id_urlsafe}}/" class="icon_link icon_law">Zur Anfrage</a>
+                <a href="/gesetze/{{inq.parl_id_urlsafe}}/" class="icon_link icon_law">Zur Anfrage</a>
               {% endif %}
             </td>
             <td>

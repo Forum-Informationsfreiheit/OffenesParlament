@@ -5,6 +5,7 @@ from op_scraper.models import Law
 from op_scraper.models import LegislativePeriod
 from op_scraper.models import Keyword
 from op_scraper.models import Inquiry
+from op_scraper.models import InquiryResponse
 from django.db.models import Count, Max, Min, Q
 
 from offenesparlament.views.search import PersonSearchView
@@ -81,27 +82,47 @@ def keyword_list_with_ggp(request, ggp):
     return render(request, 'keyword_list.html', context)
 
 def inquiry_detail(request, inq_id, ggp=None):
-    if ggp is not None:
-        inquiry = Inquiry.objects.annotate(first_date=Min('steps__date')).annotate(last_date=Max('steps__date')).filter(parl_id=inq_id, law_ptr__legislative_period__roman_numeral=ggp).first()
+    if inq_id.split('_')[0] == 'AB' or inq_id.split('_')[0] == 'ABPR':
+        if ggp is not None:
+            inquiry = InquiryResponse.objects \
+                .filter(parl_id=inq_id, law_ptr__legislative_period__roman_numeral=ggp) \
+                .first().inquiries.first()
+        else:
+            inquiry = InquiryResponse.objects.filter(parl_id=inq_id).first().inquiries.first()
+    elif ggp is not None:
+        inquiry = Inquiry.objects \
+            .filter(parl_id=inq_id, law_ptr__legislative_period__roman_numeral=ggp) \
+            .first()
     else:
-        inquiry = Inquiry.objects.annotate(first_date=Min('steps__date')).annotate(last_date=Max('steps__date')).filter(parl_id=inq_id).first()
+        inquiry = Inquiry.objects.filter(parl_id=inq_id).first()
     inquiry_type_verbal = inquiry.parl_id.split('_')[0][0] == 'M'
     inquiry_sender = inquiry.sender
     documents = inquiry.documents
     inquiry_response = inquiry.response
-    mandates_receiver = inquiry.receiver.mandates
+    mandates_receiver = inquiry.receiver.mandates.order_by('-end_date')
     # mandates_receiver_filtered = mandates_receiver.filter(legislative_period__in=LegislativePeriod.objects.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True)))
     # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True))
-    mandates_receiver_filtered = {}
-    if inquiry.first_date is not None:
-      mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.last_date) | Q(end_date__isnull=True))
+    first_date = inquiry.steps.order_by('date').first().date
+    last_date = inquiry.steps.order_by('date').last().date
+    receiver_mandate = mandates_receiver.first().function.title
+    if first_date is not None:
+      for mandate in mandates_receiver:
+        if mandate.end_date is None or mandate.start_date is None:
+          continue
+        if mandate.earliest_start_date() <= first_date <= mandate.latest_end_date():
+          receiver_mandate = mandate.function.title
+          break
+      # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=first_date), Q(end_date__gte=last_date) | Q(end_date__isnull=True))
+
     steps = inquiry.steps.order_by('-date')
     for step in steps:
       step.title = step.title.replace("/PAKT/","https://www.parlament.gv.at/PAKT/")
       step.title = step.title.replace("/WWER/","https://www.parlament.gv.at/WWER/")
-    context = {'inquiry': inquiry, 'documents': documents, 'inquiry_response': inquiry_response, \
-        'inquiry_sender': inquiry_sender, 'steps': steps, 'inquiry_type_verbal': inquiry_type_verbal, \
-        'mandates_receiver_filtered': mandates_receiver_filtered}
+    context = {'inquiry': inquiry, 'documents': documents, \
+        'inquiry_response': inquiry_response, 'first_date': first_date, \
+        'inquiry_sender': inquiry_sender, 'steps': steps, \
+        'last_date': last_date, 'inquiry_type_verbal': inquiry_type_verbal, \
+        'reveiver_mandate': receiver_mandate}
     return render(request, 'inquiry_detail.html', context)
 
 def person_detail(request, parl_id, name):
@@ -133,12 +154,14 @@ def person_detail(request, parl_id, name):
         # but we still have a fallback in case the index isn't up2date for some
         # reason
         es_person = None
-    # move inquiries_sent o other view
-    inquiries_sent = person.inquiries_sent \
-        .annotate(first_date=Min('steps__date')).order_by('-first_date')
 
+    # add inquiries_sent here
+    #inquiries_sent = person.inquiries_sent \
+    #    .annotate(first_date=Min('steps__date')).order_by('-first_date')
+    #context = {'person': person, 'es_person': es_person,
+    #           'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
     context = {'person': person, 'es_person': es_person,
-               'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
+               'keywords': keywords, 'laws': laws}
 
     return render(request, 'person_detail.html', context)
 
