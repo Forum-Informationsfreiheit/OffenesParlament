@@ -8,6 +8,8 @@ from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
+from ansicolor import yellow
+
 
 from urllib import urlencode
 
@@ -33,6 +35,8 @@ from op_scraper.models import Comittee
 from op_scraper.models import ComitteeMembership
 
 import pytz
+
+import re
 
 
 class PersonsSpider(BaseSpider):
@@ -65,15 +69,20 @@ class PersonsSpider(BaseSpider):
         'letter': '',
         'WP': 'ALLE',
         'listeId': '8',
-        'R_WF': 'WP'
+        'R_WF': 'FR'
     }
-
     name = "persons"
     title = "Persons Spider"
     persons_scraped = []
 
     def __init__(self, **kw):
         super(PersonsSpider, self).__init__(**kw)
+
+        if 'llp' in kw:
+            try:
+                self.ALLOWED_LLPS = [int(kw['llp'])]
+            except:
+                pass
 
         self.start_urls = self.get_urls()
 
@@ -85,7 +94,12 @@ class PersonsSpider(BaseSpider):
         Overwritten from BaseSpider for non-LLP-based retrieval
         """
         urls = []
-        for llp in LegislativePeriod.objects.all():
+        if self.ALLOWED_LLPS:
+            llps = LegislativePeriod.objects.filter(
+                number__in=self.ALLOWED_LLPS).all()
+        else:
+            llps = LegislativePeriod.objects.all()
+        for llp in llps:
             for nrbr in ['NR', 'BR']:
                 urloptions = self.URLOPTIONS_NR.copy()
                 urloptions['GP'] = llp.roman_numeral
@@ -130,11 +144,17 @@ class PersonsSpider(BaseSpider):
 
             changed = False
             # Create or update simple person's item
-            person_item, created_person = Person.objects.update_or_create(
-                source_link=p['source_link'],
-                parl_id=parl_id,
-                reversed_name=p['reversed_name']
-            )
+            try:
+                person_data = {
+                    'reversed_name': p['reversed_name'],
+                }
+                person_item, created_person = Person.objects.update_or_create(
+                    source_link=p['source_link'],
+                    parl_id=parl_id,
+                    defaults=person_data)
+            except:
+                import ipdb
+                ipdb.set_trace()
             if created_person:
                 self.logger.info(u"Created Person {}".format(
                     green(u'[{}]'.format(p['reversed_name']))))
@@ -142,7 +162,6 @@ class PersonsSpider(BaseSpider):
                 self.logger.info(u"Updated Person {}".format(
                     green(u"[{}]".format(p['reversed_name']))
                 ))
-
             for mandate in p['mandates']:
                 party_item = self.get_party_item(mandate)
                 state_item = self.get_state_item(p['electoral_state'])
@@ -188,8 +207,9 @@ class PersonsSpider(BaseSpider):
         # Do we have this party already?
         party_item, created = Party.objects.update_or_create(
             short=mandate['short'])
-
         titles = party_item.titles
+        if not titles:
+            titles = []
         if mandate['title'] not in titles:
             titles.append(mandate['title'])
             party_item.titles = titles
@@ -197,7 +217,7 @@ class PersonsSpider(BaseSpider):
 
         if created:
             self.logger.info(u"Created party {}".format(
-                green(u'[{}]'.format(party_item.short))))
+                green(u'[{}]: {}'.format(party_item.short, party_item.titles))))
 
         return party_item
 
@@ -249,7 +269,6 @@ class PersonsSpider(BaseSpider):
         ))
 
         bio_data = PERSON.DETAIL.BIO.xt(response)
-
         profile_photo_url = PERSON.DETAIL.PHOTO_URL.xt(response)
         profile_photo_copyright = PERSON.DETAIL.PHOTO_COPYRIGHT.xt(response)
 
@@ -271,11 +290,58 @@ class PersonsSpider(BaseSpider):
                 parl_id=person['parl_id'],
                 defaults=person_data
             )
-            person_item.save()
 
+            mandates_detail = PERSON.DETAIL.MANDATES.xt(response)
+            for mandate in mandates_detail:
+                if Party.objects.filter(short=mandate['party']):
+                    party = Party.objects.filter(
+                        short=mandate['party']).first()
+                elif Party.objects.filter(titles__contains=[mandate['party']]):
+                    party = Party.objects.filter(
+                        titles__contains=[mandate['party']]).first()
+                else:
+                    self.logger.warning(u"Can't find party {} for mandate".format(
+                        yellow(u"[{}]".format(mandate['party']))
+                    ))
+                    continue
+                mq = person_item.mandates.filter(party=party)
+
+                # try to extract LLP from function string
+                if "GP)" in mandate['function']:
+                    try:
+                        m_llp_roman = re.match(
+                            '^.*\((.*)\. GP\).*$', mandate['function']).group(1)
+                        m_llp = LegislativePeriod.objects.get(
+                            roman_numeral=m_llp_roman)
+                        mq = mq.filter(legislative_period=m_llp)
+                    except:
+                        self.logger.warning(u"Can't find llp in function string {}".format(
+                            yellow(u"[{}]".format(mandate['function']))
+                        ))
+
+                # try to find existing mandate to add in dates
+                if mq.count() == 1:
+                    md = mq.first()
+                    md.start_date = mandate['start_date']
+                    if mandate['end_date']:
+                        md.end_date = mandate['end_date']
+                    md.save()
+                    self.logger.info(u"Augmented mandate {} with start-/end-dates ".format(
+                        green(u"{}".format(md))
+                    ))
+
+            person_item.save()
             # Instatiate slug
             person_item.slug
 
+        except Exception as error:
+            self.logger.info(
+                red(u"Error saving Person {}: \n\t{}".format(full_name, error)))
+            #import ipdb
+            # ipdb.set_trace()
+            return
+
+        try:
             # Parse the Comittee (Ausschuss) memberships for this person
             memberships = COMITTEE.MEMBERSHIP.xt(response)
 
@@ -286,8 +352,14 @@ class PersonsSpider(BaseSpider):
                         roman_numeral=comittee['legislative_period'])
                     comittee['legislative_period'] = llp
 
-                comittee_item, created_comittee = Comittee.objects.get_or_create(
-                    **comittee)
+                comittee_item, created_comittee = Comittee.objects.update_or_create(
+                    parl_id=comittee['parl_id'],
+                    nrbr=comittee['nrbr'],
+                    legislative_period=comittee['legislative_period'],
+                    # source_link=comittee['source_link'],
+                    active=comittee[
+                        'active'] if 'active' in comittee else True,
+                    defaults=comittee)
                 if created_comittee:
                     self.logger.info(u"Created comittee {}".format(
                         green(u"[{}]".format(comittee))
@@ -325,7 +397,8 @@ class PersonsSpider(BaseSpider):
                     ))
 
         except Exception as error:
-            self.logger.info(red(u"Error saving Person {}".format(full_name)))
-            import ipdb
-            ipdb.set_trace()
+            self.logger.info(
+                red(u"Error adding Person's comittee memberships {}: \n\t{}".format(full_name, error)))
+            #import ipdb
+            # ipdb.set_trace()
             return
