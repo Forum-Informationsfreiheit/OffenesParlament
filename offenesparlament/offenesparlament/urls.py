@@ -35,6 +35,9 @@ urlpatterns = patterns(
         base_views.petition_detail, name='petiton_detail'),
     url(r'^signatures/petitions/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})/$',
         base_views.petition_signatures, name='petition_signatures'),
+
+    url(r'^suche/(.*)/?$', base_views.generic_search_view, name='generic_search_view'),
+
     # Search Urls
     url(r'^search/?$',
         search.JsonSearchView.as_view()),

@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django.contrib.postgres.fields
 import phonenumber_field.modelfields
 import op_scraper.models
-import annoying.fields
 
 
 class Migration(migrations.Migration):
@@ -85,18 +85,20 @@ class Migration(migrations.Migration):
             name='DebateStatement',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateTimeField(null=True)),
+                ('date', models.DateTimeField(null=True, blank=True)),
+                ('date_end', models.DateTimeField(null=True, blank=True)),
                 ('index', models.IntegerField(default=1)),
                 ('doc_section', models.CharField(max_length=255)),
                 ('text_type', models.CharField(max_length=12, null=True)),
                 ('speaker_role', models.CharField(max_length=12, null=True)),
                 ('page_start', models.IntegerField(null=True)),
                 ('page_end', models.IntegerField(null=True)),
+                ('time_start', models.CharField(max_length=12, null=True, blank=True)),
+                ('time_end', models.CharField(max_length=12, null=True, blank=True)),
                 ('full_text', models.TextField(null=True)),
                 ('raw_text', models.TextField(null=True)),
                 ('annotated_text', models.TextField(null=True)),
                 ('speaker_name', models.CharField(max_length=255, null=True)),
-                ('debugdump', models.TextField(null=True)),
                 ('debate', models.ForeignKey(related_name='debate_statements', to='op_scraper.Debate', null=True)),
             ],
         ),
@@ -196,7 +198,7 @@ class Migration(migrations.Migration):
             name='Party',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('titles', annoying.fields.JSONField(default=[], null=True, blank=True)),
+                ('titles', django.contrib.postgres.fields.ArrayField(size=None, null=True, base_field=models.CharField(max_length=255), blank=True)),
                 ('short', models.CharField(unique=True, max_length=255)),
             ],
         ),
@@ -278,7 +280,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('speech_type', models.CharField(max_length=255)),
-                ('protocol_url', models.URLField(default=b'', max_length=255)),
+                ('protocol_url', models.URLField(default=b'', max_length=255, null=True)),
                 ('index', models.IntegerField(default=1)),
                 ('person', models.ForeignKey(related_name='statements', to='op_scraper.Person')),
             ],
@@ -299,7 +301,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('url', models.URLField(unique=True, max_length=255)),
-                ('latest_content_hash', models.CharField(max_length=16, null=True, blank=True)),
+                ('latest_content_hashes', models.TextField(null=True, blank=True)),
+                ('latest_content', models.TextField(null=True, blank=True)),
+                ('title', models.CharField(default=b'', max_length=255)),
             ],
         ),
         migrations.CreateModel(
@@ -307,7 +311,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('_unsub_slug', models.CharField(default=b'', max_length=255)),
-                ('content', models.ForeignKey(to='op_scraper.SubscribedContent')),
+                ('content', models.ForeignKey(related_name='subscriptions', to='op_scraper.SubscribedContent')),
             ],
         ),
         migrations.CreateModel(
@@ -513,11 +517,6 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='subscription',
             unique_together=set([('user', 'content')]),
-        ),
-        migrations.AddField(
-            model_name='step',
-            name='inquiry',
-            field=models.ForeignKey(related_name='steps_inquiry', blank=True, to='op_scraper.Inquiry', null=True),
         ),
         migrations.AddField(
             model_name='petitionsignature',

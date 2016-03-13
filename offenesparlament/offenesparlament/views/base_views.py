@@ -20,6 +20,10 @@ def about(request):
     return render(request, 'about.html')
 
 
+def generic_search_view(request, query):
+    return render(request, 'generic_search_view.html')
+
+
 def subscriptions(request):
     return render(request, 'subscriptions.html')
 

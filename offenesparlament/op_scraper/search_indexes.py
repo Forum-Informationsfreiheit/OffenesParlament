@@ -46,7 +46,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     occupation = indexes.CharField(
         model_attr='occupation', faceted=True, null=True)
     party = indexes.CharField(model_attr='party', faceted=True, null=True)
-    llps = indexes.CharField(model_attr='llps_facet', faceted=True)
+    llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
     llps_numeric = indexes.MultiValueField(
         model_attr='llps_facet_numeric', faceted=True)
 
@@ -105,8 +105,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
         model_attr='keyword_titles', faceted=True)
 
     def index_queryset(self, using=None):
-        return self.get_model()\
-            .objects.filter(petition__isnull=True)\
+        return self.get_model().objects\
             .filter(inquiry__isnull=True)\
             .filter(inquiryresponse__isnull=True)
 
@@ -151,14 +150,8 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     # soon
     # internal_link = indexes.CharField(model_attr=u'slug')
 
-    # Related, aggregated and Multi-Value Fields
+    # Related, aggregated and Multi - Value Fields
     statements = indexes.MultiValueField()
-
-    # steps = indexes.CharField()
-    # opinions = indexes.CharField()
-    # documents = indexes.CharField()
-    # keywords = indexes.MultiValueField(
-    #     model_attr='keyword_titles', faceted=True)
 
     def prepare_statements(self, obj):
         """

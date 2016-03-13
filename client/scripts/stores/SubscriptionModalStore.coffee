@@ -20,7 +20,6 @@ _query_server = () ->
   _server_status = Const.SERVER_STATUS_QUERYING
   $.ajax
     url: '/subscribe'
-    dataType: 'json'
     method: 'POST'
     data:
       csrfmiddlewaretoken: csrf_utils.get_csrf_token()
