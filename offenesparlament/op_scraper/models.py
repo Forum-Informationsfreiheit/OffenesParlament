@@ -5,6 +5,7 @@ from django.utils.html import remove_tags
 from django.core.urlresolvers import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
+from django.contrib.postgres.fields import ArrayField
 import re
 import json
 import xxhash
@@ -409,7 +410,11 @@ class Party(models.Model):
     """
     A political party, or 'Klub'
     """
-    titles = fields.JSONField(blank=True, null=True, default=[])
+    titles = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True)
+
     short = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
@@ -466,6 +471,19 @@ class Mandate(models.Model):
 
         if self.administration and self.administration.end_date:
             return self.administration.end_date
+
+        return None
+
+    def earliest_start_date(self):
+
+        if self.start_date:
+            return self.start_date
+
+        if self.legislative_period and self.legislative_period.start_date:
+            return self.legislative_period.start_date
+
+        if self.administration and self.administration.start_date:
+            return self.administration.start_date
 
         return None
 
