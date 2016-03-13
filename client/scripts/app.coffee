@@ -10,6 +10,7 @@ $ = require 'jquery'
 _ = require 'underscore'
 require './utils/csrf_token.coffee'
 tooltip = require 'tooltip'
+app_router = require('./utils/router.coffee')
 
 
 $(document).ready( () ->
@@ -61,12 +62,19 @@ $(document).ready( () ->
     results = AnysearchStore.get_search_results()
     if content_container and results
       SearchResults = require("./components/SearchResults.cjsx")
+      document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at"
       ReactDOM.render(
-        React.createElement(SearchResults, {results: results}),
+        React.createElement(SearchResults, {
+          results: results
+          subscription_url: AnysearchStore.get_subscription_url()
+          subscription_title: AnysearchStore.get_subscription_title()
+        }),
         content_container
       )
   AnysearchStore.addChangeListener(render_results)
   render_results()
+
+  app_router.start()
 
   # modal component to display subscription-modals
   render_modal = () ->

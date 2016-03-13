@@ -47,6 +47,31 @@ class INQUIRY:
                 })
             return docs
 
+    class RESPONSEDOCS(MultiExtractor):
+        LI_XPATH = '//*[@id="content"]/div[3]/div[2]/div/div/ul/li'
+
+        @classmethod
+        def xt(cls, response):
+            docs = []
+            raw_docs = response.xpath(cls.LI_XPATH)
+            for raw_doc in raw_docs:
+                html_url, pdf_url = "", ""
+                urls = raw_doc.css('a').xpath('@href').extract()
+                for url in urls:
+                    if url.endswith('.pdf'):
+                        pdf_url = url
+                    elif url.endswith('.html'):
+                        html_url = url
+                title = Selector(text=raw_doc.extract()).xpath(
+                    '//a[1]/text()').extract()[0]
+                title = title[:title.index('/')].strip()
+                docs.append({
+                    'title': title,
+                    'html_url': html_url,
+                    'pdf_url': pdf_url
+                })
+            return docs
+
     class TITLE(SingleExtractor):
         XPATH = '//*[@id="inhalt"]/text()'
 
@@ -263,11 +288,11 @@ class INQUIRY:
             XPATH = "//td[3]/a/@href"
 
     class RESPONSE_LINK(SingleExtractor):
-        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[last()]/td[2]'
+        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]'
 
         @classmethod
         def xt(cls, response):
-            response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[last()]/td[2]/a/@href').extract()
+            response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]/a/@href').extract()
             if not response_link:
                 return 0
             else:

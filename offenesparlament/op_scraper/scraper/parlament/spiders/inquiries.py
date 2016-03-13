@@ -62,6 +62,12 @@ class InquiriesSpider(BaseSpider):
     def __init__(self, **kw):
         super(InquiriesSpider, self).__init__(**kw)
 
+        if 'llp' in kw:
+            try:
+                self.LLP = [int(kw['llp'])]
+            except:
+                pass
+
         self.start_urls = self.get_urls()
         self.cookies_seen = set()
         self.idlist = {}
@@ -88,13 +94,15 @@ class InquiriesSpider(BaseSpider):
                     url_llp = "{}?{}".format(self.BASE_URL, url_options)
                     rss = feedparser.parse(url_llp)
 
-                    print "GP {}: {} inquiries from {} [{}]".format(
-                        roman_numeral, len(rss['entries']), nrbr, url_llp)
+                    print "GP {}: {} inquiries from {}".format(
+                        roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
-
+        self.TOTAL_COUNTER = len(urls)
         return urls
 
     def parse(self, response):
+        self.SCRAPED_COUNTER += 1
+
         source_link = response.url
         category = INQUIRY.CATEGORY.xt(response)
         parl_id = response.url.split('/')[-2]
@@ -110,9 +118,11 @@ class InquiriesSpider(BaseSpider):
         else:
             LLP = LegislativePeriod.objects.get(
                 roman_numeral=response.url.split('/')[-4])
-        if not self.has_changes(parl_id, LLP, response.url, ts):
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
-                green(u"Skipping Inquiry, no changes: {}".format(
+                green(u"[{} of {}] Skipping Inquiry, no changes: {}".format(
+                    self.SCRAPED_COUNTER,
+                    self.TOTAL_COUNTER,
                     title)))
             return
 
@@ -130,15 +140,15 @@ class InquiriesSpider(BaseSpider):
                 sender_objects.append(Person.objects.get(
                     parl_id=sender_object))
         except:
-            log.msg(red(u'Sender was not found in database, skipping Inquiry {} in LLP {}'.format(
-                parl_id, LLP)))
+            log.msg(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+                INQUIRY.SENDER.xt(response), parl_id, LLP)))
             return
         try:
             receiver_object = Person.objects.get(
                 parl_id=INQUIRY.RECEIVER.xt(response))
         except:
-            log.msg(red(u'Receiver was not found in database, skipping Inquiry {} in LLP {}'.format(
-                parl_id, LLP)))
+            log.msg(red(u'Receiver "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+                INQUIRY.RECEIVER.xt(response), parl_id, LLP)))
             return
 
         # Create or update Inquiry item
@@ -182,11 +192,13 @@ class InquiriesSpider(BaseSpider):
         inquiry_item.save()
 
         if inquiry_created:
-            logtext = u"Created Inquiry {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Created Inquiry {} with ID {}, LLP {} @ {}"
         else:
-            logtext = u"Updated Inquiry {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Updated Inquiry {} with ID {}, LLP {} @ {}"
 
         logtext = logtext.format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             cyan(title),
             cyan(u"{}".format(parl_id)),
             green(str(LLP)),
@@ -195,8 +207,8 @@ class InquiriesSpider(BaseSpider):
         )
         log.msg(logtext, level=log.INFO)
 
-        log.msg(green("Open Callback requests: {}".format(
-            len(callback_requests))), level=log.INFO)
+        # log.msg(green("Open Callback requests: {}".format(
+        #   len(callback_requests))), level=log.INFO)
 
         return callback_requests
 
@@ -247,11 +259,27 @@ class InquiriesSpider(BaseSpider):
             doc_items.append(doc)
         return doc_items
 
+    def parse_response_docs(self, response):
+
+        docs = INQUIRY.RESPONSEDOCS.xt(response)
+
+        # Create all docs we don't yet have in the DB
+        doc_items = []
+        for document in docs:
+            doc, created = Document.objects.get_or_create(
+                title=document['title'],
+                html_link=document['html_url'],
+                pdf_link=document['pdf_url'],
+                stripped_html=None
+            )
+            doc_items.append(doc)
+        return doc_items
+
     def parse_steps(self, response):
         """
             Callback function to parse the single-page history for normal inquiries
         """
-
+        response_link = []
         inquiry_item = response.meta['inquiry_item']
 
         # Get or created a default-phase for inquiries, because there are no phases in
@@ -264,10 +292,9 @@ class InquiriesSpider(BaseSpider):
 
         steps = INQUIRY.STEPS.xt(response)
 
-        if "Schriftliche Beantwortung" in steps[-1]["title"]:
-            response_link = INQUIRY.RESPONSE_LINK.xt(response)
-        else:
-            response_link = 0
+        for step in steps:
+            if "Schriftliche Beantwortung" in step["title"]:
+                response_link = INQUIRY.RESPONSE_LINK.xt(response)
 
         for step in steps:
             step_item, created = Step.objects.update_or_create(
@@ -275,12 +302,15 @@ class InquiriesSpider(BaseSpider):
                 sortkey=step['sortkey'],
                 date=step['date'],
                 protocol_url=step['protocol_url'],
-                inquiry=inquiry_item,
+                law=inquiry_item,
                 phase=phase_item,
                 source_link=response.url
             )
             step_item.save()
-        return response_link
+        if response_link:
+            return response_link
+        else:
+            return
 
     def parse_parliament_steps(self, response):
         """
@@ -306,7 +336,7 @@ class InquiriesSpider(BaseSpider):
                     sortkey=step['sortkey'],
                     date=step['date'],
                     protocol_url=step['protocol_url'],
-                    inquiry=inquiry_item,
+                    law=inquiry_item,
                     phase=phase_item,
                     source_link=response.url
                 )
@@ -398,18 +428,20 @@ class InquiriesSpider(BaseSpider):
         )
 
         # Attach foreign Keys
-        inquiryresponse_item.documents = self.parse_docs(response)
+        inquiryresponse_item.documents = self.parse_response_docs(response)
         inquiryresponse_item.category = cat
 
         # Save InquiryResponse object
         inquiryresponse_item.save()
 
         if inquiryresponse_created:
-            logtext = u"Created InquiryResponse {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Created InquiryResponse {} with ID {}, LLP {} @ {}"
         else:
-            logtext = u"Updated InquiryResponse {} with ID {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Updated InquiryResponse {} with ID {}, LLP {} @ {}"
 
         logtext = logtext.format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             cyan(title),
             cyan(u"{}".format(parl_id)),
             green(str(LLP)),

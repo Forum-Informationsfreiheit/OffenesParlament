@@ -122,11 +122,14 @@ class DebateStatementAdmin(BaseAdmin):
         'doc_section', 'speaker_name',
         'text_type', 'speaker_role',
         'page_start', 'page_end', 'date')
+    list_filter = ('text_type', 'speaker_role')
 
 
 @admin.register(Debate)
 class DebateStatementAdmin(BaseAdmin):
-    list_display = ('title', 'date', 'protocol_url')
+    search_fields = ('title',)
+    list_display = ('title', 'llp', 'date', 'protocol_url')
+    list_filter = ('llp',)
 
 
 @admin.register(Subscription)
@@ -143,3 +146,7 @@ class SubscriptionAdmin(BaseAdmin):
 class SubscribedContentAdmin(BaseAdmin):
     list_display = ('title', 'url')
 
+
+@admin.register(Comittee)
+class ComitteeAdmin(BaseAdmin):
+    list_display = ('name', 'source_link')

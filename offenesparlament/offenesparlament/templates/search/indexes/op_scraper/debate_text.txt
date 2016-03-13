@@ -1,0 +1,4 @@
+{{ object.date }}
+{{ object.title }}
+{{ object.debate_type }}
+{{ object.nr }}

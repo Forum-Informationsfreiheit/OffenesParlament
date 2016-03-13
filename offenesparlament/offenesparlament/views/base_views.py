@@ -7,6 +7,9 @@ from op_scraper.models import Keyword
 from op_scraper.models import Inquiry
 from django.db.models import Count, Max, Min, Q
 
+from offenesparlament.views.search import PersonSearchView
+from op_scraper.search_indexes import extract_json_fields
+
 import datetime
 
 
@@ -16,6 +19,10 @@ def index(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+def generic_search_view(request, query):
+    return render(request, 'generic_search_view.html')
 
 
 def subscriptions(request):
@@ -104,9 +111,32 @@ def person_detail(request, parl_id, name):
         .filter(steps__statements__person=person) \
         .annotate(last_update=Max('steps__date')) \
         .order_by('-last_update')
+
+    # instantiate appropriate search view
+    psv = PersonSearchView()
+    # query ES
+    (result, facets) = psv.get_queryset({'parl_id': parl_id})
+    # only proceed if we actually found something
+    if len(result):
+        # since this is a detail page, return all the fields from the index
+        es_person = psv.build_result_set(result, 'all')[0]
+        # extract the fields that are in JSON-Format for easier manipulation in
+        # the template
+        es_person = extract_json_fields(es_person, 'person')
+    else:
+        # In Future, we might want to _only_ hit the database when we do not
+        # find our person via the search index
+        # That way, if the person is in the index, we can serve the page faster,
+        # but we still have a fallback in case the index isn't up2date for some
+        # reason
+        es_person = None
+    # move inquiries_sent o other view
     inquiries_sent = person.inquiries_sent \
         .annotate(first_date=Min('steps_inquiry__date')).order_by('-first_date')
-    context = {'person': person, 'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
+
+    context = {'person': person, 'es_person': es_person,
+               'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
+
     return render(request, 'person_detail.html', context)
 
 

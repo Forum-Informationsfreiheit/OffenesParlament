@@ -2,6 +2,7 @@
   "name": "offenesparlament",
   "version": "0.1.0",
   "devDependencies": {
+    "backbone": "^1.3.1",
     "classnames": "^2.2.0",
     "coffee-reactify": "^4.0.0",
     "flux": "^2.1.1",
@@ -16,6 +17,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-favicons": "benfreu/grunt-favicons",
     "jquery": "^2.1.4",
+    "jquery-deparam": "^0.5.2",
     "keymirror": "^0.1.1",
     "object-assign": "^4.0.1",
     "react": "^0.14.0",

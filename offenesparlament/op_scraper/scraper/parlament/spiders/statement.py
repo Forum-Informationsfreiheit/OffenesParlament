@@ -30,17 +30,16 @@ class StatementSpider(BaseSpider):
     protokolle"), for this, the RSS-Feed at
     `http://www.parlament.gv.at/PAKT/STPROT/` is used.
 
-    Parameters are `type` (NR, BR) and `llp` (as roman number) for type of
-    debate and llp respectively; and use `snr` to scrape only a single
-    debate ("sitzung")::
+    Parameters are `type` (NR, BR) and `llp` (number) for type of
+    debate and llp respectively::
 
-        ./manage.py scrape crawl statement -a llp=XXIV -a type=NR
+        ./manage.py scrape crawl statement -a llp=24 -a type=NR
 
-    or just for one debate ::
+    To limit the debate list, use `snr` to scrape only debates that
+    have 'snr' in the title::
 
-        ./manage.py scrape crawl statement -a llp=XXIV -a type=NR\
+        ./manage.py scrape crawl statement -a llp=24 -a type=NR\
         -a snr=171
-
 
     """
 
@@ -48,19 +47,22 @@ class StatementSpider(BaseSpider):
 
     ALLOWED_LLPS = range(20, 26)
 
+    DEBATETYPES = ['NR', 'BR']
+
     name = "statement"
 
     def __init__(self, **kw):
         super(StatementSpider, self).__init__(**kw)
 
-        self.DEBATETYPE = kw['type'] if 'type' in kw else 'NR'
+        if 'type' in kw and kw['type'] in self.DEBATETYPES:
+            self.DEBATETYPES = [kw['type']]
         if 'llp' in kw and kw['llp'] != 'all':
             try:
-                self.LLP = roman.toRoman(int(kw['llp']))
+                self.LLP = [roman.toRoman(int(kw['llp']))]
             except:
-                self.LLP = kw['llp']
+                self.LLP = [kw['llp']]
         else:
-            self.LLP = 'XXIII'
+            self.LLP = [roman.toRoman(llp) for llp in self.ALLOWED_LLPS]
 
         self.SNR = kw['snr'] if 'snr' in kw else None
 
@@ -73,30 +75,32 @@ class StatementSpider(BaseSpider):
         """
 
         callback_requests = []
+        for llp in self.LLP:
+            for nrbr in self.DEBATETYPES:
+                params = {'view': 'RSS',
+                          'jsMode': 'RSS',
+                          'xdocumentUri': '/PAKT/STPROT/index.shtml',
+                          'NRBRBV': nrbr,
+                          'NUR_VORL': 'N',
+                          'R_PLSO': 'PL',
+                          'GP': llp,
+                          'FBEZ': 'FP_011',
+                          'listeId': '211',
+                          }
 
-        params = {'view': 'RSS',
-                  'jsMode': 'RSS',
-                  'xdocumentUri': '/PAKT/STPROT/index.shtml',
-                  'NRBRBV': self.DEBATETYPE,
-                  'NUR_VORL': 'N',
-                  'R_PLSO': 'PL',
-                  'GP': self.LLP,
-                  'FBEZ': 'FP_011',
-                  'listeId': '211',
-                  }
+                llp_item = None
+                try:
+                    llp_item = LegislativePeriod.objects.get(
+                        roman_numeral=params['GP'])
+                except LegislativePeriod.DoesNotExist:
+                    self.logger.warning(
+                        red(u"LLP '{}' not found".format(params['GP'])))
 
-        llp = None
-        try:
-            llp = LegislativePeriod.objects.get(roman_numeral=params['GP'])
-        except LegislativePeriod.DoesNotExist:
-            self.logger.warning(
-                red(u"LLP '{}' not found".format(params['GP'])))
-
-        feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
-        callback_requests.append(
-            scrapy.Request(feed_url,
-                           callback=self.parse_debatelist,
-                           meta={'llp': llp, 'type': params['NRBRBV']}))
+                feed_url = self.BASE_URL + 'filter.psp?' + urlencode(params)
+                callback_requests.append(
+                    scrapy.Request(feed_url,
+                                   callback=self.parse_debatelist,
+                                   meta={'llp': llp_item, 'type': params['NRBRBV']}))
 
         return callback_requests
 
@@ -130,7 +134,7 @@ class StatementSpider(BaseSpider):
         """
         Debate-transcript ("Stenografisches Protokoll") parser
         """
-
+        i = 0
         for i, sect in enumerate(DOCSECTIONS.xt(response)):
             # Lookup + add references to the section data
             sect['debate'] = response.meta['debate']
@@ -141,12 +145,14 @@ class StatementSpider(BaseSpider):
                 except Person.DoesNotExist:
                     self.logger.warning(
                         red(u"Person '{}' not found".format(sect['speaker_id'])))
+            else:
+                sect['person'] = None
 
-            if sect['ref_timestamp'] is not None \
-                    and len(sect['ref_timestamp']) == 2:
-                sect['date'] = sect['debate'].date.replace(
-                    minute=sect['ref_timestamp'][0],
-                    second=sect['ref_timestamp'][1])
+            # Select best timestamps for start and end and make datetime
+            start_ts = sect['time_start'] or sect['ref_timestamp']
+            end_ts = sect['time_end'] or sect['ref_timestamp']
+            sect['date'] = self._apply_ts(sect['debate'].date, start_ts)
+            sect['date_end'] = self._apply_ts(sect['debate'].date, end_ts)
 
             self.store_statement(sect, i)
 
@@ -172,8 +178,6 @@ class StatementSpider(BaseSpider):
         Save (update or insert) debate_statement to ORM
         """
         data['index'] = index
-        data['debugdump'] = json.dumps([data[k] for k in ['links',
-                                                          'ref_timestamp']])
         try:
             debate_statement = DebateStatement.objects.get(
                 debate=data['debate'], doc_section=data['doc_section'])
@@ -184,3 +188,15 @@ class StatementSpider(BaseSpider):
         for key in keys:
             setattr(debate_statement, key, data[key])
         debate_statement.save()
+
+    def _apply_ts(self, date, timeparts):
+        """
+        Apply hour, minutes and possibly secconds to a date.
+        """
+        if timeparts is not None and len(timeparts) >= 2:
+            ts = {'hour': timeparts[0],
+                  'minute': timeparts[1],
+                  'second': timeparts[2]
+                  if len(timeparts) > 2 else 0}
+            date = date.replace(**ts)
+        return date

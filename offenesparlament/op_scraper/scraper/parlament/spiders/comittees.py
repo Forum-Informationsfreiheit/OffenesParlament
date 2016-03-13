@@ -31,6 +31,8 @@ from op_scraper.models import Law
 
 
 class ComitteesSpider(BaseSpider):
+    ALLOWED_LLPS = range(20, 26)
+
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/AUS/filter.psp")
 
     URLOPTIONS = {
@@ -130,7 +132,7 @@ class ComitteesSpider(BaseSpider):
         else:
             parent_comitee = None
 
-        if not self.has_changes(parl_id, legislative_period, nrbr, response.url, ts):
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, legislative_period, nrbr, response.url, ts):
             self.logger.info(
                 green(u"Skipping Comittee, no changes: {}".format(
                     name)))

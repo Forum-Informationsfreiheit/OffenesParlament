@@ -238,7 +238,7 @@ class PersonsSpider(BaseSpider):
         full_name = PERSON.DETAIL.FULL_NAME.xt(response)
 
         ts = GENERIC.TIMESTAMP.xt(response)
-        if not self.has_changes(person['parl_id'], person['source_link'], ts):
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(person['parl_id'], person['source_link'], ts):
             self.logger.info(
                 green(u"Skipping Person Detail, no changes: {}".format(
                     full_name)))
