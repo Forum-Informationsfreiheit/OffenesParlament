@@ -317,7 +317,7 @@ class COMITTEE:
                     raw_comittee_link = row_sel.xpath('//td[@class="biogr_am_ausschuss"]/a/@href').extract()
                     if raw_comittee_link:
                         comittee_link = raw_comittee_link[0]
-                        comittee_link = "{}/{}".format(BASE_HOST, comittee_link)
+                        comittee_link = "{}{}".format(BASE_HOST, comittee_link)
                     else:
                         comittee_link = u''
 
