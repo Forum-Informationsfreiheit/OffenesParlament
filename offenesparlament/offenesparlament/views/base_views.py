@@ -61,7 +61,7 @@ def gesetze_list_with_ggp(request, ggp):
         .filter(legislative_period=llp) \
         .annotate(last_update=Max('steps__date')) \
         .order_by('-last_update') \
-        .select_related('category')
+        .select_related('category')[:100]
     context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
 
@@ -126,7 +126,11 @@ def inquiry_detail(request, inq_id, ggp=None):
     return render(request, 'inquiry_detail.html', context)
 
 def person_detail(request, parl_id, name):
-    person = Person.objects.get(parl_id=parl_id)
+    person = Person.objects \
+        .select_related('latest_mandate') \
+        .get(parl_id=parl_id)
+    statement_list = person.statements \
+        .select_related('step__law')
     keywords = Keyword.objects \
         .filter(laws__steps__statements__person=person) \
         .annotate(num_steps=Count('laws__steps')) \
@@ -134,33 +138,34 @@ def person_detail(request, parl_id, name):
     laws = Law.objects \
         .filter(steps__statements__person=person) \
         .annotate(last_update=Max('steps__date')) \
+        .select_related('category') \
         .order_by('-last_update')
 
     # instantiate appropriate search view
-    psv = PersonSearchView()
-    # query ES
-    (result, facets) = psv.get_queryset({'parl_id': parl_id})
-    # only proceed if we actually found something
-    if len(result):
-        # since this is a detail page, return all the fields from the index
-        es_person = psv.build_result_set(result, 'all')[0]
-        # extract the fields that are in JSON-Format for easier manipulation in
-        # the template
-        es_person = extract_json_fields(es_person, 'person')
-    else:
-        # In Future, we might want to _only_ hit the database when we do not
-        # find our person via the search index
-        # That way, if the person is in the index, we can serve the page faster,
-        # but we still have a fallback in case the index isn't up2date for some
-        # reason
-        es_person = None
-
+    # psv = PersonSearchView()
+    # # query ES
+    # (result, facets) = psv.get_queryset({'parl_id': parl_id})
+    # # only proceed if we actually found something
+    # if len(result):
+    #     # since this is a detail page, return all the fields from the index
+    #     es_person = psv.build_result_set(result, 'all')[0]
+    #     # extract the fields that are in JSON-Format for easier manipulation in
+    #     # the template
+    #     es_person = extract_json_fields(es_person, 'person')
+    # else:
+    #     # In Future, we might want to _only_ hit the database when we do not
+    #     # find our person via the search index
+    #     # That way, if the person is in the index, we can serve the page faster,
+    #     # but we still have a fallback in case the index isn't up2date for some
+    #     # reason
+    #     es_person = None
+    # print(es_person.keys())
     # add inquiries_sent here
     #inquiries_sent = person.inquiries_sent \
     #    .annotate(first_date=Min('steps__date')).order_by('-first_date')
-    #context = {'person': person, 'es_person': es_person,
+    #context = {'person': person, 'statement_list': statement_list,
     #           'keywords': keywords, 'laws': laws, 'inquiries_sent': inquiries_sent}
-    context = {'person': person, 'es_person': es_person,
+    context = {'person': person, 'statement_list': statement_list,
                'keywords': keywords, 'laws': laws}
 
     return render(request, 'person_detail.html', context)

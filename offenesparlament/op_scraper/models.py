@@ -623,8 +623,9 @@ class Person(Timestamped, ParlIDMixIn):
                 }
             if mand.party:
                 mandate['party'] = {
-                    "title": mand.state.title,
-                    "name": mand.state.name,
+                    "titles": mand.party.titles,
+                    "short": mand.party.short,
+                    "short_css_class": mand.party.short_css_class,
                 }
 
             mandates.append(mandate)
