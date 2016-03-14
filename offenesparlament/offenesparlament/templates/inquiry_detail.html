@@ -15,13 +15,13 @@
 
 {% block content %}
 
-<div style="clear: both">
+<div class="inquiry_detail">
   <h2>
     {% if inquiry_type_verbal == True %}Mündliche{% else %}Schriftliche{% endif %} Anfrage betreffend<br/>
     {{ inquiry.title }}
   </h2>
-  <div id="anfragetitel" style="float: left; display: inline-block; width:48%;">
-    <p style="font-weight: bold">gestellt von
+  <div id="anfragetitel" class="inquiry_leftcol">
+    <p class="header_row">Gestellt von
       {% for sender in inquiry.sender.all %}{% if forloop.first == false %}, {% endif %}
       <a href="{{ sender.slug }}">{{ sender.full_name }}</a>
       {% if sender.party.short %}
@@ -29,15 +29,15 @@
       {% endif %}
       {% endfor %}
       <br/>
-      <span style="font-weight: normal">am {{ first_date }} </span>
+      <span class="info">am {{ first_date }} </span>
     </p>
   </div>
 
 {% if inquiry_type_verbal == False %}
-  <div id="antworttitel" style="float: right; display: inline-block; width:48%;">
+  <div id="antworttitel" class="inquiry_rightcol">
     <div>
     {% if inquiry_response != null %}
-      <p style="font-weight: bold"><span class="law_status law_status_beschlossen"></span>Beantwortet von
+      <p class="header_row"><span class="law_status law_status_beschlossen"></span>Beantwortet von
       {% if inquiry_response.sender.slug %}
         <a href="{{ inquiry_response.sender.slug }}">{{ inquiry_response.sender.full_name }}</a>
       {% else %}
@@ -46,11 +46,11 @@
       {% if inquiry_response.sender.party.short %}
         <span class="party_tag {{ inquiry_response.sender.party.short_css_class }}">{{ inquiry_response.sender.party.short }}</span>
       {% endif %}
-        <br/><span style="font-weight: normal">{{ reveiver_mandate }}
+        <br/><span class="info">{{ reveiver_mandate }}
         am {{ last_date }} </span>
       </p>
     {% else %}
-      <p style="font-weight: bold"><span class="law_status law_status_offen"></span>Noch nicht beantwortet von
+      <p class="header_row"><span class="law_status law_status_offen"></span>Noch nicht beantwortet von
         {% if inquiry.receiver.slug %}
           <a href="{{ inquiry.receiver.slug }}">{{ inquiry.receiver.full_name }}</a>
         {% else %}
@@ -59,15 +59,15 @@
         {% if inquiry.receiver.party.short %}
           <span class="party_tag {{ inquiry.receiver.party.short_css_class }}">{{ inquiry.receiver.party.short }}</span>
         {% endif %}
-        <br/><span style="font-weight: normal">{{ reveiver_mandate }}</span></p>
+        <br/><span class="info">{{ reveiver_mandate }}</span></p>
     {% endif %}
     </div>
   </div>
 {% endif %}
 </div>
 
-  <div style="clear: both">
-  <div id="anfrage" style="float: left; display: inline-block; width:48%;">
+  <div class="inquiry_clearboxes">
+  <div id="anfrage" class="inquiry_leftcol">
 
     <a href="{{ inquiry.source_link }}" class="icon_link icon_parliament">Anfrage auf Parlamentsseite</a>
 
@@ -78,12 +78,10 @@
       <embed src="http://www.parlament.gv.at{{ doc.html_link }}" width="100%" height="300px"/>
       <embed type="application/xhtml+xml" src="http://www.parlament.gv.at{{ doc.html_link }}" width="100%" height="300px"/>
     -->
-    <div style="height: 500px">
+    <div class="inquiry_iframe_container">
       <iframe
         src="http://www.parlament.gv.at{{ doc.html_link }}"
-        width="100%"
-        height="100%"
-        style="border: 1px dotted #1e4563">Dein Browser unterstuetzt kein iframe.</iframe>
+        class="inquiry_iframe">Dein Browser unterstuetzt kein iframe.</iframe>
     </div>
     {% endif %}
   {% empty %}
@@ -92,9 +90,9 @@
 
   {% for doc in documents.all %}
     {% if doc.pdf_link != '' %}
-      <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" id="inq_pdf_show_{{forloop.counter}}" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none'">PDF '{{ doc.title }}' anzeigen</a>
+      <a href="#" class="inquiry_pdf_links icon_link icon_pdf" id="inq_pdf_show_{{forloop.counter}}" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none';return false">PDF '{{ doc.title }}' anzeigen</a>
       <div style="display: none" id="inq_pdf_container_{{forloop.counter}}">
-        <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('inq_pdf_show_{{forloop.counter}}').style['display']=null;">PDF '{{ doc.title }}' verbergen</a>
+        <a href="#" class="inquiry_pdf_links icon_link icon_pdf" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('inq_pdf_show_{{forloop.counter}}').style['display']=null; return false" id="inq_pdf_hide_{{forloop.counter}}">PDF '{{ doc.title }}' verbergen</a>
         <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" width="100%" height="600px" id="pdf{{ forloop.counter }}"/>
       </div>
       <br/>
@@ -104,27 +102,24 @@
 
   {% if inquiry_type_verbal == False %}
 
-  <div id="antwort" style="float: right; display: inline-block; width:48%;">
+  <div id="antwort" class="inquiry_rightcol">
 
   {% if inquiry_response.documents %}
     <a href="{{ inquiry_response.source_link }}" class="icon_link icon_parliament">Beantwortung auf Parlamentsseite</a>
   {% else %}
-    <a class="icon_link icon_parliament" style="opacity: 0;">&nbsp;</a>
+    <a class="icon_link icon_parliament inquiry_vert_align_hack">&nbsp;</a>
   {% endif %}
 
   {% for doc in inquiry_response.documents.all %}
     {% if doc.html_link != '' %}
-      <div style="height: 500px">
+      <div class="inquiry_iframe_container">
         <iframe src="http://www.parlament.gv.at{{ doc.html_link }}"
-        width="100%"
-        height="100%"
-        style="border: 1px dotted #1e4563">Dein Browser unterstuetzt kein iframe.</iframe>
+        class="inquiry_iframe">Dein Browser unterstuetzt kein iframe.</iframe>
       </div>
     {% endif %}
     {% empty %}
-      <div style="text-align: center; width=100%; border: 1px dotted #1e4563;
-        height: 502px; background-color: #f4f6f7">
-        <p style="position: relative; top: 50%; transform: translateY(-50%);">
+      <div class="inquiry_noresponse_container">
+        <p class="inquiry_noresponse_vert_align">
           <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
         </p>
       </div>
@@ -132,10 +127,10 @@
 
   {% for doc in inquiry_response.documents.all %}
     {% if doc.pdf_link != '' %}
-      <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" id="res_pdf_show_{{forloop.counter}}" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none'">PDF '{{ doc.title }}' anzeigen</a>
+      <a href="#" class="inquiry_pdf_links icon_link icon_pdf" id="res_pdf_show_{{forloop.counter}}" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none';return false">PDF '{{ doc.title }}' anzeigen</a>
       <div style="display: none" id="res_pdf_container_{{forloop.counter}}">
-        <a href="#" style="margin: 5px 0px" class="icon_link icon_pdf" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('res_pdf_show_{{forloop.counter}}').style['display']=null;">PDF '{{ doc.title }}' verbergen</a>
-        <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" width="100%" height="600px" id="pdf{{ forloop.counter }}"/>
+        <a href="#" class="inquiry_pdf_links icon_link icon_pdf" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('res_pdf_show_{{forloop.counter}}').style['display']=null;return false" id="res_pdf_hide_{{forloop.counter}}">PDF '{{ doc.title }}' verbergen</a>
+        <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" class="inquiry_pdf" id="pdf{{ forloop.counter }}"/>
       </div>
     {% endif %}
   {% endfor %}
@@ -145,7 +140,7 @@
   </div>
 {% endif %}
 
-<div class="section" style="clear: both; padding-top: 20px">
+<div class="inquiry_section inquiry_clearboxes">
   <table>
     <thead>
       <tr>
