@@ -49,6 +49,19 @@
         </ul>
       </div>
 
+      <div class="person_info_section">
+        <h3>Ausschüsse</h3>
+        <ul>
+        {% for comm in person.comittee_memberships.all %}
+        {% if not comm.date_to %}
+          <li>
+            {{person.full_name}} ist derzeit <b>{{ comm.function }}</b> des {{ comm.comittee.name }}
+          </li>
+        {% endif %}
+        {% endfor %}
+        </ul>
+      </div>
+
       <div class="info_buttons">
         <a href="{{person.source_link}}" class="button button_source">Parlamentsprofil ansehen</a>
         <a href="#" class="button button_notifications subscription_button"
@@ -71,7 +84,7 @@
           <th>Verhandlungsgegenstand</th>
       </thead>
       <tbody>
-        {% for st in person.statements.all %}
+        {% for st in statement_list.all %}
         <tr>
           <td>
             <div class="speech_type speech_type_{{st.speech_type}}">
