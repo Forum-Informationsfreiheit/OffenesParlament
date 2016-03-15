@@ -678,6 +678,9 @@ table.phases_list
 
 .inquiry_iframe_container
   height: 500px
+  @media screen and (-webkit-min-device-pixel-ratio:2)
+    overflow: auto
+    -webkit-overflow-scrolling: touch
 
 .inquiry_iframe
   border: 1px dotted $menu_dark_blue
