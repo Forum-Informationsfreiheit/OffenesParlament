@@ -96,6 +96,9 @@ def person_detail(request, parl_id, name):
         .annotate(last_update=Max('steps__date')) \
         .select_related('category') \
         .order_by('-last_update')
+    subscription_title = person.full_name
+    url_params = {'parl_id': person.parl_id}
+    subscription_url = '/suche/gesetze?{}'.format(urllib.urlencode(url_params))
 
     # instantiate appropriate search view
     # psv = PersonSearchView()
@@ -116,8 +119,14 @@ def person_detail(request, parl_id, name):
     #     # reason
     #     es_person = None
     # print(es_person.keys())
-    context = {'person': person, 'statement_list': statement_list,
-               'keywords': keywords, 'laws': laws}
+    context = {
+        'person': person,
+        'statement_list': statement_list,
+        'keywords': keywords,
+        'laws': laws,
+        'subscription_url': subscription_url,
+        'subscription_title': subscription_title
+    }
     return render(request, 'person_detail.html', context)
 
 

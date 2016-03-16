@@ -24,8 +24,7 @@
         <img src="{{person.photo_link}}" />
         <figcaption>Foto: {{ person.photo_copyright }}</figcaption>
       </figure>
-    </div>
-    <div class="person_info_text">
+    </div><div class="person_info_text">
       <div class="person_info_section">
         Geboren am {{ person.birthdate }}, {{ person.birthplace }}<br />
         {% if person.deathdate %}
@@ -62,11 +61,15 @@
         </ul>
       </div>
 
+      <div class="person_info_section">
+        <a href="{{person.source_link}}#tab-Ausschuesse" class="icon_link icon_parliament" target="_blank">Alle Ausschusstätigkeiten auf parlament.gv.at</a>
+      </div>
+
       <div class="info_buttons">
-        <a href="{{person.source_link}}" class="button button_source">Parlamentsprofil ansehen</a>
+        <a href="{{person.source_link}}" class="button button_source" target="_blank">Parlamentsprofil ansehen</a>
         <a href="#" class="button button_notifications subscription_button"
-          data-subscription_url="TODO URL"
-          data-subscription_title="TODO TITLE">Benachrichtigung aktivieren</a>
+          data-subscription_url="{{ subscription_url|safe }}"
+          data-subscription_title="{{ subscription_title }}">Benachrichtigung aktivieren</a>
       </div>
 
     </div>
