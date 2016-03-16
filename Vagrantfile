@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 4096
     vb.cpus = 2
+    # vb.gui = true
 
     # improve network connectivity
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
