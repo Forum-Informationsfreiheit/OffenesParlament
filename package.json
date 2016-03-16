@@ -19,6 +19,7 @@
     "jquery": "^2.1.4",
     "jquery-deparam": "^0.5.2",
     "keymirror": "^0.1.1",
+    "moment": "^2.12.0",
     "object-assign": "^4.0.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",

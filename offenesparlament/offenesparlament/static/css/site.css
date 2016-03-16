@@ -854,4 +854,7 @@ table.phases_list tr .date {
   font-size: 13px;
   margin-top: 10px; }
 
+table.search_results {
+  margin-top: 50px; }
+
 /*# sourceMappingURL=site.css.map */
