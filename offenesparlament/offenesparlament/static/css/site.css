@@ -125,6 +125,9 @@
   background-color: white;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   padding: 40px; }
+  @media screen and (max-width: 500px) {
+    .subscription_modal_dialog {
+      padding: 20px; } }
   .subscription_modal_dialog h2 {
     margin-top: 0; }
   .subscription_modal_dialog input {
@@ -390,7 +393,7 @@ ul.breadcrumbs {
     background-color: #f3783e; }
 
 .person_info {
-  margin-top: 30px;
+  margin-top: 60px;
   margin-bottom: 40px; }
   .person_info .person_info_photo {
     display: inline-block;
@@ -398,7 +401,7 @@ ul.breadcrumbs {
     margin-right: 25px; }
     @media screen and (max-width: 500px) {
       .person_info .person_info_photo {
-        width: 100%;
+        text-align: center;
         margin-bottom: 30px; } }
     .person_info .person_info_photo figure {
       padding: 0;
@@ -410,7 +413,11 @@ ul.breadcrumbs {
       width: 100%; }
   .person_info .person_info_text {
     display: inline-block;
-    vertical-align: top; }
+    vertical-align: top;
+    max-width: 735px; }
+    @media screen and (max-width: 940px) {
+      .person_info .person_info_text {
+        max-width: 445px; } }
     @media screen and (max-width: 500px) {
       .person_info .person_info_text {
         display: block; } }
@@ -809,6 +816,17 @@ table {
     vertical-align: top; }
     .law_details_box .column p {
       margin: 0 50px 28px 0; }
+
+.law_vorparlamentarisch_background {
+  margin: 70px 0 -70px 0;
+  padding: 0 0 70px 0;
+  background-color: #e5e5e5; }
+  .law_vorparlamentarisch_background h3.opinions_header {
+    margin-top: 70px;
+    color: #40925b;
+    background-image: url("img/icons/paper_box_green.svg");
+    background-repeat: no-repeat;
+    text-indent: 30px; }
 
 .keyword_list a {
   margin-right: 15px; }

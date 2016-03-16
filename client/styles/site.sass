@@ -215,14 +215,14 @@ ul.breadcrumbs
     background-color: rgb(243, 120, 62)
 
 .person_info
-  margin-top: 30px
+  margin-top: 60px
   margin-bottom: 40px
   .person_info_photo
     display: inline-block
     width: 150px
     margin-right: 25px
     @media screen and (max-width: $break_small)
-      width: 100%
+      text-align: center
       margin-bottom: 30px
     figure
       padding: 0
@@ -235,6 +235,9 @@ ul.breadcrumbs
   .person_info_text
     display: inline-block
     vertical-align: top
+    max-width: 735px
+    @media screen and (max-width: $break_medium)
+      max-width: 445px
     @media screen and (max-width: $break_small)
       display: block
     .person_info_section
@@ -625,6 +628,17 @@ table
     vertical-align: top
     p
       margin: 0 50px 28px 0
+
+.law_vorparlamentarisch_background
+  margin: 70px 0 -70px 0
+  padding: 0 0 70px 0
+  background-color: $light_gray
+  h3.opinions_header
+    margin-top: 70px
+    color: $green
+    background-image: url('img/icons/paper_box_green.svg')
+    background-repeat: no-repeat
+    text-indent: 30px
 
 
 .keyword_list
