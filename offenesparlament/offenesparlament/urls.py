@@ -17,6 +17,8 @@ urlpatterns = patterns(
         base_views.person_detail, name='person_detail'),
     url(r'^personen/(?P<ggp>[XVIMCD]{1,})/$',
         base_views.person_list_with_ggp, name='person_list_with_ggp'),
+    url(r'^gesetze(?:/(?P<ggp>[XVIMCD]{1,}))?/(?P<inq_id>[J|M|A|B|P|E|U|R|\-]+\_+.+)/$',
+        base_views.inquiry_detail),
     url(r'^gesetze/$', base_views.gesetze_list, name='laws_list'),
     url(r'^gesetze/(?P<ggp>[XVIMCD]{1,})/$',
         base_views.gesetze_list_with_ggp, name='laws_list_with_ggp'),

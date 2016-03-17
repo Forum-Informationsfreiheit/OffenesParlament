@@ -1,6 +1,6 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-SearchResults = require './components/SearchResults.cjsx'
+SearchResults = require './components/results/SearchResults.cjsx'
 SubscriptionModal = require './components/SubscriptionModal.cjsx'
 SubscriptionModalStore = require './stores/SubscriptionModalStore.coffee'
 SubscriptionModalActions = require './actions/SubscriptionModalActions.coffee'
@@ -61,7 +61,6 @@ $(document).ready( () ->
   render_results = () ->
     results = AnysearchStore.get_search_results()
     if content_container and results
-      SearchResults = require("./components/SearchResults.cjsx")
       document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at"
       ReactDOM.render(
         React.createElement(SearchResults, {

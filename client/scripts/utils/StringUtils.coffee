@@ -1,4 +1,5 @@
 _ = require 'underscore'
+moment = require 'moment'
 
 
 _human_categories =
@@ -36,4 +37,8 @@ module.exports =
 
   capitalize_first_letter: (input) ->
     return input.charAt(0).toUpperCase() + input.slice(1)
+
+  get_date: (timestamp) ->
+    mnt = moment(timestamp)
+    return mnt.format('DD.MM.YYYY')
 

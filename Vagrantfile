@@ -15,9 +15,10 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, host: 9200, guest: 9200
 
   config.vm.provider "virtualbox" do |vb|
+    # turn on for error diagnosis of the virtual machine
+    # vb.gui = true
     vb.memory = 4096
     vb.cpus = 2
-    # vb.gui = true
 
     # improve network connectivity
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
