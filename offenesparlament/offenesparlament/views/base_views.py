@@ -140,6 +140,8 @@ def gesetz_detail(request, parl_id, ggp=None):
     else:
         llp = None
         gesetz = Law.objects.get(parl_id=parl_id, legislative_period=llp)
+    if hasattr(gesetz, 'laws'):
+        return redirect('{}#vorparlamentarisch'.format(gesetz.laws.slug))
     subscription_title = u"{} ({})".format(gesetz.title, gesetz.legislative_period.roman_numeral)
     url_params = {'parl_id': gesetz.parl_id, 'llps': gesetz.legislative_period.roman_numeral}
     subscription_url = '/suche/gesetze?{}'.format(urllib.urlencode(url_params))
