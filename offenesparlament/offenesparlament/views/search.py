@@ -100,7 +100,7 @@ class JsonSearchView(SearchView):
             self.search_model, [query_args]))
 
         (result, facet_counts) = self.get_queryset(query_args)
-        stats = {'num_results': result.count()}
+        stats = {'num_results': result.count() if result else None}
         # don't limit/offset empty results when we only return facets
         if 'only_facets' not in query_args:
             if 'limit' in query_args and query_args['limit']:
@@ -178,7 +178,7 @@ class JsonSearchView(SearchView):
                 # everyone from Oberoesterreich until filtering by it again.
                 qs = qs.narrow(u"{}:{}".format(
                     facet_field,
-                    query_args['facet_filters'][facet_field])
+                    qs.query.clean(query_args['facet_filters'][facet_field]))
                 ).filter(
                     **{
                         facet_field: query_args['facet_filters'][facet_field]}
