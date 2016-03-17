@@ -1,0 +1,164 @@
+{% extends "base_content.html" %}
+
+{% block ggp_selector %}{% endblock %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Anfragen & Beantwortungen" "laws_list" %}
+  {% breadcrumb inquiry.short_title "gesetz_detail" %}
+{% endblock %}
+
+{% block title %}
+{{ inquiry.title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="inquiry_detail">
+  <h2>
+    {% if inquiry_type_verbal == True %}Mündliche{% else %}Schriftliche{% endif %} Anfrage betreffend<br/>
+    {{ inquiry.title }}
+  </h2>
+  <div id="anfragetitel" class="inquiry_leftcol">
+    <p class="header_row">Gestellt von
+      {% for sender in inquiry.sender.all %}{% if forloop.first == false %}, {% endif %}
+      <a href="{{ sender.slug }}">{{ sender.full_name }}</a>
+      {% if sender.party.short %}
+        <span class="party_tag {{ sender.party.short_css_class }}">{{ sender.party.short }}</span>
+      {% endif %}
+      {% endfor %}
+      <br/>
+      <span class="info">am {{ first_date }} </span>
+    </p>
+  </div>
+
+{% if inquiry_type_verbal == False %}
+  <div id="antworttitel" class="inquiry_rightcol">
+    <div>
+    {% if inquiry_response != null %}
+      <p class="header_row"><span class="law_status law_status_beschlossen"></span>Beantwortet von
+      {% if inquiry_response.sender.slug %}
+        <a href="{{ inquiry_response.sender.slug }}">{{ inquiry_response.sender.full_name }}</a>
+      {% else %}
+        {{ inquiry_response.sender.full_name }}
+      {% endif %}
+      {% if inquiry_response.sender.party.short %}
+        <span class="party_tag {{ inquiry_response.sender.party.short_css_class }}">{{ inquiry_response.sender.party.short }}</span>
+      {% endif %}
+        <br/><span class="info">{{ reveiver_mandate }}
+        am {{ last_date }} </span>
+      </p>
+    {% else %}
+      <p class="header_row"><span class="law_status law_status_offen"></span>Noch nicht beantwortet von
+        {% if inquiry.receiver.slug %}
+          <a href="{{ inquiry.receiver.slug }}">{{ inquiry.receiver.full_name }}</a>
+        {% else %}
+          {{ inquiry.receiver.full_name }}
+        {% endif %}
+        {% if inquiry.receiver.party.short %}
+          <span class="party_tag {{ inquiry.receiver.party.short_css_class }}">{{ inquiry.receiver.party.short }}</span>
+        {% endif %}
+        <br/><span class="info">{{ reveiver_mandate }}</span></p>
+    {% endif %}
+    </div>
+  </div>
+{% endif %}
+</div>
+
+  <div class="inquiry_clearboxes">
+  <div id="anfrage" class="inquiry_leftcol">
+
+    <a href="{{ inquiry.source_link }}" class="icon_link icon_parliament">Anfrage auf Parlamentsseite</a>
+
+  {% for doc in documents.all %}
+
+    {% if doc.html_link != '' %}
+    <!-- sadly firefox does not like html in embed
+      <embed src="http://www.parlament.gv.at{{ doc.html_link }}" width="100%" height="300px"/>
+      <embed type="application/xhtml+xml" src="http://www.parlament.gv.at{{ doc.html_link }}" width="100%" height="300px"/>
+    -->
+    <div class="inquiry_iframe_container">
+      <iframe
+        src="http://www.parlament.gv.at{{ doc.html_link }}"
+        class="inquiry_iframe">Dein Browser unterstuetzt kein iframe.</iframe>
+    </div>
+    {% endif %}
+  {% empty %}
+      <p>Leider existieren keine Dokumente zu dieser Anfrage.</p>
+  {% endfor %}
+
+  {% for doc in documents.all %}
+    {% if doc.pdf_link != '' %}
+      <a href="#" class="inquiry_pdf_links icon_link icon_pdf" id="inq_pdf_show_{{forloop.counter}}" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none';return false">PDF '{{ doc.title }}' anzeigen</a>
+      <div style="display: none" id="inq_pdf_container_{{forloop.counter}}">
+        <a href="#" class="inquiry_pdf_links icon_link icon_pdf" onclick="document.getElementById('inq_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('inq_pdf_show_{{forloop.counter}}').style['display']=null; return false" id="inq_pdf_hide_{{forloop.counter}}">PDF '{{ doc.title }}' verbergen</a>
+        <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" width="100%" height="600px" id="pdf{{ forloop.counter }}"/>
+      </div>
+      <br/>
+    {% endif %}
+  {% endfor %}
+  </div>
+
+  {% if inquiry_type_verbal == False %}
+
+  <div id="antwort" class="inquiry_rightcol">
+
+  {% if inquiry_response.documents %}
+    <a href="{{ inquiry_response.source_link }}" class="icon_link icon_parliament">Beantwortung auf Parlamentsseite</a>
+  {% else %}
+    <a class="icon_link icon_parliament inquiry_vert_align_hack">&nbsp;</a>
+  {% endif %}
+
+  {% for doc in inquiry_response.documents.all %}
+    {% if doc.html_link != '' %}
+      <div class="inquiry_iframe_container">
+        <iframe src="http://www.parlament.gv.at{{ doc.html_link }}"
+        class="inquiry_iframe">Dein Browser unterstuetzt kein iframe.</iframe>
+      </div>
+    {% endif %}
+    {% empty %}
+      <div class="inquiry_noresponse_container">
+        <p class="inquiry_noresponse_vert_align">
+          <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
+        </p>
+      </div>
+  {% endfor %}
+
+  {% for doc in inquiry_response.documents.all %}
+    {% if doc.pdf_link != '' %}
+      <a href="#" class="inquiry_pdf_links icon_link icon_pdf" id="res_pdf_show_{{forloop.counter}}" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']=null;this.style['display']='none';return false">PDF '{{ doc.title }}' anzeigen</a>
+      <div style="display: none" id="res_pdf_container_{{forloop.counter}}">
+        <a href="#" class="inquiry_pdf_links icon_link icon_pdf" onclick="document.getElementById('res_pdf_container_{{forloop.counter}}').style['display']='none';document.getElementById('res_pdf_show_{{forloop.counter}}').style['display']=null;return false" id="res_pdf_hide_{{forloop.counter}}">PDF '{{ doc.title }}' verbergen</a>
+        <embed type="application/pdf" src="http://www.parlament.gv.at{{ doc.pdf_link }}" class="inquiry_pdf" id="pdf{{ forloop.counter }}"/>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  </div>
+
+  </div>
+{% endif %}
+
+<div class="inquiry_section inquiry_clearboxes">
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Stand der parlamentarischen Behandlung</th>
+        <th>Protokoll</th>
+    </thead>
+    <tbody>
+      {% for step in steps %}
+      <tr>
+        <td>{{ step.date }}</td>
+        {{ step.title | safe}}
+        <td>{% if step.protocol_url != '' %}<a href="{{ step.protocol_url }}">Protokollseite</a>{% endif %}</td>
+      </tr>
+      {% endfor%}
+    <tbody>
+  </table>
+</div>
+
+
+{% endblock %}
