@@ -100,7 +100,7 @@ class JsonSearchView(SearchView):
             self.search_model, [query_args]))
 
         (result, facet_counts) = self.get_queryset(query_args)
-
+        stats = {'num_results': result.count()}
         # don't limit/offset empty results when we only return facets
         if 'only_facets' not in query_args:
             if 'limit' in query_args and query_args['limit']:
@@ -124,7 +124,8 @@ class JsonSearchView(SearchView):
             result_list = []
 
         result = {
-            'result': result_list
+            'result': result_list,
+            'stats': stats
         }
         if facet_counts:
             result['facets'] = facet_counts
