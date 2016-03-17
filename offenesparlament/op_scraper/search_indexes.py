@@ -22,8 +22,8 @@ def extract_json_fields(result, type):
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements'],
-        'list': ['text', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric'],
+        'all': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements'],
+        'list': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric'],
     }
 
     text = indexes.CharField(document=True, use_template=True)
@@ -54,6 +54,12 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     mandates = indexes.CharField()
     statements = indexes.CharField()
     debate_statements = indexes.CharField()
+
+    # Static items
+    category = indexes.CharField(faceted=True, null=True)
+
+    def prepare_category(self, obj):
+        return "Person"
 
     def prepare_mandates(self, obj):
         """
@@ -133,8 +139,8 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
 class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements'],
-        'list': ['text', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp'],
+        'all': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements'],
+        'list': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp'],
     }
 
     text = indexes.CharField(document=True, use_template=True)
@@ -152,6 +158,12 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
 
     # Related, aggregated and Multi - Value Fields
     statements = indexes.MultiValueField()
+
+    # Static items
+    category = indexes.CharField(faceted=True, null=True)
+
+    def prepare_category(self, obj):
+        return "Debatte"
 
     def prepare_statements(self, obj):
         """
