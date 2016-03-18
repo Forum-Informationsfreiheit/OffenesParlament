@@ -3,7 +3,7 @@
   margin-top: 0
 
 .homepage_search
-  margin: 150px 0 100px 0
+  margin: 150px 0 80px 0
   .searchbar
     position: relative
     width: 100%
@@ -29,6 +29,31 @@
       color: white
       &:hover
         color: $light_blue
+
+.homepage_teasers
+  margin: 0 auto 80px auto
+  max-width: 900px
+  a.homepage_teaser_item
+    width: 33%
+    color: white
+    text-align: center
+    display: inline-block
+    padding: 0 30px
+    vertical-align: top
+    box-sizing: border-box
+    @media screen and (max-width: $break_medium)
+      padding: 0 10px
+    @media screen and (max-width: $break_small)
+      display: block
+      width: 100%
+      margin: 70px 0
+    img
+      width: 80%
+    h3
+      font-size: 22px
+      margin-bottom: 0
+    p
+      line-height: 180%
 
 
 .projectintro

@@ -51,20 +51,20 @@
     <div class="menu_bar">
       <div class="container">
         <nav>
-          <a href="/" class="logo navbar-brand">offenesparlament.at</a>
+          <a href="{% url 'home' %}" class="logo navbar-brand">offenesparlament.at</a>
           <a href="#" class="menu_responsive_sandwich">Menü</a>
           <ul class="main_menu menu_bar_items nav navbar-nav">
             <li>
-              <a href="/personen">Personen</a>
+              <a href="{% url 'person_list' %}">Personen</a>
             </li>
             <li>
-              <a href="/gesetze">Gesetze</a>
+              <a href="{% url 'laws_list' %}">Gesetze</a>
             </li>
             <li>
-              <a href="/schlagworte">Schlagworte</a>
+              <a href="{% url 'keyword_list' %}">Schlagworte</a>
             </li>
             <li>
-              <a href="/wir">Über uns</a>
+              <a href="{% url 'about' %}">Über uns</a>
             </li>
           </ul>
         </nav>
