@@ -248,6 +248,93 @@
   margin: 0px;
   margin-top: 10px; }
 
+.homepage_content {
+  background-color: #2a4f6b;
+  margin-top: 0; }
+
+.homepage_search {
+  margin: 150px 0 100px 0; }
+  .homepage_search .searchbar {
+    position: relative;
+    width: 100%;
+    background-color: white;
+    padding-left: 30px; }
+    .homepage_search .searchbar i.glyphicon {
+      position: absolute;
+      margin: 0;
+      pointer-events: none; }
+    .homepage_search .searchbar input {
+      margin: 0;
+      width: 100%;
+      line-height: 47px;
+      font-size: 16px;
+      outline: none;
+      border: none; }
+  .homepage_search .help {
+    margin-top: 15px;
+    text-align: center; }
+    .homepage_search .help a {
+      margin: 0 10px;
+      color: white; }
+      .homepage_search .help a:hover {
+        color: #7fb7ea; }
+
+.projectintro {
+  background-color: #f55f57; }
+  .projectintro .container {
+    width: 1400px;
+    background-color: #f55f57;
+    background-image: -webkit-linear-gradient(-360deg, #f55f57, #f55f57 66.66667%, white 66.66667%, white 100%);
+    background-image: linear-gradient(90deg,#f55f57, #f55f57 66.66667%, white 66.66667%, white 100%); }
+    @media screen and (max-width: 1400px) {
+      .projectintro .container {
+        width: 100%; } }
+    @media screen and (max-width: 940px) {
+      .projectintro .container {
+        margin: 0;
+        background: #f55f57; } }
+  .projectintro .projectintro_item, .projectintro .projectintro_item_inverse {
+    color: white;
+    display: inline-block;
+    width: 33.33333%;
+    vertical-align: top;
+    overflow: hidden; }
+    @media screen and (max-width: 940px) {
+      .projectintro .projectintro_item, .projectintro .projectintro_item_inverse {
+        width: 100%;
+        display: block; } }
+    .projectintro .projectintro_item .projectintro_item_border_inlay, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay {
+      margin: 20px 0;
+      overflow: hidden; }
+      @media screen and (max-width: 940px) {
+        .projectintro .projectintro_item .projectintro_item_border_inlay, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay {
+          margin: 0 30px; } }
+      .projectintro .projectintro_item .projectintro_item_border_inlay .projectintro_item_content, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay .projectintro_item_content {
+        margin: 20px 40px; }
+        @media screen and (max-width: 940px) {
+          .projectintro .projectintro_item .projectintro_item_border_inlay .projectintro_item_content, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay .projectintro_item_content {
+            margin: 30px 0; } }
+    .projectintro .projectintro_item h3, .projectintro .projectintro_item_inverse h3 {
+      background-repeat: no-repeat;
+      padding: 0 0 0 37px; }
+    .projectintro .projectintro_item .projectintro_item_icon_parliament, .projectintro .projectintro_item_inverse .projectintro_item_icon_parliament {
+      background-image: url("img/icons/parliament_white.svg"); }
+    .projectintro .projectintro_item .projectintro_item_icon_paperplane, .projectintro .projectintro_item_inverse .projectintro_item_icon_paperplane {
+      background-image: url("img/icons/paperplane_white.svg"); }
+    .projectintro .projectintro_item .projectintro_item_icon_personsearch, .projectintro .projectintro_item_inverse .projectintro_item_icon_personsearch {
+      background-image: url("img/icons/personsearch_red.svg"); }
+  .projectintro .projectintro_item_inverse {
+    color: #f55f57; }
+    @media screen and (max-width: 940px) {
+      .projectintro .projectintro_item_inverse {
+        background-color: white; } }
+  .projectintro .projectintro_item:first-child .projectintro_item_border_inlay {
+    border-right: 1px solid white; }
+    @media screen and (max-width: 940px) {
+      .projectintro .projectintro_item:first-child .projectintro_item_border_inlay {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;
@@ -494,93 +581,6 @@ ul.breadcrumbs {
     @media screen and (max-width: 500px) {
       .info_buttons a {
         margin: 10px 0; } }
-
-.homepage_content {
-  background-color: #2a4f6b;
-  margin-top: 0; }
-
-.homepage_search {
-  margin: 150px 0 100px 0; }
-  .homepage_search .searchbar {
-    position: relative;
-    width: 100%;
-    background-color: white;
-    padding-left: 30px; }
-    .homepage_search .searchbar i.glyphicon {
-      position: absolute;
-      margin: 0;
-      pointer-events: none; }
-    .homepage_search .searchbar input {
-      margin: 0;
-      width: 100%;
-      line-height: 47px;
-      font-size: 16px;
-      outline: none;
-      border: none; }
-  .homepage_search .help {
-    margin-top: 15px;
-    text-align: center; }
-    .homepage_search .help a {
-      margin: 0 10px;
-      color: white; }
-      .homepage_search .help a:hover {
-        color: #7fb7ea; }
-
-.projectintro {
-  background-color: #f55f57; }
-  .projectintro .container {
-    width: 1400px;
-    background-color: #f55f57;
-    background-image: -webkit-linear-gradient(-360deg, #f55f57, #f55f57 66.66667%, white 66.66667%, white 100%);
-    background-image: linear-gradient(90deg,#f55f57, #f55f57 66.66667%, white 66.66667%, white 100%); }
-    @media screen and (max-width: 1400px) {
-      .projectintro .container {
-        width: 100%; } }
-    @media screen and (max-width: 940px) {
-      .projectintro .container {
-        margin: 0;
-        background: #f55f57; } }
-  .projectintro .projectintro_item, .projectintro .projectintro_item_inverse {
-    color: white;
-    display: inline-block;
-    width: 33.33333%;
-    vertical-align: top;
-    overflow: hidden; }
-    @media screen and (max-width: 940px) {
-      .projectintro .projectintro_item, .projectintro .projectintro_item_inverse {
-        width: 100%;
-        display: block; } }
-    .projectintro .projectintro_item .projectintro_item_border_inlay, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay {
-      margin: 20px 0;
-      overflow: hidden; }
-      @media screen and (max-width: 940px) {
-        .projectintro .projectintro_item .projectintro_item_border_inlay, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay {
-          margin: 0 30px; } }
-      .projectintro .projectintro_item .projectintro_item_border_inlay .projectintro_item_content, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay .projectintro_item_content {
-        margin: 20px 40px; }
-        @media screen and (max-width: 940px) {
-          .projectintro .projectintro_item .projectintro_item_border_inlay .projectintro_item_content, .projectintro .projectintro_item_inverse .projectintro_item_border_inlay .projectintro_item_content {
-            margin: 30px 0; } }
-    .projectintro .projectintro_item h3, .projectintro .projectintro_item_inverse h3 {
-      background-repeat: no-repeat;
-      padding: 0 0 0 37px; }
-    .projectintro .projectintro_item .projectintro_item_icon_parliament, .projectintro .projectintro_item_inverse .projectintro_item_icon_parliament {
-      background-image: url("img/icons/parliament_white.svg"); }
-    .projectintro .projectintro_item .projectintro_item_icon_paperplane, .projectintro .projectintro_item_inverse .projectintro_item_icon_paperplane {
-      background-image: url("img/icons/paperplane_white.svg"); }
-    .projectintro .projectintro_item .projectintro_item_icon_personsearch, .projectintro .projectintro_item_inverse .projectintro_item_icon_personsearch {
-      background-image: url("img/icons/personsearch_red.svg"); }
-  .projectintro .projectintro_item_inverse {
-    color: #f55f57; }
-    @media screen and (max-width: 940px) {
-      .projectintro .projectintro_item_inverse {
-        background-color: white; } }
-  .projectintro .projectintro_item:first-child .projectintro_item_border_inlay {
-    border-right: 1px solid white; }
-    @media screen and (max-width: 940px) {
-      .projectintro .projectintro_item:first-child .projectintro_item_border_inlay {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
 
 .footer {
   width: 100%;
