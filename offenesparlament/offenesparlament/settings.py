@@ -43,7 +43,6 @@ class BaseConfig(Configuration):
         'haystack',
         'op_scraper',
         'annoying',
-        'reversion',
         'django_extensions',
         'django_bootstrap_breadcrumbs',
         'import_export',

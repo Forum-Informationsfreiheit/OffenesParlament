@@ -3,8 +3,6 @@ from __future__ import absolute_import
 from celery import shared_task
 from django.db import transaction
 from haystack.management.commands import update_index
-import reversion
-from reversion.management.commands import createinitialrevisions
 from scrapy.crawler import CrawlerProcess
 
 from op_scraper.subscriptions import check_subscriptions
@@ -19,14 +17,11 @@ DEFAULT_CRAWLER_OPTIONS = {
 def scrape(spider, **kwargs):
     from django.contrib import admin
     admin.autodiscover()
-    with transaction.atomic(), reversion.create_revision():
+    with transaction.atomic():
         process = CrawlerProcess(DEFAULT_CRAWLER_OPTIONS)
         process.crawl(spider, **kwargs)
         # the script will block here until the crawling is finished
         process.start()
-    createinitialrevisions.Command().handle(
-        comment='Initial version',
-        batch_size=500)
     return
 
 

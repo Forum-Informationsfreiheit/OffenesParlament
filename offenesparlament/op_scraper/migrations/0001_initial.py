@@ -304,6 +304,7 @@ class Migration(migrations.Migration):
                 ('latest_content_hashes', models.TextField(null=True, blank=True)),
                 ('latest_content', models.TextField(null=True, blank=True)),
                 ('title', models.CharField(default=b'', max_length=255)),
+                ('single', models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(

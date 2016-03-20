@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.db.models import Count
 from op_scraper.models import *
-import reversion
 from import_export import resources
 from import_export.admin import ImportExportMixin
 
@@ -12,7 +11,7 @@ class LawResource(resources.ModelResource):
         model = Law
 
 
-class BaseAdmin(ImportExportMixin, reversion.VersionAdmin):
+class BaseAdmin(admin.ModelAdmin, ImportExportMixin):
     change_list_template = "admin/changelist.html"
 
 
@@ -105,11 +104,13 @@ class FunctionAdmin(BaseAdmin):
 class MandateAdmin(BaseAdmin):
     pass
 
+
 @admin.register(Inquiry)
 class Inquiryadmin(BaseAdmin):
     list_display = (
         'title', 'legislative_period', 'parl_id', 'category')
     pass
+
 
 @admin.register(Petition)
 class PetitionAdmin(BaseAdmin):
@@ -141,6 +142,7 @@ class SubscriptionAdmin(BaseAdmin):
 
     def user_email(self, obj):
         return obj.user.email
+
 
 @admin.register(SubscribedContent)
 class SubscribedContentAdmin(BaseAdmin):
