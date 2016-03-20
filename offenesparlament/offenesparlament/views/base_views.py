@@ -143,7 +143,7 @@ def person_detail(request, parl_id, name):
         .order_by('-last_update')
     subscription_title = person.full_name
     url_params = {'parl_id': person.parl_id}
-    subscription_url = '/suche/gesetze?{}'.format(urllib.urlencode(url_params))
+    subscription_url = '/suche/personen?{}'.format(urllib.urlencode(url_params))
 
     # instantiate appropriate search view
     # psv = PersonSearchView()
