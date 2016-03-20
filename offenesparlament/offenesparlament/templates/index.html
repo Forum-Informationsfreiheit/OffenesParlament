@@ -24,6 +24,24 @@
         <a href="#">Detailsuche</a>
       </div>
     </div>
+
+    <div class="homepage_teasers">
+      <a href="{% url 'person_list' %}" class="homepage_teaser_item">
+        <img src="{% static 'css/img/homepage_teaser_personen.svg' %}" />
+        <h3>Personen</h3>
+        <p>Erfahren Sie mehr zu den handelnden Personen, ihren Initiativen und Redebeiträgen.</p>
+      </a><!--
+      --><a href="{% url 'laws_list' %}" class="homepage_teaser_item">
+        <img src="{% static 'css/img/homepage_teaser_gesetze.svg' %}" />
+        <h3>Gesetze</h3>
+        <p>Alle Verhandlungsgegenstände, Prozesse und Dokumente, sowie ihr aktueller Status.</p>
+      </a><!--
+      --><a href="{% url 'keyword_list' %}" class="homepage_teaser_item">
+        <img src="{% static 'css/img/homepage_teaser_schlagworte.svg' %}" />
+        <h3>Schlagworte</h3>
+        <p>Erkunden Sie über die Schlagworte thematisch sortiert die Verhandlungsgegenstände.</p>
+      </a>
+    </div>
   </div>
 </div>
 <div class="projectintro">

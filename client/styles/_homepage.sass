@@ -1,0 +1,109 @@
+.homepage_content
+  background-color: $dark_blue
+  margin-top: 0
+
+.homepage_search
+  margin: 150px 0 80px 0
+  .searchbar
+    position: relative
+    width: 100%
+    background-color: white
+    padding-left:  30px
+    i.glyphicon
+      position: absolute
+      margin: 0
+      // padding: 10px
+      pointer-events: none
+    input
+      margin: 0
+      width: 100%
+      line-height: 47px
+      font-size: 16px
+      outline: none
+      border: none
+  .help
+    margin-top: 15px
+    text-align: center
+    a
+      margin: 0 10px
+      color: white
+      &:hover
+        color: $light_blue
+
+.homepage_teasers
+  margin: 0 auto 80px auto
+  max-width: 900px
+  a.homepage_teaser_item
+    width: 33%
+    color: white
+    text-align: center
+    display: inline-block
+    padding: 0 30px
+    vertical-align: top
+    box-sizing: border-box
+    @media screen and (max-width: $break_medium)
+      padding: 0 10px
+    @media screen and (max-width: $break_small)
+      display: block
+      width: 100%
+      margin: 70px 0
+    img
+      width: 80%
+    h3
+      font-size: 22px
+      margin-bottom: 0
+    p
+      line-height: 180%
+
+
+.projectintro
+  background-color: $red
+  .container
+    width: $break_large + 200px
+    @include linear-gradient(90deg, $red, $red 66.666666666%, white 66.666666666%, white 100%)
+    @media screen and (max-width: $break_large + 200px)
+      width: 100%
+    @media screen and (max-width: $break_medium)
+      margin: 0
+      background: $red
+  .projectintro_item, .projectintro_item_inverse
+    color: white
+    display: inline-block
+    width: 33.333333333%
+    vertical-align: top
+    overflow: hidden
+    @media screen and (max-width: $break_medium)
+      width: 100%
+      display: block
+    .projectintro_item_border_inlay
+      margin: 20px 0
+      overflow: hidden
+      @media screen and (max-width: $break_medium)
+        margin: 0 30px
+      .projectintro_item_content
+        margin: 20px 40px
+        @media screen and (max-width: $break_medium)
+          margin: 30px 0
+    h3
+      background-repeat: no-repeat
+      padding: 0 0 0 37px
+      // margin: 27px 30px 17px 30px
+
+    .projectintro_item_icon_parliament
+      background-image: url('img/icons/parliament_white.svg')
+    .projectintro_item_icon_paperplane
+      background-image: url('img/icons/paperplane_white.svg')
+    .projectintro_item_icon_personsearch
+      background-image: url('img/icons/personsearch_red.svg')
+  .projectintro_item_inverse
+    color: $red
+    @media screen and (max-width: $break_medium)
+      background-color: white
+  .projectintro_item:first-child .projectintro_item_border_inlay
+    border-right: 1px solid white
+    @media screen and (max-width: $break_medium)
+      border-right: none
+      border-bottom: 1px solid rgba(white, 0.5)
+
+
+
