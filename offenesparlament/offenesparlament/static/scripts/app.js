@@ -96,11 +96,12 @@ AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 Const = require('../constants/SubscriptionModalConstants.coffee');
 
 SubscriptionModalActions = {
-  showModal: function(subscription_url, subscription_title) {
+  showModal: function(subscription_url, subscription_title, subscription_category) {
     return AppDispatcher.dispatch({
       actionType: Const.ACTION_SHOW_MODAL,
       subscription_url: subscription_url,
-      subscription_title: subscription_title
+      subscription_title: subscription_title,
+      subscription_category: subscription_category
     });
   },
   hideModal: function() {
@@ -211,6 +212,7 @@ $(document).ready(function() {
         show: SubscriptionModalStore.is_modal_shown(),
         subscription_url: SubscriptionModalStore.get_subscription_url(),
         subscription_title: SubscriptionModalStore.get_subscription_title(),
+        subscription_category: SubscriptionModalStore.get_subscription_category(),
         server_status: SubscriptionModalStore.get_server_status(),
         email: SubscriptionModalStore.get_email()
       };
@@ -220,12 +222,13 @@ $(document).ready(function() {
   SubscriptionModalStore.addChangeListener(render_modal);
   render_modal();
   return $('.subscription_button').click(function(e) {
-    var btn, title, url;
+    var btn, category, title, url;
     e.preventDefault();
     btn = $(e.target);
     url = btn.data('subscription_url');
     title = btn.data('subscription_title');
-    return SubscriptionModalActions.showModal(url, title);
+    category = btn.data('subscription_category');
+    return SubscriptionModalActions.showModal(url, title, category);
   });
 });
 
@@ -551,7 +554,8 @@ Searchbar = React.createClass({displayName: "Searchbar",
       "ref": "icon"
     }), placeholder, terms, suggest, React.createElement(SubscribeButton, {
       "subscription_url": this.state.subscription_url,
-      "subscription_title": this.state.subscription_title
+      "subscription_title": this.state.subscription_title,
+      "subscription_category": 'search'
     }));
   },
   _onChange: function() {
@@ -572,7 +576,7 @@ SubscriptionModalActions = require('../../actions/SubscriptionModalActions.coffe
 SubscribeButton = React.createClass({displayName: "SubscribeButton",
   _open_modal: function(e) {
     e.preventDefault();
-    return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.subscription_title);
+    return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.subscription_title, this.props.subscription_category);
   },
   render: function() {
     return React.createElement("a", {
@@ -1265,7 +1269,7 @@ module.exports = AnysearchStore;
 
 
 },{"../actions/RouterActions.coffee":2,"../constants/AnysearchConstants.coffee":15,"../dispatcher/AppDispatcher.coffee":17,"../utils/StringUtils.coffee":20,"events":32,"jquery":35,"jquery-deparam":34,"object-assign":38,"underscore":311}],19:[function(require,module,exports){
-var $, AppDispatcher, CHANGE_EVENT, Const, EventEmitter, SubscriptionModalStore, _, _email, _query_server, _server_status, _show_modal, _subscription_title, _subscription_url, assign, csrf_utils;
+var $, AppDispatcher, CHANGE_EVENT, Const, EventEmitter, SubscriptionModalStore, _, _email, _query_server, _server_status, _show_modal, _subscription_category, _subscription_title, _subscription_url, assign, csrf_utils;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 
@@ -1289,6 +1293,8 @@ _subscription_url = '';
 
 _subscription_title = '';
 
+_subscription_category = '';
+
 _server_status = Const.SERVER_STATUS_NEUTRAL;
 
 _email = '';
@@ -1302,6 +1308,7 @@ _query_server = function() {
       csrfmiddlewaretoken: csrf_utils.get_csrf_token(),
       subscription_url: _subscription_url,
       subscription_title: _subscription_title,
+      category: _subscription_category,
       email: _email
     },
     success: function(response) {
@@ -1326,6 +1333,9 @@ SubscriptionModalStore = assign({}, EventEmitter.prototype, {
   get_subscription_title: function() {
     return _subscription_title;
   },
+  get_subscription_category: function() {
+    return _subscription_category;
+  },
   get_server_status: function() {
     return _server_status;
   },
@@ -1347,6 +1357,7 @@ SubscriptionModalStore = assign({}, EventEmitter.prototype, {
         case Const.ACTION_SHOW_MODAL:
           _subscription_url = payload.subscription_url;
           _subscription_title = payload.subscription_title;
+          _subscription_category = payload.subscription_category;
           _server_status = Const.SERVER_STATUS_NEUTRAL;
           _show_modal = true;
           SubscriptionModalStore.emitChange();

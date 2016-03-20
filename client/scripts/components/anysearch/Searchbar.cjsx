@@ -122,6 +122,7 @@ Searchbar = React.createClass
       <SubscribeButton
         subscription_url={@state.subscription_url}
         subscription_title={@state.subscription_title}
+        subscription_category='search'
       />
     </div>
 

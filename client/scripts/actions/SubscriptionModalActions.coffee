@@ -3,11 +3,12 @@ Const = require('../constants/SubscriptionModalConstants.coffee')
 
 
 SubscriptionModalActions =
-  showModal: (subscription_url, subscription_title) ->
+  showModal: (subscription_url, subscription_title, subscription_category) ->
     AppDispatcher.dispatch({
       actionType: Const.ACTION_SHOW_MODAL
       subscription_url: subscription_url
       subscription_title: subscription_title
+      subscription_category: subscription_category
     })
 
   hideModal: () ->

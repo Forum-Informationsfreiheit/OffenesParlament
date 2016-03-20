@@ -82,6 +82,7 @@ $(document).ready( () ->
         show: SubscriptionModalStore.is_modal_shown()
         subscription_url: SubscriptionModalStore.get_subscription_url()
         subscription_title: SubscriptionModalStore.get_subscription_title()
+        subscription_category: SubscriptionModalStore.get_subscription_category()
         server_status: SubscriptionModalStore.get_server_status()
         email: SubscriptionModalStore.get_email()
       ReactDOM.render(
@@ -97,6 +98,7 @@ $(document).ready( () ->
     btn = $(e.target)
     url = btn.data('subscription_url')
     title = btn.data('subscription_title')
-    SubscriptionModalActions.showModal(url, title)
+    category = btn.data('subscription_category')
+    SubscriptionModalActions.showModal(url, title, category)
   )
 )

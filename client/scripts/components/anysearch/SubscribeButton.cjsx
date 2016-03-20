@@ -6,7 +6,7 @@ SubscribeButton = React.createClass
 
   _open_modal: (e) ->
     e.preventDefault()
-    SubscriptionModalActions.showModal(@props.subscription_url, @props.subscription_title)
+    SubscriptionModalActions.showModal(@props.subscription_url, @props.subscription_title, @props.subscription_category)
 
   render: ->
     return <a
