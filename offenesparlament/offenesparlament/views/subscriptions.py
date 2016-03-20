@@ -18,6 +18,12 @@ import requests
 import uuid
 import json
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 def verify(request, email, key):
     """
@@ -135,9 +141,18 @@ def subscribe(request):
     """
     # we must unset the limiting for accurate results
     url = request.build_absolute_uri(
-        request.POST['subscription_url']) + "&limit=-1"
+        request.POST['subscription_url']) + "&limit=-1&fieldset=all"
     title = request.POST['subscription_title']
     email = request.POST['email']
+    category = request.POST[
+        'category'] if 'category' in request.POST else 'search'
+
+    logger.info(u"Creating subscription of {} (category '{}') for {} @ {}".format(
+        title,
+        category,
+        email,
+        url
+    ))
 
     user, created_user = User.objects.get_or_create(email=email)
     if created_user:
@@ -154,6 +169,7 @@ def subscribe(request):
         hashes = content.generate_content_hashes()
         content.latest_content_hashes = hashes
         content.latest_content = content.get_content()
+        content.category = category
         content.save()
 
     if not Subscription.objects.filter(user=user, content=content).exists():

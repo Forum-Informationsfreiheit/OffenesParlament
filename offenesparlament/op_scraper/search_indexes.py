@@ -97,6 +97,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     internal_link = indexes.CharField(model_attr=u'slug')
     title = indexes.CharField(model_attr='title')
     description = indexes.CharField(model_attr='description')
+    status = indexes.CharField(model_attr='status', null=True)
     category = indexes.CharField(
         model_attr='category__title', faceted=True, null=True)
     llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)

@@ -78,6 +78,13 @@ class LegislativePeriod(models.Model):
 
         return rep_str
 
+    @classmethod
+    def get(cls, roman_numeral):
+        try:
+            return LegislativePeriod.objects.filter(roman_numeral=roman_numeral).get()
+        except:
+            return None
+
 
 class Phase(models.Model):
 
@@ -808,6 +815,7 @@ class SubscribedContent(models.Model):
     latest_content_hashes = models.TextField(null=True, blank=True)
     latest_content = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=255, default="")
+    single = models.BooleanField(default=False)
 
     # Relationships
     users = models.ManyToManyField(User, through="Subscription")
@@ -828,6 +836,7 @@ class SubscribedContent(models.Model):
         Used for speedy comparison of changes
         """
         es_response = json.loads(self.get_content())
+
         content_hashes = {}
         for res in es_response['result']:
             content_hashes[res['parl_id']] = xxhash.xxh64(
