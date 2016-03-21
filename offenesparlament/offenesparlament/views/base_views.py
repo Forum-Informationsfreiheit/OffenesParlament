@@ -181,7 +181,7 @@ def person_detail(request, parl_id, name):
         .order_by('-last_update')
     subscription_title = person.full_name
     url_params = {'parl_id': person.parl_id}
-    subscription_url = '/suche/personen?{}'.format(urllib.urlencode(url_params))
+    subscription_url = '/personen/search?{}'.format(urllib.urlencode(url_params))
 
     # instantiate appropriate search view
     # psv = PersonSearchView()
@@ -232,7 +232,10 @@ def gesetz_detail(request, parl_id, ggp=None):
         return redirect('{}#vorparlamentarisch'.format(gesetz.laws.slug))
     subscription_title = u"{} ({})".format(gesetz.title, gesetz.legislative_period.roman_numeral)
     url_params = {'parl_id': gesetz.parl_id, 'llps': gesetz.legislative_period.roman_numeral}
-    subscription_url = '/suche/gesetze?{}'.format(urllib.urlencode(url_params))
+    url_params_subscription = url_params.copy()
+    url_params_subscription.pop('llps')
+    url_params_subscription['llp_numeric'] = gesetz.legislative_period.number
+    subscription_url = '/gesetze/search?{}'.format(urllib.urlencode(url_params_subscription))
     context = {
         'law': gesetz,
         'subscription_url': subscription_url,
