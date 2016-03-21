@@ -943,4 +943,12 @@ table.phases_list tr .date {
 table.search_results {
   margin-top: 50px; }
 
+ul.petitions_creators {
+  list-style: none;
+  padding: 0;
+  margin: 0; }
+  ul.petitions_creators li {
+    margin: 0;
+    padding: 0; }
+
 /*# sourceMappingURL=site.css.map */

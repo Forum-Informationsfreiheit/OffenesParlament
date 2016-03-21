@@ -3,8 +3,10 @@
 {% load django_bootstrap_breadcrumbs %}
 
 {% block breadcrumbs %}
-    {{ block.super }}
-    {% breadcrumb "Petitionen" "petition_list" %}
+  {{ block.super }}
+  {% breadcrumb "Bürgerinitiativen & Petitionen" "petition_list" %}
+  {% breadcrumb petition.short_title "petition_detail" %}
+  {% breadcrumb "Zustimmungserklärungen" "petition_signatures" %}
 {% endblock %}
 
 {% block title %}Unterschriften für <a href="{{ petition.real_slug }}"> {{ petition.title }}</a>{% endblock %}
