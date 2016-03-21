@@ -43,10 +43,11 @@ class BaseConfig(Configuration):
         'haystack',
         'op_scraper',
         'annoying',
-        'reversion',
         'django_extensions',
         'django_bootstrap_breadcrumbs',
-        'import_export'
+        'import_export',
+        'jsonify',
+        'djcelery',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -69,6 +70,8 @@ class BaseConfig(Configuration):
             'ENGINE': 'offenesparlament.search_backend.FuzzyElasticsearchSearchEngine',
             'URL': 'http://localhost:9200/',
             'INDEX_NAME': 'haystack',
+            'TIMEOUT': 120,
+            'BATCH_SIZE': 50,
         },
     }
 
@@ -142,12 +145,21 @@ class BaseConfig(Configuration):
     CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'
     CELERYD_HIJACK_ROOT_LOGGER = False
 
+    # CELERYBEAT_SCHEDULE = {
+    #     'update_elastic_index': {
+    #         'task': 'tasks.update_elastic',
+    #         'schedule': crontab(minute='0', hour='6')
+    #     },
+    # }
+
+    # CELERY_TIMEZONE = 'UTC'
+
 
 class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
-    CELERY_RESULT_BACKEND = 'amqp'
+    #CELERY_RESULT_BACKEND = 'amqp'
 
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

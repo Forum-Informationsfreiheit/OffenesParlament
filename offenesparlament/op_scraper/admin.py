@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.db.models import Count
 from op_scraper.models import *
-import reversion
 from import_export import resources
 from import_export.admin import ImportExportMixin
 
@@ -12,7 +11,7 @@ class LawResource(resources.ModelResource):
         model = Law
 
 
-class BaseAdmin(ImportExportMixin, reversion.VersionAdmin):
+class BaseAdmin(admin.ModelAdmin, ImportExportMixin):
     change_list_template = "admin/changelist.html"
 
 
@@ -104,3 +103,52 @@ class FunctionAdmin(BaseAdmin):
 @admin.register(Mandate)
 class MandateAdmin(BaseAdmin):
     pass
+
+
+@admin.register(Inquiry)
+class Inquiryadmin(BaseAdmin):
+    list_display = (
+        'title', 'legislative_period', 'parl_id', 'category')
+    pass
+
+
+@admin.register(Petition)
+class PetitionAdmin(BaseAdmin):
+    pass
+
+
+@admin.register(DebateStatement)
+class DebateStatementAdmin(BaseAdmin):
+    list_display = (
+        'doc_section', 'speaker_name',
+        'text_type', 'speaker_role',
+        'page_start', 'page_end', 'date')
+    list_filter = ('text_type', 'speaker_role')
+
+
+@admin.register(Debate)
+class DebateStatementAdmin(BaseAdmin):
+    search_fields = ('title',)
+    list_display = ('title', 'llp', 'date', 'protocol_url')
+    list_filter = ('llp',)
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(BaseAdmin):
+    list_display = ['title', 'user_email']
+
+    def title(self, obj):
+        return obj.content.title
+
+    def user_email(self, obj):
+        return obj.user.email
+
+
+@admin.register(SubscribedContent)
+class SubscribedContentAdmin(BaseAdmin):
+    list_display = ('title', 'url')
+
+
+@admin.register(Comittee)
+class ComitteeAdmin(BaseAdmin):
+    list_display = ('name', 'source_link')

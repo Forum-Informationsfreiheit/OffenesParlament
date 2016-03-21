@@ -32,6 +32,14 @@ Technical Documentation
    Frontend <frontend.rst>
    Subscriptions <subscriptions.rst>
 
+Existing Scrapers
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   Inquiries <scraper/inquiries.rst>
+
 
 Indices and tables
 ==================
@@ -40,3 +48,10 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+Community
+=========
+
+If you'd like to stay in touch, sign up to our mailing list:
+
+https://lists.metalab.at/mailman/listinfo/offenesparlament_at

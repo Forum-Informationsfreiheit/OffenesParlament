@@ -2,6 +2,7 @@
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.http import HttpResponse
 from op_scraper.models import User
 from op_scraper.models import SubscribedContent
 from op_scraper.models import Subscription
@@ -15,6 +16,13 @@ from django.shortcuts import render
 import xxhash
 import requests
 import uuid
+import json
+
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 def verify(request, email, key):
@@ -130,11 +138,21 @@ def unsubscribe(request, email, key):
 def subscribe(request):
     """
     Subcribe the given email to the given URL.
-
-    TODO BEN: Include Subscription title or description in POST variables
     """
-    url = request.POST['subscription_url']
+    # we must unset the limiting for accurate results
+    url = request.build_absolute_uri(
+        request.POST['subscription_url']) + "&limit=-1&fieldset=all"
+    title = request.POST['subscription_title']
     email = request.POST['email']
+    category = request.POST[
+        'category'] if 'category' in request.POST else 'search'
+
+    logger.info(u"Creating subscription of {} (category '{}') for {} @ {}".format(
+        title,
+        category,
+        email,
+        url
+    ))
 
     user, created_user = User.objects.get_or_create(email=email)
     if created_user:
@@ -145,11 +163,14 @@ def subscribe(request):
         user.verification = user_verification
         user.save()
 
-    content, created_content = SubscribedContent.objects.get_or_create(url=url)
+    content, created_content = SubscribedContent.objects.get_or_create(
+        url=url, title=title)
     if created_content:
-        content_response = requests.get(url)
-        content_hash = xxhash.xxh64(content_response.text).hexdigest()
-        content.latest_content_hash = content_hash
+        hashes = content.generate_content_hashes()
+        content.latest_content_hashes = hashes
+        content.latest_content = content.get_content()
+        content.category = category
+        content.save()
 
     if not Subscription.objects.filter(user=user, content=content).exists():
         verification_hash = uuid.uuid4().hex
@@ -182,5 +203,4 @@ def subscribe(request):
     else:
         message = MESSAGES.EMAIL.ALREADY_SUBSCRIBED
 
-    messages.add_message(request, messages.INFO, message)
-    return redirect(request.META['HTTP_REFERER'], {'message': message})
+    return HttpResponse(message)

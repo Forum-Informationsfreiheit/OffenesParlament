@@ -11,16 +11,6 @@
 {% block content %}
   <h1>Regierungsvorlagen &amp; Gesetzesinitiativen</h1>
 
-  <!-- EXAMPLE FORM FOR SEARCH/PAGE SUBSCRIPTION -->
-  <form action="/subscribe" method="post">
-      {% csrf_token %}
-      <input type="hidden" name="subscription_url" value="{{ request.build_absolute_uri }}search">
-      <label for="email">Email: </label>
-      <input id="input_email" type="text" name="email" value="" />
-      <input type="submit" value="OK" />
-  </form>
-  <!-- EXAMPLE FORM FOR SEARCH/PAGE SUBSCRIPTION -->
-
   <p class="explanation">
     Hier finden Sie eine Übersicht über alle Regierungsvorlagen und
     Gesetzesinitiativen der aktuellen Gesetzgebungsperiode (XXV.). Sie können
@@ -30,4 +20,8 @@
   <div id="search_results">
   {% include 'partials/lawlist.html' with laws=laws %}
   </div>
+  {% load jsonify %}
+  <script>
+    var OFFPARL_DATA_SEARCH_TYPE = 'Gesetze';
+  </script>
 {% endblock %}

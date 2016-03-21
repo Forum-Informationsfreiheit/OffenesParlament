@@ -133,6 +133,7 @@ class LAW:
                             BASE_HOST,
                             protocol_url
                         )
+
                     step = {
                         'sortkey': step_sortkey,
                         'title': title,
@@ -167,27 +168,33 @@ class LAW:
                         statements = []
                         # Extract statements data
                         for index, row_selector in enumerate(raw_rows):
-                            person_source_link = row_selector.xpath(
-                                cls.XP_P_LINK).extract()[0]
-                            person_name = row_selector.xpath(
-                                cls.XP_P_NAME).extract()
-                            statement_type = _clean(
-                                row_selector.xpath(cls.XP_T_TYPE).extract()[0])
-                            protocol_link = row_selector.xpath(
-                                cls.XP_PROT_LINK).extract()
-                            protocol_text = _clean(
-                                remove_tags(
-                                    row_selector.xpath(
-                                        cls.XP_PROT_TEXT).extract()[0],
-                                    'td a'))
-                            statements.append({
-                                'index': index,
-                                'person_source_link': person_source_link,
-                                'person_name': person_name,
-                                'statement_type': statement_type,
-                                'protocol_link': protocol_link,
-                                'protocol_text': protocol_text,
-                            })
+                            try:
+                                person_source_link = row_selector.xpath(
+                                    cls.XP_P_LINK).extract()[0]
+                                person_name = row_selector.xpath(
+                                    cls.XP_P_NAME).extract()
+                                statement_type = _clean(
+                                    row_selector.xpath(cls.XP_T_TYPE).extract()[0])
+                                protocol_link = row_selector.xpath(
+                                    cls.XP_PROT_LINK).extract()
+                                protocol_text = _clean(
+                                    remove_tags(
+                                        row_selector.xpath(
+                                            cls.XP_PROT_TEXT).extract()[0],
+                                        'td a'))
+                                statements.append({
+                                    'index': index,
+                                    'person_source_link': person_source_link,
+                                    'person_name': person_name,
+                                    'statement_type': statement_type,
+                                    'protocol_link': protocol_link,
+                                    'protocol_text': protocol_text,
+                                })
+                            except:
+                                logger.error("Skipping statement '{}' due to extraction error".format(
+                                    row_selector.extract()
+                                    ))
+                                continue
                         title = {
                             'text': u'Wortmeldungen in der Debatte',
                             'statements': statements

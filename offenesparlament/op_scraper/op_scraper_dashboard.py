@@ -81,6 +81,11 @@ class CustomIndexDashboard(Dashboard):
                     'external': False,
                 },
                 {
+                    'title': _('Scrape Persons/Audit Office Presidents'),
+                    'url': '/admin/scrape/auditors',
+                    'external': False,
+                },
+                {
                     'title': _('Scrape Pre-Laws'),
                     'url': '/admin/scrape/pre_laws',
                     'external': False,
@@ -91,8 +96,23 @@ class CustomIndexDashboard(Dashboard):
                     'external': False,
                 },
                 {
+                    'title': _('Scrape Inquiries'),
+                    'url': '/admin/scrape/inquiries',
+                    'external': False,
+                },
+                {
                     'title': _('Scrape Petitions'),
                     'url': '/admin/scrape/petitions',
+                    'external': False,
+                },
+                {
+                    'title': _('Scrape Debates/Statements'),
+                    'url': '/admin/scrape/debates',
+                    'external': False,
+                },
+                {
+                    'title': _('Scrape Comittees'),
+                    'url': '/admin/scrape/comittees',
                     'external': False,
                 },
             ]

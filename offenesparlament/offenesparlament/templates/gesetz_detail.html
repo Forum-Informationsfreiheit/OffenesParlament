@@ -50,9 +50,16 @@
   </div>
 </div>
 
+{% for pr in law.press_releases.all %}
+{{ pr.title }}
+{% endfor %}
+
 <div class="info_buttons law_info_buttons">
-  <a href="{{ law.source_link }}" class="button button_source">Zur Parlamentsseite</a>
-  <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
+  <a href="{{ law.source_link }}" class="button button_source" target="_blank">Zur Parlamentsseite</a>
+        <a href="#" class="button button_notifications subscription_button"
+          data-subscription_url="{{ subscription_url|safe }}"
+          data-subscription_category="law"
+          data-subscription_title="{{ subscription_title }}">Benachrichtigung aktivieren</a>
 </div>
 
 
@@ -93,6 +100,10 @@
 </div>
 
 {% if law.references %}
+</div>
+</div>
+<div class="law_vorparlamentarisch_background">
+<div class="container">
   <div class="section">
     <h2 id="vorparlamentarisch">Vorparlamentarisches Verfahren</h2>
 
@@ -117,6 +128,8 @@
       </div>
     </div>
 
+{% if law.references.opinions.all %}
+<h3 class="opinions_header">Es gab im vorparlamentarischen Prozess insgesamt {{ law.references.opinions.all|length }} Stellungnahme{{ law.references.opinions.all|pluralize:"n" }}.</h3>
     <table>
       <thead>
         <tr>
@@ -139,7 +152,12 @@
         {% endfor %}
       </tbody>
     </table>
+{% endif %}
   </div>
 {% endif %}
 
+{% load jsonify %}
+<script>
+  var OFFPARL_DATA_SEARCH_TYPE = 'Gesetze';
+</script>
 {% endblock %}

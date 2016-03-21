@@ -51,9 +51,18 @@ class PETITION:
                 # PET started by members of parliament
                 for raw_creator in raw_creators_list:
                     creator_sel = Selector(text=raw_creator)
-                    parl_id = creator_sel.xpath("//a/@href").extract()[0].split("/")[2]
-                    name = creator_sel.xpath("//a/text()").extract()[0]
-                    creators.append((parl_id, name))
+                    raw_parl_id_url = creator_sel.xpath("//a/@href").extract()
+                    name = u''
+                    parl_id = u''
+                    if len(raw_parl_id_url) > 0:
+                        raw_parl_id = raw_parl_id_url[0].split("/")
+                        if len(raw_parl_id) > 1:
+                            parl_id = raw_parl_id[2]
+                    raw_name = creator_sel.xpath("//a/text()").extract()
+                    if len(raw_name) > 0:
+                        name = raw_name[0]
+                    if parl_id != u'' and name != u'':
+                        creators.append((parl_id, name))
             else:
                 raw_creators_list = response.xpath(XPATH_BI_creator).extract()
                 if len(raw_creators_list) > 0:
@@ -91,8 +100,16 @@ class PETITION:
             for raw_op in raw_ops:
                 op_sel = Selector(text=raw_op)
 
-                url = op_sel.xpath('//a/@href').extract()[0]
-                parl_id = op_sel.xpath('//span/text()').extract()[0]
+                raw_url = op_sel.xpath('//a/@href').extract()
+                if len(raw_url) > 0:
+                    url = raw_url[0]
+                else:
+                    url = u''
+                raw_parl_id = op_sel.xpath('//span/text()').extract()
+                if len(raw_parl_id) > 0:
+                    parl_id = raw_parl_id[0]
+                else:
+                    parl_id = u''
 
                 # TODO: check what title should be
                 # title = op_sel.xpath('//td[3]/text()').extract()[0]
@@ -127,11 +144,15 @@ class PETITION:
             if len(raw_reference) > 0:
                 ref_url = raw_reference[0]
                 splitted_url = ref_url.split('/')
-                llp = splitted_url[3]
-                raw_parl_id = splitted_url[5].split('_')
-                type = raw_parl_id[0]
-                number = int(raw_parl_id[1])
-                parl_id = u'({}/{})'.format(number, type)
+                llp = u''
+                parl_id = u''
+                if len(splitted_url) > 4:
+                    llp = splitted_url[3]
+                    raw_parl_id = splitted_url[5].split('_')
+                    if len(raw_parl_id) > 1:
+                        pet_type = raw_parl_id[0]
+                        number = int(raw_parl_id[1])
+                        parl_id = u'({}/{})'.format(number, pet_type)
 
                 return llp, parl_id
 
@@ -149,17 +170,30 @@ class PETITION:
             for raw_signature in raw_signatures:
                 sig_sel = Selector(text=raw_signature)
                 signature_list = sig_sel.xpath('//td/text()').extract()
-                full_name = _clean(signature_list[0])
-                postal_code = _clean(signature_list[1])
-                location = _clean(signature_list[2])
-                raw_date = time.strptime(_clean(signature_list[3]), '%d.%m.%Y')
-                date = datetime.datetime.fromtimestamp(time.mktime(raw_date))
+                if len(signature_list) > 0:
+                    full_name = _clean(signature_list[0])
 
-                signatures.append({
-                    'full_name': full_name,
-                    'postal_code': postal_code,
-                    'location': location,
-                    'date': date
-                })
+                    if len(signature_list) > 1:
+                        postal_code = _clean(signature_list[1])
+                    else:
+                        postal_code = u''
+
+                    if len(signature_list) > 2:
+                        location = _clean(signature_list[2])
+                    else:
+                        location = u''
+
+                    if len(signature_list) > 3:
+                        raw_date = time.strptime(_clean(signature_list[3]), '%d.%m.%Y')
+                        date = datetime.date.fromtimestamp(time.mktime(raw_date))
+                    else:
+                        date = datetime.date.fromtimestamp(0)
+
+                    signatures.append({
+                        'full_name': full_name,
+                        'postal_code': postal_code,
+                        'location': location,
+                        'date': date
+                    })
 
             return signatures

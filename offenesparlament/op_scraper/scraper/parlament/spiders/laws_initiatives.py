@@ -9,7 +9,10 @@ from roman import fromRoman
 
 from scrapy import log
 
+import pytz
+
 from parlament.spiders import BaseSpider
+from parlament.resources.extractors import *
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
@@ -32,6 +35,8 @@ from op_scraper.models import LegislativePeriod
 
 class LawsInitiativesSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/RGES/filter.psp")
+
+    ALLOWED_LLPS = range(20, 26)
 
     URLOPTIONS = {
         'view': 'RSS',
@@ -63,13 +68,24 @@ class LawsInitiativesSpider(BaseSpider):
         self.print_debug()
 
     def parse(self, response):
+        self.SCRAPED_COUNTER += 1
+
+        LLP = LegislativePeriod.objects.get(
+            roman_numeral=response.url.split('/')[-4])
+
         # Extract fields
+        ts = GENERIC.TIMESTAMP.xt(response)
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
         status = LAW.STATUS.xt(response)
 
-        LLP = LegislativePeriod.objects.get(
-            roman_numeral=response.url.split('/')[-4])
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
+            self.logger.info(
+                green(u"Skipping Law {} of {}, no changes: {}".format(
+                    self.SCRAPED_COUNTER,
+                    self.TOTAL_COUNTER,
+                    title)))
+            return
 
         # Extract foreign keys
         category = LAW.CATEGORY.xt(response)
@@ -85,7 +101,8 @@ class LawsInitiativesSpider(BaseSpider):
         law_data = {
             'title': title,
             'status': status,
-            'description': description
+            'description': description,
+            'ts': ts
         }
         law_item, law_created = Law.objects.update_or_create(
             parl_id=parl_id,
@@ -102,11 +119,13 @@ class LawsInitiativesSpider(BaseSpider):
 
         # Log our progress
         if law_created:
-            logtext = u"Created {} with id {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Created {} with id {}, LLP {} @ {}"
         else:
-            logtext = u"Updated {} with id {}, LLP {} @ {}"
+            logtext = u"[{} of {}] Updated {} with id {}, LLP {} @ {}"
 
         logtext = logtext.format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             red(title),
             cyan(u"[{}]".format(parl_id)),
             green(str(LLP)),
@@ -122,6 +141,22 @@ class LawsInitiativesSpider(BaseSpider):
 
         if response.xpath('//h2[@id="tab-VorparlamentarischesVerfahren"]'):
             self.parse_pre_parliament_steps(response)
+
+    def has_changes(self, parl_id, legislative_period, source_link, ts):
+        if not Law.objects.filter(
+            parl_id=parl_id,
+            legislative_period=legislative_period,
+            source_link=source_link
+        ).exists():
+            return True
+
+        ts = ts.replace(tzinfo=pytz.utc)
+        if Law.objects.get(
+                parl_id=parl_id,
+                legislative_period=legislative_period,
+                source_link=source_link).ts != ts:
+            return True
+        return False
 
     def parse_keywords(self, response):
 
@@ -191,7 +226,8 @@ class LawsInitiativesSpider(BaseSpider):
                     title=step['title']['text'],
                     sortkey=step['sortkey'],
                     date=step['date'],
-                    protocol_url=step['protocol_url'],
+                    protocol_url=step['protocol_url'][
+                        0] if step['protocol_url'] else u'',
                     law=law_item,
                     phase=phase_item,
                     source_link=response.url
@@ -208,23 +244,24 @@ class LawsInitiativesSpider(BaseSpider):
                             person_item = pq.first()
                             st_data = {
                                 'speech_type': stmnt['statement_type'],
-                                'protocol_url': stmnt['protocol_link']
+                                'protocol_url': stmnt['protocol_link'][0] if stmnt['protocol_link'] else None
                             }
+
                             st_item, st_created = Statement.objects.update_or_create(
                                 index=stmnt['index'],
                                 person=person_item,
                                 step=step_item,
                                 defaults=st_data)
-                            if st_created:
-                                log.msg(u"Created Statement by {} on {}".format(
-                                    green(
-                                        u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
-                            else:
-                                log.msg(u"Updated Statement by {} on {}".format(
-                                    green(
-                                        u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
+                            # if st_created:
+                            #     log.msg(u"Created Statement by {} on {}".format(
+                            #         green(
+                            #             u'[{}]'.format(person_item.full_name)),
+                            #         step_item.date))
+                            # else:
+                            #     log.msg(u"Updated Statement by {} on {}".format(
+                            #         green(
+                            #             u'[{}]'.format(person_item.full_name)),
+                            #         step_item.date))
                         else:
                             # We can't save statements if we can't find the
                             # Person

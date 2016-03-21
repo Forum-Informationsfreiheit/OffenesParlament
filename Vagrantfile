@@ -15,7 +15,9 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, host: 9200, guest: 9200
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = 1024
+    # turn on for error diagnosis of the virtual machine
+    # vb.gui = true
+    vb.memory = 4096
     vb.cpus = 2
 
     # improve network connectivity
@@ -26,11 +28,22 @@ Vagrant.configure("2") do |config|
   config.vm.define 'offenesparlament' do |node|
     node.vm.hostname = 'offenesparlament.vm'
     node.vm.network :private_network, ip: '192.168.47.15'
-    node.vm.provision :shell, path: "bootstrap.sh"
 
-    node.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provision/reset_postgresdb.yml"
-    end
+
+    ##
+    # Provisioners
+    ##
+
+    # 1. Bootstrap provisioner, installs the dev system and dependencies
+    config.vm.provision "bootstrap", type: "shell", path: "provision/bootstrap.sh", privileged: false
+
+    # 2. DB Creation and Reset provisioner
+    node.vm.provision "reset_db", type: "ansible_local", playbook: "provision/reset_postgresdb.yml"
+    #, verbose: "vvv"
+
+    # 3. DB Creation and Reset complete with Migrations provisioner
+    node.vm.provision "reset_db_mig", type: "ansible_local", playbook: "provision/reset_postgresdb_and_migrations.yml"
+    #, verbose: "vvv"
 
   end
 end

@@ -6,6 +6,11 @@ Constants and Utility classes
 from django.core.mail import send_mail
 from django.template import loader, Context
 
+from datetime import datetime
+
+# Limit results for ElasticSearch to this number by Default
+ES_DEFAULT_LIMIT = 50
+
 
 class EmailController():
 
@@ -66,3 +71,42 @@ class MESSAGES:
         SUBSCRIPTION_LINK_SENT = "Subskriptions-Link an '{}' gesandt."
         SUBSCRIPTION_DELETED = "Subskription {} gelöscht."
         VERIFICATION_SENT = "Email-Verifikation an '{}' gesendet."
+
+
+class ChangeMessageGenerator:
+
+    MESSAGE_TEMPLATE = u""
+
+    @classmethod
+    def msg(cls, new_content):
+        return cls.MESSAGE_TEMPLATE.format(new_content)
+
+
+class LAW:
+
+    class TITLE(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat einen neuen Titel: {}"
+
+    class DESCRIPTION(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat eine neue Beschreibung: {}"
+
+
+class PERSON:
+    class OCCUPATION(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat einen neuen Beruf angegeben: {}"
+
+    class DEATH(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"ist verstorben am: {}"
+
+        @classmethod
+        def msg(cls, new_content):
+            try:
+                dt = datetime.strptime(new_content, "%Y-%m-%dT%H:%M:%S")
+                return cls.MESSAGE_TEMPLATE.format(dt.date().strftime("%d. %m. %Y"))
+            except:
+                # couldn't parse isoformat, return as is
+                return cls.MESSAGE_TEMPLATE.format(new_content)
+
+
+class DEBATE:
+    pass

@@ -13,7 +13,8 @@ class LegislativePeriodSpider(BaseSpider):
 
     name = "llp"
     title = "Legislative Periods Spider"
-    LLP = []
+
+    ALLOWED_LLPS = []
 
     def __init__(self, **kw):
         super(LegislativePeriodSpider, self).__init__(**kw)

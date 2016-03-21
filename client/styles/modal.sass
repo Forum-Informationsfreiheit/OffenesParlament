@@ -1,0 +1,83 @@
+.subscription_modal
+  position: fixed
+  z-index: 1040
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+.subscription_modal_backdrop
+  position: fixed
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  z-index: auto
+  background-color: $menu_dark_blue
+  opacity: 0.8
+.subscription_modal_dialog
+  position: absolute
+  width: 100%
+  max-width: 700px
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  border: 1px solid #e5e5e5
+  background-color: white
+  box-shadow: 0 5px 15px rgba(0,0,0,.5)
+  padding: 40px
+  @media screen and (max-width: $break_small)
+    padding: 20px
+  h2
+    margin-top: 0
+  input
+    width: 100%
+    font-size: 16px
+    padding: 10px 15px
+    margin: 10px 0
+    box-sizing: border-box
+  .buttons
+    max-width: 500px
+    width: 100%
+    margin: 15px auto 0 auto
+    text-align: center
+    .button_ok, .button_cancel
+      @media screen and (max-width: $break_responsive_menu)
+        width: 100%
+        display: block
+        margin: 5px 0
+    .button_ok
+      background-image: url('img/icons/ix_ok_red.svg')
+      &:hover, &:focus
+        background-image: url('img/icons/ix_ok_white.svg')
+    .button_cancel
+      color: $gray
+      border-color: $gray
+      background-image: url('img/icons/ix_cancel_gray.svg')
+      margin-right: 20px
+      @media screen and (max-width: $break_responsive_menu)
+        margin-right: 0
+      &:hover, &:focus
+        color: white
+        background-image: url('img/icons/ix_cancel_white.svg')
+        background-color: $gray
+    .info_text
+      color: $gray
+      font-size: 12px
+      margin: 20px 0 0 0
+  .spinner_container > span
+    display: block
+    position: relative
+    margin: 30px 0 35px 0
+    padding: 20px
+  .status_icon_success, .status_icon_error
+    background-size: auto 100%
+    width: 100%
+    height: 30px
+    display: block
+    background-repeat: no-repeat
+    background-position: center
+    margin: 40px 0
+  .status_icon_success
+    background-image: url('img/icons/status_completed.svg')
+  .status_icon_error
+    background-image: url('img/icons/status_negative.svg')

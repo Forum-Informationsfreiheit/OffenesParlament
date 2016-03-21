@@ -8,23 +8,20 @@ from ansicolor import green
 from ansicolor import blue
 from ansicolor import magenta
 
-from roman import fromRoman
-
 from scrapy import log
 
-from parlament.spiders import BaseSpider
+from parlament.spiders.laws_initiatives import LawsInitiativesSpider
+from parlament.resources.extractors import *
 from parlament.resources.extractors.law import *
 from parlament.resources.extractors.prelaw import *
 from parlament.resources.extractors.person import *
 from parlament.resources.extractors.opinion import *
 
 from parlament.settings import BASE_HOST
-from parlament.resources.util import _clean
 
 from op_scraper.models import Phase
 from op_scraper.models import Entity
 from op_scraper.models import Document
-from op_scraper.models import PressRelease
 from op_scraper.models import Category
 from op_scraper.models import Keyword
 from op_scraper.models import Law
@@ -33,10 +30,10 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Opinion
 
 
-class PreLawsSpider(BaseSpider):
+class PreLawsSpider(LawsInitiativesSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "PAKT/MESN/filter.psp")
 
-    # LLP = range(24, 26)
+    ALLOWED_LLPS = range(20, 26)
 
     URLOPTIONS = {
         'view': 'RSS',
@@ -56,6 +53,12 @@ class PreLawsSpider(BaseSpider):
 
     def __init__(self, **kw):
         super(PreLawsSpider, self).__init__(**kw)
+        print "Initializing PRE_LAW scraper with keywords:{}".format(kw)
+        if 'llp' in kw:
+            try:
+                self.LLP = [int(kw['llp'])]
+            except:
+                pass
 
         # add at least a default URL for testing
         self.start_urls = self.get_urls()
@@ -65,10 +68,17 @@ class PreLawsSpider(BaseSpider):
 
     def parse(self, response):
         # Extract fields
+        ts = GENERIC.TIMESTAMP.xt(response)
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
         LLP = LegislativePeriod.objects.get(
             roman_numeral=response.url.split('/')[-4])
+
+        if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
+            self.logger.info(
+                green(u"Skipping Law, no changes: {}".format(
+                    title)))
+            return
 
         # save ids and stuff for internals
         if LLP not in self.idlist:
@@ -89,12 +99,16 @@ class PreLawsSpider(BaseSpider):
         log.msg(logtext, level=log.INFO)
 
         # Create and save Law
+        pre_law_data = {
+            'title': title,
+            'description': description,
+            'ts': ts
+        }
         law_item, created = Law.objects.get_or_create(
-            title=title,
             parl_id=parl_id,
             source_link=response.url,
-            description=description,
-            legislative_period=LLP)
+            legislative_period=LLP,
+            defaults=pre_law_data)
 
         if not created:
             law_item.save()
@@ -113,8 +127,10 @@ class PreLawsSpider(BaseSpider):
 
         # is the tab 'Parlamentarisches Verfahren available?'
         if opinions:
+            skipped_ops = 0
             for op in opinions:
                 if Opinion.objects.filter(parl_id=op['parl_id']).exists():
+                    skipped_ops += 1
                     continue
                 post_req = scrapy.Request("{}/{}".format(BASE_HOST, op['url']),
                                           callback=self.parse_opinion,
@@ -124,8 +140,8 @@ class PreLawsSpider(BaseSpider):
 
                 callback_requests.append(post_req)
 
-        log.msg(green("Open Callback requests: {}".format(
-            len(callback_requests))), level=log.INFO)
+            log.msg(green("Open/Skipped Callback requests: {}/{}".format(
+                len(callback_requests), skipped_ops)), level=log.INFO)
 
         return callback_requests
 

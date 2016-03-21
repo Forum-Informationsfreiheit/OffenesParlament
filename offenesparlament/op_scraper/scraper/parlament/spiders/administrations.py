@@ -141,7 +141,7 @@ class AdministrationsSpider(PersonsSpider):
             'end_date': mandate['administration']['end_date']
         }
         admin_item, created = Administration.objects.update_or_create(
-            title=mandate['administration']['title'],
+            title=mandate['administration']['title'][0],
             defaults=admin_data)
 
         if created:

@@ -11,9 +11,13 @@
     <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     {% block js_files %}
-      <script src="{% static 'scripts/vendor.js' %}"></script>
       <script src="{% static 'scripts/app.js' %}"></script>
     {% endblock %}
+
+    {% load jsonify %}
+    <script>
+      var OFFPARL_DATA_GGP = {{ request.session.ggp_facet_repr|jsonify }};
+    </script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,29 +50,21 @@
 
     <div class="menu_bar">
       <div class="container">
-        <a href="/" class="logo navbar-brand">offenesparlament.at</a>
-
-          {% if messages %}
-              <ul class="messages">
-                  {% for message in messages %}
-                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          {% endif %}
-
-        <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right">
-          <ul class="menu_bar_items nav navbar-nav">
+        <nav>
+          <a href="{% url 'home' %}" class="logo navbar-brand">offenesparlament.at</a>
+          <a href="#" class="menu_responsive_sandwich">Menü</a>
+          <ul class="main_menu menu_bar_items nav navbar-nav">
             <li>
-              <a href="/personen">Personen</a>
+              <a href="{% url 'person_list' %}">Personen</a>
             </li>
             <li>
-              <a href="/gesetze">Gesetze</a>
+              <a href="{% url 'laws_list' %}">Gesetze</a>
             </li>
             <li>
-              <a href="/schlagworte">Schlagworte</a>
+              <a href="{% url 'keyword_list' %}">Schlagworte</a>
             </li>
             <li>
-              <a href="/wir">Über uns</a>
+              <a href="{% url 'about' %}">Über uns</a>
             </li>
           </ul>
         </nav>
@@ -82,6 +78,14 @@
       </div>
     {% endblock %}
 
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     {% block container %}
     {% endblock %}
 
@@ -89,8 +93,9 @@
       <div class="container">
         <div class="footer_content">
           <div class="footer_left">
-            <p>offenesparlament.at wird durch die Internet Foundation
-            Austria (IPA) / <a href="https://www.netidee.at/">netidee.at</a> gefördert.</p>
+            <p>OffenesParlament.at ist ein Projekt des Forum
+            Informationsfreiheit<br/> und wird durch die <a
+            href="https://www.netidee.at/">netidee.at</a> gefördert.</p>
             <div class="footer_logos">
               <a class="foi" href="http://www.informationsfreiheit.at/"></a>
               <a class="netidee" href="https://www.netidee.at/"></a>
@@ -127,6 +132,7 @@
       </div>
     </div>
     <div id="react_tooltip_container"></div>
+    <div id="react_modal_container"></div>
   </body>
 </html>
 
