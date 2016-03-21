@@ -1,0 +1,56 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Bürgerinitiativen & Petitionen" "petition_list" %}
+  {% breadcrumb petition.short_title "petition_detail" %}
+  {% breadcrumb "Zustimmungserklärungen" "petition_signatures" %}
+{% endblock %}
+
+{% block title %}Unterschriften für <a href="{{ petition.real_slug }}"> {{ petition.title }}</a>{% endblock %}
+
+{% block content %}
+    <h1></h1>
+
+    <!-- EXAMPLE FORM FOR SEARCH/PAGE SUBSCRIPTION -->
+    <form action="/subscribe" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="subscription_url" value="{{ request.build_absolute_uri }}search">
+        <label for="email">Email: </label>
+        <input id="input_email" type="text" name="email" value=""/>
+        <input type="submit" value="OK"/>
+    </form>
+    <!-- EXAMPLE FORM FOR SEARCH/PAGE SUBSCRIPTION -->
+
+    <p class="explanation">
+        Hier finden Sie alle Unterschriften für die ausgewählte {{ petition.category.title }}
+    </p>
+    <table class="lawlist">
+        <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Name</th>
+            <th>PLZ</th>
+            <th>Ort</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for signature in signatures %}
+            <tr>
+                <td class="lawlist_title">{{ signature.date }}</td>
+                <td class="lawlist_category">{{ signature.full_name }}</td>
+                <td class="lawlist_date">{{ signature.postal_code }}</td>
+                <td class="lawlist_title">{{ signature.location }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% load jsonify %}
+    <script>
+        var OFFPARL_DATA_SEARCH_TYPE = 'Petitionen';
+    </script>
+{% endblock %}

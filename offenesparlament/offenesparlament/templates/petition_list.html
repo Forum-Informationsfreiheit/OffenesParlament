@@ -1,0 +1,65 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Bürgerinitiativen & Petitionen" "petition_list" %}
+{% endblock %}
+
+{% block title %}Petitionen und Bürgerinitiativen{% endblock %}
+
+{% block content %}
+    <h1>Petitionen und Bürgerinitiativen</h1>
+
+    <p class="explanation">
+      Hier finden Sie eine Übersicht über alle eingebrachten Petitionen und
+      ihren Status der ausgewählten Gesetzgebungsperiode. Sie können über die
+      Suchleiste eine andere Legislaturperiode wählen oder die Ergebnisse
+      verfeinern.
+    </p>
+    <table class="lawlist">
+        <thead>
+        <tr>
+            <th>Aktualisierung</th>
+            <th>Art</th>
+            <th>Betreff</th>
+            <th>Zustimmungserklärungen</th>
+            <th>Eingebracht von</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for petition in petition_list %}
+            <tr>
+                <td class="lawlist_date">{{ petition.last_update }}</td>
+                <td class="lawlist_category">{{ petition.category.title }}</td>
+                <td class="lawlist_title"><a href="{{ petition.real_slug }}">{{ petition.title }}</a></td>
+                <td class="lawlist_title"><a href="/signatures{{ petition.real_slug }}"> {{ petition.full_signature_count }}</a></td>
+                <td class="lawlist_title">
+                  <ul class="petitions_creators">
+                      {% for creator in petition.creators.all %}
+                          {% if creator.person.slug %}
+                            <li>
+                              <a href="{{ creator.person.slug }}">{{ creator.full_name }}</a>
+                              {% include 'partials/party_tag.html' with party=creator.person.party %}
+                            </li>
+                          {% else %}
+                            <li>{{ creator.full_name }}</li>
+                          {% endif %}
+                      {% endfor %}
+                  </ul>
+                </td>
+                <td class="lawlist_status">
+                  <span class="law_status law_status_{{ petition.simple_status }}">{{ petition.simple_status }}</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% load jsonify %}
+    <script>
+        var OFFPARL_DATA_SEARCH_TYPE = 'Petitionen';
+    </script>
+{% endblock %}
