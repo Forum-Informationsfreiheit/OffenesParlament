@@ -1,0 +1,22 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Abos verwalten" "subscriptions" %}
+{% endblock %}
+
+{% block title %}Abos verwalten{% endblock %}
+
+{% block content %}
+  <h1>Abos verwalten</h1>
+
+  <form action="" method="post">
+    {% csrf_token %}
+    {{ form.email.errors }}
+    {{ form.email }}
+    <input type="submit" value="Abos verwalten">
+  </form>
+
+{% endblock %}

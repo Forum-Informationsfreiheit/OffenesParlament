@@ -9,7 +9,7 @@ from op_scraper.models import Subscription
 from op_scraper.models import Verification
 from offenesparlament.constants import EMAIL
 from offenesparlament.constants import MESSAGES
-
+from offenesparlament.forms import SubscriptionsLoginForm
 
 from django.shortcuts import render
 
@@ -23,6 +23,18 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+def login(request):
+    if request.method == 'POST':
+        form = SubscriptionsLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            return redirect('list_subscriptions', email=email)
+    else:
+        form = SubscriptionsLoginForm()
+
+    return render(request, 'subscription/login.html', {'form': form})
 
 
 def verify(request, email, key):

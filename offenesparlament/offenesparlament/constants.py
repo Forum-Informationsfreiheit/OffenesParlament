@@ -67,7 +67,7 @@ class MESSAGES:
         SUCCESSFULLY_SUBSCRIBED = "Email-Adresse {} und Subskription bestätigt."
         OOPS = "Ups, da ist was schiefgelaufen - konnte {} nicht finden (oder nicht eindeutig zuordnen)!"
         ERROR_SENDING_EMAIL = "Fehler beim Senden des Emails an '{}'."
-        EMAIL_NOT_FOUND = "Email-Adresse '{}' nicht gefunden."
+        EMAIL_NOT_FOUND = "Falls wir Abos unter der Email-Adresse '{}' in der Datenbank finden konnten, haben Sie soeben ein Login-E-Mail erhalten."
         SUBSCRIPTION_LINK_SENT = "Subskriptions-Link an '{}' gesandt."
         SUBSCRIPTION_DELETED = "Subskription {} gelöscht."
         VERIFICATION_SENT = "Email-Verifikation an '{}' gesendet."

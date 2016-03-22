@@ -11,7 +11,6 @@ urlpatterns = patterns(
     '',
     url(r'^$', base_views.index, name='home'),
     url(r'^wir/$', base_views.about, name='about'),
-    url(r'^abos/$', base_views.subscriptions, name='subscriptions'),
     url(r'^personen/$', base_views.person_list, name='person_list'),
     url(r'^personen/(?P<parl_id>.{1,60})/(?P<name>.+)/$',
         base_views.person_detail, name='person_detail'),
@@ -52,6 +51,8 @@ urlpatterns = patterns(
 
     # Subscription URLS
 
+    url(r'^abos/$', subscriptions.login, name='subscriptions'),
+
     # Verify a new subscription
     url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
         subscriptions.verify,
@@ -69,13 +70,13 @@ urlpatterns = patterns(
     # List emails subscriptions
     url(r'^list/(?P<email>.+)/(?P<key>.+)/?$',
         subscriptions.list,
-        name='list'),
+        name='list_subscriptions'),
 
 
     # Resend list hashkey for email
     url(r'^list/(?P<email>.+)/?$',
         subscriptions.list,
-        name='list'),
+        name='list_subscriptions'),
 
 
 

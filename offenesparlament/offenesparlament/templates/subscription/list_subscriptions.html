@@ -3,13 +3,13 @@
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
   {{ block.super }}
-  {% breadcrumb "Subskription" "list" %}
+  {% breadcrumb "Abos verwalten" "subscriptions" %}
 {% endblock %}
 
-{% block title %}Subskriptions-Manager{% endblock %}
+{% block title %}Abos verwalten{% endblock %}
 
 {% block content %}
-  <h1>Subskriptions-Manager</h1>
+  <h1>Abos verwalten</h1>
 
   {% if message %}
     <p class="explanation">
