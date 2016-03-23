@@ -62,15 +62,15 @@ class EMAIL:
 class MESSAGES:
 
     class EMAIL:
-        ALREADY_VERIFIED = "Diese Subskription ist bereits bestätigt für {}!"
-        ALREADY_SUBSCRIBED = "Diese Seite ist bereits für diese Email abonniert!"
-        SUCCESSFULLY_SUBSCRIBED = "Email-Adresse {} und Subskription bestätigt."
-        OOPS = "Ups, da ist was schiefgelaufen - konnte {} nicht finden (oder nicht eindeutig zuordnen)!"
-        ERROR_SENDING_EMAIL = "Fehler beim Senden des Emails an '{}'."
-        EMAIL_NOT_FOUND = "Falls wir Abos unter der Email-Adresse '{}' in der Datenbank finden konnten, haben Sie soeben ein Login-E-Mail erhalten."
-        SUBSCRIPTION_LINK_SENT = "Subskriptions-Link an '{}' gesandt."
-        SUBSCRIPTION_DELETED = "Subskription {} gelöscht."
-        VERIFICATION_SENT = "Email-Verifikation an '{}' gesendet."
+        ALREADY_VERIFIED = "Dieses Abo ist bereits bestätigt. Sie erhalten bei Neuigkeiten zum Thema ein E-Mail."
+        ALREADY_SUBSCRIBED = "Diese Seite ist bereits für diese E-Mail-Adresse abonniert!"
+        SUCCESSFULLY_SUBSCRIBED = "Ihr Abo ist somit bestätigt und aktiv. Sie erhalten ab jetzt bei Neuigkeiten zum Thema ein E-Mail."
+        OOPS = "Ups, da ist was schiefgelaufen - konnte das Abo für {} nicht finden oder nicht eindeutig zuordnen!"
+        ERROR_SENDING_EMAIL = "Fehler beim Senden des E-Mails an '{}'."
+        EMAIL_NOT_FOUND = "Falls wir Abos unter der E-Mail-Adresse '{}' in der Datenbank finden konnten, haben Sie soeben ein Login-E-Mail erhalten."
+        SUBSCRIPTION_LINK_SENT = "Ein Login-Link wurde soeben an '{}' gesendet (falls wir ein Abo unter dieser Adresse in unserer Datenbank gefunden haben)."
+        SUBSCRIPTION_DELETED = "Das Abo '{}' wurde gelöscht."
+        VERIFICATION_SENT = "Ein Bestätigungslink wurde soeben an '{}' gesendet."
 
 
 class ChangeMessageGenerator:
