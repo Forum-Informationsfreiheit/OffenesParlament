@@ -13,6 +13,9 @@ RouterActions =
       url_matches.shift()
       location.href = url_matches.join('')
 
+  changeLocation: (route) ->
+    location.href = route
+
   changeRoute: (route) ->
     app_router.navigate(route)
 
