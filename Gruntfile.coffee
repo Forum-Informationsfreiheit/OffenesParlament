@@ -20,6 +20,7 @@ module.exports = (grunt) ->
         files:
           'offenesparlament/offenesparlament/static/css/vendor.css': 'client/styles/vendor/vendor.sass'
           'offenesparlament/offenesparlament/static/css/site.css': 'client/styles/site.sass'
+          'offenesparlament/offenesparlament/static/css/email.css': 'client/styles/emails/base.sass'
     watch:
       styles:
         files: 'client/styles/**/*'

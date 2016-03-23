@@ -1,0 +1,184 @@
+$menu_dark_blue: rgb(30, 69, 99)
+$dark_blue: rgb(42, 79, 107)
+$light_blue: rgb(127, 183, 234)
+$middle_blue: rgb(0, 111, 213)
+$red: rgb(245, 95, 87)
+$dark_gray: rgb(38, 38, 38)
+$gray: rgb(127, 127, 127)
+$light_gray: rgb(229, 229, 229)
+$dirty_white: rgb(191, 191, 191)
+$green: rgb(64, 146, 91)
+$background_light_gray: rgb(244, 246, 247)
+$border_light_gray: rgb(221, 227, 232)
+
+
+// /* -------------------------------------
+    // GLOBAL
+// ------------------------------------- */
+*
+  font-family: "Source Sans Pro", "Helvetica", Helvetica, Arial, sans-serif
+  font-size: 100%
+  line-height: 1.6em
+  margin: 0
+  padding: 0
+
+img
+  max-width: 600px
+  width: auto
+
+body
+  -webkit-font-smoothing: antialiased
+  height: 100%
+  -webkit-text-size-adjust: none
+  width: 100% !important
+
+
+// /* -------------------------------------
+    // ELEMENTS
+// ------------------------------------- */
+a
+  color: $middle_blue
+  text-decoration: none
+
+table.btn_primary
+  width: auto !important
+  margin: 50px 0
+
+.btn_primary td
+  font-family: "Source Sans Pro", Helvetica, Arial, "Lucida Grande", sans-serif 
+  font-size: 18px 
+  text-align: center
+  vertical-align: top 
+
+.btn_primary td a
+  border-style: solid
+  border-width: 10px 50px
+  display: inline-block
+  color: white
+  cursor: pointer
+  font-weight: 700
+  line-height: 1.75
+  text-decoration: none
+
+.btn_primary_red td a
+  background-color: $red
+  border-color: $red
+
+.btn_primary_green td a
+  background-color: $green
+  border-color: $green
+
+.last
+  margin-bottom: 0
+
+.first
+  margin-top: 0
+
+.padding
+  padding: 10px 0
+
+
+// /* -------------------------------------
+    // BODY
+// ------------------------------------- */
+table.body-wrap
+  padding: 20px
+  width: 100%
+  border-spacing: 0
+  border-collapse: collapse
+
+table.body-wrap .container
+  border: 1px solid #f0f0f0
+
+
+// /* -------------------------------------
+    // FOOTER
+// ------------------------------------- */
+table.footer-wrap
+  clear: both !important
+  width: 100%
+  margin: 15px 0
+
+.footer-wrap .container p
+  color: $gray
+  font-size: 16px
+
+table.footer-wrap p.secondary
+  opacity: 0.5
+
+
+table.footer-wrap a
+  color: $middle_blue
+
+
+// /* -------------------------------------
+    // TYPOGRAPHY
+// ------------------------------------- */
+h1, 
+h2, 
+h3
+  color: black
+  font-family: "Source Sans Pro", Helvetica, Arial, "Lucida Grande", sans-serif
+  line-height: 1.2em
+
+h1
+  font-size: 32px
+  text-align: center
+  font-weight: 700
+  margin: 40px 0 40px
+h2
+  font-size: 26px
+  font-weight: 200
+  margin: 40px 0 10px
+h3
+  font-size: 22px
+  font-weight: 200
+  margin: 40px 0 10px
+
+p, 
+ul, 
+ol
+  font-size: 18px
+  font-weight: normal
+  margin-bottom: 10px
+
+ul li, 
+ol li
+  margin-left: 5px
+  list-style-position: inside
+
+// /* ---------------------------------------------------
+    // RESPONSIVENESS
+// ------------------------------------------------------ */
+
+/* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+.container
+  clear: both !important
+  display: block !important
+  Margin: 0 auto !important
+  max-width: 600px !important
+
+/* Set the padding on the td rather than the div for Outlook compatibility */
+.body-wrap .content_container
+  padding: 20px
+
+/* This should also be a block element, so that it will fill 100% of the .container */
+.content
+  display: block
+  margin: 0 auto
+  max-width: 600px
+
+/* Let's make sure tables in the content area are 100% wide */
+.content table
+  width: 100%
+  border-spacing: 0
+  border-collapse: collapse
+
+
+
+.header_bar
+  background-color: $menu_dark_blue
+  padding: 15px 20px
+  img.logo
+    width: 200px
+    display: block

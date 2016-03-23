@@ -73,7 +73,7 @@ def list(request, email, key=None):
         if not key:
             list_url = request.build_absolute_uri(
                 reverse(
-                    'list',
+                    'list_subscriptions',
                     kwargs={
                         'email': email,
                         'key': user.verification.verification_hash}
@@ -100,7 +100,7 @@ def list(request, email, key=None):
                 }
             )
     else:
-        message = MESSAGES.EMAIL.EMAIL_NOT_FOUND.format(email)
+        message = MESSAGES.EMAIL.SUBSCRIPTION_LINK_SENT.format(email)
         return render(request, 'subscription/list_subscriptions.html', {'message': message})
 
 
@@ -122,12 +122,12 @@ def unsubscribe(request, email, key):
         message = MESSAGES.EMAIL.SUBSCRIPTION_DELETED.format(content.url)
 
         sub.delete()
-        if content.subscription_set.count() == 0:
+        if content.subscriptions.count() == 0:
             content.delete()
 
         list_subscriptions_link = request.build_absolute_uri(
             reverse(
-                'list',
+                'list_subscriptions',
                 kwargs={
                     'email': email,
                     'key': user.verification.verification_hash}

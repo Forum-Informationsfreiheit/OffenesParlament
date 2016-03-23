@@ -10,13 +10,15 @@
 {% block title %}Abos verwalten{% endblock %}
 
 {% block content %}
-  <h1>Abos verwalten</h1>
 
-  <form action="" method="post">
+  <form action="" method="post" class="abo_login">
     {% csrf_token %}
     {{ form.email.errors }}
-    {{ form.email }}
-    <input type="submit" value="Abos verwalten">
+    {{ form.email }}<!--
+    --><input type="submit" value="Abos verwalten" class="button">
+    <p class="hint">
+      Geben Sie Ihre E-Mailadresse ein, um Ihre Benachrichtungen zu verwalten oder zu löschen.
+    </p>
   </form>
 
 {% endblock %}

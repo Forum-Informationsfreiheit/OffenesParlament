@@ -1,19 +1,20 @@
 {% extends "subscription/emails/base.email" %}
 
 {% block content %}
-  <h1>Es gibt Neuigkeiten</h1>
+  <h1>Übersicht der Benachrichtigungen</h1>
   <p>
     Hej there,
   </p>
   <p>
-    Lorem Ipsum
+    a list of subscriptions on OffenesParlament.at has been requested for this email address. Please follow this link to view or edit your subscriptions:
+    <a href="{{ list_url }}">My Subscriptions</a>
   </p>
 
   <!-- button -->
   <table class="btn_primary btn_primary_red" cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td>
-        <a href="">Link</a>
+        <a href="#">Abos verwalten</a>
       </td>
     </tr>
   </table>

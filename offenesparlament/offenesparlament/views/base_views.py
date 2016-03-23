@@ -27,6 +27,10 @@ def generic_search_view(request, query):
     return render(request, 'generic_search_view.html')
 
 
+def generic_email(request):
+    return render(request, 'subscription/emails/generic.email')
+
+
 def person_list(request):
     llp = _ensure_ggp_is_set(request)
     return redirect('person_list_with_ggp', ggp=llp.roman_numeral)

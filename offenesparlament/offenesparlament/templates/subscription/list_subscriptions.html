@@ -9,21 +9,35 @@
 {% block title %}Abos verwalten{% endblock %}
 
 {% block content %}
-  <h1>Abos verwalten</h1>
+{% if user.email %}
+  <h1>Benachrichtigungen für <span class="abo_email">{{ user.email }}</span></h1>
+{% else %}
+  <h1>Login</h1>
+{% endif %}
 
-  {% if message %}
-    <p class="explanation">
-        {{ message }}
-    </p>
-  {% endif %}
+  <p class="explanation">
+    {% if message %}
+      {{ message }}
+    {% endif %}
+  </p>
 
   {% if subscriptions %}
-    <p class="subscriptions">
-    {% for sub in subscriptions %}
-        <a href="{{ sub.content.url }}">{{ sub.content.url }}</a>
-        <a href="{{ sub.unsub_slug }}">Delete Subscription</a>
-    {% endfor %}
-    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Inhalt des Abos</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in subscriptions %}
+        <tr>
+          <td class="">{{ sub.content.title }}</td>
+          <td class=""><a href="{{ sub.unsub_slug }}">Abo löschen</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% endif %}
 
 {% endblock %}

@@ -362,6 +362,35 @@
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
 
+form.abo_login {
+  width: 100%;
+  max-width: 800px;
+  margin: 100px auto 100px auto; }
+  form.abo_login input {
+    line-height: 50px;
+    padding: 0 20px;
+    font-size: 18px;
+    width: 70%;
+    box-sizing: border-box; }
+    @media screen and (max-width: 500px) {
+      form.abo_login input {
+        width: 100%; } }
+  form.abo_login .button, form.abo_login .button_large {
+    padding: 0;
+    width: 30%;
+    background-color: #f55f57;
+    color: white; }
+    @media screen and (max-width: 500px) {
+      form.abo_login .button, form.abo_login .button_large {
+        margin-top: 20px;
+        width: 100%; } }
+  form.abo_login p.hint {
+    color: #7f7f7f;
+    text-align: center; }
+
+h1 .abo_email {
+  color: #f55f57; }
+
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;
