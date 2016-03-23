@@ -48,6 +48,7 @@ class BaseConfig(Configuration):
         'import_export',
         'jsonify',
         'djcelery',
+        'django_inlinecss',
     )
 
     MIDDLEWARE_CLASSES = (

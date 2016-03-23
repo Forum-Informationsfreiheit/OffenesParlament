@@ -1,7 +1,17 @@
-Hej there,<br /><br />
+{% load inlinecss %}
+{% inlinecss "css/email.css" %}
+<html>
+  <body>
+    <div class='dark_style'>
+      Hej there,<br /><br />
 
-a list of subscriptions on OffenesParlament.at has been requested for this email address.<br />
+      a list of subscriptions on OffenesParlament.at has been requested for this email address.<br />
 
-Please follow this link to view or edit your subscriptions:<br /><br />
+      Please follow this link to view or edit your subscriptions:<br /><br />
 
-<a href="{{ list_url }}">My Subscriptions</a>
+      <a href="{{ list_url }}">My Subscriptions</a>
+    </div>
+  </body>
+</html>
+{% endinlinecss %}
+
