@@ -1,17 +1,22 @@
-{% load inlinecss %}
-{% inlinecss "css/email.css" %}
-<html>
-  <body>
-    <div class='dark_style'>
-      Hej there,<br /><br />
+{% extends "subscription/emails/base.email" %}
 
-      a list of subscriptions on OffenesParlament.at has been requested for this email address.<br />
+{% block content %}
+  <h1>Übersicht der Benachrichtigungen</h1>
+  <p>
+    Hej there,
+  </p>
+  <p>
+    a list of subscriptions on OffenesParlament.at has been requested for this email address. Please follow this link to view or edit your subscriptions:
+    <a href="{{ list_url }}">My Subscriptions</a>
+  </p>
 
-      Please follow this link to view or edit your subscriptions:<br /><br />
-
-      <a href="{{ list_url }}">My Subscriptions</a>
-    </div>
-  </body>
-</html>
-{% endinlinecss %}
-
+  <!-- button -->
+  <table class="btn_primary btn_primary_red" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td>
+        <a href="https://github.com/leemunroe/html-email-template">Abos verwalten</a>
+      </td>
+    </tr>
+  </table>
+  <!-- /button -->
+{% endblock %}

@@ -1,9 +1,23 @@
-Ihre Benachrichtigungen<br /><br />
+{% extends "subscription/emails/base.email" %}
 
-Zur/zu den von Ihnen abonnierten Personen gibt es Neuigkeiten:
+{% block content %}
+  <h1>Es gibt Neuigkeiten</h1>
+  <p>
+    Hej there,
+  </p>
+  <p>
+    Lorem Ipsum
+  </p>
 
-Zur/zu den von Ihnen abonnierten Gesetzen gibt es Neuigkeiten:
+  <!-- button -->
+  <table class="btn_primary btn_primary_red" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td>
+        <a href="">Link</a>
+      </td>
+    </tr>
+  </table>
+  <!-- /button -->
+{% endblock %}
 
-Zur/zu den von Ihnen abonnierten Debatten gibt es Neuigkeiten:
 
-Zur/zu den von Ihnen abonnierten Suchen gibt es Neuigkeiten:
