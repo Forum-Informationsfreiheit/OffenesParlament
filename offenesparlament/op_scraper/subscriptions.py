@@ -12,6 +12,8 @@ def collect_changesets(content):
         cur_hashes = content.generate_content_hashes()
     except Exception as e:
         # FIXME This happens b/c we can't subscribe detail pages yet
+        import ipdb
+        ipdb.set_trace()
         return None
 
     old_content = content.latest_content
@@ -84,6 +86,14 @@ def check_subscriptions():
         # Collect all the users we need to contact for this changeset/content
         emails = [sub.user.email for sub in content.subscriptions.all()]
 
+        # changed_content
+        changed_items = {
+            'person': [],
+            'debatte': [],
+            'gesetz': [],
+            'search': [],
+        }
+
         # iterate changed content
         for parl_id in changeset.keys():
             content_changes = changeset[parl_id]
@@ -91,14 +101,33 @@ def check_subscriptions():
             item_category = complete_result['category']
             item_index = item_category if item_category in [
                 'Person', 'Debatte'] else 'Gesetz'
+
+            change_item = {
+                'parl_id': parl_id,
+                'category': item_category,
+                'messages': []
+            }
+
+            if item_category == 'Person':
+                change_item['photo_link'] = complete_result['photo_link']
+
             for field in content_changes:
                 if field in FIELD_MESSAGES[item_index]:
-                    print "  --> " + FIELD_MESSAGES[item_index][field].msg(
+                    msg = FIELD_MESSAGES[item_index][field].msg(
                         content_changes[field]['new'])
+                    change_item['messages'].append(msg)
                 else:
                     print "Ignored Changes for {}: {}".format(item_index, field)
 
+            changed_items[content.category].append(change_item)
+
+        # TODO don't forget to recalculate the hashes and shit so we don't
+        # re-send any changes
+        template_parameters = {
+            'changes': changed_items
+        }
 
         for email in emails:
+            print "Sending email to {}".format(email)
             email_sent = EMAIL.SUBSCRIPTION_CHANGES.send(
-                email, changes)
+                email, template_parameters)

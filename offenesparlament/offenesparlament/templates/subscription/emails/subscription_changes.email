@@ -6,7 +6,10 @@
     Hej there,
   </p>
   <p>
-    Lorem Ipsum
+    Persons:<br />
+    {% for p in changes.person %}
+        <img src="{{ p.photo_link }}" />{{ p.parl_id }}
+    {% endfor %}
   </p>
 
   <!-- button -->

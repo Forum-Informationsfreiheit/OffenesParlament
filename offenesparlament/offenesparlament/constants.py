@@ -33,7 +33,8 @@ class EmailController():
                 cls.sender,
                 [recipient],
                 fail_silently=cls.fail_silently)
-        except:
+        except Exception as e:
+            print e
             return False
         return True
 
@@ -96,6 +97,7 @@ class LAW:
 
 
 class PERSON:
+
     class OCCUPATION(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat einen neuen Beruf angegeben: {}"
 
