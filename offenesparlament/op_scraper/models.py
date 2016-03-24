@@ -18,16 +18,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
 class ParlIDMixIn(object):
 
     @property
     def parl_id_urlsafe(self):
         return self.parl_id.replace('/', '-').replace('(', '').replace(')', '').replace(' ', '_')
 
+
 class CONSTANTS():
-    PETITIONS_LINK_NAME="petitions"
-    LAWS_LINK_NAME="gesetze"
+    PETITIONS_LINK_NAME = "petitions"
+    LAWS_LINK_NAME = "gesetze"
+
 
 class Timestamped(models.Model):
     ts = models.DateTimeField(null=True)
@@ -834,13 +835,19 @@ class SubscribedContent(models.Model):
         content_response = requests.get(self.url)
         return content_response.text
 
-    def generate_content_hashes(self):
+    def generate_content_hashes(self, content=None):
         """
         Generate a dictionary which maps parl_ids to their respective hashes
 
         Used for speedy comparison of changes
         """
-        es_response = json.loads(self.get_content())
+        if not content:
+            es_response = json.loads(self.get_content())
+        else:
+            try:
+                es_response = json.loads(content)
+            except:
+                es_response = json.loads(self.get_content())
 
         content_hashes = {}
         for res in es_response['result']:
@@ -897,7 +904,7 @@ class Petition(Law):
         "self", blank=True, null=True, related_name='redistribution')
 
     def real_slug(self):
-        #slug contains a link to the law-detail page (gesetze)
+        # slug contains a link to the law-detail page (gesetze)
         return self.slug.replace(CONSTANTS.LAWS_LINK_NAME, CONSTANTS.PETITIONS_LINK_NAME)
 
     def __unicode__(self):

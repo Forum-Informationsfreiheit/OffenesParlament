@@ -13,17 +13,17 @@ logger = logging.getLogger(__name__)
 
 def collect_changesets(content):
     changes = {}
-    try:
-        old_hashes = content.latest_content_hashes
-        cur_hashes = content.generate_content_hashes()
-    except Exception as e:
-        # FIXME This happens b/c we can't subscribe detail pages yet
-        import ipdb
-        ipdb.set_trace()
-        return None
 
     old_content = content.latest_content
     cur_content = content.get_content()
+
+    try:
+        old_hashes = content.latest_content_hashes
+        cur_hashes = content.generate_content_hashes(content=cur_content)
+    except Exception as e:
+        logger.warn(e)
+        return None
+
 
     # no changes, skip to the next one
     if old_hashes == cur_hashes:
