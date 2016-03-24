@@ -55,5 +55,15 @@ AnysearchActions =
       actionType: AnysearchConstants.SEARCHBAR_SETUP_COMPLETE
     })
 
+  activateSearchbarRouting: () ->
+    AppDispatcher.dispatch({
+      actionType: AnysearchConstants.SEARCHBAR_ACTIVATE_ROUTING
+    })
+
+  forceLocationChange: () ->
+    AppDispatcher.dispatch({
+      actionType: AnysearchConstants.SEARCHBAR_FORCE_LOCATION_CHANGE
+    })
+
 
 module.exports = AnysearchActions

@@ -27,8 +27,8 @@ def generic_search_view(request, query):
     return render(request, 'generic_search_view.html')
 
 
-def subscriptions(request):
-    return render(request, 'subscriptions.html')
+def generic_email(request):
+    return render(request, 'subscription/emails/generic.email')
 
 
 def person_list(request):

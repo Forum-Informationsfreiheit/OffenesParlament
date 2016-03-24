@@ -9,7 +9,7 @@ from op_scraper.models import Subscription
 from op_scraper.models import Verification
 from offenesparlament.constants import EMAIL
 from offenesparlament.constants import MESSAGES
-
+from offenesparlament.forms import SubscriptionsLoginForm
 
 from django.shortcuts import render
 
@@ -23,6 +23,18 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+def login(request):
+    if request.method == 'POST':
+        form = SubscriptionsLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            return redirect('list_subscriptions', email=email)
+    else:
+        form = SubscriptionsLoginForm()
+
+    return render(request, 'subscription/login.html', {'form': form})
 
 
 def verify(request, email, key):
@@ -61,7 +73,7 @@ def list(request, email, key=None):
         if not key:
             list_url = request.build_absolute_uri(
                 reverse(
-                    'list',
+                    'list_subscriptions',
                     kwargs={
                         'email': email,
                         'key': user.verification.verification_hash}
@@ -88,7 +100,7 @@ def list(request, email, key=None):
                 }
             )
     else:
-        message = MESSAGES.EMAIL.EMAIL_NOT_FOUND.format(email)
+        message = MESSAGES.EMAIL.SUBSCRIPTION_LINK_SENT.format(email)
         return render(request, 'subscription/list_subscriptions.html', {'message': message})
 
 
@@ -110,12 +122,12 @@ def unsubscribe(request, email, key):
         message = MESSAGES.EMAIL.SUBSCRIPTION_DELETED.format(content.url)
 
         sub.delete()
-        if content.subscription_set.count() == 0:
+        if content.subscriptions.count() == 0:
             content.delete()
 
         list_subscriptions_link = request.build_absolute_uri(
             reverse(
-                'list',
+                'list_subscriptions',
                 kwargs={
                     'email': email,
                     'key': user.verification.verification_hash}

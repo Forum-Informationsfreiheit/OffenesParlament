@@ -57,6 +57,16 @@ AnysearchActions = {
     return AppDispatcher.dispatch({
       actionType: AnysearchConstants.SEARCHBAR_SETUP_COMPLETE
     });
+  },
+  activateSearchbarRouting: function() {
+    return AppDispatcher.dispatch({
+      actionType: AnysearchConstants.SEARCHBAR_ACTIVATE_ROUTING
+    });
+  },
+  forceLocationChange: function() {
+    return AppDispatcher.dispatch({
+      actionType: AnysearchConstants.SEARCHBAR_FORCE_LOCATION_CHANGE
+    });
   }
 };
 
@@ -79,6 +89,9 @@ RouterActions = {
       url_matches.shift();
       return location.href = url_matches.join('');
     }
+  },
+  changeLocation: function(route) {
+    return location.href = route;
   },
   changeRoute: function(route) {
     return app_router.navigate(route);
@@ -183,6 +196,7 @@ $(document).ready(function() {
       AnysearchActions.createTerm('type', OFFPARL_DATA_SEARCH_TYPE);
     }
     AnysearchActions.declareSearchbarSetupComplete();
+    AnysearchActions.activateSearchbarRouting();
     ReactDOM.render(React.createElement(Searchbar, {}), anysearch_container);
   } else if (anysearch_container_homepage) {
     Searchbar = require("./components/anysearch/Searchbar.cjsx");
@@ -661,7 +675,7 @@ module.exports = SuggestItem;
 
 
 },{"../../utils/StringUtils.coffee":20,"react":"react"}],12:[function(require,module,exports){
-var $, AnysearchActions, AutosizeInput, React, ReactDOM, StringUtils, Term, classNames;
+var $, AnysearchActions, AutosizeInput, ENTER_KEYCODE, React, ReactDOM, StringUtils, Term, classNames;
 
 React = require('react');
 
@@ -676,6 +690,8 @@ classNames = require('classnames');
 $ = require('jquery');
 
 ReactDOM = require('react-dom');
+
+ENTER_KEYCODE = 13;
 
 Term = React.createClass({displayName: "Term",
   getInitialState: function() {
@@ -717,6 +733,7 @@ Term = React.createClass({displayName: "Term",
       "value": this.props.value,
       "onChange": this.onChange,
       "onFocus": this._on_input_focused,
+      "onKeyUp": this._on_key_up,
       "minWidth": 10,
       "className": "anysearch_term_value",
       "ref": "input"
@@ -732,6 +749,11 @@ Term = React.createClass({displayName: "Term",
       return offset.left;
     } else {
       return null;
+    }
+  },
+  _on_key_up: function(event) {
+    if (event.keyCode === ENTER_KEYCODE) {
+      return AnysearchActions.forceLocationChange();
     }
   },
   _on_term_clicked: function(event) {
@@ -844,7 +866,9 @@ module.exports = keyMirror({
   CHANGE_TERM_VALUE: null,
   UPDATE_FACETS: null,
   OVERRIDE_SEARCH: null,
-  SEARCHBAR_SETUP_COMPLETE: null
+  SEARCHBAR_SETUP_COMPLETE: null,
+  SEARCHBAR_ACTIVATE_ROUTING: null,
+  SEARCHBAR_FORCE_LOCATION_CHANGE: null
 });
 
 
@@ -876,7 +900,7 @@ module.exports = AppDispatcher;
 
 
 },{"flux":25}],18:[function(require,module,exports){
-var $, AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, LLP_REGEXP, RouterActions, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _current_search_url, _debounced_update_search_results, _delete_term, _get_search_api_endpoint, _get_search_humanfacing_endpoint, _get_term, _get_term_by_category, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _parse_term_value, _process_edit, _replace_search, _search_results, _setup_complete, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, _was_edited_by_user, assign, deparam, string_utils;
+var $, AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, LLP_REGEXP, RouterActions, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _current_search_url, _debounced_update_search_results, _delete_term, _get_search_api_endpoint, _get_search_humanfacing_endpoint, _get_term, _get_term_by_category, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _parse_term_value, _process_edit, _replace_search, _routing_active, _search_results, _setup_complete, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, _was_edited_by_user, assign, deparam, string_utils;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 
@@ -919,6 +943,8 @@ _setup_complete = false;
 _was_edited_by_user = false;
 
 _current_search_url = '';
+
+_routing_active = false;
 
 _process_edit = function() {
   if (_setup_complete) {
@@ -996,7 +1022,7 @@ _change_term_value = function(id, value) {
       term.category = 'q';
     }
     term.value = value;
-    if (!_was_edited_by_user && term.category === 'llps') {
+    if (!_was_edited_by_user && term.category === 'llps' && _routing_active) {
       return RouterActions.changeLlpUrl(_parse_term_value(value, term.category));
     } else {
       _pad_terms_with_helpers();
@@ -1252,9 +1278,19 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
         case AnysearchConstants.SEARCHBAR_SETUP_COMPLETE:
           _current_search_url = AnysearchStore.get_search_ui_url();
           _setup_complete = true;
+          break;
+        case AnysearchConstants.SEARCHBAR_ACTIVATE_ROUTING:
+          _current_search_url = AnysearchStore.get_search_ui_url();
+          _routing_active = true;
+          break;
+        case AnysearchConstants.SEARCHBAR_FORCE_LOCATION_CHANGE:
+          if (!_routing_active) {
+            _current_search_url = AnysearchStore.get_search_ui_url();
+            RouterActions.changeLocation(_current_search_url);
+          }
       }
       new_search_url = AnysearchStore.get_search_ui_url();
-      if (_setup_complete && _current_search_url !== new_search_url) {
+      if (_setup_complete && _current_search_url !== new_search_url && _routing_active) {
         RouterActions.changeRoute(new_search_url);
         _current_search_url = new_search_url;
       }

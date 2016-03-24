@@ -43,6 +43,7 @@ $(document).ready( () ->
     if OFFPARL_DATA_SEARCH_TYPE?
       AnysearchActions.createTerm('type', OFFPARL_DATA_SEARCH_TYPE)
     AnysearchActions.declareSearchbarSetupComplete()
+    AnysearchActions.activateSearchbarRouting()
     ReactDOM.render(
       React.createElement(Searchbar, {}),
       anysearch_container

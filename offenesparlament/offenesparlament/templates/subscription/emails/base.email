@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title></title>
+  <!--[if !mso]><!-->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+  <!--<![endif]-->
+</head>
+
+{% load inlinecss %}
+{% inlinecss "css/email.css" %}
+<body bgcolor="#f6f6f6">
+
+<!-- body -->
+<table class="body-wrap" bgcolor="#f6f6f6">
+  <tr>
+    <td></td>
+    <td class="header_bar container">
+      <img src="http://localhost:3000/static/css/img/offparl_logo.png" class="logo" />
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="content_container container" bgcolor="#FFFFFF">
+
+      <!-- content -->
+      <div class="content">
+      <table>
+        <tr>
+          <td>
+            {% block content %}
+            {% endblock %}
+          </td>
+        </tr>
+      </table>
+      </div>
+      <!-- /content -->
+    </td>
+    <td></td>
+  </tr>
+</table>
+<!-- /body -->
+
+<!-- footer -->
+<table class="footer-wrap">
+  <tr>
+    <td></td>
+    <td class="content_container container">
+      <!-- content -->
+      <div class="content">
+        <table>
+          <tr>
+            <td align="center">
+              <p><a href="#"><unsubscribe>Abos verwalten</unsubscribe></a>
+              <p class="secondary">
+                <a href="http://www.offenesparlament.at">offenesparlament.at</a> ist ein Projekt des Forum Informationsfreiheit und wird durch
+                die <a href="https://www.netidee.at/netidee-home/">Internet Foundation Austria (IPA) / netidee.at</a> gefördert.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- /content -->
+    </td>
+    <td></td>
+  </tr>
+</table>
+<!-- /footer -->
+
+</body>
+</html>
+{% endinlinecss %}
+

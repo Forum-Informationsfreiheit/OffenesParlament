@@ -6,6 +6,8 @@ classNames = require 'classnames'
 $ = require 'jquery'
 ReactDOM = require 'react-dom'
 
+ENTER_KEYCODE = 13
+
 
 Term = React.createClass
 
@@ -42,6 +44,7 @@ Term = React.createClass
           value={@props.value}
           onChange={@onChange}
           onFocus={@_on_input_focused}
+          onKeyUp={@_on_key_up}
           minWidth=10
           className="anysearch_term_value"
           ref="input"
@@ -57,6 +60,10 @@ Term = React.createClass
       return offset.left
     else
       return null
+
+  _on_key_up: (event) ->
+    if event.keyCode == ENTER_KEYCODE
+      AnysearchActions.forceLocationChange()
 
   _on_term_clicked: (event) ->
     if not @props.permanent

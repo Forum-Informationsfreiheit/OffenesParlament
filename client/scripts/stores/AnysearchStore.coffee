@@ -22,6 +22,7 @@ _search_results = null
 _setup_complete = false
 _was_edited_by_user = false
 _current_search_url = ''
+_routing_active = false
 
 
 _process_edit = () ->
@@ -67,7 +68,7 @@ _change_term_value = (id, value) ->
       term.helper = false
       term.category = 'q'
     term.value = value
-    if not _was_edited_by_user and term.category == 'llps'
+    if not _was_edited_by_user and term.category == 'llps' and _routing_active
       RouterActions.changeLlpUrl(_parse_term_value(value, term.category))
     else
       _pad_terms_with_helpers()
@@ -259,8 +260,15 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
       when AnysearchConstants.SEARCHBAR_SETUP_COMPLETE
         _current_search_url = AnysearchStore.get_search_ui_url()
         _setup_complete = true
+      when AnysearchConstants.SEARCHBAR_ACTIVATE_ROUTING
+        _current_search_url = AnysearchStore.get_search_ui_url()
+        _routing_active = true
+      when AnysearchConstants.SEARCHBAR_FORCE_LOCATION_CHANGE
+        if not _routing_active
+          _current_search_url = AnysearchStore.get_search_ui_url()
+          RouterActions.changeLocation(_current_search_url)
     new_search_url = AnysearchStore.get_search_ui_url()
-    if _setup_complete and _current_search_url != new_search_url
+    if _setup_complete and _current_search_url != new_search_url and _routing_active
       RouterActions.changeRoute(new_search_url)
       _current_search_url = new_search_url
     return true # No errors. Needed by promise in Dispatcher.

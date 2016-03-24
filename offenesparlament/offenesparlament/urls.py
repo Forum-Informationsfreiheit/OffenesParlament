@@ -11,7 +11,6 @@ urlpatterns = patterns(
     '',
     url(r'^$', base_views.index, name='home'),
     url(r'^wir/$', base_views.about, name='about'),
-    url(r'^abos/$', base_views.subscriptions, name='subscriptions'),
     url(r'^personen/$', base_views.person_list, name='person_list'),
     url(r'^personen/(?P<parl_id>.{1,60})/(?P<name>.+)/$',
         base_views.person_detail, name='person_detail'),
@@ -37,6 +36,7 @@ urlpatterns = patterns(
         base_views.petition_detail, name='petition_detail'),
     url(r'^signatures/petitionen/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})/$',
         base_views.petition_signatures, name='petition_signatures'),
+    url(r'^generic_email/$', base_views.generic_email, name='generic_email'),
 
     url(r'^suche/(.*)/?$', base_views.generic_search_view, name='generic_search_view'),
 
@@ -51,6 +51,8 @@ urlpatterns = patterns(
         search.DebateSearchView.as_view(search_model=Debate)),
 
     # Subscription URLS
+
+    url(r'^abos/$', subscriptions.login, name='subscriptions'),
 
     # Verify a new subscription
     url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
@@ -69,13 +71,13 @@ urlpatterns = patterns(
     # List emails subscriptions
     url(r'^list/(?P<email>.+)/(?P<key>.+)/?$',
         subscriptions.list,
-        name='list'),
+        name='list_subscriptions'),
 
 
     # Resend list hashkey for email
     url(r'^list/(?P<email>.+)/?$',
         subscriptions.list,
-        name='list'),
+        name='list_subscriptions'),
 
 
 
