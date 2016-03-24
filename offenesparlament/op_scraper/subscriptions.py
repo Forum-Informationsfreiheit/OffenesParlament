@@ -4,6 +4,12 @@ import pprint
 
 from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 def collect_changesets(content):
     changes = {}
@@ -77,10 +83,13 @@ FIELD_MESSAGES = {
 
 def check_subscriptions():
 
+    emails_to_changesets = {}
+    changes = {}
+
     for content in SubscribedContent.objects.all():
         changeset = collect_changesets(content)
         if not changeset:
-            print u"No changes for {}".format(content.title)
+            logger.info(u"No changes for {}".format(content.title))
             continue
 
         # Collect all the users we need to contact for this changeset/content
@@ -110,6 +119,7 @@ def check_subscriptions():
 
             if item_category == 'Person':
                 change_item['photo_link'] = complete_result['photo_link']
+                change_item['full_name'] = complete_result['full_name']
 
             for field in content_changes:
                 if field in FIELD_MESSAGES[item_index]:
@@ -117,17 +127,43 @@ def check_subscriptions():
                         content_changes[field]['new'])
                     change_item['messages'].append(msg)
                 else:
-                    print "Ignored Changes for {}: {}".format(item_index, field)
+                    logger.info(
+                        "Ignored Changes for {}: {}".format(item_index, field))
 
             changed_items[content.category].append(change_item)
 
-        # TODO don't forget to recalculate the hashes and shit so we don't
-        # re-send any changes
-        template_parameters = {
-            'changes': changed_items
-        }
+        changes[content.id] = changed_items
 
         for email in emails:
-            print "Sending email to {}".format(email)
-            email_sent = EMAIL.SUBSCRIPTION_CHANGES.send(
-                email, template_parameters)
+            if email not in emails_to_changesets:
+                emails_to_changesets[email] = []
+            emails_to_changesets[email].append(content.id)
+
+    process_emails(emails_to_changesets, changes)
+
+
+def process_emails(emails_to_changesets, change_items):
+
+    logger.info(
+        "Preparing to send {} emails".format(len(emails_to_changesets)))
+    for email in emails_to_changesets.keys():
+        logger.info("Sending email to {}".format(email))
+
+        # changed_content
+        changed_items = {
+            'person': [],
+            'debatte': [],
+            'gesetz': [],
+            'search': [],
+        }
+
+        for content_id in set(emails_to_changesets[email]):
+            change_item = change_items[content_id]
+            for category_key in change_item:
+                changed_items[category_key] += (change_item[category_key])
+
+        template_parameters = {'changes': changed_items}
+        email_sent = EMAIL.SUBSCRIPTION_CHANGES.send(
+            email, template_parameters)
+        if email_sent:
+            logger.info("Email sent to {}".format(email))

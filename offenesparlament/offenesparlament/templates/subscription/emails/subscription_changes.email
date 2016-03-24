@@ -8,7 +8,14 @@
   <p>
     Persons:<br />
     {% for p in changes.person %}
-        <img src="{{ p.photo_link }}" />{{ p.parl_id }}
+        <img src="{{ p.photo_link }}" />{{ p.full_name }} [{{ p.parl_id }}]<br />
+        <ul>
+        {% for msg in p.messages %}
+        <li>{{ msg }}</li>
+        {% endfor %}
+        </ul>
+
+
     {% endfor %}
   </p>
 
