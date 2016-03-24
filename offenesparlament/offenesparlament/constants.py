@@ -58,6 +58,10 @@ class EMAIL:
         template_file = 'subscription/emails/subscription_list.email'
         subject = 'Your subscriptions @ OffenesParlament.at'
 
+    class SUBSCRIPTION_CHANGES(EmailController):
+        template_file = 'subscription/emails/subscription_changes.email'
+        subject = 'Neuigkeiten von OffenesParlament'
+
 
 class MESSAGES:
 

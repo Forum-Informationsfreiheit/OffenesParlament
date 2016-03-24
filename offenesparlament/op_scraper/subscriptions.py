@@ -2,7 +2,7 @@ from op_scraper.models import SubscribedContent, Subscription, User
 import json
 import pprint
 
-from offenesparlament.constants import LAW, PERSON, DEBATE
+from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL
 
 
 def collect_changesets(content):
@@ -78,6 +78,7 @@ def check_subscriptions():
     for content in SubscribedContent.objects.all():
         changeset = collect_changesets(content)
         if not changeset:
+            print u"No changes for {}".format(content.title)
             continue
 
         # Collect all the users we need to contact for this changeset/content
@@ -96,3 +97,8 @@ def check_subscriptions():
                         content_changes[field]['new'])
                 else:
                     print "Ignored Changes for {}: {}".format(item_index, field)
+
+
+        for email in emails:
+            email_sent = EMAIL.SUBSCRIPTION_CHANGES.send(
+                email, changes)
