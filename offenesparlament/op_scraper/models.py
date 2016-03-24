@@ -820,6 +820,7 @@ class SubscribedContent(models.Model):
     latest_content = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=255, default="")
     single = models.BooleanField(default=False)
+    category = models.CharField(max_length=255, default="search")
 
     # Relationships
     users = models.ManyToManyField(User, through="Subscription")
