@@ -175,8 +175,11 @@ def subscribe(request):
         user.verification = user_verification
         user.save()
 
+    content_default = {
+        'title': title
+    }
     content, created_content = SubscribedContent.objects.get_or_create(
-        url=url, title=title)
+        url=url, defaults=content_default)
     if created_content:
         hashes = content.generate_content_hashes()
         content.latest_content_hashes = hashes
