@@ -67,6 +67,7 @@ $(document).ready( () ->
         React.createElement(SearchResults, {
           results: results
           subscription_url: AnysearchStore.get_subscription_url()
+          search_ui_url: AnysearchStore.get_search_ui_url()
           subscription_title: AnysearchStore.get_subscription_title()
         }),
         content_container
@@ -82,6 +83,7 @@ $(document).ready( () ->
       data =
         show: SubscriptionModalStore.is_modal_shown()
         subscription_url: SubscriptionModalStore.get_subscription_url()
+        search_ui_url: AnysearchStore.get_search_ui_url()
         subscription_title: SubscriptionModalStore.get_subscription_title()
         subscription_category: SubscriptionModalStore.get_subscription_category()
         server_status: SubscriptionModalStore.get_server_status()
@@ -98,6 +100,7 @@ $(document).ready( () ->
     e.preventDefault()
     btn = $(e.target)
     url = btn.data('subscription_url')
+    ui_url = btn.data('search_ui_url')
     title = btn.data('subscription_title')
     category = btn.data('subscription_category')
     SubscriptionModalActions.showModal(url, title, category)

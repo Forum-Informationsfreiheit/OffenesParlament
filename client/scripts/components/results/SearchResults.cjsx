@@ -17,7 +17,7 @@ SearchResults = React.createClass
 
   _open_subscription_modal: (e) ->
     e.preventDefault()
-    SubscriptionModalActions.showModal(@props.subscription_url, @props.subscription_title)
+    SubscriptionModalActions.showModal(@props.subscription_url, @props.search_ui_url, @props.subscription_title)
 
   render: ->
     results = _.map(@props.results, (r) =>

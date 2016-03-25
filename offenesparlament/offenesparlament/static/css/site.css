@@ -240,7 +240,8 @@
   transform: translateY(-50%); }
 
 .inquiry_section {
-  padding-top: 20px; }
+  padding-top: 20px;
+  margin-bottom: 100px; }
 
 .inquiry_pdf {
   width: 100%;
@@ -459,7 +460,8 @@ ul {
   overflow: hidden;
   position: fixed;
   top: 0;
-  height: 50px; }
+  height: 50px;
+  z-index: 10000; }
   @media screen and (max-width: 650px) {
     .menu_bar {
       position: relative;
