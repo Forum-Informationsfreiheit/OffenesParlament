@@ -13,7 +13,7 @@ BOT_NAME = 'scraper'
 SPIDER_MODULES = ['parlament.spiders']
 NEWSPIDER_MODULE = 'parlament.spiders'
 
-BASE_HOST = "http://www.parlament.gv.at"
+BASE_HOST = "https://www.parlament.gv.at"
 
 LOG_LEVEL = 'INFO'
 LOG_ENABLED = False
