@@ -147,14 +147,17 @@ class PersonsSpider(BaseSpider):
             try:
                 person_data = {
                     'reversed_name': p['reversed_name'],
+                    'source_link': p['source_link']
                 }
                 person_item, created_person = Person.objects.update_or_create(
-                    source_link=p['source_link'],
                     parl_id=parl_id,
                     defaults=person_data)
-            except:
-                import ipdb
-                ipdb.set_trace()
+            except Exception as e:
+                self.logger.warning("Error saving Person {}: {}".format(
+                    green(u'[{}]'.format(p['reversed_name'])),
+                    e
+                ))
+                continue
             if created_person:
                 self.logger.info(u"Created Person {}".format(
                     green(u'[{}]'.format(p['reversed_name']))))
