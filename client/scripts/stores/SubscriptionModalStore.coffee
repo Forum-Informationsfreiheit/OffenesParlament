@@ -11,6 +11,7 @@ CHANGE_EVENT = 'change'
 
 _show_modal = false
 _subscription_url = ''
+_search_ui_url = ''
 _subscription_title = ''
 _subscription_category = ''
 _server_status = Const.SERVER_STATUS_NEUTRAL
@@ -25,6 +26,7 @@ _query_server = () ->
     data:
       csrfmiddlewaretoken: csrf_utils.get_csrf_token()
       subscription_url: _subscription_url
+      search_ui_url: _search_ui_url
       subscription_title: _subscription_title
       category: _subscription_category
       email: _email
@@ -43,6 +45,9 @@ SubscriptionModalStore = assign({}, EventEmitter.prototype, {
 
   get_subscription_url: () ->
     return _subscription_url
+
+  get_search_ui_url: () ->
+    return _search_ui_url
 
   get_subscription_title: () ->
     return _subscription_title
@@ -69,6 +74,7 @@ SubscriptionModalStore = assign({}, EventEmitter.prototype, {
     switch payload.actionType
       when Const.ACTION_SHOW_MODAL
         _subscription_url = payload.subscription_url
+        _search_ui_url = payload.search_ui_url
         _subscription_title = payload.subscription_title
         _subscription_category = payload.subscription_category
         _server_status = Const.SERVER_STATUS_NEUTRAL

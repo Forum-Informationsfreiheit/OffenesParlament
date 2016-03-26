@@ -152,7 +152,7 @@
       {% for step in steps %}
       <tr>
         <td>{{ step.date }}</td>
-        {{ step.title | safe}}
+        <td>{{ step.title | safe}}</td>
         <td>{% if step.protocol_url != '' %}<a href="{{ step.protocol_url }}">Protokollseite</a>{% endif %}</td>
       </tr>
       {% endfor%}
