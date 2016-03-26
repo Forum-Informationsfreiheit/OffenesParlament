@@ -118,11 +118,11 @@ class Command(BaseCommand):
         p1.deathdate = datetime.datetime.today()
         p1.occupation = "Schmissbubi"
         p1.save()
-        person_idx.update_object(p1)
+        self.person_idx.update_object(p1)
 
         for p in Person.objects.filter(latest_mandate__party__short__startswith="FP"):
             p.occupation += " JETZT NEU: rechter Recke "
-            person_idx.update_object(p)
+            self.person_idx.update_object(p)
             p.save()
 
         p2 = Person.objects.get(full_name__contains="Kumpitsch")
@@ -131,7 +131,7 @@ class Command(BaseCommand):
         new_debate_statement.full_text = "Ich Trottel"
         new_debate_statement.save()
         p2.save()
-        person_idx.update_object(p2)
+        self.person_idx.update_object(p2)
 
         p3 = Person.objects.get(full_name__contains="Schellenbacher")
         new_comittee_membership = p3.comittee_memberships.first()
@@ -139,15 +139,16 @@ class Command(BaseCommand):
         new_comittee_membership.comittee_id -= 1
         new_comittee_membership.save()
         p3.save()
-        person_idx.update_object(p3)
+        self.person_idx.update_object(p3)
 
         p4 = Person.objects.get(full_name__contains="Lintl")
         last_inq = p4.inquiries_sent.first()
-        last_inq.pk = None
-        last_inq.title = "NEUES TEST INQUIRY"
-        last_inq.save()
-        p4.save()
-        person_idx.update_object(p4)
+        if last_inq:
+            last_inq.pk = None
+            last_inq.title = "NEUES TEST INQUIRY"
+            last_inq.save()
+            p4.save()
+            self.person_idx.update_object(p4)
 
     def modify_debates(self):
         pass

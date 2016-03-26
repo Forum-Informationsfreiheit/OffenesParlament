@@ -158,13 +158,7 @@ def subscribe(request):
     email = request.POST['email']
     category = request.POST[
         'category'] if 'category' in request.POST else 'search'
-
-    logger.info(u"Created subscription of {} (category '{}') for {} @ {} with a ".format(
-        title,
-        category,
-        email,
-        url
-    ))
+    ui_url = request.build_absolute_uri(request.POST['search_ui_url'])
 
     user, created_user = User.objects.get_or_create(email=email)
     if created_user:
@@ -176,7 +170,8 @@ def subscribe(request):
         user.save()
 
     content_default = {
-        'title': title
+        'title': title,
+        'ui_url': ui_url
     }
     content, created_content = SubscribedContent.objects.get_or_create(
         url=url, defaults=content_default)

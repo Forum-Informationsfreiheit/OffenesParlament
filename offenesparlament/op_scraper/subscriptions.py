@@ -119,6 +119,7 @@ def check_subscriptions():
 
             change_item = {
                 'parl_id': parl_id,
+                'ui_url': content.ui_url,
                 'category': item_category,
                 'messages': [],
                 'item': complete_result
@@ -136,8 +137,8 @@ def check_subscriptions():
                 elif field not in FIELD_BLACKLIST:
                     logger.info(
                         "Ignored Changes for {}: {}".format(item_index, field))
-                    import ipdb
-                    ipdb.set_trace()
+                    # import ipdb
+                    # ipdb.set_trace()
 
             changed_items[content.category].append(change_item)
 
@@ -177,6 +178,7 @@ def process_emails(emails_to_changesets, change_items):
                     else:
                         changed_items[category_key].append({
                             'content_id': content.id,
+                            'ui_url': content.ui_url,
                             'search_title': content.title,
                             'changes': change_item[category_key]
                         })
