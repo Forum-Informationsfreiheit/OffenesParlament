@@ -1,0 +1,24 @@
+---
+- hosts: all
+  vars:
+      dump_file: "latest_db.dump"
+      vagrant_dump_path: "/tmp/"
+  tasks:
+  - name: Drop local postgresdb
+    postgresql_db: name=op state=absent
+    become: true
+    become_user: postgres
+
+  - name: Recreate local postgresdb
+    postgresql_db: name=op encoding='UTF-8' lc_collate='de_DE.UTF-8' lc_ctype='de_DE.UTF-8' template='template0'
+    become: true
+    become_user: postgres
+
+  - name: Create op user
+    postgresql_user: db=op name=op password=secret priv=ALL
+    become: true
+    become_user: postgres
+
+  - name: Restore dump to local db
+    shell: "sudo -u postgres pg_restore -d op {{ vagrant_dump_path }}{{ dump_file }}"
+    become: true

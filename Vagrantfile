@@ -18,6 +18,7 @@ Vagrant.configure("2") do |config|
     # turn on for error diagnosis of the virtual machine
     # vb.gui = true
     vb.memory = 4096
+    #vb.memory = 8192
     vb.cpus = 2
 
     # improve network connectivity
@@ -38,11 +39,19 @@ Vagrant.configure("2") do |config|
     config.vm.provision "bootstrap", type: "shell", path: "provision/bootstrap.sh", privileged: false
 
     # 2. DB Creation and Reset provisioner
-    node.vm.provision "reset_db", type: "ansible_local", playbook: "provision/reset_postgresdb.yml"
+    config.vm.provision "reset_db", type: "ansible_local", playbook: "provision/reset_postgresdb.yml"
     #, verbose: "vvv"
 
     # 3. DB Creation and Reset complete with Migrations provisioner
-    node.vm.provision "reset_db_mig", type: "ansible_local", playbook: "provision/reset_postgresdb_and_migrations.yml"
+    config.vm.provision "reset_db_mig", type: "ansible_local", playbook: "provision/reset_postgresdb_and_migrations.yml"
+    #, verbose: "vvv"
+
+    # 2. DB Snapshot Create
+    config.vm.provision "backup_db", type: "ansible_local", playbook: "provision/backup_postgresdb.yml"
+    #, verbose: "vvv"
+
+    # 2. DB Snapshot Restore
+    config.vm.provision "restore_db", type: "ansible_local", playbook: "provision/restore_postgresdb.yml"
     #, verbose: "vvv"
 
   end

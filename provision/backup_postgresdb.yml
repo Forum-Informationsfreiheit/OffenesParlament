@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars:
+      dump_file: "latest_db.dump"
+      vagrant_dump_path: "/tmp/"
+  tasks:
+  - name: Dump current postgresql db
+    shell: "sudo -u postgres pg_dump -Fc op -f {{ vagrant_dump_path }}{{ dump_file }}"
+    become: true
