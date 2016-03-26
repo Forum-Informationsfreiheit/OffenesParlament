@@ -58,12 +58,12 @@ class LegislativePeriod(models.Model):
 
     def __unicode__(self):
         if self.end_date:
-            rep_str = "{} ({} - {})".format(
+            rep_str = u"{} ({} – {})".format(
                 self.roman_numeral,
                 self.start_date,
                 self.end_date)
         else:
-            rep_str = "{} (seit {})".format(
+            rep_str = u"{} (seit {})".format(
                 self.roman_numeral,
                 self.start_date)
 
@@ -72,12 +72,12 @@ class LegislativePeriod(models.Model):
     @property
     def facet_repr(self):
         if self.end_date:
-            rep_str = "{} - {} ({})".format(
+            rep_str = u"{} – {} ({})".format(
                 self.start_date,
                 self.end_date,
                 self.roman_numeral)
         else:
-            rep_str = "aktuell seit {} ({})".format(
+            rep_str = u"aktuell seit {} ({})".format(
                 self.start_date,
                 self.roman_numeral)
 
