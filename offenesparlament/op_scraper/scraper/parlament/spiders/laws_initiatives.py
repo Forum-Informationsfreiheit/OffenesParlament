@@ -102,12 +102,12 @@ class LawsInitiativesSpider(BaseSpider):
             'title': title,
             'status': status,
             'description': description,
-            'ts': ts
+            'ts': ts,
+            'source_link': response.url,
         }
         law_item, law_created = Law.objects.update_or_create(
             parl_id=parl_id,
             legislative_period=LLP,
-            source_link=response.url,
             defaults=law_data)
 
         # Attach foreign keys
