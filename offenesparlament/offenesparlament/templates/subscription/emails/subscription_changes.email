@@ -6,16 +6,47 @@
     Hej there,
   </p>
   <p>
-    Persons:<br />
+  <h1>Personen:</h1><br />
     {% for p in changes.person %}
-        <img src="{{ p.photo_link }}" />{{ p.full_name }} [{{ p.parl_id }}]<br />
+        <img src="{{ p.item.photo_link }}" />{{ p.item.full_name }} [{{ p.parl_id }}]<br />
         <ul>
         {% for msg in p.messages %}
-        <li>{{ msg }}</li>
+        <li>{{ msg|safe }}</li>
         {% endfor %}
         </ul>
+    {% endfor %}
+  </p>
+  <p>
+  <h1>Gesetze:</h1><br />
+    {% for l in changes.law %}
+        <h2>{{ l.item.title }} [{{ l.item.parl_id }}]</h2>
+        <ul>
+        {% for msg in l.messages %}
+        <li>{{ msg|safe}}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+  </p>
 
 
+  <p>
+  <h1>Suchanfragen:</h1><br />
+    {% for content in changes.search %}
+        {{ content.search_title }}<br /><br />
+        {% for change in content.changes %}
+          {% if change.item.category == "Person" %}
+            <img src="{{ change.item.photo_link }}" />{{ change.item.full_name }} [{{ change.parl_id }}]<br />
+          {% endif %}
+          {% if change.item.category != "Person" %}
+            {{ change.item.title }} [{{ change.parl_id }}]<br />
+          {% endif %}
+          <ul>
+          {% for msg in change.messages %}
+          <li>{{ msg|safe }}</li>
+          {% endfor %}
+          </ul>
+
+        {% endfor %}
     {% endfor %}
   </p>
 

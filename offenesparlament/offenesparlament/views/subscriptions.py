@@ -159,7 +159,7 @@ def subscribe(request):
     category = request.POST[
         'category'] if 'category' in request.POST else 'search'
 
-    logger.info(u"Creating subscription of {} (category '{}') for {} @ {}".format(
+    logger.info(u"Created subscription of {} (category '{}') for {} @ {} with a ".format(
         title,
         category,
         email,
@@ -207,6 +207,13 @@ def subscribe(request):
             content=content,
             verification=verification_item
         )
+
+        logger.info(u"Created subscription of {} (category '{}') for {} with a subscribe link of {} ".format(
+            title,
+            category,
+            email,
+            verification_url
+        ))
 
         email_sent = EMAIL.VERIFY_SUBSCRIPTION.send(
             email, {'verification_url': verification_url})

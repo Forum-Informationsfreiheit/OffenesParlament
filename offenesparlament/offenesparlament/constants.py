@@ -8,6 +8,12 @@ from django.template import loader, Context
 
 from datetime import datetime
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 # Limit results for ElasticSearch to this number by Default
 ES_DEFAULT_LIMIT = 50
 
@@ -17,6 +23,8 @@ class EmailController():
     """
     Email utility controller, sends emails based on templates
     """
+    # Get an instance of a logger
+    logger = logging.getLogger("EmailController")
 
     sender = 'op@offenesparlament.com'
     fail_silently = False
@@ -27,9 +35,11 @@ class EmailController():
         Renders email template and sends the resulting email
         """
         try:
+            rendered_mail = cls.render_email(context_params)
+
             send_mail(
                 cls.subject,
-                cls.render_email(context_params),
+                rendered_mail,
                 cls.sender,
                 [recipient],
                 fail_silently=cls.fail_silently)
@@ -83,8 +93,8 @@ class ChangeMessageGenerator:
     MESSAGE_TEMPLATE = u""
 
     @classmethod
-    def msg(cls, new_content):
-        return cls.MESSAGE_TEMPLATE.format(new_content)
+    def msg(cls, changed_content):
+        return cls.MESSAGE_TEMPLATE.format(changed_content['new'])
 
 
 class LAW:
@@ -95,8 +105,85 @@ class LAW:
     class DESCRIPTION(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat eine neue Beschreibung: {}"
 
+    class STEPS(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat Statusänderungem im parl. Verfahren: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            steps_messages = u""
+            for ph in new.keys():
+                for st in new[ph]:
+                    if ph in old and st in old[ph]:
+                        continue
+                    else:
+                        steps_messages += u"\t<li>{}: {} am {}</li>\n".format(
+                            ph,
+                            st['title'],
+                            st['date']
+                        )
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + steps_messages + u"\n</ul>\n"
+            )
+
+    class KEYWORDS(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat neue Schlagworte: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+
+            kw_messages = u""
+            for kw in new:
+                if kw not in old:
+                    kw_messages += u"\t<li>{}</li>\n".format(kw)
+
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + kw_messages + u"\n</ul>\n"
+            )
+
 
 class PERSON:
+
+    class DEBATE_STATEMENTS(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat neue Redeeinträge: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            changed_dstatements = [ds for ds in new if ds not in old]
+            statement_changes = u""
+            for ds in changed_dstatements:
+                ds_full_text = ds['full_text']
+                if len(ds_full_text) > 100:
+                    ds_full_text = ds_full_text[:100]
+                    ds_full_text = ds_full_text[
+                        :ds_full_text.rindex(u' ')] + u" [...]"
+                statement_changes += u"\t<li>{}</li>\n".format(ds_full_text)
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + statement_changes + u"\n</ul>\n"
+            )
+
+    class STATEMENTS(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat neue Redebeiträge: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            changed_statements = [s for s in new if s not in old]
+            statement_changes = u""
+            for st in changed_statements:
+                statement_changes += u"\t<li>am {} zu {}</li>\n".format(
+                    st['date'],
+                    st['law'],
+                )
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + statement_changes + u"</ul>\n"
+            )
 
     class OCCUPATION(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat einen neuen Beruf angegeben: {}"
@@ -107,8 +194,9 @@ class PERSON:
         @classmethod
         def msg(cls, new_content):
             try:
-                dt = datetime.strptime(new_content, "%Y-%m-%dT%H:%M:%S")
-                return cls.MESSAGE_TEMPLATE.format(dt.date().strftime("%d. %m. %Y"))
+                dt = datetime.strptime(new_content['new'], "%Y-%m-%dT%H:%M:%S")
+                return cls.MESSAGE_TEMPLATE.format(
+                    dt.date().strftime("%d. %m. %Y"))
             except:
                 # couldn't parse isoformat, return as is
                 return cls.MESSAGE_TEMPLATE.format(new_content)

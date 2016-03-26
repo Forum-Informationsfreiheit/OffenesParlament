@@ -10,6 +10,8 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+FIELD_BLACKLIST = ['text', 'ts']
+
 
 def collect_changesets(content):
     changes = {}
@@ -23,7 +25,6 @@ def collect_changesets(content):
     except Exception as e:
         logger.warn(e)
         return None
-
 
     # no changes, skip to the next one
     if old_hashes == cur_hashes:
@@ -71,12 +72,16 @@ def collect_changesets(content):
 FIELD_MESSAGES = {
     'Person': {
         'deathdate': PERSON.DEATH,
-        'occupation': PERSON.OCCUPATION
+        'occupation': PERSON.OCCUPATION,
+        'debate_statements': PERSON.DEBATE_STATEMENTS,
+        'statements': PERSON.STATEMENTS,
     },
     'Debatte': {},
     'Gesetz': {
         'title': LAW.TITLE,
         'description': LAW.DESCRIPTION,
+        'steps': LAW.STEPS,
+        'keywords': LAW.KEYWORDS,
     },
 }
 
@@ -99,8 +104,9 @@ def check_subscriptions():
         changed_items = {
             'person': [],
             'debatte': [],
-            'gesetz': [],
+            'law': [],
             'search': [],
+            'content': content
         }
 
         # iterate changed content
@@ -114,21 +120,24 @@ def check_subscriptions():
             change_item = {
                 'parl_id': parl_id,
                 'category': item_category,
-                'messages': []
+                'messages': [],
+                'item': complete_result
             }
-
-            if item_category == 'Person':
-                change_item['photo_link'] = complete_result['photo_link']
-                change_item['full_name'] = complete_result['full_name']
 
             for field in content_changes:
                 if field in FIELD_MESSAGES[item_index]:
                     msg = FIELD_MESSAGES[item_index][field].msg(
-                        content_changes[field]['new'])
+                        content_changes[field])
+                    try:
+                        print msg
+                    except:
+                        pass
                     change_item['messages'].append(msg)
-                else:
+                elif field not in FIELD_BLACKLIST:
                     logger.info(
                         "Ignored Changes for {}: {}".format(item_index, field))
+                    import ipdb
+                    ipdb.set_trace()
 
             changed_items[content.category].append(change_item)
 
@@ -153,15 +162,24 @@ def process_emails(emails_to_changesets, change_items):
         changed_items = {
             'person': [],
             'debatte': [],
-            'gesetz': [],
+            'law': [],
             'search': [],
         }
 
         for content_id in set(emails_to_changesets[email]):
             change_item = change_items[content_id]
-            for category_key in change_item:
-                changed_items[category_key] += (change_item[category_key])
-
+            content = change_item['content']
+            for category_key in ['person', 'debatte', 'law', 'search']:
+                if change_item[category_key]:
+                    if category_key != 'search':
+                        changed_items[
+                            category_key] += (change_item[category_key])
+                    else:
+                        changed_items[category_key].append({
+                            'content_id': content.id,
+                            'search_title': content.title,
+                            'changes': change_item[category_key]
+                        })
         template_parameters = {'changes': changed_items}
         email_sent = EMAIL.SUBSCRIPTION_CHANGES.send(
             email, template_parameters)
