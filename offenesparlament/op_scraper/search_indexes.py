@@ -1,4 +1,5 @@
 from haystack import indexes
+import datetime
 
 from op_scraper.models import Person, Law, Debate
 import json
@@ -92,7 +93,9 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
     text = indexes.CharField(document=True, use_template=True)
     parl_id = indexes.CharField(model_attr='parl_id')
-    ts = indexes.DateTimeField(model_attr='ts', faceted=True)
+    source_link = indexes.CharField(model_attr='source_link')
+    ts = indexes.DateTimeField(
+        model_attr='ts', faceted=True, default=datetime.datetime(1970, 1, 1, 0, 0))
 
     internal_link = indexes.CharField(model_attr=u'slug')
     title = indexes.CharField(model_attr='title')
@@ -111,10 +114,12 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
     keywords = indexes.MultiValueField(
         model_attr='keyword_titles', faceted=True)
 
-    def index_queryset(self, using=None):
-        return self.get_model().objects\
-            .filter(inquiry__isnull=True)\
-            .filter(inquiryresponse__isnull=True)
+    # Use this to limit which (inherited) laws should be scraped
+    # The example shows how to remove inquiries/responses from the list
+    # def index_queryset(self, using=None):
+    #     return self.get_model().objects\
+    #         .filter(inquiry__isnull=False)\
+    #         .filter(inquiryresponse__isnull=False)
 
     def prepare_steps(self, obj):
         """
