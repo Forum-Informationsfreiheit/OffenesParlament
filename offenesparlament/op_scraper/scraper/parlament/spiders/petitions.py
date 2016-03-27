@@ -144,7 +144,7 @@ class PetitionsSpider(BaseSpider):
         logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
             red(title),
             magenta(u"[{}]".format(parl_id)),
-            green(str(LLP)),
+            green(unicode(LLP)),
             blue(response.url)
         )
         log.msg(logtext, level=log.INFO)

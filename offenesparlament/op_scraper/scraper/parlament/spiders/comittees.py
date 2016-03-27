@@ -142,7 +142,7 @@ class ComitteesSpider(BaseSpider):
         logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
             red(name),
             magenta(u"[{}]".format(parl_id)),
-            green(str(llp)),
+            green(unicode(LLP)),
             blue(response.url)
         )
         log.msg(logtext, level=log.INFO)

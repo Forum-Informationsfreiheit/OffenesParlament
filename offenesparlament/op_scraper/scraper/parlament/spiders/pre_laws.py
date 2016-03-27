@@ -90,10 +90,11 @@ class PreLawsSpider(LawsInitiativesSpider):
         description = PRELAW.DESCRIPTION.xt(response)
 
         # Log our progress
+
         logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
             red(title),
             magenta(u"[{}]".format(parl_id)),
-            green(str(LLP)),
+            green(unicode(LLP)),
             blue(response.url)
         )
         log.msg(logtext, level=log.INFO)
@@ -102,11 +103,11 @@ class PreLawsSpider(LawsInitiativesSpider):
         pre_law_data = {
             'title': title,
             'description': description,
+            'source_link': response.url,
             'ts': ts
         }
         law_item, created = Law.objects.get_or_create(
             parl_id=parl_id,
-            source_link=response.url,
             legislative_period=LLP,
             defaults=pre_law_data)
 

@@ -201,7 +201,7 @@ class InquiriesSpider(BaseSpider):
             self.TOTAL_COUNTER,
             cyan(title),
             cyan(u"{}".format(parl_id)),
-            green(str(LLP)),
+            green(unicode(LLP)),
             blue(response.url),
             green(u"{}".format(inquiry_item.keywords))
         )
@@ -444,7 +444,7 @@ class InquiriesSpider(BaseSpider):
             self.TOTAL_COUNTER,
             cyan(title),
             cyan(u"{}".format(parl_id)),
-            green(str(LLP)),
+            green(unicode(LLP)),
             blue(response.url)
         )
         log.msg(logtext, level=log.INFO)

@@ -128,7 +128,7 @@ class LawsInitiativesSpider(BaseSpider):
             self.TOTAL_COUNTER,
             red(title),
             cyan(u"[{}]".format(parl_id)),
-            green(str(LLP)),
+            green(unicode(LLP)),
             blue(response.url)
         )
         log.msg(logtext, level=log.INFO)
