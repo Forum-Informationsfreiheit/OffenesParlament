@@ -36,6 +36,8 @@ regexSpeakerPart = re.compile('.*?\s?'  # name, title etc. up until link
     ':\s?',  # colon plus optional space , delimiter to actual text
     re.U | re.S)
 regexAnnotation = re.compile('\[\[(?:link|com)\d+\]\]', re.U | re.S)
+regexDuration = re.compile('.*?'
+    '(\d{1,2})\.(\d{2}).{1,3}(\d{1,2})\.(\d{2}).?Uhr', re.U | re.S)
 
 # When re-building paragraphs, prefix links with this
 linkPrefix = 'https://www.parlament.gv.at'
@@ -228,10 +230,6 @@ class DOCSECTIONS(MultiExtractor):
             res['page_start'] =  min(pages) if len(pages) else current_maxpage
             res['page_end'] = max(pages) if len(pages) else current_maxpage
 
-            # if item_index == 258:
-            #     print(res['paragraphs'][0].src.encode('utf-8'))
-            #     print(res['raw_text'].encode('utf-8'))
-
             sections.append(res)
 
         return sections
@@ -420,6 +418,20 @@ class SECTION(SingleExtractor):
     #     return {"found": False}
 
     @classmethod
+    def xt_duration_ts(cls, rawtext):
+        """ Look for duration (from-to) time (hh:mm) patterns in whole text """
+        rawtext = ST.strip_tags(rawtext)
+        found = []
+        for l in rawtext.split("\n"):
+            ts_parts = regexDuration.match(l)
+            if ts_parts is not None and len(ts_parts.groups()) == 4:
+                try:
+                    found.append([int(v) for v in ts_parts.groups()[0:2]])
+                except:
+                    pass
+        return found
+
+    @classmethod
     def p_mkplain(cls, p, comments, links):
         """
         Build the final plain-text representation.
@@ -543,5 +555,9 @@ class SECTION(SingleExtractor):
             res['speaker_name'] = None
             res['speaker_id'] = None
             res['speaker_role'] = None
+
+        if res['text_type'] == cls.TAG_STMT_OTHER and not len(res['timestamps']):
+            # Intro-section that might contain duration of the debate:
+            res['timestamps'] += cls.xt_duration_ts(res['raw_text'])
 
         return res
