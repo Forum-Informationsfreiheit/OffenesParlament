@@ -81,7 +81,7 @@ class LawsInitiativesSpider(BaseSpider):
 
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
-                green(u"Skipping Law {} of {}, no changes: {}".format(
+                green(u"[{} of {}] Skipping Law, no changes: {}".format(
                     self.SCRAPED_COUNTER,
                     self.TOTAL_COUNTER,
                     title)))
