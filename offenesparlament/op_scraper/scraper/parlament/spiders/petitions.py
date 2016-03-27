@@ -97,9 +97,11 @@ class PetitionsSpider(BaseSpider):
                         urls = urls + [entry['link']
                                        for entry in rss['entries']]
 
+        self.TOTAL_COUNTER = len(urls)
         return urls
 
     def parse(self, response):
+        self.SCRAPED_COUNTER += 1
         # Extract fields
         title = LAW.TITLE.xt(response)
         parl_id = LAW.PARL_ID.xt(response)
@@ -120,7 +122,9 @@ class PetitionsSpider(BaseSpider):
 
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
             self.logger.info(
-                green(u"Skipping Petition, no changes: {}".format(
+                green(u"[{} of {}] Skipping Petition, no changes: {}".format(
+                    self.SCRAPED_COUNTER,
+                    self.TOTAL_COUNTER,
                     title)))
             return
 
@@ -141,7 +145,9 @@ class PetitionsSpider(BaseSpider):
         reference = self.parse_reference(response)
 
         # Log our progress
-        logtext = u"Scraping {} with id {}, LLP {} @ {}".format(
+        logtext = u"[{} of {}] Scraping {} with id {}, LLP {} @ {}".format(
+            self.SCRAPED_COUNTER,
+            self.TOTAL_COUNTER,
             red(title),
             magenta(u"[{}]".format(parl_id)),
             green(unicode(LLP)),
@@ -361,6 +367,9 @@ class PetitionsSpider(BaseSpider):
 
         phases = LAW.PHASES.xt(response)
 
+        # Create steps
+        # Save statements for this step, if applicable
+        num_created, num_updated, num_skipped = (0, 0, 0)
         for phase in phases:
             # Create phase if we don't have it yet
             phase_item, created = Phase.objects.get_or_create(
@@ -369,7 +378,6 @@ class PetitionsSpider(BaseSpider):
                 log.msg(u"Created Phase {}".format(
                     green(u'[{}]'.format(phase_item.title))))
 
-            # Create steps
             for step in phase['steps']:
                 step_item, created = Step.objects.update_or_create(
                     title=step['title']['text'],
@@ -382,7 +390,6 @@ class PetitionsSpider(BaseSpider):
                 )
                 step_item.save()
 
-                # Save statements for this step, if applicable
                 if 'statements' in step['title']:
                     for stmnt in step['title']['statements']:
                         # Find the person
@@ -400,30 +407,38 @@ class PetitionsSpider(BaseSpider):
                                 step=step_item,
                                 defaults=st_data)
                             if st_created:
-                                log.msg(u"Created Statement by {} on {}".format(
-                                    green(
-                                        u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
+                                num_created += 1
+                                # log.msg(u"Created Statement by {} on {}".format(
+                                #     green(
+                                #         u'[{}]'.format(person_item.full_name)),
+                                #     step_item.date))
                             else:
-                                log.msg(u"Updated Statement by {} on {}".format(
-                                    green(
-                                        u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
+                                num_updated += 1
+                                # log.msg(u"Updated Statement by {} on {}".format(
+                                #     green(
+                                #         u'[{}]'.format(person_item.full_name)),
+                                #     step_item.date))
                         else:
                             # We can't save statements if we can't find the
                             # Person
-                            log.msg(
-                                red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
-                                    green(
-                                        u'[{}]'.format(stmnt['person_name'])),
-                                    blue(
-                                        "[{}]".format(stmnt['person_source_link'])),
-                                    red("{}").format(
-                                        "" if pq.exists() else " not"),
-                                    "" if pq.count() > 1 else ", but {} persons matching found!".format(
-                                        pq.count())
-                                ))
+                            num_skipped += 1
+                            # log.msg(
+                            #     red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
+                            #         green(
+                            #             u'[{}]'.format(stmnt['person_name'])),
+                            #         blue(
+                            #             "[{}]".format(stmnt['person_source_link'])),
+                            #         red("{}").format(
+                            #             "" if pq.exists() else " not"),
+                            #         "" if pq.count() > 1 else ", but {} persons matching found!".format(
+                            #             pq.count())
+                            #     ))
                             continue
+        log.msg("Created {} statements, updated {} statements, skipped {} statemts".format(
+            num_created,
+            num_updated,
+            num_skipped
+        ))
 
     def parse_op_steps(self, response):
         """
