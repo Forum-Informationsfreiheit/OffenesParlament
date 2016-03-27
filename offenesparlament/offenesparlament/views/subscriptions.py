@@ -171,16 +171,13 @@ def subscribe(request):
 
     content_default = {
         'title': title,
-        'ui_url': ui_url
+        'ui_url': ui_url,
+        'category': category
     }
     content, created_content = SubscribedContent.objects.get_or_create(
         url=url, defaults=content_default)
     if created_content:
-        hashes = content.generate_content_hashes()
-        content.latest_content_hashes = hashes
-        content.latest_content = content.get_content()
-        content.category = category
-        content.save()
+        content.reset_content_hashes()
 
     if not Subscription.objects.filter(user=user, content=content).exists():
         verification_hash = uuid.uuid4().hex

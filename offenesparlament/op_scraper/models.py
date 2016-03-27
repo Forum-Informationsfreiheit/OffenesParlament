@@ -856,6 +856,14 @@ class SubscribedContent(models.Model):
                 json.dumps(res)).hexdigest()
         return json.dumps(content_hashes)
 
+    def reset_content_hashes(self):
+        """
+        Resets content's hashes after an email-sending
+        """
+        self.latest_content_hashes = self.generate_content_hashes()
+        self.latest_content = self.get_content()
+        self.save()
+
 
 class Subscription(models.Model):
 
