@@ -151,6 +151,11 @@ def check_subscriptions():
 
     process_emails(emails_to_changesets, changes)
 
+    # Reset the content hashes for all SubscribedContent items we just
+    # processed
+    #for content in SubscribedContent.objects.all():
+    #    content.reset_content_hashes()
+
 
 def process_emails(emails_to_changesets, change_items):
 
