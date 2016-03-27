@@ -81,6 +81,7 @@ def person_list_with_ggp(request, ggp):
     person_list = Person.objects \
         .filter(mandates__legislative_period=llp) \
         .order_by('reversed_name') \
+        .distinct() \
         .select_related('latest_mandate__party')
     context = {'person_list': person_list}
     return render(request, 'person_list.html', context)
