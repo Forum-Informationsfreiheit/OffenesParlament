@@ -55,6 +55,7 @@ def collect_changesets(content):
         atomic_changeset = {
             'cur_content': new
         }
+
         for key in diffkeys:
             atomic_changeset[key] = {
                 'old': old[key] if key in old else None,
@@ -86,6 +87,7 @@ FIELD_MESSAGES = {
         'description': LAW.DESCRIPTION,
         'steps': LAW.STEPS,
         'keywords': LAW.KEYWORDS,
+        'opinions': LAW.OPINIONS
     },
 }
 

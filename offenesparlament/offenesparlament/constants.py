@@ -144,6 +144,23 @@ class LAW:
                 u"\n<ul>\n" + kw_messages + u"\n</ul>\n"
             )
 
+    class OPINIONS(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat neue Stellungnahmen: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            new_stns = [stn for stn in new if stn not in old]
+            stn_messages = u""
+            for stn in new_stns:
+                stn_messages += u"\t<li>{}</li>\n".format(
+                    stn['description'])
+
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + stn_messages + u"\n</ul>\n"
+            )
+
 
 class PERSON:
 
