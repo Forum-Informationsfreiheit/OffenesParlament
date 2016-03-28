@@ -251,6 +251,9 @@ class Law(Timestamped, ParlIDMixIn):
 
         return json.dumps(phases)
 
+    def opinions_and_documents(self):
+        return self.opinions.all().prefetch_related('documents')
+
     def opinions_json(self):
         """
         Returns a json representation of the opinios
