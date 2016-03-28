@@ -23,6 +23,7 @@ _setup_complete = false
 _was_edited_by_user = false
 _current_search_url = ''
 _routing_active = false
+_subscription_allowed = false
 
 
 _process_edit = () ->
@@ -225,6 +226,15 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
   get_subscription_title: () ->
     return string_utils.get_search_title(_get_terms_as_object())
 
+  is_subscription_allowed: () ->
+    categories = _get_terms_as_object()
+    if categories.llps? and
+      categories.llps and
+      _.compact(_.values(_.omit(categories, ['llps', 'type']))).length > 0
+        return true
+    else
+      return false
+
   emitChange: () ->
     this.emit(CHANGE_EVENT)
 
@@ -270,7 +280,9 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     new_search_url = AnysearchStore.get_search_ui_url()
     if _setup_complete and _current_search_url != new_search_url and _routing_active
       RouterActions.changeRoute(new_search_url)
+      _subscription_allowed = true
       _current_search_url = new_search_url
+      AnysearchStore.emitChange()
     return true # No errors. Needed by promise in Dispatcher.
   )
 })

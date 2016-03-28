@@ -212,6 +212,7 @@ $(document).ready(function() {
       document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at";
       return ReactDOM.render(React.createElement(SearchResults, {
         results: results,
+        allow_subscription: AnysearchStore.is_subscription_allowed(),
         subscription_url: AnysearchStore.get_subscription_url(),
         search_ui_url: AnysearchStore.get_search_ui_url(),
         subscription_title: AnysearchStore.get_subscription_title()
@@ -439,7 +440,8 @@ _get_state_from_store = function() {
     subscription_title: AnysearchStore.get_subscription_title(),
     categories: AnysearchStore.get_categories(),
     values: AnysearchStore.get_values(),
-    loading: AnysearchStore.is_loading()
+    loading: AnysearchStore.is_loading(),
+    allow_subscription: AnysearchStore.is_subscription_allowed()
   };
 };
 
@@ -571,7 +573,8 @@ Searchbar = React.createClass({displayName: "Searchbar",
       "subscription_url": this.state.subscription_url,
       "search_ui_url": this.state.search_ui_url,
       "subscription_title": this.state.subscription_title,
-      "subscription_category": 'search'
+      "subscription_category": 'search',
+      "active": this.state.allow_subscription
     }));
   },
   _onChange: function() {
@@ -583,21 +586,29 @@ module.exports = Searchbar;
 
 
 },{"../../actions/AnysearchActions.coffee":1,"../../stores/AnysearchStore.coffee":18,"./SubscribeButton.cjsx":9,"./Suggest.cjsx":10,"./Term.cjsx":12,"jquery":35,"react":"react","react-input-autosize":40,"underscore":311}],9:[function(require,module,exports){
-var React, SubscribeButton, SubscriptionModalActions;
+var React, SubscribeButton, SubscriptionModalActions, classnames;
 
 React = require('react');
 
 SubscriptionModalActions = require('../../actions/SubscriptionModalActions.coffee');
 
+classnames = require('classnames');
+
 SubscribeButton = React.createClass({displayName: "SubscribeButton",
   _open_modal: function(e) {
     e.preventDefault();
-    return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.search_ui_url, this.props.subscription_title, this.props.subscription_category);
+    if (this.props.active) {
+      return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.search_ui_url, this.props.subscription_title, this.props.subscription_category);
+    }
   },
   render: function() {
+    var htmlClassnames;
+    htmlClassnames = classnames("anysearch_subscribe_button", {
+      'active': this.props.active
+    });
     return React.createElement("a", {
       "href": "#",
-      "className": "anysearch_subscribe_button",
+      "className": htmlClassnames,
       "onClick": this._open_modal
     }, "Suche abonnieren");
   }
@@ -606,7 +617,7 @@ SubscribeButton = React.createClass({displayName: "SubscribeButton",
 module.exports = SubscribeButton;
 
 
-},{"../../actions/SubscriptionModalActions.coffee":3,"react":"react"}],10:[function(require,module,exports){
+},{"../../actions/SubscriptionModalActions.coffee":3,"classnames":24,"react":"react"}],10:[function(require,module,exports){
 var React, Suggest, SuggestItem, _;
 
 React = require('react');
@@ -772,7 +783,7 @@ module.exports = Term;
 
 
 },{"../../actions/AnysearchActions.coffee":1,"../../utils/StringUtils.coffee":20,"classnames":24,"jquery":35,"react":"react","react-dom":39,"react-input-autosize":40}],13:[function(require,module,exports){
-var React, SearchResults, SearchResultsRow, SubscriptionModalActions, _;
+var React, SearchResults, SearchResultsRow, SubscriptionModalActions, _, classnames;
 
 React = require('react');
 
@@ -782,6 +793,8 @@ SearchResultsRow = require('./SearchResultsRow.cjsx');
 
 _ = require('underscore');
 
+classnames = require('classnames');
+
 SearchResults = React.createClass({displayName: "SearchResults",
   getInitialState: function() {
     return {};
@@ -790,10 +803,15 @@ SearchResults = React.createClass({displayName: "SearchResults",
   componentWillUnmount: function() {},
   _open_subscription_modal: function(e) {
     e.preventDefault();
-    return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.search_ui_url, this.props.subscription_title);
+    if (this.props.allow_subscription) {
+      return SubscriptionModalActions.showModal(this.props.subscription_url, this.props.search_ui_url, this.props.subscription_title);
+    }
   },
   render: function() {
-    var results;
+    var htmlClassnames, results;
+    htmlClassnames = classnames('button', 'button_notifications', {
+      'disabled': !this.props.allow_subscription
+    });
     results = _.map(this.props.results, (function(_this) {
       return function(r) {
         var key, title;
@@ -817,7 +835,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
       "className": "title_with_button"
     }, React.createElement("h1", null, "Suchergebnisse"), React.createElement("a", {
       "href": "#",
-      "className": "button button_notifications",
+      "className": htmlClassnames,
       "onClick": this._open_subscription_modal
     }, "Benachrichtigung aktivieren")), React.createElement("table", {
       "className": "search_results"
@@ -828,7 +846,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
 module.exports = SearchResults;
 
 
-},{"../../actions/SubscriptionModalActions.coffee":3,"./SearchResultsRow.cjsx":14,"react":"react","underscore":311}],14:[function(require,module,exports){
+},{"../../actions/SubscriptionModalActions.coffee":3,"./SearchResultsRow.cjsx":14,"classnames":24,"react":"react","underscore":311}],14:[function(require,module,exports){
 var React, SearchResultsRow, _, string_utils;
 
 React = require('react');
@@ -902,7 +920,7 @@ module.exports = AppDispatcher;
 
 
 },{"flux":25}],18:[function(require,module,exports){
-var $, AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, LLP_REGEXP, RouterActions, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _current_search_url, _debounced_update_search_results, _delete_term, _get_search_api_endpoint, _get_search_humanfacing_endpoint, _get_term, _get_term_by_category, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _parse_term_value, _process_edit, _replace_search, _routing_active, _search_results, _setup_complete, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, _was_edited_by_user, assign, deparam, string_utils;
+var $, AnysearchConstants, AnysearchStore, AppDispatcher, CHANGE_EVENT, EventEmitter, LLP_REGEXP, RouterActions, SERVER_DEBOUNCE_INTERVAL, _, _add_term, _change_term_category, _change_term_value, _create_term, _current_search_url, _debounced_update_search_results, _delete_term, _get_search_api_endpoint, _get_search_humanfacing_endpoint, _get_term, _get_term_by_category, _get_terms_as_object, _id_counter, _loading, _pad_terms_with_helpers, _parse_term_value, _process_edit, _replace_search, _routing_active, _search_results, _setup_complete, _subscription_allowed, _suggested_categories, _suggested_values, _terms, _update_facets, _update_search_results, _update_suggested_categories, _was_edited_by_user, assign, deparam, string_utils;
 
 AppDispatcher = require('../dispatcher/AppDispatcher.coffee');
 
@@ -947,6 +965,8 @@ _was_edited_by_user = false;
 _current_search_url = '';
 
 _routing_active = false;
+
+_subscription_allowed = false;
 
 _process_edit = function() {
   if (_setup_complete) {
@@ -1236,6 +1256,15 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
   get_subscription_title: function() {
     return string_utils.get_search_title(_get_terms_as_object());
   },
+  is_subscription_allowed: function() {
+    var categories;
+    categories = _get_terms_as_object();
+    if ((categories.llps != null) && categories.llps && _.compact(_.values(_.omit(categories, ['llps', 'type']))).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  },
   emitChange: function() {
     return this.emit(CHANGE_EVENT);
   },
@@ -1294,7 +1323,9 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
       new_search_url = AnysearchStore.get_search_ui_url();
       if (_setup_complete && _current_search_url !== new_search_url && _routing_active) {
         RouterActions.changeRoute(new_search_url);
+        _subscription_allowed = true;
         _current_search_url = new_search_url;
+        AnysearchStore.emitChange();
       }
       return true;
     };

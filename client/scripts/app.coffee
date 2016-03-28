@@ -66,6 +66,7 @@ $(document).ready( () ->
       ReactDOM.render(
         React.createElement(SearchResults, {
           results: results
+          allow_subscription: AnysearchStore.is_subscription_allowed()
           subscription_url: AnysearchStore.get_subscription_url()
           search_ui_url: AnysearchStore.get_search_ui_url()
           subscription_title: AnysearchStore.get_subscription_title()

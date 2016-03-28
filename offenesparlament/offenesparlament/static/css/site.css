@@ -21,20 +21,25 @@
       .anysearch_box .anysearch_icon {
         display: none; } }
   .anysearch_box .anysearch_subscribe_button {
-    background-image: url("img/icons/subscribe_red.svg");
+    background-image: url("img/icons/subscribe_gray.svg");
     background-repeat: no-repeat;
     width: 17px;
     height: 17px;
     display: inline-block;
     margin: 10px 10px 10px 10px;
     vertical-align: top;
-    cursor: pointer;
     border: none;
     padding: 0;
     background-color: transparent;
     overflow: hidden;
     text-indent: -5000px;
-    float: right; }
+    float: right;
+    cursor: default;
+    opacity: 0.5; }
+    .anysearch_box .anysearch_subscribe_button.active {
+      opacity: 1;
+      background-image: url("img/icons/subscribe_red.svg");
+      cursor: pointer; }
   .anysearch_box .anysearch_placeholder {
     position: absolute;
     line-height: 36px;
@@ -767,6 +772,14 @@ ul.breadcrumbs {
   background-position-y: 8px; }
   .button_notifications:hover, .button_notifications:focus {
     background-image: url("img/icons/notification_white.svg"); }
+  .button_notifications.disabled {
+    opacity: 0.5;
+    background-image: url("img/icons/subscribe_gray.svg");
+    cursor: default;
+    border-color: gray;
+    color: gray; }
+    .button_notifications.disabled:hover, .button_notifications.disabled:focus {
+      background-color: white; }
 
 .keyword_box {
   padding: 40px;

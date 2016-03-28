@@ -381,6 +381,14 @@ ul.breadcrumbs
   background-position-y: 8px
   &:hover, &:focus
     background-image: url('img/icons/notification_white.svg')
+  &.disabled
+    opacity: 0.5
+    background-image: url('img/icons/subscribe_gray.svg')
+    cursor: default
+    border-color: gray
+    color: gray
+    &:hover, &:focus
+      background-color: white
 
 .keyword_box
   padding: 40px

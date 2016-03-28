@@ -18,6 +18,7 @@ _get_state_from_store = () ->
     categories: AnysearchStore.get_categories()
     values: AnysearchStore.get_values()
     loading: AnysearchStore.is_loading()
+    allow_subscription: AnysearchStore.is_subscription_allowed()
   }
 
 
@@ -121,6 +122,7 @@ Searchbar = React.createClass
         search_ui_url={@state.search_ui_url}
         subscription_title={@state.subscription_title}
         subscription_category='search'
+        active={@state.allow_subscription}
       />
     </div>
 
