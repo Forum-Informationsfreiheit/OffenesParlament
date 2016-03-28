@@ -23,7 +23,7 @@ def extract_json_fields(result, type):
 
 class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements'],
+        'all': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements', 'inquiries_sent', 'inquiries_received', 'inquiries_answered', 'comittee_memberships'],
         'list': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric'],
     }
 
@@ -58,11 +58,13 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     inquiries_sent = indexes.CharField()
     inquiries_received = indexes.CharField()
     inquiries_answered = indexes.CharField()
+    comittee_memberships = indexes.MultiValueField()
 
     # Static items
     category = indexes.CharField(faceted=True, null=True)
 
     def prepare_category(self, obj):
+        print u"Indexing {}".format(obj.full_name)
         return "Person"
 
     def prepare_mandates(self, obj):
@@ -100,6 +102,12 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
         Collects the object's inquiries answered as json
         """
         return obj.inquiries_answered_json
+
+    def prepare_comittee_memberships(self, obj):
+        """
+        Collects the object's inquiries answered as json
+        """
+        return [unicode(cm) for cm in obj.comittee_memberships.all()]
 
     def get_model(self):
         return Person
