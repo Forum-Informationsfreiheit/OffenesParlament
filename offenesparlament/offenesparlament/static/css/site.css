@@ -352,6 +352,11 @@
     .projectintro .projectintro_item h3, .projectintro .projectintro_item_inverse h3 {
       background-repeat: no-repeat;
       padding: 0 0 0 37px; }
+    .projectintro .projectintro_item a, .projectintro .projectintro_item a:active, .projectintro .projectintro_item a:focus, .projectintro .projectintro_item a:visited, .projectintro .projectintro_item_inverse a, .projectintro .projectintro_item_inverse a:active, .projectintro .projectintro_item_inverse a:focus, .projectintro .projectintro_item_inverse a:visited {
+      color: #f55f57;
+      text-decoration: underline; }
+      .projectintro .projectintro_item a:hover, .projectintro .projectintro_item a:active:hover, .projectintro .projectintro_item a:focus:hover, .projectintro .projectintro_item a:visited:hover, .projectintro .projectintro_item_inverse a:hover, .projectintro .projectintro_item_inverse a:active:hover, .projectintro .projectintro_item_inverse a:focus:hover, .projectintro .projectintro_item_inverse a:visited:hover {
+        text-decoration: none; }
     .projectintro .projectintro_item .projectintro_item_icon_parliament, .projectintro .projectintro_item_inverse .projectintro_item_icon_parliament {
       background-image: url("img/icons/parliament_white.svg"); }
     .projectintro .projectintro_item .projectintro_item_icon_paperplane, .projectintro .projectintro_item_inverse .projectintro_item_icon_paperplane {
