@@ -147,6 +147,21 @@ class LAW:
 
 class PERSON:
 
+    class COMITTEE_MEMBERSHIPS(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"Hat neue Ausschusstätigkeiten: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            new_cms = [cm for cm in new if cm not in old]
+            cm_changes = u""
+            for cm in new_cms:
+                cm_changes += u"\t<li>{}</li>\n".format(cm)
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + cm_changes + u"\n</ul>\n"
+            )
+
     class INQUIRIES_SENT(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"Hat neue Anfragen gestellt: {}"
 

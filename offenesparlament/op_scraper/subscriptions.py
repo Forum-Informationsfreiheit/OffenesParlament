@@ -78,6 +78,7 @@ FIELD_MESSAGES = {
         'inquiries_sent': PERSON.INQUIRIES_SENT,
         'inquiries_received': PERSON.INQUIRIES_RECEIVED,
         'inquiries_answered': PERSON.INQUIRIES_ANSWERED,
+        'comittee_memberships': PERSON.COMITTEE_MEMBERSHIPS,
     },
     'Debatte': {},
     'Gesetz': {
@@ -151,8 +152,7 @@ def check_subscriptions():
             if email not in emails_to_changesets:
                 emails_to_changesets[email] = []
             emails_to_changesets[email].append(content.id)
-    import ipdb
-    ipdb.set_trace()
+
     process_emails(emails_to_changesets, changes)
 
     # Reset the content hashes for all SubscribedContent items we just
