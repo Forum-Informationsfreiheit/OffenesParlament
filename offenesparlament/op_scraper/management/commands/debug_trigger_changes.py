@@ -10,6 +10,14 @@ import logging
 class Command(BaseCommand):
     help = u'Trigger a bunch of changes for testing and debugging the subscription features'
 
+    def add_arguments(self, parser):
+        # Named (optional) arguments
+        parser.add_argument('--reindex',
+                            action='store_true',
+                            dest='just_reindex',
+                            default=False,
+                            help='Just reindex')
+
     def init(self):
         # Get an instance of a logger
         self.logger = logging.getLogger(__name__)
@@ -65,95 +73,108 @@ class Command(BaseCommand):
 
         law1 = Law.objects.filter(
             parl_id="(1 d.B.)", legislative_period=self.XXV).get()
-        law1.status = "NEUER STATUS"
-        law1.title = "NEUER Titel: " + law1.title
-        law1.description = "DIES IST DIE NEUE BESCHREIBUNG"
-        law1.ts = datetime.datetime.today()
-        law1.save()
+        if not self.just_reindex:
+            law1.status = "NEUER STATUS"
+            law1.title = "NEUER Titel: " + law1.title
+            law1.description = "DIES IST DIE NEUE BESCHREIBUNG"
+            law1.ts = datetime.datetime.today()
+            law1.save()
         self.law_idx.update_object(law1)
 
         law51 = Law.objects.filter(
             parl_id="(51 d.B.)", legislative_period=self.XXV).get()
 
-        law51_new_step = law51.steps.first()
-        law51_new_step.title = "NEUER STEP"
-        law51_new_step.pk = None
-        law51_new_step.save()
+        if not self.just_reindex:
+            law51_new_step = law51.steps.first()
+            law51_new_step.title = "NEUER STEP"
+            law51_new_step.pk = None
+            law51_new_step.save()
 
-        new_kw = Keyword.objects.exclude(
-            id__in=[k.id for k in law51.keywords.all()]
-        ).first()
-        law51.keywords.add(new_kw)
+            new_kw = Keyword.objects.exclude(
+                id__in=[k.id for k in law51.keywords.all()]
+            ).first()
+            law51.keywords.add(new_kw)
 
-        law51_new_doc = law51.documents.first()
-        law51_new_doc.title = "NEUES DOKUMENT"
-        law51_new_doc.pk = None
-        law51_new_doc.save()
+            law51_new_doc = law51.documents.first()
+            law51_new_doc.title = "NEUES DOKUMENT"
+            law51_new_doc.pk = None
+            law51_new_doc.save()
 
-        law51.ts = datetime.datetime.today()
-        law51.save()
+            law51.ts = datetime.datetime.today()
+            law51.save()
         self.law_idx.update_object(law51)
 
         law179 = Law.objects.filter(
             parl_id="(179/ME)", legislative_period=self.XXV).get()
-        law179_new_opinion = law179.opinions.first()
-        law179_new_opinion.description = "NEUE BESCHREIBUNG"
-        law179_new_opinion.parl_id += "_123"
-        law179_new_opinion.pk = None
-        law179_new_opinion.save()
+
+        if not self.just_reindex:
+            law179_new_opinion = law179.opinions.first()
+            law179_new_opinion.description = "NEUE BESCHREIBUNG"
+            law179_new_opinion.parl_id += "_123"
+            law179_new_opinion.pk = None
+            law179_new_opinion.save()
         self.law_idx.update_object(law179)
 
         bralaws = Law.objects.filter(
             legislative_period=self.XXV, category__title='Bundesrechnungsabschluss').all()
-        for bralaw in bralaws[:1]:
-            bralaw.title = "NEUER TITEL: " + bralaw.title
-        for bralaw in bralaws[1:]:
-            bralaw.status = "NEUER STATUS: " + bralaw.status
+        if not self.just_reindex:
+            for bralaw in bralaws[:1]:
+                bralaw.title = "NEUER TITEL: " + bralaw.title
+            for bralaw in bralaws[1:]:
+                bralaw.status = "NEUER STATUS: " + bralaw.status
         for bralaw in bralaws:
-            bralaw.save()
+            if not self.just_reindex:
+                bralaw.save()
             self.law_idx.update_object(bralaw)
 
     def modify_persons(self):
         p1 = Person.objects.get(full_name__contains="Heinz-Christian Strache")
-        p1.deathdate = datetime.datetime.today()
-        p1.occupation = "Schmissbubi"
-        p1.save()
+        if not self.just_reindex:
+            p1.deathdate = datetime.datetime.today()
+            p1.occupation = "Schmissbubi"
+            p1.save()
         self.person_idx.update_object(p1)
 
         for p in Person.objects.filter(latest_mandate__party__short__startswith="FP"):
-            p.occupation += " JETZT NEU: rechter Recke "
+            if not self.just_reindex:
+                p.occupation += " JETZT NEU: rechter Recke "
+                p.save()
             self.person_idx.update_object(p)
-            p.save()
 
         p2 = Person.objects.get(full_name__contains="Kumpitsch")
-        new_debate_statement = p2.debate_statements.first()
-        new_debate_statement.pk = None
-        new_debate_statement.full_text = "Ich Trottel"
-        new_debate_statement.save()
-        p2.save()
+        if not self.just_reindex:
+            new_debate_statement = p2.debate_statements.first()
+            new_debate_statement.pk = None
+            new_debate_statement.full_text = "Ich Trottel"
+            new_debate_statement.save()
+            p2.save()
         self.person_idx.update_object(p2)
 
         p3 = Person.objects.get(full_name__contains="Schellenbacher")
-        new_comittee_membership = p3.comittee_memberships.first()
-        new_comittee_membership.pk = None
-        new_comittee_membership.comittee_id -= 1
-        new_comittee_membership.save()
-        p3.save()
+        if not self.just_reindex:
+            new_comittee_membership = p3.comittee_memberships.first()
+            new_comittee_membership.pk = None
+            new_comittee_membership.comittee_id -= 1
+            new_comittee_membership.save()
+            p3.save()
         self.person_idx.update_object(p3)
 
         p4 = Person.objects.get(full_name__contains="Lintl")
-        last_inq = p4.inquiries_sent.first()
-        if last_inq:
-            last_inq.pk = None
-            last_inq.title = "NEUES TEST INQUIRY"
-            last_inq.save()
-            p4.save()
-            self.person_idx.update_object(p4)
+        if not self.just_reindex:
+            last_inq = p4.inquiries_sent.first()
+            if last_inq:
+                last_inq.pk = None
+                last_inq.title = "NEUES TEST INQUIRY"
+                last_inq.save()
+                p4.save()
+        self.person_idx.update_object(p4)
 
     def modify_debates(self):
         pass
 
     def handle(self, *args, **options):
+
+        self.just_reindex = options['just_reindex'] or False
 
         # Initialize connections to indices, etc
         cont = self.init()
