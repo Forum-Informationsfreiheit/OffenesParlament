@@ -26,7 +26,7 @@
   <h2>{{ law.category.title }}</h2>
 
   <div class="column">
-    <p>{{ law.description }}</p>
+    <p>{{ law.description|safe }}</p>
     {% if law.references %}
       <p>Bezieht sich auf: {{ law.references.short_title }}</p>
     {% endif %}
@@ -141,12 +141,15 @@
         </tr>
       </thead>
       <tbody>
-        {% for opinion in law.references.opinions.all %}
+        {% for opinion in law.references.opinions_and_documents %}
         <tr>
           <td class="date">{{ opinion.date }}</td>
           <td class="title">{{ opinion.parl_id }}</td>
           <td class="by">{{ opinion.entity }}</td>
           <td class="links">
+            {% for document in opinion.documents.all %}
+            <a target="_blank" href="http://www.parlament.gv.at{% if document.html_link %}{{ document.html_link }}{% else %}{{document.pdf_link}}{% endif %}" class="icon_link {% if document.html_link %}icon_html{% else %} icon_pdf{% endif %}">&nbsp;</a>
+            {% endfor %}
             <a href="{{ opinion.source_link }}" class="icon_link icon_parliament">Parlamentsseite</a>
           </td>
         </tr>
