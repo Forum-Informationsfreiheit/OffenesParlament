@@ -116,11 +116,24 @@ class Entity(models.Model):
     email = models.EmailField(null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
 
+    matching_lobbyreg_entry = models.ForeignKey('LobbyRegisterPerson', null=True, blank=True, on_delete=models.SET_NULL)
+
     class Meta:
         unique_together = ("title", "title_detail")
 
     def __unicode__(self):
         return self.title
+
+    @classmethod
+    def try_matching_lobbyreg_entries(cls):
+        """ try to match entity names with persons mentioned in the lobby register. matching method: case-insensitive contains
+        """
+
+        for x in LobbyRegisterPerson.objects.all():
+            for y in cls.objects.filter(title__icontains=x.name):
+                y.matching_lobbyreg_entry = x
+                y.save()
+
 
 
 class Document(models.Model):
@@ -996,6 +1009,9 @@ class LobbyRegisterEntry(models.Model):
     last_change = models.CharField(max_length=20)
     
     last_seen = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return u'%s' % self.name
  
 
 class LobbyRegisterPerson(models.Model):
@@ -1008,6 +1024,9 @@ class LobbyRegisterPerson(models.Model):
     
     # Relationships
     entry = models.ForeignKey(LobbyRegisterEntry)
+
+    def __unicode__(self):
+        return u'%s (%s)' % (self.name, self.entry.name,)
     
 
 class Debate(models.Model):

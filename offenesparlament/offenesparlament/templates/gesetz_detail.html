@@ -145,12 +145,14 @@
         <tr>
           <td class="date">{{ opinion.date }}</td>
           <td class="title">{{ opinion.parl_id }}</td>
-          <td class="by">{{ opinion.entity }}</td>
+          <td class="by">{{ opinion.entity }} {% if option.entity.matching_lobbyreg_entry %}<span class="lobbyreg_info" title="Eine Person mit gleichen Namen ist im Lobbyregister vertreten">!</span>{% endif %}</td>
           <td class="links">
-            {% for document in opinion.documents.all %}
-            <a target="_blank" href="http://www.parlament.gv.at{% if document.html_link %}{{ document.html_link }}{% else %}{{document.pdf_link}}{% endif %}" class="icon_link {% if document.html_link %}icon_html{% else %} icon_pdf{% endif %}">&nbsp;</a>
-            {% endfor %}
-            <a href="{{ opinion.source_link }}" class="icon_link icon_parliament">Parlamentsseite</a>
+            {% spaceless %}
+              {% for document in opinion.documents.all %}
+                <a target="_blank" href="http://www.parlament.gv.at{% if document.html_link %}{{ document.html_link }}{% else %}{{document.pdf_link}}{% endif %}" class="icon_link {% if document.html_link %}icon_html{% else %} icon_pdf{% endif %}">&nbsp;</a>
+              {% endfor %}
+              <a href="{{ opinion.source_link }}" class="icon_link icon_parliament">Parlamentsseite</a>
+            {% endspaceless %}
           </td>
         </tr>
         {% endfor %}
