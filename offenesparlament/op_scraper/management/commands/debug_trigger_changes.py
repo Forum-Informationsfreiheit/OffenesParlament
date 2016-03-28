@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
             * http://offenesparlament.vm:8000/gesetze/XXV/1_d.B./
             * http://offenesparlament.vm:8000/gesetze/XXV/51_d.B./
-            * http://offenesparlament.vm:8000/gesetze/XXV/179_d.B./
+            * http://offenesparlament.vm:8000/gesetze/XXV/179-ME/
 
             Single Persons:
 
