@@ -23,11 +23,26 @@ SearchResults = React.createClass
 
   render: ->
     htmlClassnames = classnames('button', 'button_notifications', 'disabled': !@props.allow_subscription)
-    results = _.map(@props.results, (r) =>
-      title = if r.title? then r.title else r.full_name
-      key = if r.parl_id? then r.parl_id else r.llp + ";" + r.nr
-      return <SearchResultsRow title={title} url={r.internal_link} date={r.ts} key={key} />
-    )
+    if @props.results.length > 0
+      result_rows = _.map(@props.results, (r) =>
+        title = if r.title? then r.title else r.full_name
+        key = if r.parl_id? then r.parl_id else r.llp + ";" + r.nr
+        return <SearchResultsRow title={title} url={r.internal_link} date={r.ts} key={key} />
+      )
+      search_results = <table className="search_results">
+          <thead>
+            <tr>
+              <th>Aktualisierung</th>
+              <th>Titel / Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {result_rows}
+          </tbody>
+        </table>
+    else
+      search_results = <p className="explanation">Zu Ihrer Suche wurden keine Ergebnisse gefunden.</p>
     <div>
       <div className="top_bar">
         <ul className="breadcrumbs">
@@ -40,18 +55,7 @@ SearchResults = React.createClass
         <a href="#" className={htmlClassnames}
           onClick={@_open_subscription_modal}>Benachrichtigung aktivieren</a>
       </div>
-      <table className="search_results">
-        <thead>
-          <tr>
-            <th>Aktualisierung</th>
-            <th>Titel / Name</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {results}
-        </tbody>
-      </table>
+      {search_results}
     </div>
 
 module.exports = SearchResults

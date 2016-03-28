@@ -808,23 +808,32 @@ SearchResults = React.createClass({displayName: "SearchResults",
     }
   },
   render: function() {
-    var htmlClassnames, results;
+    var htmlClassnames, result_rows, search_results;
     htmlClassnames = classnames('button', 'button_notifications', {
       'disabled': !this.props.allow_subscription
     });
-    results = _.map(this.props.results, (function(_this) {
-      return function(r) {
-        var key, title;
-        title = r.title != null ? r.title : r.full_name;
-        key = r.parl_id != null ? r.parl_id : r.llp + ";" + r.nr;
-        return React.createElement(SearchResultsRow, {
-          "title": title,
-          "url": r.internal_link,
-          "date": r.ts,
-          "key": key
-        });
-      };
-    })(this));
+    if (this.props.results.length > 0) {
+      result_rows = _.map(this.props.results, (function(_this) {
+        return function(r) {
+          var key, title;
+          title = r.title != null ? r.title : r.full_name;
+          key = r.parl_id != null ? r.parl_id : r.llp + ";" + r.nr;
+          return React.createElement(SearchResultsRow, {
+            "title": title,
+            "url": r.internal_link,
+            "date": r.ts,
+            "key": key
+          });
+        };
+      })(this));
+      search_results = React.createElement("table", {
+        "className": "search_results"
+      }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Aktualisierung"), React.createElement("th", null, "Titel \x2F Name"), React.createElement("th", null))), React.createElement("tbody", null, result_rows));
+    } else {
+      search_results = React.createElement("p", {
+        "className": "explanation"
+      }, "Zu Ihrer Suche wurden keine Ergebnisse gefunden.");
+    }
     return React.createElement("div", null, React.createElement("div", {
       "className": "top_bar"
     }, React.createElement("ul", {
@@ -837,9 +846,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
       "href": "#",
       "className": htmlClassnames,
       "onClick": this._open_subscription_modal
-    }, "Benachrichtigung aktivieren")), React.createElement("table", {
-      "className": "search_results"
-    }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Aktualisierung"), React.createElement("th", null, "Titel \x2F Name"), React.createElement("th", null))), React.createElement("tbody", null, results)));
+    }, "Benachrichtigung aktivieren")), search_results);
   }
 });
 
