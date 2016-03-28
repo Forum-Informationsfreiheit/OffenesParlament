@@ -69,6 +69,7 @@
         <a href="{{person.source_link}}" class="button button_source" target="_blank">Parlamentsprofil ansehen</a>
         <a href="#" class="button button_notifications subscription_button"
           data-subscription_url="{{ subscription_url|safe }}"
+          data-search_ui_url="{{ request.path|safe }}"
           data-subscription_category="person"
           data-subscription_title="{{ subscription_title }}">Benachrichtigung aktivieren</a>
       </div>

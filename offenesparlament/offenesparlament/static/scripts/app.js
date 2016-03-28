@@ -246,7 +246,7 @@ $(document).ready(function() {
     ui_url = btn.data('search_ui_url');
     title = btn.data('subscription_title');
     category = btn.data('subscription_category');
-    return SubscriptionModalActions.showModal(url, title, category);
+    return SubscriptionModalActions.showModal(url, ui_url, title, category);
   });
 });
 
