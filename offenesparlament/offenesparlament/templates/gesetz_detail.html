@@ -141,7 +141,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for opinion in law.references.opinions.all %}
+        {% for opinion in law.references.opinions_and_documents %}
         <tr>
           <td class="date">{{ opinion.date }}</td>
           <td class="title">{{ opinion.parl_id }}</td>
