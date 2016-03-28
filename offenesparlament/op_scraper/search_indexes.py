@@ -64,7 +64,11 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     category = indexes.CharField(faceted=True, null=True)
 
     def prepare_category(self, obj):
-        print u"Indexing {}".format(obj.full_name)
+        try:
+            print u"Indexing {}".format(obj.full_name)
+        except:
+            #some unicode shit here
+            pass
         return "Person"
 
     def prepare_mandates(self, obj):
