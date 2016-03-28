@@ -701,6 +701,66 @@ class Person(Timestamped, ParlIDMixIn):
             debate_statements.append(statement)
         return json.dumps(debate_statements)
 
+    @property
+    def inquiries_sent_json(self):
+        inquiries_sent = []
+        for inq in self.inquiries_sent.all():
+            inquiry = {
+                'id': inq.id,
+                'llp': inq.legislative_period.roman_numeral if inq.legislative_period else None,
+                'ts': inq.ts.isoformat() if inq.ts else None,
+                'title': inq.title,
+                'description': inq.description,
+                'category': inq.category.title if inq.category else None,
+                'source_link': inq.source_link,
+                'receiver_id': inq.receiver_id,
+                'receiver_name': inq.receiver.full_name,
+                'keywords': inq.keyword_titles,
+                'status': inq.status,
+            }
+            inquiries_sent.append(inquiry)
+        return json.dumps(inquiries_sent)
+
+    @property
+    def inquiries_received_json(self):
+        inquiries_received = []
+        for inq in self.inquiries_received.all():
+            inquiry = {
+                'id': inq.id,
+                'llp': inq.legislative_period.roman_numeral if inq.legislative_period else None,
+                'ts': inq.ts.isoformat() if inq.ts else None,
+                'title': inq.title,
+                'description': inq.description,
+                'category': inq.category.title if inq.category else None,
+                'source_link': inq.source_link,
+                'sender_ids': [s.parl_id for s in inq.sender.all()],
+                'sender_names': [s.full_name for s in inq.sender.all()],
+                'keywords': inq.keyword_titles,
+                'status': inq.status,
+            }
+            inquiries_received.append(inquiry)
+        return json.dumps(inquiries_received)
+
+    @property
+    def inquiries_answered_json(self):
+        inquiries_answered = []
+        for inq in self.inquiries_answered.all():
+            inquiry = {
+                'id': inq.id,
+                'llp': inq.legislative_period.roman_numeral if inq.legislative_period else None,
+                'ts': inq.ts.isoformat() if inq.ts else None,
+                'title': inq.title,
+                'description': inq.description,
+                'category': inq.category.title if inq.category else None,
+                'source_link': inq.source_link,
+                'sender_ids': [p.parl_id for i in inq.inquiries.all() for p in i.sender.all()],
+                'sender_names': [p.full_name for i in inq.inquiries.all() for p in i.sender.all()],
+                'keywords': inq.keyword_titles,
+                'status': inq.status,
+            }
+            inquiries_answered.append(inquiry)
+        return json.dumps(inquiries_answered)
+
 
 class InquiryResponse(Law):
     sender = models.ForeignKey(

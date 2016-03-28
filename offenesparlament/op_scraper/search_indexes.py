@@ -55,6 +55,9 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
     mandates = indexes.CharField()
     statements = indexes.CharField()
     debate_statements = indexes.CharField()
+    inquiries_sent = indexes.CharField()
+    inquiries_received = indexes.CharField()
+    inquiries_answered = indexes.CharField()
 
     # Static items
     category = indexes.CharField(faceted=True, null=True)
@@ -79,6 +82,24 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
         Collects the object's statements's as json
         """
         return obj.debate_statements_json
+
+    def prepare_inquiries_sent(self, obj):
+        """
+        Collects the object's inquiries sent as json
+        """
+        return obj.inquiries_sent_json
+
+    def prepare_inquiries_received(self, obj):
+        """
+        Collects the object's inquiries received as json
+        """
+        return obj.inquiries_received_json
+
+    def prepare_inquiries_answered(self, obj):
+        """
+        Collects the object's inquiries answered as json
+        """
+        return obj.inquiries_answered_json
 
     def get_model(self):
         return Person
