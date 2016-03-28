@@ -16,6 +16,7 @@ import urllib
 
 
 def index(request):
+    _ensure_ggp_is_set(request)
     return render(request, 'index.html')
 
 
