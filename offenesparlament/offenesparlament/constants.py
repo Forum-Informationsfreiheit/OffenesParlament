@@ -147,6 +147,60 @@ class LAW:
 
 class PERSON:
 
+    class INQUIRIES_SENT(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"Hat neue Anfragen gestellt: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            new_inqs = [inq for inq in new if inq not in old]
+            inq_changes = u""
+            for inq in new_inqs:
+                inq_changes += u"\t<li>{}: {} an {}</li>\n".format(
+                    inq['category'],
+                    inq['title'],
+                    inq['receiver_name'])
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + inq_changes + u"\n</ul>\n"
+            )
+
+    class INQUIRIES_RECEIVED(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"Hat neue Anfragen erhalten: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            new_inqs = [inq for inq in new if inq not in old]
+            inq_changes = u""
+            for inq in new_inqs:
+                inq_changes += u"\t<li>{}: {} von {}</li>\n".format(
+                    inq['category'],
+                    inq['title'],
+                    u", ".join(inq['sender_names']))
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + inq_changes + u"\n</ul>\n"
+            )
+
+    class INQUIRIES_ANSWERED(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"Hat neue Anfragen beantwortet: {}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            old = changed_content['old']
+            new = changed_content['new']
+            new_inqs = [inq for inq in new if inq not in old]
+            inq_changes = u""
+            for inq in new_inqs:
+                inq_changes += u"\t<li>{}: {} von {}</li>\n".format(
+                    inq['category'],
+                    inq['title'],
+                    u", ".join(inq['sender_names']))
+            return cls.MESSAGE_TEMPLATE.format(
+                u"\n<ul>\n" + inq_changes + u"\n</ul>\n"
+            )
+
     class DEBATE_STATEMENTS(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat neue Redeeinträge: {}"
 
