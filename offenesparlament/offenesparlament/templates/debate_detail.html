@@ -1,0 +1,51 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Debatten" "debate_list" %}
+  {% breadcrumb debate.full_title "debate_detail" %}
+{% endblock %}
+
+{% block title %}{{ debate.full_title }}{% endblock %}
+
+{% block content %}
+<h1>{{ debate.full_title }}</h1>
+
+<p>{{ debate.date|date }}</p>
+
+{% if statements %}
+  <h2>Liste der RednerInnen</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nummer</th>
+        <th>Art</th>
+        <th>Name</th>
+    </thead>
+    <tbody>
+      {% for ds in statements %}
+      <tr>
+        <td>{{ ds.index }}</td>
+        <td>{{ ds.speaker_role }}</td>
+        <td>
+          <a href="#">
+            {{ ds.person.full_name }}
+          </a>
+          {% include 'partials/party_tag.html' with party=ds.person.party %}<br/>
+          <p>{{ ds.full_text }}</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <h2>Kein Protokoll</h2>
+  <p>Zu dieser Sitzung ist noch kein stenografisches Protokoll verfügbar.</p>
+{% endif %}
+
+{% load jsonify %}
+<script>
+  var OFFPARL_DATA_SEARCH_TYPE = 'Debatten';
+</script>
+{% endblock %}

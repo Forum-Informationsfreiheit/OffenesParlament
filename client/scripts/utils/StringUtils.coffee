@@ -13,6 +13,8 @@ _human_categories =
   keywords: 'Schlagwort'
   type: 'Suchtyp'
   debate_type: 'Art der Debatte'
+  NR: 'Nationalrat'
+  BR: 'Bundesrat'
 
 
 module.exports =

@@ -1482,7 +1482,9 @@ _human_categories = {
   category: 'Kategorie',
   keywords: 'Schlagwort',
   type: 'Suchtyp',
-  debate_type: 'Art der Debatte'
+  debate_type: 'Art der Debatte',
+  NR: 'Nationalrat',
+  BR: 'Bundesrat'
 };
 
 module.exports = {

@@ -1076,6 +1076,17 @@ class Debate(models.Model):
             in self.debate_statements.order_by('index').all()
         ]
 
+    @property
+    def is_protocol_available(self):
+        return not ("VorlaeufigesSten.Protokoll" in self.protocol_url)
+
+    @property
+    def full_title(self):
+        if self.debate_type == 'NR':
+            return "{} des Nationalrats".format(self.title)
+        else:
+            return "{} des Bundesrates".format(self.title)
+
     def __unicode__(self):
         return self.title
 

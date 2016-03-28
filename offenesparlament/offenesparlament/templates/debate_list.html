@@ -1,0 +1,57 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Debatten" "debate_list" %}
+{% endblock %}
+
+{% block title %}Debatten{% endblock %}
+
+{% block content %}
+  <h1>Debatten</h1>
+
+  <p class="explanation">
+    Hier finden Sie eine Übersicht über alle Sitzungen des Nationalrats und des Bundesrats der gewählten
+    Gesetzgebungsperiode. Sie können über die Suchleiste eine andere Legislaturperiode wählen oder die Ergebnisse
+    verfeinern.
+  </p>
+  <div id="search_results">
+
+    <table class="debatelist">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th colspan="2">Titel</th>
+          <th>Stenografisches Protokoll</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for debate in debates %}
+        <tr>
+          <td class="debatelist_date">{{ debate.date|date }}</td>
+
+          <td class="debatelist_title">
+            <a href="{% url 'debate_detail' ggp=debate.llp.roman_numeral debate_type=debate.debate_type number=debate.nr %}">
+              {{ debate.full_title }}
+            </a>
+          </td>
+
+          <td class=""><a href="{{ debate.detail_url }}" class="icon_link icon_parliament" target="_blank">Sitzung auf parlament.gv.at</a></td>
+
+          {% if debate.is_protocol_available %}
+            <td class="lawlist_status"><span class="law_status law_status_beschlossen">vorhanden</span></td>
+          {% else %}
+            <td class="lawlist_status"><span class="law_status law_status_offen">offen</span></td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+  {% load jsonify %}
+  <script>
+    var OFFPARL_DATA_SEARCH_TYPE = 'Debatten';
+  </script>
+{% endblock %}

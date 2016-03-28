@@ -6,6 +6,8 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Keyword
 from op_scraper.models import Inquiry
 from op_scraper.models import InquiryResponse
+from op_scraper.models import Debate
+from op_scraper.models import DebateStatement
 from django.db.models import Count, Max, Min, Q
 
 from offenesparlament.views.search import PersonSearchView
@@ -77,6 +79,11 @@ def gesetze_list(request):
     return redirect('laws_list_with_ggp', ggp=llp.roman_numeral)
 
 
+def debate_list(request):
+    llp = _ensure_ggp_is_set(request)
+    return redirect('debate_list_with_ggp', ggp=llp.roman_numeral)
+
+
 def person_list_with_ggp(request, ggp):
     llp = _ensure_ggp_is_set(request, ggp)
     person_list = Person.objects \
@@ -97,6 +104,15 @@ def gesetze_list_with_ggp(request, ggp):
         .select_related('category')[:100]
     context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
+
+
+def debate_list_with_ggp(request, ggp):
+    llp = _ensure_ggp_is_set(request, ggp)
+    debates = Debate.objects \
+        .filter(llp=llp) \
+        .order_by('-date')
+    context = {'debates': debates}
+    return render(request, 'debate_list.html', context)
 
 
 def keyword_list_with_ggp(request, ggp):
@@ -265,6 +281,21 @@ def keyword_detail(request, keyword):
         .order_by('-last_update')
     context = {'keyword': keyword, 'laws': laws}
     return render(request, 'keyword_detail.html', context)
+
+
+def debate_detail(request, ggp, debate_type, number):
+    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
+    debate = Debate.objects.get(
+        debate_type=debate_type,
+        llp=llp,
+        nr=number
+    )
+    statements = DebateStatement.objects \
+        .filter(debate=debate) \
+        .order_by('index') \
+        .select_related('person')
+    context = {'debate': debate, 'statements': statements}
+    return render(request, 'debate_detail.html', context)
 
 
 def _ensure_ggp_is_set(request, ggp_roman_numeral=None):
