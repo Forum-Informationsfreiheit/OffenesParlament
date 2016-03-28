@@ -277,6 +277,7 @@ class Law(Timestamped, ParlIDMixIn):
                     'documents':  docs,
                     'keywords':  [kw.title for kw in op.keywords.all()],
                     'prelaw': op.prelaw.id,
+                    'entity': op.entity.title if op.entity else None
                 }
             )
         return json.dumps(ops)
