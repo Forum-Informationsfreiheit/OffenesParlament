@@ -86,7 +86,7 @@
           <td class="change_item_person_photo"><img src="{{ change.item.photo_link }}" width="80" /></td>
           <td class="change_item_person_content">
             <h3>
-              <a href="{{ change.ui_url }}">{{ change.item.full_name }}</a>
+              {{ change.item.full_name }}
               {% if change.item.party.short %}
                 <span class="party_tag {{ change.party.short_css_class }}">{{ change.party.short }}</span>
               {% endif %}
