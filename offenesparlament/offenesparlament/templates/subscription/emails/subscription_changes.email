@@ -2,63 +2,91 @@
 
 {% block content %}
   <h1>Es gibt Neuigkeiten</h1>
-  <p>
-    Hej there,
-  </p>
-  <p>
-  <h1>Personen:</h1><br />
+
+  {% if changes.person|length > 0 %}
+  <div class="change_section">
+    <h2>Personen</h2>
     {% for p in changes.person %}
-    <a href="{{ p.ui_url }}"><img src="{{ p.item.photo_link }}" />{{ p.item.full_name }} [{{ p.parl_id }}]</a><br />
-        <ul>
-        {% for msg in p.messages %}
-        <li>{{ msg|safe }}</li>
-        {% endfor %}
-        </ul>
+      <table class="change_item change_item_person">
+        <tr>
+          <td class="change_item_person_photo"><img src="{{ p.item.photo_link }}" width="80" /></td>
+          <td class="change_item_person_content">
+            <h3>
+              <a href="{{ p.ui_url }}">{{ p.item.full_name }}</a>
+              {% if p.item.party.short %}
+                <span class="party_tag {{ p.party.short_css_class }}">{{ p.party.short }}</span>
+              {% endif %}
+            </h3>
+            <ul>
+              {% for msg in p.messages %}
+                <li>{{ msg|safe }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      </table>
     {% endfor %}
-  </p>
-  <p>
-  <h1>Gesetze:</h1><br />
+  </div>
+  {% endif %}
+
+  {% if changes.law|length > 0 %}
+  <div class="change_section">
+    <h2>Gesetze</h2>
     {% for l in changes.law %}
-    <h2><a href="{{ l.ui_url }}">{{ l.item.title }} [{{ l.item.parl_id }}]</a></h2>
-        <ul>
-        {% for msg in l.messages %}
-        <li>{{ msg|safe}}</li>
-        {% endfor %}
-        </ul>
+      <table class="change_item change_item_law">
+        <tr>
+          <td class="change_item_law_content">
+            <h3>
+              <a href="{{ l.ui_url }}">{{ l.item.title }}</a>
+            </h3>
+            <ul>
+              {% for msg in l.messages %}
+                <li>{{ msg|safe }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      </table>
     {% endfor %}
-  </p>
+  </div>
+  {% endif %}
 
-
-  <p>
-  <h1>Suchanfragen:</h1><br />
+  {% if changes.search|length > 0 %}
+  <div class="change_section">
+    <h2>Suchen</h2>
     {% for content in changes.search %}
-    <a href="{{ content.ui_url }}">{{ content.search_title }}</a><br /><br />
-        {% for change in content.changes %}
+    <p><a href="{{ content.ui_url }}">{{ content.search_title }}</a></p>
+
+    {% for change in content.changes %}
+      <table class="change_item change_item_person change_item_law">
+        <tr>
           {% if change.item.category == "Person" %}
-            <img src="{{ change.item.photo_link }}" />{{ change.item.full_name }} [{{ change.parl_id }}]<br />
+          <td class="change_item_person_photo"><img src="{{ change.item.photo_link }}" width="80" /></td>
+          <td class="change_item_person_content">
+            <h3>
+              <a href="{{ change.ui_url }}">{{ change.item.full_name }}</a>
+              {% if change.item.party.short %}
+                <span class="party_tag {{ change.party.short_css_class }}">{{ change.party.short }}</span>
+              {% endif %}
+            </h3>
+          {% else %}
+          <td class="change_item_law_content">
+            <h3>
+              <a href="{{ change.ui_url }}">{{ change.item.title }}</a>
+            </h3>
           {% endif %}
-          {% if change.item.category != "Person" %}
-            {{ change.item.title }} [{{ change.parl_id }}]<br />
-          {% endif %}
-          <ul>
-          {% for msg in change.messages %}
-          <li>{{ msg|safe }}</li>
-          {% endfor %}
-          </ul>
-
-        {% endfor %}
+            <ul>
+              {% for msg in change.messages %}
+                <li>{{ msg|safe }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      </table>
     {% endfor %}
-  </p>
-
-  <!-- button -->
-  <table class="btn_primary btn_primary_red" cellpadding="0" cellspacing="0" border="0">
-    <tr>
-      <td>
-        <a href="">Link</a>
-      </td>
-    </tr>
-  </table>
-  <!-- /button -->
+    {% endfor %}
+  </div>
+  {% endif %}
 {% endblock %}
 
 
