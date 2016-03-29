@@ -8,6 +8,8 @@ from django.template import loader, Context
 
 from datetime import datetime
 
+import html2text
+
 # import the logging library
 import logging
 
@@ -36,13 +38,16 @@ class EmailController():
         """
         try:
             rendered_mail = cls.render_email(context_params)
+            rendered_text_mail = html2text.html2text(rendered_mail)
 
             send_mail(
                 cls.subject,
-                rendered_mail,
+                rendered_text_mail,
                 cls.sender,
                 [recipient],
-                fail_silently=cls.fail_silently)
+                fail_silently=cls.fail_silently,
+                html_message=rendered_mail
+            )
         except Exception as e:
             print e
             return False
