@@ -14,34 +14,58 @@
 
 <p>{{ debate.date|date }}</p>
 
-{% if statements %}
-  <h2>Liste der RednerInnen</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Nummer</th>
-        <th>Art</th>
-        <th>Name</th>
-    </thead>
-    <tbody>
-      {% for ds in statements %}
-      <tr>
-        <td>{{ ds.index }}</td>
-        <td>{{ ds.speaker_role }}</td>
-        <td>
-          <a href="#">
-            {{ ds.person.full_name }}
-          </a>
-          {% include 'partials/party_tag.html' with party=ds.person.party %}<br/>
-          <p>{{ ds.full_text }}</p>
-        </td>
-      </tr>
+{% if persons %}
+  <div class="section">
+    <h2>{{ persons|length }} RednerIn{{ persons|length|pluralize:"nen" }}</h2>
+    <ul class="columned_linklist">
+      {% for p in persons %}
+      <li>
+        <a href="{{ p.slug }}">{{ p.full_name }}</a>
+        {% if p.party.short %}
+          <span class="party_tag {{ p.party.short_css_class }}">{{ p.party.short }}</span>
+        {% endif %}
+        {# not using the partial party_tag.html here cause it was just to slow to repeatedly include the partial. caching was as slow #}
+      </li>
       {% endfor %}
-    </tbody>
-  </table>
+    </ul>
+  </div>
+{% endif %}
+
+{% if statements %}
+  <div class="section">
+    <h2>Redebeiträge Volltext</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nummer</th>
+          <th>Art</th>
+          <th>Name</th>
+      </thead>
+      <tbody>
+        {% for ds in statements %}
+        <tr>
+          <td>{{ ds.index }}</td>
+          <td>{{ ds.speaker_role }}</td>
+          <td>
+            <a href="#">
+              {{ ds.person.full_name }}
+            </a>
+            {% if ds.person.party.short %}
+              <span class="party_tag {{ ds.person.party.short_css_class }}">{{ ds.person.party.short }}</span>
+            {% endif %}
+            {# not using the partial party_tag.html here cause it was just to slow to repeatedly include the partial. caching was as slow #}
+            <p>{{ ds.full_text }}</p>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% else %}
-  <h2>Kein Protokoll</h2>
-  <p>Zu dieser Sitzung ist noch kein stenografisches Protokoll verfügbar.</p>
+  <div class="section">
+    <h2>Kein Protokoll</h2>
+    <p>Zu dieser Sitzung ist noch kein stenografisches Protokoll verfügbar.</p>
+  </div>
 {% endif %}
 
 {% load jsonify %}

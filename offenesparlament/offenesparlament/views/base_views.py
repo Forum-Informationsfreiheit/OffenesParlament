@@ -99,8 +99,7 @@ def gesetze_list_with_ggp(request, ggp):
     llp = _ensure_ggp_is_set(request, ggp)
     laws = Law.objects \
         .filter(legislative_period=llp) \
-        .annotate(last_update=Max('steps__date')) \
-        .order_by('-last_update') \
+        .order_by('-ts') \
         .select_related('category')[:100]
     context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
@@ -110,7 +109,8 @@ def debate_list_with_ggp(request, ggp):
     llp = _ensure_ggp_is_set(request, ggp)
     debates = Debate.objects \
         .filter(llp=llp) \
-        .order_by('-date')
+        .order_by('-date', '-nr') \
+        .select_related('llp')
     context = {'debates': debates}
     return render(request, 'debate_list.html', context)
 
@@ -290,11 +290,18 @@ def debate_detail(request, ggp, debate_type, number):
         llp=llp,
         nr=number
     )
-    statements = DebateStatement.objects \
-        .filter(debate=debate) \
-        .order_by('index') \
-        .select_related('person')
-    context = {'debate': debate, 'statements': statements}
+    statements = debate.debate_statements \
+            .order_by('index') \
+            .exclude(speaker_role__isnull=True) \
+            .select_related('person__latest_mandate__party')
+    persons = Person.objects \
+            .filter(debate_statements__debate=debate) \
+            .exclude(debate_statements__speaker_role='pres') \
+            .exclude(debate_statements__speaker_role__isnull=True) \
+            .order_by('reversed_name') \
+            .distinct() \
+            .select_related('latest_mandate__party')
+    context = {'debate': debate, 'statements': statements, 'persons': persons}
     return render(request, 'debate_detail.html', context)
 
 
