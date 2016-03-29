@@ -404,6 +404,29 @@ form.abo_login {
 h1 .abo_email {
   color: #f55f57; }
 
+.debate_statement_list {
+  border-bottom: 1px solid #e5e5e5; }
+
+.debate_statement {
+  border-top: 1px solid #e5e5e5;
+  padding: 30px 0; }
+  .debate_statement .debate_statement_image {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 100%;
+    float: left; }
+    .debate_statement .debate_statement_image img {
+      width: 100%; }
+  .debate_statement .debate_statement_content {
+    margin-left: 80px; }
+    .debate_statement .debate_statement_content h3 {
+      margin: 0; }
+      .debate_statement .debate_statement_content h3 .party_tag {
+        font-weight: normal; }
+    .debate_statement .debate_statement_content p {
+      line-height: 170%; }
+
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;

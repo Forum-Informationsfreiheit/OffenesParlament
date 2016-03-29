@@ -1149,6 +1149,14 @@ class DebateStatement(models.Model):
             self.doc_section,
             self.date)
 
+    @property
+    def speaker_role_verbose(self):
+        return {
+            'pres': 'PräsidentIn',
+            'min': 'MinisterIn',
+            'abg': 'AbgeordneteR',
+        }.get(self.speaker_role, '')
+
 
 class Comittee(Timestamped, ParlIDMixIn):
 
