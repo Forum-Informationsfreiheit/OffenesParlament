@@ -3,10 +3,13 @@
 {% block content %}
   <h1>E-Mail-Adresse bestätigen</h1>
   <p>
-    Hej there,
+    Hallo,
   </p>
   <p>
-    Lorem Ipsum
+    jemand hat auf <a href="http://offenesparlament.at">offenesparlament.at</a> diese E-Mail-Adresse für regelmäßige Benachrichtigungen eingetragen.
+  </p>
+  <p>
+    Um Ihre E-Mail-Adresse zu bestätigen und diese Benachrichtigungen zu aktivieren, klicken Sie bitte auf folgenden Button oder kopieren Sie diesen Link in die Adresszeile Ihres Browsers: <a href="{{ verification_url }}">{{ verification_url }}</a>
   </p>
 
   <!-- button -->

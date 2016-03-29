@@ -88,8 +88,11 @@ def list(request, email, key=None):
                 message = MESSAGES.EMAIL.ERROR_SENDING_EMAIL.format(email)
 
             return render(request, 'subscription/list_subscriptions.html', {'message': message})
+        elif user is not None and user.verification.verification_hash != key:
+            message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
+            return render(request, 'subscription/list_subscriptions.html', {'message': message})
         else:
-            subscriptions = user.subscription_set.all()
+            subscriptions = user.subscription_set.filter(verification__verified=True)
             return render(
                 request,
                 'subscription/list_subscriptions.html',

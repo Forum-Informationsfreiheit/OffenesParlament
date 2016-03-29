@@ -32,7 +32,7 @@
       <tbody>
         {% for sub in subscriptions %}
         <tr>
-          <td class="">{{ sub.content.title }}</td>
+          <td class=""><a href="{{ sub.content.ui_url }}" target="_blank">{{ sub.content.title }}</a></td>
           <td class=""><a href="{{ sub.unsub_slug }}">Abo löschen</a></td>
         </tr>
         {% endfor %}

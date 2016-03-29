@@ -55,8 +55,6 @@ urlpatterns = patterns(
 
     # Subscription URLS
 
-    url(r'^abos/$', subscriptions.login, name='subscriptions'),
-
     # Verify a new subscription
     url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
         subscriptions.verify,
@@ -71,14 +69,17 @@ urlpatterns = patterns(
         subscriptions.unsubscribe,
         name='unsubscribe'),
 
+    # Show login form (only email address)
+    url(r'^abos/$', subscriptions.login, name='subscriptions'),
+
     # List emails subscriptions
-    url(r'^list/(?P<email>.+)/(?P<key>.+)/?$',
+    url(r'^abos/(?P<email>.+)/(?P<key>.+)/?$',
         subscriptions.list,
         name='list_subscriptions'),
 
 
     # Resend list hashkey for email
-    url(r'^list/(?P<email>.+)/?$',
+    url(r'^abos/(?P<email>.+)/?$',
         subscriptions.list,
         name='list_subscriptions'),
 

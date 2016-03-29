@@ -3,18 +3,25 @@
 {% block content %}
   <h1>Übersicht der Benachrichtigungen</h1>
   <p>
-    Hej there,
+    Hallo,
   </p>
   <p>
-    a list of subscriptions on OffenesParlament.at has been requested for this email address. Please follow this link to view or edit your subscriptions:
-    <a href="{{ list_url }}">My Subscriptions</a>
+    jemand hat versucht sich mit dieser E-Mail-Adresse auf offenesparlament.at einzuloggen.
+  </p>
+  <p>
+    Wenn Sie sich einloggen möchten, klicken Sie bitte auf den Button "Abos
+    verwalten" oder kopieren Sie folgenden Link in die Adresszeile Ihres
+    Browsers: <a href="{{ list_url }}">{{ list_url }}</a>
+  </p>
+  <p>
+    Sollten Sie dieses E-Mail nicht angefordert haben, können Sie es ignorieren.
   </p>
 
   <!-- button -->
   <table class="btn_primary btn_primary_red" cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td>
-        <a href="https://github.com/leemunroe/html-email-template">Abos verwalten</a>
+        <a href="{{ list_url }}">Abos verwalten</a>
       </td>
     </tr>
   </table>

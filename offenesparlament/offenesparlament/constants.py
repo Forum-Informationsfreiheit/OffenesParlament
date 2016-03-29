@@ -68,11 +68,11 @@ class EMAIL:
 
     class VERIFY_SUBSCRIPTION(EmailController):
         template_file = 'subscription/emails/verify_subscription.email'
-        subject = 'Verify Thine Self!'
+        subject = 'OffenesParlament.at - Abo bestätigen'
 
     class SUBSCRIPTION_LIST(EmailController):
         template_file = 'subscription/emails/subscription_list.email'
-        subject = 'Your subscriptions @ OffenesParlament.at'
+        subject = 'OffenesParlament.at - Abos verwalten: Login'
 
     class SUBSCRIPTION_CHANGES(EmailController):
         template_file = 'subscription/emails/subscription_changes.email'
@@ -91,6 +91,7 @@ class MESSAGES:
         SUBSCRIPTION_LINK_SENT = "Ein Login-Link wurde soeben an '{}' gesendet (falls wir ein Abo unter dieser Adresse in unserer Datenbank gefunden haben)."
         SUBSCRIPTION_DELETED = "Das Abo '{}' wurde gelöscht."
         VERIFICATION_SENT = "Ein Bestätigungslink wurde soeben an '{}' gesendet."
+        VERIFICATION_HASH_WRONG = "Der Authentifizierungscode ist falsch. Bitte gehen Sie zu 'Abos verwalten' und loggen Sie sich ein."
 
 
 class ChangeMessageGenerator:
