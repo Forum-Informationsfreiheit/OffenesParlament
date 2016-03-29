@@ -314,12 +314,20 @@ SubscriptionModalForm = React.createClass({displayName: "SubscriptionModalForm",
     e.preventDefault();
     return SubscriptionModalActions.sendData();
   },
+  _on_key_up: function(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      return SubscriptionModalActions.sendData();
+    }
+  },
   render: function() {
     return React.createElement("div", null, React.createElement("h2", null, "Benachrichtigungen abonnieren"), React.createElement("p", null, "Bitte senden Sie mir Aktualisierungen für ", React.createElement("b", null, this.props.subscription_title), " an folgende E-Mail-Adresse:"), React.createElement("input", {
       "type": "text",
       "placeholder": "Meine E-Mail-Adresse",
       "onChange": this._on_email_changed,
-      "value": this.props.email
+      "value": this.props.email,
+      "autoFocus": true,
+      "onKeyUp": this._on_key_up
     }), React.createElement("div", {
       "className": "buttons"
     }, React.createElement("a", {

@@ -15,6 +15,12 @@ SubscriptionModalForm = React.createClass
     e.preventDefault()
     SubscriptionModalActions.sendData()
 
+  _on_key_up: (e) ->
+    if e.keyCode == 13 #ENTER key
+      e.preventDefault()
+      SubscriptionModalActions.sendData()
+
+
   render: ->
     return <div>
         <h2>Benachrichtigungen abonnieren</h2>
@@ -24,6 +30,8 @@ SubscriptionModalForm = React.createClass
           placeholder="Meine E-Mail-Adresse"
           onChange={@_on_email_changed}
           value={@props.email}
+          autoFocus=true
+          onKeyUp={@_on_key_up}
         />
         <div className="buttons">
           <a href="#" className="button_large button_cancel" onClick={@_on_cancel_clicked}>Abbrechen</a>
