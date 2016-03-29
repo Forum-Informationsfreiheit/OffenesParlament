@@ -51,7 +51,7 @@
         <table>
           <tr>
             <td align="center">
-              <p><a href="#"><unsubscribe>Abos verwalten</unsubscribe></a>
+              <p><a href="http://www.offenesparlament.at{{ manage_subscriptions_link }}"><unsubscribe>Abos verwalten</unsubscribe></a>
               <p class="secondary">
                 <a href="http://www.offenesparlament.at">offenesparlament.at</a> ist ein Projekt des Forum Informationsfreiheit und wird durch
                 die <a href="https://www.netidee.at/netidee-home/">Internet Foundation Austria (IPA) / netidee.at</a> gefördert.

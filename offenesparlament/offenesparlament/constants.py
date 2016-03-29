@@ -4,9 +4,12 @@ Constants and Utility classes
 """
 
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 from django.template import loader, Context
 
 from datetime import datetime
+
+from op_scraper.models import User
 
 import html2text
 
@@ -37,6 +40,13 @@ class EmailController():
         Renders email template and sends the resulting email
         """
         try:
+            user = User.objects.get(email=recipient)
+            context_params['manage_subscriptions_link'] = reverse(
+                'list_subscriptions',
+                kwargs={
+                    'email': recipient,
+                    'key': user.verification.verification_hash}
+            )
             rendered_mail = cls.render_email(context_params)
             rendered_text_mail = html2text.html2text(rendered_mail)
 
