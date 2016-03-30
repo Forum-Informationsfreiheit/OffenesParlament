@@ -831,7 +831,7 @@ ul.breadcrumbs {
   .keyword_box a {
     color: #40925b; }
 
-.speech_type_Pro, .speech_type_Contra {
+.speech_type_Pro, .speech_type_Contra, .speech_type_Wortmeldung {
   width: 70px;
   height: 20px;
   background-repeat: no-repeat;
@@ -845,6 +845,9 @@ ul.breadcrumbs {
 
 .speech_type_Contra {
   background-image: url("img/icons/thumb_down.svg"); }
+
+.speech_type_Wortmeldung {
+  background-image: url("img/icons/info_yellow.svg"); }
 
 table {
   font-size: 13px;
