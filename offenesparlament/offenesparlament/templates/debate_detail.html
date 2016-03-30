@@ -44,9 +44,7 @@
             <h3>
               <span class="debate_statement_speaker_role">{{ ds.speaker_role_verbose }}</span>
               <span class="debate_statement_speaker_name">
-                <a href="#">
-                  {{ ds.person.full_name }}
-                </a>
+                <a href="{{ ds.person.slug }}">{{ ds.person.full_name }}</a>
                 {% if ds.person.party.short %}
                   <span class="party_tag {{ ds.person.party.short_css_class }}">{{ ds.person.party.short }}</span>
                 {% endif %}
