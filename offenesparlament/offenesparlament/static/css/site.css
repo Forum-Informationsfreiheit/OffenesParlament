@@ -262,6 +262,37 @@
 
 .homepage_search {
   margin: 150px 0 80px 0; }
+  .homepage_search .search_bar {
+    width: 80%;
+    display: inline-block; }
+    @media screen and (max-width: 650px) {
+      .homepage_search .search_bar {
+        display: block;
+        width: 100%; } }
+  .homepage_search .search_button {
+    width: 20%;
+    background-color: #f55f57;
+    color: white;
+    padding: 0;
+    text-align: center;
+    line-height: 57px;
+    vertical-align: top;
+    margin-top: 50px;
+    border: 0;
+    font-size: 19px; }
+    @media screen and (max-width: 650px) {
+      .homepage_search .search_button {
+        display: block;
+        width: 50%;
+        margin: 10px auto 0 auto; } }
+    @media screen and (max-width: 500px) {
+      .homepage_search .search_button {
+        width: 100%; } }
+    .homepage_search .search_button:active, .homepage_search .search_button:visited {
+      color: white; }
+    .homepage_search .search_button:hover, .homepage_search .search_button:focus {
+      color: #f55f57;
+      background-color: white; }
   .homepage_search .searchbar {
     position: relative;
     width: 100%;
@@ -278,13 +309,13 @@
       font-size: 16px;
       outline: none;
       border: none; }
-  .homepage_search .help {
-    margin-top: 15px;
-    text-align: center; }
-    .homepage_search .help a {
-      margin: 0 10px;
-      color: white; }
-      .homepage_search .help a:hover {
+  .homepage_search .anysearch_container_homepage_help {
+    margin-top: 5px;
+    text-align: center;
+    color: white; }
+    .homepage_search .anysearch_container_homepage_help a {
+      margin: 0 10px; }
+      .homepage_search .anysearch_container_homepage_help a:hover {
         color: #7fb7ea; }
 
 .homepage_teasers {

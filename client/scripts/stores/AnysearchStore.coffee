@@ -24,6 +24,7 @@ _was_edited_by_user = false
 _current_search_url = ''
 _routing_active = false
 _subscription_allowed = false
+_projected_result_count = null
 
 
 _process_edit = () ->
@@ -138,6 +139,7 @@ _update_search_results = () ->
     success: (response) ->
       if response.result?
         _search_results = response.result
+        _projected_result_count = response.stats.num_results
     complete: () ->
       _loading = false
       AnysearchStore.emitChange()
@@ -234,6 +236,9 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
         return true
     else
       return false
+
+  get_result_count: () ->
+    return _projected_result_count
 
   emitChange: () ->
     this.emit(CHANGE_EVENT)

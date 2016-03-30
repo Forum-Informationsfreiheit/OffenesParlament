@@ -1,6 +1,7 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
 SearchResults = require './components/results/SearchResults.cjsx'
+ResultsPreview = require './components/anysearch/ResultsPreview.cjsx'
 SubscriptionModal = require './components/SubscriptionModal.cjsx'
 SubscriptionModalStore = require './stores/SubscriptionModalStore.coffee'
 SubscriptionModalActions = require './actions/SubscriptionModalActions.coffee'
@@ -56,6 +57,7 @@ $(document).ready( () ->
   # try to get all containers for react components on the page
   anysearch_container = document.getElementById('anysearch_container')
   anysearch_container_homepage = document.getElementById('anysearch_container_homepage')
+  anysearch_container_homepage_help = document.getElementById('anysearch_container_homepage_help')
   content_container = document.getElementById('content')
   modal_container = document.getElementById('react_modal_container')
 
@@ -79,6 +81,14 @@ $(document).ready( () ->
     ReactDOM.render(
       React.createElement(Searchbar, {}),
       anysearch_container_homepage
+    )
+    ReactDOM.render(
+      React.createElement(ResultsPreview, {}),
+      anysearch_container_homepage_help
+    )
+    $('.anysearch_submit_button').click((e) ->
+      e.preventDefault()
+      AnysearchActions.forceLocationChange()
     )
 
   # render search results if store has results
