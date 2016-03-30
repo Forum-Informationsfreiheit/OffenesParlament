@@ -25,7 +25,7 @@ class FuzzyElasticsearchSearchBackend(ElasticsearchSearchBackend):
 
     DEFAULT_FIELD_MAPPING = {
         'type': 'string',
-        'analyzer': 'german'}
+        'analyzer': 'german2'}
 
     def build_schema(self, fields):
         content_field_name = ''
