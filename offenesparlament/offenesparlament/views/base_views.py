@@ -98,9 +98,9 @@ def person_list_with_ggp(request, ggp):
 def gesetze_list_with_ggp(request, ggp):
     llp = _ensure_ggp_is_set(request, ggp)
     laws = Law.objects \
-        .filter(legislative_period=llp) \
+        .filter(legislative_period=llp, ts__isnull=False) \
         .order_by('-ts') \
-        .select_related('category')[:100]
+        .select_related('category')[:500]
     context = {'laws': laws}
     return render(request, 'gesetze_list.html', context)
 
