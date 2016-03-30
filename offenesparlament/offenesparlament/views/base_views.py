@@ -194,6 +194,9 @@ def person_detail(request, parl_id, name):
         .annotate(last_update=Max('steps__date')) \
         .select_related('category') \
         .order_by('-last_update')
+    petitions = Petition.objects \
+        .filter(creators__person=person) \
+        .order_by('-ts')
     subscription_title = person.full_name
     url_params = {'parl_id': person.parl_id}
     subscription_url = '/personen/search?{}'.format(
@@ -227,6 +230,7 @@ def person_detail(request, parl_id, name):
         'statement_list': statement_list,
         'keywords': keywords,
         'laws': laws,
+        'petitions': petitions,
         'inquiries_sent': inquiries_sent,
         'subscription_url': subscription_url,
         'subscription_title': subscription_title

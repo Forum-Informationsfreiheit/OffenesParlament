@@ -31,32 +31,38 @@
       <p>Bezieht sich auf: {{ law.references.short_title }}</p>
     {% endif %}
 
-    {% if law.keywords.all %}
-      <h3>Schlagworte</h3>
-      <p class="keyword_list">
-      {% for kw in law.keywords.all %}
-        <a href="{% url 'keyword_detail' keyword=kw.title_urlsafe %}">{{ kw }}</a>
-      {% endfor %}
-      </p>
-    {% endif %}
-  </div><!--
-  --><div class="column">
     <h3>Status</h3>
     <p>
       {% autoescape off %}
       <span class="law_status law_status_{{ law.simple_status }}">{{ law.status }}</span></br>
       {% endautoescape %}
     </p>
+  </div><!--
+  --><div class="column">
+    {% if law.creators.all %}
+      <h3>Eingebracht von</h3>
+      <ul class="petitions_creators">
+          {% for creator in law.creators.all %}
+              {% if creator.person.slug %}
+                <li>
+                  <a href="{{ creator.person.slug }}">{{ creator.full_name }}</a>
+                  {% include 'partials/party_tag.html' with party=creator.person.party %}
+                </li>
+              {% else %}
+                <li>{{ creator.full_name }}</li>
+              {% endif %}
+          {% endfor %}
+      </ul>
+      <p>
+      </p>
+    {% endif %}
   <h3>Unterschriften</h3>
-    <p>
-      <a href="/signatures{{ law.real_slug }}"> {{ law.full_signature_count }}</a>
-    </p>
+    <p>{{ law.full_signature_count }}</p>
   </div>
 </div>
 
 <div class="info_buttons law_info_buttons">
   <a href="{{ law.source_link }}" class="button button_source">Zur Parlamentsseite</a>
-  <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
 </div>
 
 

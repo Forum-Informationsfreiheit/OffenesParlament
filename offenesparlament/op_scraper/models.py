@@ -26,7 +26,7 @@ class ParlIDMixIn(object):
 
 
 class CONSTANTS():
-    PETITIONS_LINK_NAME = "petitions"
+    PETITIONS_LINK_NAME = "petitionen"
     LAWS_LINK_NAME = "gesetze"
 
 
