@@ -580,7 +580,10 @@ class Person(Timestamped, ParlIDMixIn):
 
     @property
     def most_recent_function_or_occupation(self):
-        return self.latest_mandate.function.title or self.occupation
+        if not self.latest_mandate is None and not self.latest_mandate.function is None:
+            return self.latest_mandate.function.title or self.occupation
+        else:
+            return self.occupation
 
     @property
     def slug(self):
