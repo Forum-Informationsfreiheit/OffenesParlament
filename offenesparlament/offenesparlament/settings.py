@@ -232,6 +232,22 @@ class ProductionBase(BaseConfig):
     ALLOWED_HOSTS = ['*']
     BROKER_URL = 'amqp://production_user_rabbitmq:supersecretpw@rabbitmq_vhost:5672//'
 
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            },
+        },
+    }
+
 
 class StagingBase(ProductionBase):
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
