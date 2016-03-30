@@ -1105,6 +1105,21 @@ class Debate(models.Model):
         else:
             return "{} des Bundesrates".format(self.title)
 
+    @property
+    def llps_facet(self):
+        if self.llp:
+            return [self.llp.facet_repr]
+        else:
+            return []
+
+    @property
+    def llps_facet_numeric(self):
+        if self.llp:
+            return [self.llp.number]
+        else:
+            return []
+
+
     def __unicode__(self):
         return self.title
 

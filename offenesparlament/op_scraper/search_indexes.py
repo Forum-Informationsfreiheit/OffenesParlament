@@ -190,7 +190,9 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     protocol_url = indexes.CharField(model_attr='protocol_url')
     detail_url = indexes.CharField(model_attr='detail_url')
     nr = indexes.IntegerField(model_attr='nr', null=True)
-    llp = indexes.IntegerField(model_attr='llp__number', faceted=True)
+    llps = indexes.MultiValueField(model_attr='llps_facet', faceted=True)
+    llps_numeric = indexes.MultiValueField(
+        model_attr='llps_facet_numeric', faceted=True)
 
     # soon
     internal_link = indexes.CharField(model_attr=u'slug')

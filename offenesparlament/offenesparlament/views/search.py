@@ -247,7 +247,7 @@ class DebateSearchView(JsonSearchView):
 
     search_model = Debate
     facet_fields = {
-        'llp': {'type': 'field'},
+        'llps': {'type': 'field'},
         'debate_type': {'type': 'field'},
         'date': {'type': 'date'}
     }
