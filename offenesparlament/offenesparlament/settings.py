@@ -248,6 +248,8 @@ class ProductionBase(BaseConfig):
         },
     }
 
+    INSTALLED_APPS = BaseConfig.INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
+
 
 class StagingBase(ProductionBase):
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
