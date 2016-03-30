@@ -169,7 +169,7 @@ tooltip = require('tooltip');
 app_router = require('./utils/router.coffee');
 
 $(document).ready(function() {
-  var Searchbar, anysearch_container, anysearch_container_homepage, content_container, menu, modal_container, render_modal, render_results, toggle;
+  var Searchbar, anysearch_container, anysearch_container_homepage, content_container, menu, modal_container, render_modal, render_results, tables, toggle;
   tooltip({
     showDelay: 10,
     offset: {
@@ -185,6 +185,31 @@ $(document).ready(function() {
   toggle.on('click', function(event) {
     event.preventDefault();
     return menu.slideToggle();
+  });
+  tables = $('.limited_table');
+  $.each(tables, function(key, t) {
+    var rows, show_all_link, table, visible_items;
+    table = $(t);
+    rows = table.find('tbody tr');
+    visible_items = table.data('limited_table_visible_items') || 10;
+    if (visible_items < rows.length) {
+      $.each(rows, function(key, r) {
+        if (key >= visible_items) {
+          return $(r).addClass('limited_table_hidden_row');
+        }
+      });
+      show_all_link = $('<a href="#" class="limited_table_show_all_link icon_link icon_arrow_down">Alle ' + rows.length + ' Einträge anzeigen</a>');
+      show_all_link.click(function(e) {
+        var hidden_rows;
+        e.preventDefault();
+        hidden_rows = table.find('tbody tr.limited_table_hidden_row');
+        $.each(hidden_rows, function(key, r) {
+          return $(r).removeClass('limited_table_hidden_row');
+        });
+        return show_all_link.remove();
+      });
+      return table.after(show_all_link);
+    }
   });
   anysearch_container = document.getElementById('anysearch_container');
   anysearch_container_homepage = document.getElementById('anysearch_container_homepage');
@@ -210,6 +235,7 @@ $(document).ready(function() {
     results = AnysearchStore.get_search_results();
     if (content_container && results) {
       document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at";
+      $('.law_vorparlamentarisch_background').remove();
       return ReactDOM.render(React.createElement(SearchResults, {
         results: results,
         allow_subscription: AnysearchStore.is_subscription_allowed(),

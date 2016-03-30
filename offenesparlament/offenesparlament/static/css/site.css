@@ -894,6 +894,10 @@ table {
     background-image: url("img/icons/pdf.svg");
     background-size: 11px;
     background-position: 0px 2px; }
+  .icon_link.icon_arrow_down {
+    background-image: url("img/icons/arrow_down.svg");
+    background-size: 11px;
+    background-position: 0px 2px; }
 
 .section {
   margin-top: 70px; }
@@ -1027,5 +1031,16 @@ ul.petitions_creators {
   ul.petitions_creators li {
     margin: 0;
     padding: 0; }
+
+.limited_table .limited_table_hidden_row {
+  display: none; }
+
+.icon_link.icon_arrow_down.limited_table_show_all_link {
+  margin-top: 15px;
+  line-height: 20px;
+  height: 20px;
+  background-size: 20px;
+  text-indent: 27px;
+  background-position: 0; }
 
 /*# sourceMappingURL=site.css.map */

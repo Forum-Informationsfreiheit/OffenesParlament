@@ -118,11 +118,13 @@
       </div>
     {% endif %}
     {% empty %}
+    <!--
       <div class="inquiry_noresponse_container">
         <p class="inquiry_noresponse_vert_align">
           <a href="#" class="button button_notifications">Benachrichtigung aktivieren</a>
         </p>
       </div>
+      -->
   {% endfor %}
 
   {% for doc in inquiry_response.documents.all %}

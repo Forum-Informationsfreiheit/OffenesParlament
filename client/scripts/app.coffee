@@ -30,6 +30,29 @@ $(document).ready( () ->
     menu.slideToggle()
   )
 
+  # limited tables
+  tables = $('.limited_table')
+  $.each(tables, (key, t) ->
+    table = $(t)
+    rows = table.find('tbody tr')
+    visible_items = table.data('limited_table_visible_items') or 10
+    if visible_items < rows.length
+      $.each(rows, (key, r) ->
+        if key >= visible_items
+          $(r).addClass('limited_table_hidden_row')
+      )
+      show_all_link = $('<a href="#" class="limited_table_show_all_link icon_link icon_arrow_down">Alle ' + rows.length + ' Einträge anzeigen</a>')
+      show_all_link.click((e) ->
+        e.preventDefault()
+        hidden_rows = table.find('tbody tr.limited_table_hidden_row')
+        $.each(hidden_rows, (key, r) ->
+          $(r).removeClass('limited_table_hidden_row')
+        )
+        show_all_link.remove()
+      )
+      table.after(show_all_link)
+  )
+
   # try to get all containers for react components on the page
   anysearch_container = document.getElementById('anysearch_container')
   anysearch_container_homepage = document.getElementById('anysearch_container_homepage')
@@ -63,6 +86,7 @@ $(document).ready( () ->
     results = AnysearchStore.get_search_results()
     if content_container and results
       document.title = AnysearchStore.get_subscription_title() + " - OffenesParlament.at"
+      $('.law_vorparlamentarisch_background').remove()
       ReactDOM.render(
         React.createElement(SearchResults, {
           results: results
