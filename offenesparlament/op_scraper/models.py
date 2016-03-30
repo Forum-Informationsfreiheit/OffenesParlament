@@ -1058,6 +1058,24 @@ class Debate(models.Model):
     nr = models.IntegerField(null=True)
     llp = models.ForeignKey(LegislativePeriod, null=True, blank=True)
 
+    # Interna, Utilities
+    _slug = models.CharField(max_length=255, default="")
+
+    @property
+    def slug(self):
+        if not self._slug:
+            self._slug = reverse(
+                'debate_detail',
+                kwargs={
+                    'debate_type': self.debate_type,
+                    'ggp': self.llp.roman_numeral if self.llp else None,
+                    'number': self.nr
+                }
+            )
+            self.save()
+
+        return self._slug
+
     @property
     def statements_full_text(self):
         return [

@@ -178,8 +178,8 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 
 class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements'],
-        'list': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp'],
+        'all': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements', 'internal_link'],
+        'list': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
     }
 
     text = indexes.CharField(document=True, use_template=True)
@@ -193,7 +193,7 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     llp = indexes.IntegerField(model_attr='llp__number', faceted=True)
 
     # soon
-    # internal_link = indexes.CharField(model_attr=u'slug')
+    internal_link = indexes.CharField(model_attr=u'slug')
 
     # Related, aggregated and Multi - Value Fields
     statements = indexes.MultiValueField()
@@ -202,6 +202,11 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     category = indexes.CharField(faceted=True, null=True)
 
     def prepare_category(self, obj):
+        try:
+            print u"Indexing {}".format(obj.title)
+        except:
+            #some unicode shit here
+            pass
         return "Debatte"
 
     def prepare_statements(self, obj):
