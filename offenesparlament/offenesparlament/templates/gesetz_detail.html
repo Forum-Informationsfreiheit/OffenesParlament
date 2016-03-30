@@ -43,9 +43,7 @@
   --><div class="column">
     <h3>Status</h3>
     <p>
-      {% autoescape off %}
-      <span class="law_status law_status_{{ law.simple_status }}">{{ law.status }}</span></br>
-      {% endautoescape %}
+      <span class="law_status law_status_{{ law.simple_status }}">{{ law.status|striptags }}</span></br>
     </p>
   </div>
 </div>
