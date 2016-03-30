@@ -92,7 +92,8 @@ def list(request, email, key=None):
             message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
             return render(request, 'subscription/list_subscriptions.html', {'message': message})
         else:
-            subscriptions = user.subscription_set.filter(verification__verified=True)
+            subscriptions = user.subscription_set.filter(verification__verified=True) \
+                    .select_related('content')
             return render(
                 request,
                 'subscription/list_subscriptions.html',
