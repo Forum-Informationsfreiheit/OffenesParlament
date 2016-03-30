@@ -8,6 +8,8 @@ from op_scraper.models import Inquiry
 from op_scraper.models import InquiryResponse
 from op_scraper.models import Debate
 from op_scraper.models import DebateStatement
+from op_scraper.models import Comittee
+from op_scraper.models import ComitteeMeeting
 from django.db.models import Count, Max, Min, Q
 
 from offenesparlament.views.search import PersonSearchView
@@ -307,6 +309,22 @@ def debate_detail(request, ggp, debate_type, number):
             .select_related('latest_mandate__party')
     context = {'debate': debate, 'statements': statements, 'persons': persons}
     return render(request, 'debate_detail.html', context)
+
+
+def committee_detail(request, ggp, parl_id):
+    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
+    committee = Comittee.objects.get(
+        legislative_period=llp,
+        parl_id=parl_id
+    )
+    members = Person.objects \
+            .filter(comittee_memberships__comittee=committee, comittee_memberships__date_to__isnull=True) \
+            .order_by('reversed_name') \
+            .distinct()
+    meetings = ComitteeMeeting.objects \
+            .filter(comittee=committee)
+    context = {'committee': committee, 'members': members, 'meetings': meetings}
+    return render(request, 'committee_detail.html', context)
 
 
 def _ensure_ggp_is_set(request, ggp_roman_numeral=None):

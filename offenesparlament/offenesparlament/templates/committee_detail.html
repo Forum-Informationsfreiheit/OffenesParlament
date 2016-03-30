@@ -1,0 +1,146 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Ausschüsse" "" %}
+  {% breadcrumb committee.name "committee_detail" %}
+{% endblock %}
+
+{% block title %}{{ committee.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ committee.name }}</h1>
+
+<div class="section">
+  <a href="{{ committee.source_link }}" class="button button_source" target="_blank">Zur Parlamentsseite</a>
+</div>
+
+{% if False %}
+<div class="law_details_box">
+  <h2>{{ committee.description }}</h2>
+
+  <div class="column">
+    <p>{{ law.description|safe }}</p>
+    {% if law.references %}
+      <p>Bezieht sich auf: {{ law.references.short_title }}</p>
+    {% endif %}
+
+      <h3>Unterausschüsse</h3>
+      <p class="keyword_list">
+      {% for sc in committee.sub_comittees.all %}
+        <a href="{% url 'committee_detail' ggp=sc.legislative_period.roman_numeral parl_id=sc.parl_id %}">{{ sc.name }}</a>
+      {% endfor %}
+      </p>
+  </div><!--
+  --><div class="column">
+    <h3>Status</h3>
+    <p>
+      {% autoescape off %}
+      <span class="law_status law_status_{{ law.simple_status }}">{{ law.status }}</span></br>
+      {% endautoescape %}
+    </p>
+  </div>
+</div>
+{% endif %}
+
+<div class="section">
+  <h2>Mitglieder &amp; Ersatzmitglieder</h2>
+  <ul class="columned_linklist">
+  {% for p in members %}
+    <li>
+        <a href="{{ p.slug }}">{{ p.full_name }}</a>
+        {% if p.party.short %}
+          <span class="party_tag {{ p.party.short_css_class }}">{{ p.party.short }}</span>
+        {% endif %}
+        {# not using the partial party_tag.html here cause it was just to slow to repeatedly include the partial. caching was as slow #}
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+
+{% if meetings %}
+<div class="section">
+  <h2>Sitzungen</h2>
+  <table class="limited_table">
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Betreff</th>
+    </thead>
+    <tbody>
+      {% for m in meetings.all %}
+      <tr>
+        <td>
+          {{ m.ts|date }}
+        </td>
+        <td>
+          {{ m.number }}. Sitzung
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+
+{% if persons2 %}
+{% if persons %}
+  <div class="section">
+    <h2>{{ persons|length }} RednerIn{{ persons|length|pluralize:"nen" }}</h2>
+    <ul class="columned_linklist">
+      {% for p in persons %}
+      <li>
+        <a href="{{ p.slug }}">{{ p.full_name }}</a>
+        {% if p.party.short %}
+          <span class="party_tag {{ p.party.short_css_class }}">{{ p.party.short }}</span>
+        {% endif %}
+        {# not using the partial party_tag.html here cause it was just to slow to repeatedly include the partial. caching was as slow #}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% if statements %}
+  <div class="section">
+    <h2>Redebeiträge Volltext</h2>
+    <div class="debate_statement_list">
+      {% for ds in statements %}
+        <div class="debate_statement">
+          <div class="debate_statement_image">
+            <img src="{{ ds.person.photo_link }}" />
+          </div>
+          <div class="debate_statement_content">
+            <h3>
+              <span class="debate_statement_speaker_role">{{ ds.speaker_role_verbose }}</span>
+              <span class="debate_statement_speaker_name">
+                <a href="#">
+                  {{ ds.person.full_name }}
+                </a>
+                {% if ds.person.party.short %}
+                  <span class="party_tag {{ ds.person.party.short_css_class }}">{{ ds.person.party.short }}</span>
+                {% endif %}
+              </span>
+                {# not using the partial party_tag.html here cause it was just to slow to repeatedly include the partial. caching was as slow #}
+            </h3>
+            <p>{{ ds.full_text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% else %}
+  <div class="section">
+    <h2>Kein Protokoll</h2>
+    <p>Zu dieser Sitzung ist noch kein endgültiges stenografisches Protokoll verfügbar.</p>
+  </div>
+{% endif %}
+{% endif %}
+
+{% load jsonify %}
+<script>
+  var OFFPARL_DATA_SEARCH_TYPE = 'Debatten';
+</script>
+{% endblock %}

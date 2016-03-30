@@ -54,7 +54,8 @@
         {% for comm in person.comittee_memberships.all %}
         {% if not comm.date_to %}
           <li>
-            {{person.full_name}} ist derzeit <b>{{ comm.function }}</b> des {{ comm.comittee.name }}
+            {{person.full_name}} ist derzeit <b>{{ comm.function }}</b> des
+            <a href="{% url 'committee_detail' ggp=comm.comittee.legislative_period.roman_numeral parl_id=comm.comittee.parl_id %}">{{ comm.comittee.name }}</a>
           </li>
         {% endif %}
         {% endfor %}
