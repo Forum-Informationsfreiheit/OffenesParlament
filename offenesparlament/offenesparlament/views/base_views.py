@@ -278,7 +278,8 @@ def keyword_detail(request, keyword):
     keyword = get_object_or_404(Keyword, _title_urlsafe=keyword)
     laws = keyword.laws \
         .annotate(last_update=Max('steps__date')) \
-        .order_by('-last_update')
+        .order_by('-last_update') \
+        .select_related('category')
     context = {'keyword': keyword, 'laws': laws}
     return render(request, 'keyword_detail.html', context)
 
