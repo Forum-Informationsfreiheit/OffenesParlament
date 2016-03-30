@@ -161,6 +161,8 @@ def check_subscriptions():
     # Reset the content hashes for all SubscribedContent items we just
     # processed
     if settings.DEBUG_SUBSCRIPTIONS:
+        print 'skipping content has reset, because settings.DEBUG_SUBSCRIPTIONS'
+    else:
         for content in SubscribedContent.objects.all():
             content.reset_content_hashes()
 
