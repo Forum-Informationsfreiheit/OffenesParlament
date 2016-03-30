@@ -11,6 +11,7 @@ from op_scraper.models import DebateStatement
 from op_scraper.models import Comittee
 from op_scraper.models import ComitteeMeeting
 from django.db.models import Count, Max, Min, Q
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from offenesparlament.views.search import PersonSearchView
 from op_scraper.search_indexes import extract_json_fields
@@ -27,7 +28,7 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
-
+@ensure_csrf_cookie
 def generic_search_view(request, query):
     return render(request, 'generic_search_view.html')
 

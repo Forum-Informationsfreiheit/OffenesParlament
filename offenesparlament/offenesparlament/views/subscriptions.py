@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from op_scraper.models import User
 from op_scraper.models import SubscribedContent
 from op_scraper.models import Subscription
@@ -151,6 +152,7 @@ def unsubscribe(request, email, key):
         {'message': message})
 
 
+@ensure_csrf_cookie
 def subscribe(request):
     """
     Subcribe the given email to the given URL.
