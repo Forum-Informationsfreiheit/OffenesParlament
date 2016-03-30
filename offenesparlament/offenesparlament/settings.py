@@ -25,6 +25,7 @@ logging.basicConfig(
 
 class BaseConfig(Configuration):
     STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
+    DEBUG_SUBSCRIPTIONS = True
 
     SECRET_KEY = 'tk5l_92mqo3406we8^s*x%%=*7*m*!ce0^o^s7_t9lrg@f46_n'
     DEBUG = False
@@ -231,6 +232,7 @@ class ProductionBase(BaseConfig):
     SECRET_KEY = None
     ALLOWED_HOSTS = ['*']
     BROKER_URL = 'amqp://production_user_rabbitmq:supersecretpw@rabbitmq_vhost:5672//'
+    DEBUG_SUBSCRIPTIONS = False
 
 
 class StagingBase(ProductionBase):
