@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from op_scraper.models import Person, Petition
 from op_scraper.models import Law
 from op_scraper.models import LegislativePeriod
@@ -60,13 +60,11 @@ def petition_detail(request, parl_id, ggp=None):
     parl_id_restored = '({})'.format(
         parl_id.replace('-', '/').replace('_', ' '))
     if ggp:
-        llp = LegislativePeriod.objects.get(roman_numeral=ggp)
-        petition = Petition.objects.get(
-            parl_id=parl_id_restored, legislative_period=llp)
+        llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+        petition = get_object_or_404(Petition, parl_id=parl_id_restored, legislative_period=llp)
     else:
         llp = None
-        petition = Petition.objects.get(
-            parl_id=parl_id, legislative_period=llp)
+        petition = get_object_or_404(Petition, parl_id=parl_id, legislative_period=llp)
     context = {'law': petition}
     return render(request, 'petition_detail.html', context)
 
@@ -182,9 +180,7 @@ def inquiry_detail(request, inq_id, ggp=None):
 
 
 def person_detail(request, parl_id, name):
-    person = Person.objects \
-        .select_related('latest_mandate') \
-        .get(parl_id=parl_id)
+    person = get_object_or_404(Person.objects.select_related('latest_mandate'), parl_id=parl_id)
     statement_list = person.statements \
         .select_related('step__law')
     keywords = Keyword.objects \
@@ -244,12 +240,11 @@ def gesetz_detail(request, parl_id, ggp=None):
     parl_id_restored = '({})'.format(
         parl_id.replace('-', '/').replace('_', ' '))
     if ggp:
-        llp = LegislativePeriod.objects.get(roman_numeral=ggp)
-        gesetz = Law.objects.get(
-            parl_id=parl_id_restored, legislative_period=llp)
+        llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+        gesetz = get_object_or_404(Law, parl_id=parl_id_restored, legislative_period=llp)
     else:
         llp = None
-        gesetz = Law.objects.get(parl_id=parl_id, legislative_period=llp)
+        gesetz = get_object_or_404(Law, parl_id=parl_id, legislative_period=llp)
     if hasattr(gesetz, 'laws'):
         return redirect('{}#vorparlamentarisch'.format(gesetz.laws.slug))
     subscription_title = u"{} ({})".format(
@@ -272,16 +267,15 @@ def gesetz_detail(request, parl_id, ggp=None):
 def petition_signatures(request, parl_id, ggp):
     parl_id_restored = '({})'.format(
         parl_id.replace('-', '/').replace('_', ' '))
-    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
-    petition = Petition.objects.get(
-        parl_id=parl_id_restored, legislative_period=llp)
+    llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+    petition = get_object_or_404(Petition, parl_id=parl_id_restored, legislative_period=llp)
     context = {'petition': petition, 'signatures':
                petition.petition_signatures.order_by('-date').all()}
     return render(request, 'petition_signatures.html', context)
 
 
 def keyword_detail(request, keyword):
-    keyword = Keyword.objects.get(_title_urlsafe=keyword)
+    keyword = get_object_or_404(Keyword, _title_urlsafe=keyword)
     laws = keyword.laws \
         .annotate(last_update=Max('steps__date')) \
         .order_by('-last_update')
@@ -290,12 +284,8 @@ def keyword_detail(request, keyword):
 
 
 def debate_detail(request, ggp, debate_type, number):
-    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
-    debate = Debate.objects.get(
-        debate_type=debate_type,
-        llp=llp,
-        nr=number
-    )
+    llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+    debate = get_object_or_404(Debate, debate_type=debate_type, llp=llp, nr=number)
     statements = debate.debate_statements \
             .order_by('index') \
             .exclude(speaker_role__isnull=True) \
@@ -312,11 +302,8 @@ def debate_detail(request, ggp, debate_type, number):
 
 
 def committee_detail(request, ggp, parl_id):
-    llp = LegislativePeriod.objects.get(roman_numeral=ggp)
-    committee = Comittee.objects.get(
-        legislative_period=llp,
-        parl_id=parl_id
-    )
+    llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+    committee = get_object_or_404(Comittee, legislative_period=llp, parl_id=parl_id)
     members = Person.objects \
             .filter(comittee_memberships__comittee=committee, comittee_memberships__date_to__isnull=True) \
             .order_by('reversed_name') \
@@ -331,13 +318,12 @@ def _ensure_ggp_is_set(request, ggp_roman_numeral=None):
     """Make sure a valid GGP is set as session var and set the current one if
     it isn't. Return the selected GGP's roman numeral."""
     if ggp_roman_numeral is not None:
-        llp = LegislativePeriod.objects.get(roman_numeral=ggp_roman_numeral)
+        llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp_roman_numeral)
         request.session['ggp_roman_numeral'] = llp.roman_numeral
         request.session['ggp_facet_repr'] = llp.facet_repr
     elif 'ggp_roman_numeral' not in request.session or request.session['ggp_roman_numeral'] is None:
         llp = LegislativePeriod.objects.get_current()
         request.session['ggp_roman_numeral'] = llp.roman_numeral
         request.session['ggp_facet_repr'] = llp.facet_repr
-    llp = LegislativePeriod.objects.get(
-        roman_numeral=request.session['ggp_roman_numeral'])
+    llp = get_object_or_404(LegislativePeriod, roman_numeral=request.session['ggp_roman_numeral'])
     return llp
