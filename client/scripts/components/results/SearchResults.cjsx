@@ -1,6 +1,8 @@
 React = require 'react'
 SubscriptionModalActions = require '../../actions/SubscriptionModalActions.coffee'
 SearchResultsRow = require './SearchResultsRow.cjsx'
+Pagination = require './Pagination.cjsx'
+ResultsPreview = require '../anysearch/ResultsPreview.cjsx'
 _ = require 'underscore'
 classnames = require 'classnames'
 
@@ -55,7 +57,13 @@ SearchResults = React.createClass
         <a href="#" className={htmlClassnames}
           onClick={@_open_subscription_modal}>Benachrichtigung aktivieren</a>
       </div>
+      <p><ResultsPreview result_count={@props.pagination.offset} /></p>
       {search_results}
+      <Pagination
+        offset={@props.pagination.offset}
+        items_per_page={@props.pagination.items_per_page}
+        max_items={@props.pagination.max_items}
+      />
     </div>
 
 module.exports = SearchResults

@@ -7,6 +7,7 @@ SubscriptionModalStore = require './stores/SubscriptionModalStore.coffee'
 SubscriptionModalActions = require './actions/SubscriptionModalActions.coffee'
 AnysearchStore = require './stores/AnysearchStore.coffee'
 AnysearchActions = require './actions/AnysearchActions.coffee'
+AppConstants = require './constants/AppConstants.coffee'
 $ = require 'jquery'
 _ = require 'underscore'
 require './utils/csrf_token.coffee'
@@ -104,6 +105,10 @@ $(document).ready( () ->
           subscription_url: AnysearchStore.get_subscription_url()
           search_ui_url: AnysearchStore.get_search_ui_url()
           subscription_title: AnysearchStore.get_subscription_title()
+          pagination:
+            offset: AnysearchStore.get_pagination_offset()
+            items_per_page: AppConstants.PAGINATION_ITEMS_PER_PAGE
+            max_items: AnysearchStore.get_result_count()
         }),
         content_container
       )

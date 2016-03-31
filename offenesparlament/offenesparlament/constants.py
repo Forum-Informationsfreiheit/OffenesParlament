@@ -31,7 +31,7 @@ class EmailController():
     # Get an instance of a logger
     logger = logging.getLogger("EmailController")
 
-    sender = 'op@offenesparlament.at'
+    sender = 'OffenesParlament <op@offenesparlament.at>'
     fail_silently = False
 
     @classmethod
