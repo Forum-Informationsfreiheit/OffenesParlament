@@ -453,7 +453,7 @@ class InquiriesSpider(BaseSpider):
         log.msg(logtext, level=log.INFO)
 
         inquiry_item.response = inquiryresponse_item
-        inquiry_item.status = 'closed'
+        inquiry_item.status = 'response_received'
         inquiry_item.save()
 
         return

@@ -360,6 +360,8 @@ class Law(Timestamped, ParlIDMixIn):
             return 'abgelehnt'
         elif self.status.startswith(u'Zurückgezogen'):
             return 'zurückgezogen'
+        elif self.status=='response_received':
+            return 'beantwortet'
         else:
             return 'offen'
 
