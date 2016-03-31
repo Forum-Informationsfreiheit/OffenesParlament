@@ -164,6 +164,9 @@ class InquiriesSpider(BaseSpider):
             }
         )
 
+        if inquiry_created:
+            inquiry_item.status = 'offen'
+
         # Attach foreign keys
         inquiry_item.keywords = self.parse_keywords(response)
         inquiry_item.documents = self.parse_docs(response)
@@ -450,6 +453,7 @@ class InquiriesSpider(BaseSpider):
         log.msg(logtext, level=log.INFO)
 
         inquiry_item.response = inquiryresponse_item
+        inquiry_item.status = 'closed'
         inquiry_item.save()
 
         return
