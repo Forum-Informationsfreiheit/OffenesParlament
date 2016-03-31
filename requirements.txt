@@ -31,7 +31,7 @@ django-bootstrap-breadcrumbs
 django-import-export
 django-grappelli==2.6.5
 django-haystack==2.4.0
-elasticsearch==1.6.0
+elasticsearch==1.7.0
 xxhash==0.4.3
 requests==2.8.1
 django-jsonify==0.3.0
