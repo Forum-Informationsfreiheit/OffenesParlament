@@ -3,7 +3,6 @@
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
   {{ block.super }}
-  {% breadcrumb "Bürgerinitiativen & Petitionen" "petition_list" %}
   {% breadcrumb law.short_title "petition_detail" %}
 {% endblock %}
 

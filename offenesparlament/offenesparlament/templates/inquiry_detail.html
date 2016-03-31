@@ -5,7 +5,6 @@
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
   {{ block.super }}
-  {% breadcrumb "Anfragen & Beantwortungen" "laws_list" %}
   {% breadcrumb inquiry.short_title "gesetz_detail" %}
 {% endblock %}
 
@@ -162,5 +161,8 @@
   </table>
 </div>
 
-
+{% load jsonify %}
+<script>
+  var OFFPARL_DATA_SEARCH_TYPE = 'Gesetze';
+</script>
 {% endblock %}
