@@ -179,7 +179,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
 class DebateIndex(indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
         'all': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements', 'internal_link'],
-        'list': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
+        'list': ['category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
     }
 
     text = indexes.CharField(document=True, use_template=True)

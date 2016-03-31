@@ -2,3 +2,9 @@
 {{ object.title }}
 {{ object.debate_type }}
 {{ object.nr }}
+
+Statements:
+
+{% for st in object.statements_full_text %}
+{{ st.7 }}: {{ st.8}}:
+{% endfor %}
