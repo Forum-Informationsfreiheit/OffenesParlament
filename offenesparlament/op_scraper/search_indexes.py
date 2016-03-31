@@ -21,7 +21,17 @@ def extract_json_fields(result, type):
     return result
 
 
-class PersonIndex(indexes.SearchIndex, indexes.Indexable):
+class BaseIndex(object):
+    pass
+
+    # # Uncomment the following to limit the amount of objects indexed for
+    # # debug reasons (it be much faster that way)
+    # def build_queryset(self, start_date=None, end_date=None, using=None):
+    #     "Only index a random 100 Objects"
+    #     return self.get_model().objects.all()[:10]
+
+
+class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
         'all': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements', 'inquiries_sent', 'inquiries_received', 'inquiries_answered', 'comittee_memberships'],
         'list': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric'],
@@ -67,7 +77,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
         try:
             print u"Indexing {}".format(obj.full_name)
         except:
-            #some unicode shit here
+            # some unicode shit here
             pass
         return "Person"
 
@@ -117,7 +127,7 @@ class PersonIndex(indexes.SearchIndex, indexes.Indexable):
         return Person
 
 
-class LawIndex(indexes.SearchIndex, indexes.Indexable):
+class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     FIELDSETS = {
         'all': ['text', 'parl_id', 'ts', 'internal_link', 'title', 'description', 'category', 'llps', 'llps_numeric', 'steps', 'opinions', 'documents', 'keywords'],
@@ -176,7 +186,7 @@ class LawIndex(indexes.SearchIndex, indexes.Indexable):
         return Law
 
 
-class DebateIndex(indexes.SearchIndex, indexes.Indexable):
+class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
         'all': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements', 'internal_link'],
         'list': ['category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
@@ -207,7 +217,7 @@ class DebateIndex(indexes.SearchIndex, indexes.Indexable):
         try:
             print u"Indexing {}".format(obj.title)
         except:
-            #some unicode shit here
+            # some unicode shit here
             pass
         return "Debatte"
 
