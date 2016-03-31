@@ -6,7 +6,7 @@
     Hallo,
   </p>
   <p>
-    jemand hat auf <a href="https://www.offenesparlament.at">offenesparlament.at</a> diese E-Mail-Adresse für regelmäßige Benachrichtigungen eingetragen.
+    jemand hat auf <a href="https://offenesparlament.at">offenesparlament.at</a> diese E-Mail-Adresse für regelmäßige Benachrichtigungen eingetragen.
   </p>
   <p>
     Um Ihre E-Mail-Adresse zu bestätigen und diese Benachrichtigungen zu aktivieren, klicken Sie bitte auf folgenden Button oder kopieren Sie diesen Link in die Adresszeile Ihres Browsers: <a href="{{ verification_url }}">{{ verification_url }}</a>
