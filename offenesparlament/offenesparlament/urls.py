@@ -34,6 +34,7 @@ urlpatterns = patterns(
     url(r'^petitionen/(?P<ggp>[XVIMCD]{1,})/$', base_views.petition_list_with_ggp, name='petition_list_with_ggp'),
     url(r'^petitionen/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})/$',
         base_views.petition_detail, name='petition_detail'),
+    url(r'^petitionen/(?P<parl_id>.{1,60})/$', base_views.petition_detail, name='petition_detail'),
     url(r'^signatures/petitionen/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})/$',
         base_views.petition_signatures, name='petition_signatures'),
     url(r'^generic_email/$', base_views.generic_email, name='generic_email'),

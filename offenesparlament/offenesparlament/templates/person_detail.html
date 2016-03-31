@@ -144,7 +144,7 @@
           {% for petition in petitions %}
               <tr>
                   <td class="lawlist_date">{{ petition.ts|date }}</td>
-                  <td class="lawlist_title"><a href="{{ petition.real_slug }}">{{ petition.title }}</a></td>
+                  <td class="lawlist_title"><a href="{{ petition.slug }}">{{ petition.title }}</a></td>
                   <td class="lawlist_title">{{ petition.full_signature_count }}</td>
                   <td class="lawlist_status">
                     <span class="law_status law_status_{{ petition.simple_status }}">{{ petition.simple_status }}</span>

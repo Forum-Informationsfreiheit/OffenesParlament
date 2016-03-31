@@ -12,6 +12,7 @@ from op_scraper.models import Comittee
 from op_scraper.models import ComitteeMeeting
 from django.db.models import Count, Max, Min, Q
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.urlresolvers import reverse
 
 from offenesparlament.views.search import PersonSearchView
 from op_scraper.search_indexes import extract_json_fields
@@ -240,14 +241,16 @@ def person_detail(request, parl_id, name):
 
 
 def gesetz_detail(request, parl_id, ggp=None):
-    parl_id_restored = '({})'.format(
-        parl_id.replace('-', '/').replace('_', ' '))
-    if ggp:
-        llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
-        gesetz = get_object_or_404(Law, parl_id=parl_id_restored, legislative_period=llp)
+    if ggp is None:
+        slug = '/gesetze/{}/'.format(parl_id)
     else:
-        llp = None
-        gesetz = get_object_or_404(Law, parl_id=parl_id, legislative_period=llp)
+        slug = '/gesetze/{}/{}/'.format(ggp, parl_id)
+    gesetz = get_object_or_404(Law, _slug=slug)
+    if hasattr(gesetz, 'petition'):
+        if ggp is None:
+            return redirect(reverse('petition_detail', kwargs={'parl_id': gesetz.parl_id}))
+        else:
+            return redirect(reverse('petition_detail', kwargs={'ggp': ggp, 'parl_id': gesetz.parl_id}))
     if hasattr(gesetz, 'laws'):
         return redirect('{}#vorparlamentarisch'.format(gesetz.laws.slug))
     subscription_title = u"{} ({})".format(
