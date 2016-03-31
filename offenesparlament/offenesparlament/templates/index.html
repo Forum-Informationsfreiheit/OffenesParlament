@@ -27,17 +27,17 @@
       <a href="{% url 'person_list' %}" class="homepage_teaser_item">
         <img src="{% static 'css/img/homepage_teaser_personen.svg' %}" />
         <h3>Personen</h3>
-        <p>Erfahren Sie mehr zu den handelnden Personen, ihren Initiativen und Redebeiträgen.</p>
+        <p>Erfahren Sie mehr zu den handelnden Personen, ihren Initiativen und Redebeiträgen</p>
       </a><!--
       --><a href="{% url 'laws_list' %}" class="homepage_teaser_item">
         <img src="{% static 'css/img/homepage_teaser_gesetze.svg' %}" />
         <h3>Gesetze</h3>
-        <p>Alle Verhandlungsgegenstände, Prozesse und Dokumente, sowie ihr aktueller Status.</p>
+        <p>Alle Verhandlungsgegenstände, Prozesse und Dokumente, sowie ihr aktueller Status</p>
       </a><!--
-      --><a href="{% url 'keyword_list' %}" class="homepage_teaser_item">
+      --><a href="{% url 'debate_list' %}" class="homepage_teaser_item">
         <img src="{% static 'css/img/homepage_teaser_schlagworte.svg' %}" />
-        <h3>Schlagworte</h3>
-        <p> Erkunden Sie nach Themen sortiert, was im Parlament passiert</p>
+        <h3>Debatten</h3>
+        <p>Erkunden Sie was in Sitzungen im Parlament passiert</p>
       </a>
     </div>
   </div>
@@ -58,14 +58,14 @@
       <div class="projectintro_item_border_inlay">
         <div class="projectintro_item_content">
           <h3 class="projectintro_item_icon_paperplane">Auf dem Laufenden bleiben</h3>
-          <p>Sie können Benachrichtigungen zu Suchanfragen, emen, Personen, Stichworten, Gesetzen und Prozessen Ihres Interesses anlegen – und wir geben via Email Bescheid, wenn sich etwas tut.</p>
+          <p>Sie können Benachrichtigungen zu Suchanfragen, Themen, Personen, Stichworten, Gesetzen und Prozessen Ihres Interesses anlegen – und wir geben via Email Bescheid, wenn sich etwas tut.</p>
         </div>
       </div>
     </div><!--
     --><div class="projectintro_item_inverse">
       <div class="projectintro_item_border_inlay">
         <div class="projectintro_item_content">
-          <h3 class="projectintro_item_icon_personsearch">Über uns</h3>
+          <h3 class="projectintro_item_icon_personsearch"><a href="{% url 'about' %}">Über uns</a></h3>
           <p>Dies ist ein zivilgesellschaftliches Projekt mit dem Ziel,
           die Aktivitäten des Parlaments einfacher nachvollziehbar zu
           machen. Feedback &amp; Anregungen bitte an

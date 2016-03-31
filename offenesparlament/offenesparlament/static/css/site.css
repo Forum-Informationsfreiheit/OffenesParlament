@@ -388,6 +388,10 @@ ul.pagination {
       margin-bottom: 0; }
     .homepage_teasers a.homepage_teaser_item p {
       line-height: 180%; }
+    .homepage_teasers a.homepage_teaser_item h3, .homepage_teasers a.homepage_teaser_item p {
+      opacity: 1; }
+    .homepage_teasers a.homepage_teaser_item:hover h3, .homepage_teasers a.homepage_teaser_item:hover p {
+      opacity: 0.8; }
 
 .projectintro {
   background-color: #f55f57; }
