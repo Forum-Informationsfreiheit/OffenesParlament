@@ -152,6 +152,43 @@
     </div>
   {% endif %}
 
+  {% if inquiries_sent %}
+    <div class="section">
+      <h2>Parlamentarische Anfragen</h2>
+      <table class="limited_table">
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Titel</th>
+            <th>EmpfängerIn</th>
+        </thead>
+        <tbody>
+          {% for inq in inquiries_sent.all %}
+          <tr>
+            <td>
+                {{inq.first_date}}
+            </td>
+            <td>
+              {% if inq.law_ptr.legislative_period %}
+                <a href="/gesetze/{{inq.llp_roman}}/{{inq.parl_id_urlsafe}}/">{{inq.title}}</a>
+              {% else %}
+                <a href="/gesetze/{{inq.parl_id_urlsafe}}/">{{inq.title}}</a>
+              {% endif %}
+            </td>
+            <td>
+              {% if inq.receiver.slug %}
+                <a href="{{ inq.receiver.slug }}">{{ inq.receiver.full_name }}</a>
+              {% else %}
+                {{ inq.receiver.full_name }}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
   {% load jsonify %}
   <script>
     var OFFPARL_DATA_SEARCH_TYPE = 'Personen';
