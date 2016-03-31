@@ -63,7 +63,7 @@ def petition_detail(request, parl_id, ggp=None):
         parl_id.replace('-', '/').replace('_', ' '))
     if ggp:
         llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
-        petition = get_object_or_404(Petition, parl_id=parl_id_restored, legislative_period=llp)
+        petition = get_object_or_404(Petition, parl_id=parl_id, legislative_period=llp)
     else:
         llp = None
         petition = get_object_or_404(Petition, parl_id=parl_id, legislative_period=llp)
