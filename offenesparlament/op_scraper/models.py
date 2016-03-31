@@ -360,7 +360,7 @@ class Law(Timestamped, ParlIDMixIn):
             return 'abgelehnt'
         elif self.status.startswith(u'Zurückgezogen'):
             return 'zurückgezogen'
-        elif self.status=='response_received':
+        elif self.status == 'response_received':
             return 'beantwortet'
         else:
             return 'offen'
@@ -543,10 +543,10 @@ class Person(Timestamped, ParlIDMixIn):
 
     @property
     def llps(self):
-        return [
+        return list(set([
             m.legislative_period
             for m in self.mandates.order_by('-legislative_period__end_date')
-            if m.legislative_period]
+            if m.legislative_period]))
 
     @property
     def llps_roman(self):
@@ -1123,7 +1123,6 @@ class Debate(models.Model):
             return [self.llp.number]
         else:
             return []
-
 
     def __unicode__(self):
         return self.title

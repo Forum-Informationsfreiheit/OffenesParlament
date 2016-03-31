@@ -6,6 +6,8 @@ from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
 
+from django.db.models import Q
+
 from urllib import urlencode
 
 from parlament.settings import BASE_HOST
@@ -20,6 +22,7 @@ from op_scraper.models import Person
 from op_scraper.models import Function
 from op_scraper.models import Mandate
 from op_scraper.models import Administration
+from op_scraper.models import LegislativePeriod
 
 
 class AdministrationsSpider(PersonsSpider):
@@ -110,6 +113,33 @@ class AdministrationsSpider(PersonsSpider):
                 mandate_item, m_created = Mandate.objects.update_or_create(
                     function=function_item,
                     administration=administration_item)
+                # Let's try to find a matching LLP for this administration so we can
+                # add it to this mandate
+                try:
+                    llps = LegislativePeriod.objects\
+                        .filter(
+                            start_date__lte=mandate[
+                                'administration']['end_date']
+                            or datetime.date.today())\
+                        .filter(
+                            Q(end_date__isnull=True) | Q(
+                                end_date__gte=mandate[
+                                    'administration']['start_date']
+                            ))\
+                        .all()
+                    if llps:
+                        # always pick the latest, in case the adminstration
+                        # overlapped
+                        mandate_item.legislative_period = llps[
+                            llps.count() - 1]
+                        mandate_item.save()
+                except Exception as e:
+                    # # nope, that didn't work, but nevermind #passiveaggressivecomment
+                    # print e.message
+                    # import ipdb
+                    # ipdb.set_trace()
+                    pass
+
             except:
                 self.logger.info(
                     red("Error saving Mandate {} ({})".format(function_item, administration_item)))
