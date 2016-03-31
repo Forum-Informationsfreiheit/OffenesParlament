@@ -9,8 +9,8 @@
 {% block title %}Abos verwalten{% endblock %}
 
 {% block content %}
-{% if user.email %}
-  <h1>Benachrichtigungen für <span class="abo_email">{{ user.email }}</span></h1>
+{% if email %}
+  <h1>Benachrichtigungen für <span class="abo_email">{{ email }}</span></h1>
 {% else %}
   <h1>Login</h1>
 {% endif %}

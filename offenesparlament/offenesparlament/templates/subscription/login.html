@@ -13,6 +13,12 @@
 
   <form action="" method="post" class="abo_login">
     {% csrf_token %}
+
+    <div class="message">
+      {{ form.message.errors }}
+      {{ form.message }}
+    </div>
+
     {{ form.email.errors }}
     {{ form.email }}<!--
     --><input type="submit" value="Abos verwalten" class="button">

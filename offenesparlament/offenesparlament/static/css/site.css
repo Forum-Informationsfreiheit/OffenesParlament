@@ -479,6 +479,11 @@ form.abo_login {
   form.abo_login p.hint {
     color: #7f7f7f;
     text-align: center; }
+  form.abo_login .message {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0.01; }
 
 h1 .abo_email {
   color: #f55f57; }

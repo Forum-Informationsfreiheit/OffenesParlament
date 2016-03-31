@@ -1,0 +1,21 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Abos verwalten" "subscriptions" %}
+{% endblock %}
+
+{% block title %}Abos verwalten{% endblock %}
+
+{% block content %}
+
+  <h1>Login</h1>
+
+  <p class="explanation">
+    {% if message %}
+      {{ message }}
+    {% endif %}
+  </p>
+
+{% endblock %}
