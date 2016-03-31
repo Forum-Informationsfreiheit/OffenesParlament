@@ -31,10 +31,21 @@ def login(request):
         form = SubscriptionsLoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            return redirect('list_subscriptions', email=email)
+            if User.objects.filter(email=email).exists() and len(form.cleaned_data['message']) == 0:  #honey trap was not filled out
+                user = User.objects.get(email=email)
+                list_url = request.build_absolute_uri(
+                    reverse(
+                        'list_subscriptions',
+                        kwargs={
+                            'email': email,
+                            'key': user.verification.verification_hash}
+                    )
+                )
+                email_sent = EMAIL.SUBSCRIPTION_LIST.send(email, {'list_url': list_url})
+            message = MESSAGES.EMAIL.SUBSCRIPTION_LINK_SENT.format(email)
+            return render(request, 'subscription/login_attempted.html', {'message': message})
     else:
         form = SubscriptionsLoginForm()
-
     return render(request, 'subscription/login.html', {'form': form})
 
 
@@ -71,28 +82,7 @@ def list(request, email, key=None):
     message = ""
     if User.objects.filter(email=email).exists():
         user = User.objects.get(email=email)
-        if not key:
-            list_url = request.build_absolute_uri(
-                reverse(
-                    'list_subscriptions',
-                    kwargs={
-                        'email': email,
-                        'key': user.verification.verification_hash}
-                )
-            )
-
-            email_sent = EMAIL.SUBSCRIPTION_LIST.send(
-                email, {'list_url': list_url})
-            if email_sent:
-                message = MESSAGES.EMAIL.SUBSCRIPTION_LINK_SENT.format(email)
-            else:
-                message = MESSAGES.EMAIL.ERROR_SENDING_EMAIL.format(email)
-
-            return render(request, 'subscription/list_subscriptions.html', {'message': message})
-        elif user is not None and user.verification.verification_hash != key:
-            message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
-            return render(request, 'subscription/list_subscriptions.html', {'message': message})
-        else:
+        if key is not None and user.verification.verification_hash == key:
             subscriptions = user.subscription_set.filter(verification__verified=True) \
                     .select_related('content')
             return render(
@@ -100,12 +90,15 @@ def list(request, email, key=None):
                 'subscription/list_subscriptions.html',
                 {
                     'message': message,
-                    'user': user,
+                    'email': email,
                     'subscriptions': subscriptions
                 }
             )
+        else:
+            message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
+            return render(request, 'subscription/list_subscriptions.html', {'message': message})
     else:
-        message = MESSAGES.EMAIL.SUBSCRIPTION_LINK_SENT.format(email)
+        message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
         return render(request, 'subscription/list_subscriptions.html', {'message': message})
 
 

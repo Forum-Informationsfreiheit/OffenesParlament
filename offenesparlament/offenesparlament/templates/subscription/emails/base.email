@@ -15,7 +15,7 @@
   <tr>
     <td></td>
     <td class="header_bar container">
-      <img src="https://www.offenesparlament.at/static/css/img/offparl_logo.png" class="logo" width="200" height="24"/>
+      <img src="https://offenesparlament.at/static/css/img/offparl_logo.png" class="logo" width="200" height="24"/>
     </td>
     <td></td>
   </tr>
@@ -51,9 +51,9 @@
         <table>
           <tr>
             <td align="center">
-              <p><a href="https://www.offenesparlament.at{{ manage_subscriptions_link }}"><unsubscribe>Abos verwalten</unsubscribe></a>
+              <p><a href="https://offenesparlament.at{{ manage_subscriptions_link }}"><unsubscribe>Abos verwalten</unsubscribe></a>
               <p class="secondary">
-                <a href="https://www.offenesparlament.at">offenesparlament.at</a> ist ein Projekt des Forum Informationsfreiheit und wird durch
+                <a href="https://offenesparlament.at">offenesparlament.at</a> ist ein Projekt des Forum Informationsfreiheit und wird durch
                 die <a href="https://www.netidee.at/netidee-home/">Internet Foundation Austria (IPA) / netidee.at</a> gefördert.
               </p>
             </td>
