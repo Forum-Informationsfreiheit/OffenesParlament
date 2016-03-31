@@ -1021,7 +1021,7 @@ table {
 .law_status_offen {
   background-image: url("img/icons/status_open.svg"); }
 
-.law_status_beschlossen {
+.law_status_beschlossen, .law_status_beantwortet {
   color: #40925b;
   background-image: url("img/icons/status_completed.svg"); }
 
