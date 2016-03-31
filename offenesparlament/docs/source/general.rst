@@ -19,7 +19,7 @@ Frontend Code
 -------------
 
 All sources for the frontend code (JS and CSS) are located in
-``offenesparlament/offenesparlament/assets`` and split between ``scripts`` and
+``client/`` and split between ``scripts`` and
 ``styles``. We use CoffeeScript and the React framework for client code. To
 generate JS and CSS from the sources we use grunt (``Gruntfile.coffee`` is in
 the root dir).

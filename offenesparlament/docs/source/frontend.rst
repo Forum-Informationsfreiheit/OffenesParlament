@@ -13,7 +13,7 @@ Tech
 Building
 ~~~~~~~~
 
-We use grunt to build our frontend code. It is generated from the sources in ``offenesparlament/offenesparlament/assets/`` and is output to ``offenesparlament/offenesparlament/static/``.
+We use grunt to build our frontend code. It is generated from the sources in ``client/`` and is output to ``offenesparlament/offenesparlament/static/``.
 
 We commit all generated files to git.
 
