@@ -21,7 +21,7 @@ Pagination = React.createClass
     return @props.offset + @props.items_per_page < @props.max_items
 
   _get_page_count: () ->
-    return Math.ceil(@props.max_items / @props.items_per_page)
+    return Math.max(Math.ceil(@props.max_items / @props.items_per_page), 1)
 
   _get_current_page: () ->
     return Math.round(@props.offset / @props.items_per_page) + 1

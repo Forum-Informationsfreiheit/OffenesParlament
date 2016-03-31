@@ -906,7 +906,7 @@ Pagination = React.createClass({displayName: "Pagination",
     return this.props.offset + this.props.items_per_page < this.props.max_items;
   },
   _get_page_count: function() {
-    return Math.ceil(this.props.max_items / this.props.items_per_page);
+    return Math.max(Math.ceil(this.props.max_items / this.props.items_per_page), 1);
   },
   _get_current_page: function() {
     return Math.round(this.props.offset / this.props.items_per_page) + 1;
