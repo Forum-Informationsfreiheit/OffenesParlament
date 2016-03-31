@@ -226,8 +226,8 @@ class LawsInitiativesSpider(BaseSpider):
                     title=step['title']['text'],
                     sortkey=step['sortkey'],
                     date=step['date'],
-                    protocol_url=step['protocol_url'][
-                        0] if step['protocol_url'] else u'',
+                    protocol_url=step['protocol_url']
+                        if step['protocol_url'] else u'',
                     law=law_item,
                     phase=phase_item,
                     source_link=response.url
