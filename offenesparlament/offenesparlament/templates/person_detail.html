@@ -55,7 +55,11 @@
         {% if not comm.date_to %}
           <li>
             {{person.full_name}} ist derzeit <b>{{ comm.function }}</b> des
-            <a href="{% url 'committee_detail' ggp=comm.comittee.legislative_period.roman_numeral parl_id=comm.comittee.parl_id %}">{{ comm.comittee.name }}</a>
+            {% if comm.comittee.legislative_period %}
+              <a href="{% url 'committee_detail' ggp=comm.comittee.legislative_period.roman_numeral parl_id=comm.comittee.parl_id %}">{{ comm.comittee.name }}</a>
+            {% else %}
+              <a href="{% url 'committee_detail' parl_id=comm.comittee.parl_id %}">{{ comm.comittee.name }}</a>
+            {% endif %}
           </li>
         {% endif %}
         {% endfor %}

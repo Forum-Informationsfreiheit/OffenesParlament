@@ -305,8 +305,11 @@ def debate_detail(request, ggp, debate_type, number):
     return render(request, 'debate_detail.html', context)
 
 
-def committee_detail(request, ggp, parl_id):
-    llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+def committee_detail(request, parl_id, ggp=None):
+    if ggp is not None:
+        llp = get_object_or_404(LegislativePeriod, roman_numeral=ggp)
+    else:
+        llp = None
     committee = get_object_or_404(Comittee, legislative_period=llp, parl_id=parl_id)
     members = Person.objects \
             .filter(comittee_memberships__comittee=committee, comittee_memberships__date_to__isnull=True) \

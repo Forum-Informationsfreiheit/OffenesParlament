@@ -41,6 +41,7 @@ urlpatterns = patterns(
     url(r'^debatten/(?P<ggp>[XVIMCD]{1,})/$', base_views.debate_list_with_ggp, name='debate_list_with_ggp'),
     url(r'^debatten/(?P<ggp>[XVIMCD]{1,})/(?P<debate_type>[NBR]{2})/(?P<number>\d+)$', base_views.debate_detail, name='debate_detail'),
     url(r'^ausschuss/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})$', base_views.committee_detail, name='committee_detail'),
+    url(r'^ausschuss/(?P<parl_id>.{1,60})$', base_views.committee_detail, name='committee_detail'),
 
     url(r'^suche/(.*)/?$', base_views.generic_search_view, name='generic_search_view'),
 
