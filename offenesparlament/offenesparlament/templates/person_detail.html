@@ -169,10 +169,10 @@
                 {{inq.first_date}}
             </td>
             <td>
-              {% if inq.law_ptr.legislative_period %}
-                <a href="/gesetze/{{inq.llp_roman}}/{{inq.parl_id_urlsafe}}/">{{inq.title}}</a>
+              {% if inq.legislative_period %}
+                <a href="{% url 'gesetz_detail' ggp=inq.llp_roman parl_id=inq.parl_id_urlsafe %}">{{inq.title}}</a>
               {% else %}
-                <a href="/gesetze/{{inq.parl_id_urlsafe}}/">{{inq.title}}</a>
+                <a href="{% url 'gesetz_detail' parl_id=inq.parl_id_urlsafe %}">{{inq.title}}</a>
               {% endif %}
             </td>
             <td>

@@ -223,7 +223,9 @@ def person_detail(request, parl_id, name):
 
     # add inquiries_sent here
     inquiries_sent = person.inquiries_sent \
-        .annotate(first_date=Min('steps__date')).order_by('-first_date')
+        .annotate(first_date=Min('steps__date')).order_by('-first_date') \
+        .select_related('legislative_period') \
+        .select_related('receiver')
     context = {
         'person': person,
         'statement_list': statement_list,
