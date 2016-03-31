@@ -162,5 +162,5 @@ https://lists.metalab.at/mailman/listinfo/offenesparlament_at
 
 ## License
 
-you may find the license for the source code - excepting only some icons
-- in the `LICENSE` file
+you may find the license for the source code - excepting only some icons - 
+in the `LICENSE` file
