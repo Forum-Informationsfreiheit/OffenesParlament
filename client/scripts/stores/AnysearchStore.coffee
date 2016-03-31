@@ -88,7 +88,6 @@ _change_term_category = (id, category) ->
     term.category = category
     _pad_terms_with_helpers()
     _update_facets(id)
-    _debounced_update_search_results()
     _process_edit()
 
 _parse_term_value = (value, category) ->
