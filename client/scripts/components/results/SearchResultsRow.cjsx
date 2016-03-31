@@ -16,6 +16,8 @@ SearchResultsRow = React.createClass
 
   render: ->
     date_string = string_utils.get_date(@props.date)
+    if date_string == '01.01.1970'
+      date_string = ''
     <tr>
       <td>{date_string}</td>
       <td><a href={@props.url}>{@props.title}</a></td>

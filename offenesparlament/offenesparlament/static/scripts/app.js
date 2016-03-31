@@ -1072,6 +1072,9 @@ SearchResultsRow = React.createClass({displayName: "SearchResultsRow",
   render: function() {
     var date_string;
     date_string = string_utils.get_date(this.props.date);
+    if (date_string === '01.01.1970') {
+      date_string = '';
+    }
     return React.createElement("tr", null, React.createElement("td", null, date_string), React.createElement("td", null, React.createElement("a", {
       "href": this.props.url
     }, this.props.title)), React.createElement("td", null, this.props.status));
