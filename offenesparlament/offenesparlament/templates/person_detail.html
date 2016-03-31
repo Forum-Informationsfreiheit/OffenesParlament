@@ -80,6 +80,7 @@
 
   {% include 'partials/keywordbox.html' with keywords=keywords tooltip="Zu diesen Schlagworten hatte die/der Parlamentarier_in in den letzten 4 Wochen am meisten Aktivität" %}
 
+  {% if statement_list.all %}
   <div class="section">
     <h2>Redebeiträge</h2>
     <table class="limited_table">
@@ -114,11 +115,14 @@
       </tbody>
     </table>
   </div>
+  {% endif %}
 
+  {% if laws %}
   <div class="section">
     <h2>Verhandlungsgegenstände</h2>
     {% include 'partials/lawlist.html' with laws=laws limited_table=True %}
   </div>
+  {% endif %}
 
   {% if petitions %}
     <div class="section">
