@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.cache import never_cache
 from op_scraper.models import User
 from op_scraper.models import SubscribedContent
 from op_scraper.models import Subscription
@@ -26,6 +26,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@never_cache
 def login(request):
     if request.method == 'POST':
         form = SubscriptionsLoginForm(request.POST)
@@ -49,6 +50,7 @@ def login(request):
     return render(request, 'subscription/login.html', {'form': form})
 
 
+@never_cache
 def verify(request, email, key):
     """
     Verify a user's subscription for the given email
@@ -75,6 +77,7 @@ def verify(request, email, key):
     return render(request, 'subscription/verification.html', {'message': message})
 
 
+@never_cache
 def list(request, email, key=None):
     """
     List a user's subscriptions or (re-)send the email with the hashkey
@@ -102,6 +105,7 @@ def list(request, email, key=None):
         return render(request, 'subscription/list_subscriptions.html', {'message': message})
 
 
+@never_cache
 def unsubscribe(request, email, key):
     """
     Unsubscribe a certain subscription
@@ -145,7 +149,6 @@ def unsubscribe(request, email, key):
         {'message': message})
 
 
-@ensure_csrf_cookie
 def subscribe(request):
     """
     Subcribe the given email to the given URL.
