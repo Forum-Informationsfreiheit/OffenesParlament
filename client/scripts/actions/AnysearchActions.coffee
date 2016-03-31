@@ -65,5 +65,11 @@ AnysearchActions =
       actionType: AnysearchConstants.SEARCHBAR_FORCE_LOCATION_CHANGE
     })
 
+  updatePaginationOffset: (offset) ->
+    AppDispatcher.dispatch({
+      actionType: AnysearchConstants.UPDATE_PAGINATION_OFFSET
+      offset: offset
+    })
+
 
 module.exports = AnysearchActions

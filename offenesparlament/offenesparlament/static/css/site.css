@@ -198,6 +198,50 @@
   margin: 50px 0 0 25px;
   vertical-align: middle; }
 
+ul.pagination {
+  list-style: none;
+  text-align: right;
+  margin: 50px 0 0 0;
+  display: block; }
+  ul.pagination li {
+    display: inline-block;
+    margin: 7px 0 0 7px;
+    padding: 0;
+    vertical-align: top; }
+    ul.pagination li a {
+      padding: 0;
+      border: 1px solid #e5e5e5;
+      color: black;
+      display: block;
+      line-height: 40px;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 40px;
+      width: 40px;
+      background-size: 15px;
+      box-sizing: border-box;
+      text-align: center; }
+      ul.pagination li a:hover {
+        color: white;
+        background-color: black; }
+      ul.pagination li a.disabled {
+        opacity: 0.5;
+        cursor: default; }
+        ul.pagination li a.disabled:hover {
+          color: black;
+          background-color: white; }
+      ul.pagination li a.back {
+        background-image: url("img/icons/arrow_raw_left.svg"); }
+        ul.pagination li a.back:hover {
+          background-image: url("img/icons/arrow_raw_left_white.svg"); }
+      ul.pagination li a.forward {
+        background-image: url("img/icons/arrow_raw_right.svg"); }
+        ul.pagination li a.forward:hover {
+          background-image: url("img/icons/arrow_raw_right_white.svg"); }
+    ul.pagination li.current a {
+      color: white;
+      background-color: black; }
+
 .inquiry_detail .leftcol, .inquiry_leftcol {
   float: left;
   display: inline-block;

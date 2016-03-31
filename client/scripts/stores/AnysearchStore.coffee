@@ -25,10 +25,13 @@ _current_search_url = ''
 _routing_active = false
 _subscription_allowed = false
 _projected_result_count = null
+_pagination_offset = 0
 
 
 _process_edit = () ->
-  if _setup_complete then _was_edited_by_user = true
+  if _setup_complete
+    _was_edited_by_user = true
+    _pagination_offset = 0
 
 _get_term = (id) ->
   return _.find(_terms, (term) -> return term.id == id)
@@ -135,7 +138,7 @@ _update_search_results = () ->
   $.ajax
     url: _get_search_api_endpoint()
     dataType: 'json'
-    data: _get_terms_as_object()
+    data: _.extend({offset: _pagination_offset}, _get_terms_as_object())
     success: (response) ->
       if response.result?
         _search_results = response.result
@@ -240,6 +243,9 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
   get_result_count: () ->
     return _projected_result_count
 
+  get_pagination_offset: () ->
+    return _pagination_offset
+
   emitChange: () ->
     this.emit(CHANGE_EVENT)
 
@@ -282,6 +288,10 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
         if not _routing_active
           _current_search_url = AnysearchStore.get_search_ui_url()
           RouterActions.changeLocation(_current_search_url)
+      when AnysearchConstants.UPDATE_PAGINATION_OFFSET
+        _pagination_offset = payload.offset
+        _debounced_update_search_results()
+        AnysearchStore.emitChange()
     new_search_url = AnysearchStore.get_search_ui_url()
     if _setup_complete and _current_search_url != new_search_url and _routing_active
       RouterActions.changeRoute(new_search_url)
