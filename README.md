@@ -158,3 +158,9 @@ to perform a simple update. For this to succeed, make sure ElasticSearch is up a
 We have a mailing list now, sign up here:
 
 https://lists.metalab.at/mailman/listinfo/offenesparlament_at
+
+
+## License
+
+you may find the license for the source code - excepting only some icons
+- in the `LICENSE` file
