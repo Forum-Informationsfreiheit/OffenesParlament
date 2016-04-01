@@ -511,6 +511,13 @@ h1 .abo_email {
     .debate_statement .debate_statement_content p {
       line-height: 170%; }
 
+.debate_speaker_list .goto_link {
+  padding-left: 20px; }
+  .debate_speaker_list .goto_link a {
+    color: #7fb7ea; }
+    .debate_speaker_list .goto_link a:hover {
+      color: #006fd5; }
+
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;

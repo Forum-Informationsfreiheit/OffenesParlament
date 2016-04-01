@@ -92,6 +92,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build_styles', ['sass:dev', 'copy:images', 'copy:fonts']
   grunt.registerTask 'clean_except_icons', [ 'clean:build', 'clean:style_images', 'clean:style_fonts', 'clean:scripts' ]
   grunt.registerTask 'icons', ['favicons:icons']
+  grunt.registerTask 'once', ['clean_except_icons', 'build_styles', 'browserify:dev']
   grunt.registerTask 'dev', ['clean_except_icons', 'build_styles', 'browserify:dev', 'watch']
   grunt.registerTask 'reloading', ['clean_except_icons', 'build_styles', 'browserify:dev', 'browserSync', 'watch']
 
