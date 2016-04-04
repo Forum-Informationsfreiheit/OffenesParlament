@@ -1,4 +1,5 @@
 from op_scraper.models import SubscribedContent, Subscription, User
+from django.conf import settings
 import json
 import pprint
 
@@ -159,8 +160,11 @@ def check_subscriptions():
 
     # Reset the content hashes for all SubscribedContent items we just
     # processed
-    # for content in SubscribedContent.objects.all():
-    #    content.reset_content_hashes()
+    if settings.DEBUG_SUBSCRIPTIONS:
+        print 'skipping content has reset, because settings.DEBUG_SUBSCRIPTIONS'
+    else:
+        for content in SubscribedContent.objects.all():
+            content.reset_content_hashes()
 
 
 def process_emails(emails_to_changesets, change_items):
