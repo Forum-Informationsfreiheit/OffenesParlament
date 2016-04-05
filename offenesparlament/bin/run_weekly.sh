@@ -28,3 +28,5 @@ eval "$CMD scrape crawl statement"
 eval "$CMD update_index op_scraper.Debate -b 100"
 eval "$CMD update_index op_scraper.Law -b 1000"
 eval "$CMD update_index op_scraper.Person"
+
+eval "$CMD check_subscriptions"
