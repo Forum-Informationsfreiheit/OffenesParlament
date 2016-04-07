@@ -24,8 +24,8 @@ def extract_json_fields(result, type):
 class BaseIndex(object):
     pass
 
-    # # Uncomment the following to limit the amount of objects indexed for
-    # # debug reasons (it be much faster that way)
+    # Uncomment the following to limit the amount of objects indexed for
+    # debug reasons (it be much faster that way)
     # def build_queryset(self, start_date=None, end_date=None, using=None):
     #     "Only index a random 100 Objects"
     #     return self.get_model().objects.all()[:10]
@@ -188,12 +188,13 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
 class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements', 'internal_link'],
-        'list': ['category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
+        'all': ['text', 'parl_id', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements', 'internal_link'],
+        'list': ['parl_id', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
     }
 
     text = indexes.CharField(document=True, use_template=True)
 
+    parl_id = indexes.CharField(model_attr='parl_id')
     date = indexes.DateTimeField(model_attr='date', faceted=True)
     title = indexes.CharField(model_attr='title')
     debate_type = indexes.CharField(model_attr='debate_type', faceted=True)

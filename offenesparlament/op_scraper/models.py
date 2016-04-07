@@ -1067,6 +1067,14 @@ class Debate(models.Model):
     _slug = models.CharField(max_length=255, default="")
 
     @property
+    def parl_id(self):
+        return u"{}_{}{}".format(
+            self.debate_type,
+            self.nr,
+            "_{}".format(self.llp.roman_numeral) if self.llp else u"",
+        )
+
+    @property
     def slug(self):
         if not self._slug:
             self._slug = reverse(

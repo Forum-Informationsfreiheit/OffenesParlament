@@ -23,18 +23,18 @@ def collect_changesets(content):
     try:
         old_hashes = content.latest_content_hashes
         cur_hashes = content.generate_content_hashes(content=cur_content)
+
+        # no changes, skip to the next one
+        if old_hashes == cur_hashes:
+            return None
+
+        old_hashes = json.loads(old_hashes)
+        cur_hashes = json.loads(cur_hashes)
+        old_content = json.loads(old_content)['result']
+        cur_content = json.loads(cur_content)['result']
     except Exception as e:
         logger.warn(e)
         return None
-
-    # no changes, skip to the next one
-    if old_hashes == cur_hashes:
-        return None
-
-    old_hashes = json.loads(old_hashes)
-    cur_hashes = json.loads(cur_hashes)
-    old_content = json.loads(old_content)['result']
-    cur_content = json.loads(cur_content)['result']
 
     old_dict = dict((item['parl_id'], item) for item in old_content)
     cur_dict = dict((item['parl_id'], item) for item in cur_content)
