@@ -183,7 +183,6 @@ class PersonsSpider(BaseSpider):
                 if mandate_item not in person_item.mandates.all():
                     changed = True
                     person_item.mandates.add(mandate_item)
-
             if changed:
                 # In case we added/modified a mandate now,
                 latest_mandate_item = person_item.get_latest_mandate()
@@ -329,9 +328,12 @@ class PersonsSpider(BaseSpider):
                     if mandate['end_date']:
                         md.end_date = mandate['end_date']
                     md.save()
-                    self.logger.info(u"Augmented mandate {} with start-/end-dates ".format(
-                        green(u"{}".format(md))
+                    self.logger.info(u"Augmented mandate {} with start-/end-dates: {} - {} ".format(
+                        green(u"{}".format(md)),
+                        md.start_date,
+                        md.end_date
                     ))
+            person_item.latest_mandate = person_item.get_latest_mandate()
 
             person_item.save()
             # Instatiate slug

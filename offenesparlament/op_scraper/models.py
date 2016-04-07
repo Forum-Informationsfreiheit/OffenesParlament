@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from datetime import date
+import datetime
 from django.db import models
 from django.utils.html import remove_tags
 from django.core.urlresolvers import reverse
@@ -571,7 +571,7 @@ class Person(Timestamped, ParlIDMixIn):
         if self.mandates:
             return max(
                 self.mandates.all(),
-                key=lambda m: m.latest_end_date() or date(3000, 1, 1))
+                key=lambda m: m.latest_end_date() or datetime.date(3000, 1, 1))
         else:
             return None
 
