@@ -530,7 +530,8 @@ class Person(Timestamped, ParlIDMixIn):
     # Relationsships
     mandates = models.ManyToManyField(Mandate)
     latest_mandate = models.ForeignKey(
-        Mandate, related_name='latest_mandate', null=True, blank=True)
+        Mandate, related_name='latest_mandate', null=True, blank=True,
+        on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return self.full_name or self.reversed_name
