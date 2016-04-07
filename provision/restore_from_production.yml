@@ -5,20 +5,19 @@
     remote_dump_path: "/tmp/"
     local_dump_path: "../ignore/offenesparlament.production_dumps/"
   tasks:
-  # - name: Dump current EEA postgresql db
-  #   shell: "pg_dump -Fc offenesparlament_at -f {{remote_dump_path}}{{ dump_file }}"
-  #   become_user: postgres
-  #   become: true
-  # - name: Fetch the SQL dump to localhost
-  #   fetch: src={{remote_dump_path}}{{ dump_file}} dest={{ local_dump_path }}
-  #   register: fetch_result
-  #   become: true
-  #   args:
-  #     flat: true
-  # - name: Delete dump on eea.production
-  #   shell: "rm {{ remote_dump_path }}{{ dump_file }}"
-  #   become: true
-
+  - name: Dump current offenesparlament postgresql db
+    shell: "pg_dump -Fc offenesparlament_at -f {{remote_dump_path}}{{ dump_file }}"
+    become_user: postgres
+    become: true
+  - name: Fetch the SQL dump to localhost
+    fetch: src={{remote_dump_path}}{{ dump_file}} dest={{ local_dump_path }}
+    register: fetch_result
+    become: true
+    args:
+      flat: true
+  - name: Delete dump on offenesparlament.production
+    shell: "rm {{ remote_dump_path }}{{ dump_file }}"
+    become: true
   - name: Drop local postgresdb
     postgresql_db: name=op state=absent
     become: true
@@ -34,8 +33,17 @@
     become: true
     become_user: postgres
     delegate_to: 127.0.0.1
-
+  - name: Create op user
+    postgresql_user: db=op name=op password=secret priv=ALL
+    become: true
+    become_user: postgres
+    delegate_to: 127.0.0.1
   - name: restore dump to local db
     local_action: shell sudo -u postgres pg_restore -d op {{ local_dump_path }}{{ dump_file }}
+  - name: Grant op user privs
+    shell: psql op -c "GRANT ALL ON ALL TABLES IN SCHEMA public to op;" && psql op -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public to op;" && psql op -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public to op;"
+    become: true
+    become_user: postgres
+    delegate_to: 127.0.0.1
   - name: Print some feedback
     debug: msg="Restored production db into test db, dump is available  at {{ local_dump_path }}{{ dump_file}}"
