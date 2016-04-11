@@ -43,6 +43,10 @@ def login(request):
                     )
                 )
                 email_sent = EMAIL.SUBSCRIPTION_LIST.send(email, {'list_url': list_url})
+                logger.info(u"Sent login email to user {} with a subscribe link of {} ".format(
+                    email,
+                    list_url
+                ))
             message = MESSAGES.EMAIL.SUBSCRIPTION_LINK_SENT.format(email)
             return render(request, 'subscription/login_attempted.html', {'message': message})
     else:
