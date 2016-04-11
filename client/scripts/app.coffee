@@ -109,6 +109,7 @@ $(document).ready( () ->
             offset: AnysearchStore.get_pagination_offset()
             items_per_page: AppConstants.PAGINATION_ITEMS_PER_PAGE
             max_items: AnysearchStore.get_result_count()
+          subscription_prohibited_reason: AnysearchStore.get_subscription_prohibited_reason()
         }),
         content_container
       )

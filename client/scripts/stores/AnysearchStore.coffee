@@ -231,19 +231,23 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     return string_utils.get_search_title(_get_terms_as_object())
 
   is_subscription_allowed: () ->
-    categories = _get_terms_as_object()
-    if categories.llps? and
-      categories.llps and
-      _.compact(_.values(_.omit(categories, ['llps', 'type']))).length > 0
-        return true
-    else
-      return false
+    return (@get_subscription_prohibited_reason() == AnysearchConstants.SUBSCRIPTION_ALLOWED)
 
   get_result_count: () ->
     return _projected_result_count
 
   get_pagination_offset: () ->
     return _pagination_offset
+
+  get_subscription_prohibited_reason: () ->
+    categories = _get_terms_as_object()
+    if categories.llps? and categories.llps
+      if _.compact(_.values(_.omit(categories, ['llps', 'type']))).length > 0
+        return AnysearchConstants.SUBSCRIPTION_ALLOWED
+      else
+        return AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NEED_MORE_FACETS
+    else
+      return AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NO_LLP
 
   emitChange: () ->
     this.emit(CHANGE_EVENT)

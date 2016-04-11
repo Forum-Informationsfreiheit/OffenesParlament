@@ -262,7 +262,8 @@ $(document).ready(function() {
           offset: AnysearchStore.get_pagination_offset(),
           items_per_page: AppConstants.PAGINATION_ITEMS_PER_PAGE,
           max_items: AnysearchStore.get_result_count()
-        }
+        },
+        subscription_prohibited_reason: AnysearchStore.get_subscription_prohibited_reason()
       }), content_container);
     }
   };
@@ -974,7 +975,7 @@ module.exports = Pagination;
 
 
 },{"../../actions/AnysearchActions.coffee":1,"classnames":27,"react":"react"}],15:[function(require,module,exports){
-var Pagination, React, ResultsPreview, SearchResults, SearchResultsRow, SubscriptionModalActions, _, classnames;
+var AnysearchConstants, Pagination, React, ResultsPreview, SearchResults, SearchResultsRow, SubscriptionModalActions, _, classnames;
 
 React = require('react');
 
@@ -990,6 +991,8 @@ _ = require('underscore');
 
 classnames = require('classnames');
 
+AnysearchConstants = require('../../constants/AnysearchConstants.coffee');
+
 SearchResults = React.createClass({displayName: "SearchResults",
   getInitialState: function() {
     return {};
@@ -1003,7 +1006,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
     }
   },
   render: function() {
-    var htmlClassnames, result_rows, search_results;
+    var htmlClassnames, result_rows, search_results, subscription_prohibited_explanation;
     htmlClassnames = classnames('button', 'button_notifications', {
       'disabled': !this.props.allow_subscription
     });
@@ -1029,6 +1032,11 @@ SearchResults = React.createClass({displayName: "SearchResults",
         "className": "explanation"
       }, "Zu Ihrer Suche wurden keine Ergebnisse gefunden.");
     }
+    if (this.props.subscription_prohibited_reason === AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NO_LLP) {
+      subscription_prohibited_explanation = React.createElement("span", null, "Bitte wählen Sie eine Gesetzgebungsperiode aus um die Suche zu abonnieren.");
+    } else if (this.props.subscription_prohibited_reason === AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NEED_MORE_FACETS) {
+      subscription_prohibited_explanation = React.createElement("span", null, "Bitte wählen Sie weitere Filter aus um die Suche zu abonnieren.");
+    }
     return React.createElement("div", null, React.createElement("div", {
       "className": "top_bar"
     }, React.createElement("ul", {
@@ -1043,7 +1051,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
       "onClick": this._open_subscription_modal
     }, "Benachrichtigung aktivieren")), React.createElement("p", null, React.createElement(ResultsPreview, {
       "result_count": this.props.pagination.offset
-    })), search_results, React.createElement(Pagination, {
+    }), " ", subscription_prohibited_explanation), search_results, React.createElement(Pagination, {
       "offset": this.props.pagination.offset,
       "items_per_page": this.props.pagination.items_per_page,
       "max_items": this.props.pagination.max_items
@@ -1054,7 +1062,7 @@ SearchResults = React.createClass({displayName: "SearchResults",
 module.exports = SearchResults;
 
 
-},{"../../actions/SubscriptionModalActions.coffee":3,"../anysearch/ResultsPreview.cjsx":8,"./Pagination.cjsx":14,"./SearchResultsRow.cjsx":16,"classnames":27,"react":"react","underscore":314}],16:[function(require,module,exports){
+},{"../../actions/SubscriptionModalActions.coffee":3,"../../constants/AnysearchConstants.coffee":17,"../anysearch/ResultsPreview.cjsx":8,"./Pagination.cjsx":14,"./SearchResultsRow.cjsx":16,"classnames":27,"react":"react","underscore":314}],16:[function(require,module,exports){
 var React, SearchResultsRow, _, string_utils;
 
 React = require('react');
@@ -1100,7 +1108,10 @@ module.exports = keyMirror({
   SEARCHBAR_SETUP_COMPLETE: null,
   SEARCHBAR_ACTIVATE_ROUTING: null,
   SEARCHBAR_FORCE_LOCATION_CHANGE: null,
-  UPDATE_PAGINATION_OFFSET: null
+  UPDATE_PAGINATION_OFFSET: null,
+  SUBSCRIPTION_PROHIBITED_REASON_NO_LLP: null,
+  SUBSCRIPTION_PROHIBITED_REASON_NEED_MORE_FACETS: null,
+  SUBSCRIPTION_ALLOWED: null
 });
 
 
@@ -1482,19 +1493,26 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
     return string_utils.get_search_title(_get_terms_as_object());
   },
   is_subscription_allowed: function() {
-    var categories;
-    categories = _get_terms_as_object();
-    if ((categories.llps != null) && categories.llps && _.compact(_.values(_.omit(categories, ['llps', 'type']))).length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.get_subscription_prohibited_reason() === AnysearchConstants.SUBSCRIPTION_ALLOWED;
   },
   get_result_count: function() {
     return _projected_result_count;
   },
   get_pagination_offset: function() {
     return _pagination_offset;
+  },
+  get_subscription_prohibited_reason: function() {
+    var categories;
+    categories = _get_terms_as_object();
+    if ((categories.llps != null) && categories.llps) {
+      if (_.compact(_.values(_.omit(categories, ['llps', 'type']))).length > 0) {
+        return AnysearchConstants.SUBSCRIPTION_ALLOWED;
+      } else {
+        return AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NEED_MORE_FACETS;
+      }
+    } else {
+      return AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NO_LLP;
+    }
   },
   emitChange: function() {
     return this.emit(CHANGE_EVENT);
@@ -1816,7 +1834,7 @@ module.exports = {
 
 },{"../actions/AnysearchActions.coffee":1,"backbone":26}],26:[function(require,module,exports){
 (function (global){
-//     Backbone.js 1.3.2
+//     Backbone.js 1.2.3
 
 //     (c) 2010-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Backbone may be freely distributed under the MIT license.
@@ -1862,7 +1880,7 @@ module.exports = {
   var slice = Array.prototype.slice;
 
   // Current version of the library. Keep in sync with `package.json`.
-  Backbone.VERSION = '1.3.2';
+  Backbone.VERSION = '1.2.3';
 
   // For Backbone's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
   // the `$` variable.
@@ -2126,7 +2144,6 @@ module.exports = {
   Events.once = function(name, callback, context) {
     // Map the event into a `{event: once}` object.
     var events = eventsApi(onceMap, {}, name, callback, _.bind(this.off, this));
-    if (typeof name === 'string' && context == null) callback = void 0;
     return this.on(events, callback, context);
   };
 
@@ -4098,7 +4115,7 @@ module.exports = invariant;
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
-var isArray = require('isarray')
+var isArray = require('is-array')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -5634,7 +5651,7 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":32,"ieee754":33,"isarray":34}],32:[function(require,module,exports){
+},{"base64-js":32,"ieee754":33,"is-array":34}],32:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -5847,10 +5864,38 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 },{}],34:[function(require,module,exports){
-var toString = {}.toString;
 
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
+/**
+ * isArray
+ */
+
+var isArray = Array.isArray;
+
+/**
+ * toString
+ */
+
+var str = Object.prototype.toString;
+
+/**
+ * Whether or not the given `val`
+ * is an array.
+ *
+ * example:
+ *
+ *        isArray([]);
+ *        // > true
+ *        isArray(arguments);
+ *        // > false
+ *        isArray('');
+ *        // > false
+ *
+ * @param {mixed} val
+ * @return {bool}
+ */
+
+module.exports = isArray || function (val) {
+  return !! val && '[object Array]' == str.call(val);
 };
 
 },{}],35:[function(require,module,exports){
@@ -19383,7 +19428,7 @@ var nextFrame = typeof window !== 'undefined' ? (function () {
 	return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
 		window.setTimeout(callback, 1000 / 60);
 	};
-})().bind(window) : undefined; // If window is undefined, then we can't define a nextFrame function
+})() : undefined; // If window is undefined, then we can't define a nextFrame function
 
 var AutosizeInput = React.createClass({
 	displayName: 'AutosizeInput',

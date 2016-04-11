@@ -5,6 +5,7 @@ Pagination = require './Pagination.cjsx'
 ResultsPreview = require '../anysearch/ResultsPreview.cjsx'
 _ = require 'underscore'
 classnames = require 'classnames'
+AnysearchConstants = require '../../constants/AnysearchConstants.coffee'
 
 
 SearchResults = React.createClass
@@ -45,6 +46,10 @@ SearchResults = React.createClass
         </table>
     else
       search_results = <p className="explanation">Zu Ihrer Suche wurden keine Ergebnisse gefunden.</p>
+    if @props.subscription_prohibited_reason == AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NO_LLP
+      subscription_prohibited_explanation = <span>Bitte wählen Sie eine Gesetzgebungsperiode aus um die Suche zu abonnieren.</span>
+    else if @props.subscription_prohibited_reason == AnysearchConstants.SUBSCRIPTION_PROHIBITED_REASON_NEED_MORE_FACETS
+      subscription_prohibited_explanation = <span>Bitte wählen Sie weitere Filter aus um die Suche zu abonnieren.</span>
     <div>
       <div className="top_bar">
         <ul className="breadcrumbs">
@@ -57,7 +62,9 @@ SearchResults = React.createClass
         <a href="#" className={htmlClassnames}
           onClick={@_open_subscription_modal}>Benachrichtigung aktivieren</a>
       </div>
-      <p><ResultsPreview result_count={@props.pagination.offset} /></p>
+      <p>
+        <ResultsPreview result_count={@props.pagination.offset} /> {subscription_prohibited_explanation}
+      </p>
       {search_results}
       <Pagination
         offset={@props.pagination.offset}
