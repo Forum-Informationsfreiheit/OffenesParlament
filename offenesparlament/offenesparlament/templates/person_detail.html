@@ -112,6 +112,9 @@
                 <a href="https://www.parlament.gv.at{{ st.protocol_url }}" class="icon_link icon_parliament" target="_blank">Redebeitrag auf parlament.gv.at</a>
               {% endif %}
               <a href="{{ st.step.law.slug }}" class="icon_link icon_law">Zum Gesetz</a>
+              <a href="{{ st.get_href_to_debate }}" class="icon_link">
+                Zum Redebeitrag
+              </a>
             </div>
           </td>
         </tr>
