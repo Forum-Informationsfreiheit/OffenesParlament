@@ -839,6 +839,19 @@ class Statement(models.Model):
     person = models.ForeignKey(Person, related_name='statements')
     step = models.ForeignKey(Step, related_name='statements')
 
+    def get_href_to_debate(self):
+        try:
+            ids = re.match('.*?/([XVIMCD]*)/.*?(NR|BR)SITZ_(\d*).*?SEITE_(\d*)\.html',
+                           self.protocol_url)
+            if ids is not None:
+                llp, debtype, debnr, pagenr = ids.groups()
+                return reverse('debate_detail', args=(llp, debtype, debnr)) \
+                       + '#statement_pg_' + str(int(pagenr))
+        except:
+            pass
+
+        return None
+
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
 
