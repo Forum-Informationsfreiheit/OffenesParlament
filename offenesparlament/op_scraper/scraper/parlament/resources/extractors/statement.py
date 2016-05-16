@@ -227,7 +227,7 @@ class DOCSECTIONS(MultiExtractor):
             res['ref_timestamp'] = current_timestamp
             res['time_start'] = min(timestamps) if len(timestamps) else None
             res['time_end'] =  max(timestamps) if len(timestamps) else None
-            res['page_start'] =  min(pages) if len(pages) else current_maxpage
+            res['page_start'] =  min(pages) - 1 if len(pages) else current_maxpage
             res['page_end'] = max(pages) if len(pages) else current_maxpage
 
             sections.append(res)
