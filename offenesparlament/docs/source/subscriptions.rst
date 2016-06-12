@@ -20,7 +20,7 @@ given user. The following functionalities have been implemented:
 * Subscription List URL reminder email sending
 * Subscription Deletion
 
-Currently not yet implemented are:
+The following things are in beta or have yet to be implemented:
 
 * Frontend Design for views
 * Actual "Changes" email based on search results
