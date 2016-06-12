@@ -1,4 +1,4 @@
-Django==1.8
+Django>=1.8.0,<1.9
 django-annoying==0.8.1
 cffi
 Jinja2==2.7.2
