@@ -301,10 +301,13 @@ class INQUIRY:
 
     class RESPONSESENDER(SingleExtractor):
         XPATH = '//*[@id="content"]/div[3]/div[2]//p[contains(text(),"Beantwortet durch:")]//a/@href'
+        XPATH_BACKUP = '//*[@id="content"]/div[3]/div[2]//p[contains(text(),"beantwortet")]/preceding-sibling::p[1]//a/@href'
 
         @classmethod
         def xt(cls, response):
             responsesender_link = response.xpath(cls.XPATH).extract()
+            if not responsesender_link:
+                response.xpath(cls.XPATH_BACKUP).extract()
             return responsesender_link[0].split('/')[-2]
 
     class RESPONSEDESCRIPTION(SingleExtractor):
