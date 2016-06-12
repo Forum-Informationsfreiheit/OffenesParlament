@@ -299,7 +299,7 @@ class INQUIRY:
                 return response_link[0]
 
     class RESPONSESENDER(SingleExtractor):
-        XPATH = '//*[@id="content"]/div[3]/div[2]/div/p[2]/a/@href'
+        XPATH = '//*[@id="content"]/div[3]/div[2]//p[contains(text(),"Beantwortet durch:")]//a/@href'
 
         @classmethod
         def xt(cls, response):

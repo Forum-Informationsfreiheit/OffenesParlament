@@ -413,9 +413,9 @@ class InquiriesSpider(BaseSpider):
         try:
             sender_object = Person.objects.get(
                 parl_id=INQUIRY.RESPONSESENDER.xt(response))
-        except:
-            log.msg(red(u'Receiver was not found in database, skipping Inquiry {} in LLP {}'.format(
-                parl_id, LLP)))
+        except Exception, e:
+            log.msg(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+                INQUIRY.RESPONSESENDER.xt(response), parl_id, LLP)))
             return
 
         # Create or update Inquiry item
