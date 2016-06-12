@@ -64,12 +64,13 @@ class INQUIRY:
                         html_url = url
                 title = Selector(text=raw_doc.extract()).xpath(
                     '//a[1]/text()').extract()[0]
-                title = title[:title.index('/')].strip()
-                docs.append({
-                    'title': title,
-                    'html_url': html_url,
-                    'pdf_url': pdf_url
-                })
+                if '/' in title: # xpath also matches schlagworte sometimes
+                    title = title[:title.index('/')].strip()
+                    docs.append({
+                        'title': title,
+                        'html_url': html_url,
+                        'pdf_url': pdf_url
+                    })
             return docs
 
     class TITLE(SingleExtractor):
