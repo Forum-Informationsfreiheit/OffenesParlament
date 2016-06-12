@@ -170,6 +170,7 @@
             <th>Datum</th>
             <th>Titel</th>
             <th>EmpfängerIn</th>
+            <th>Status</th>
         </thead>
         <tbody>
           {% for inq in inquiries_sent.all %}
@@ -191,6 +192,7 @@
                 {{ inq.receiver.full_name }}
               {% endif %}
             </td>
+            <td class="lawlist_status"><span class="law_status law_status_{{ inq.simple_status }}">{{ inq.simple_status }}</span></td>
           </tr>
           {% endfor %}
         </tbody>
