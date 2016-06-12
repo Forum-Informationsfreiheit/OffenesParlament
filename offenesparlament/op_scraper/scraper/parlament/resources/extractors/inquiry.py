@@ -307,12 +307,12 @@ class INQUIRY:
         def xt(cls, response):
             responsesender_link = response.xpath(cls.XPATH).extract()
             if not responsesender_link:
-                response.xpath(cls.XPATH_BACKUP).extract()
+                responsesender_link = response.xpath(cls.XPATH_BACKUP).extract()
             return responsesender_link[0].split('/')[-2]
 
     class RESPONSEDESCRIPTION(SingleExtractor):
         XPATH = '//*[@id="content"]/div[3]/div[2]/div/p[1]'
-        
+
         @classmethod
         def xt(cls, response):
             description = response.xpath(cls.XPATH).extract()

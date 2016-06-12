@@ -68,11 +68,10 @@ class InquiriesSpider(BaseSpider):
             except:
                 pass
 
-        self.start_urls = self.get_urls()
         self.cookies_seen = set()
         self.idlist = {}
 
-    def get_urls(self):
+    def start_requests(self):
         """
         Returns a list of URLs to scrape
         """
@@ -395,12 +394,12 @@ class InquiriesSpider(BaseSpider):
         """
         Callback function for parsing the inquiry responses
         """
-        inquiry_item = response.meta['inquiry_item']
+        inquiry_item = response.meta.get('inquiry_item',None) # allow testing single urls for parsing errors
         source_link = response.url
         parl_id = response.url.split('/')[-2]
         title = INQUIRY.TITLE.xt(response)
         description = INQUIRY.RESPONSEDESCRIPTION.xt(response)
-        LLP = inquiry_item.legislative_period
+        LLP = inquiry_item.legislative_period if inquiry_item else None
         category = INQUIRY.CATEGORY.xt(response)
 
         # Get or create Category object for the inquiry and log to screen if new
@@ -417,6 +416,10 @@ class InquiriesSpider(BaseSpider):
             log.msg(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
                 INQUIRY.RESPONSESENDER.xt(response), parl_id, LLP)))
             return
+
+        if not inquiry_item:
+            print locals()
+            return # allow testing single urls for parsing errors
 
         # Create or update Inquiry item
         inquiryresponse_item, inquiryresponse_created = InquiryResponse.objects.update_or_create(
