@@ -97,7 +97,8 @@ class InquiriesSpider(BaseSpider):
                         roman_numeral, len(rss['entries']), nrbr)
                     urls = urls + [entry['link'] for entry in rss['entries']]
         self.TOTAL_COUNTER = len(urls)
-        return urls
+        for url in urls:
+            yield self.make_requests_from_url(url)
 
     def parse(self, response):
         self.SCRAPED_COUNTER += 1
