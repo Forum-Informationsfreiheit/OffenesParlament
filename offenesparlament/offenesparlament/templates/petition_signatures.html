@@ -19,7 +19,7 @@
         {% csrf_token %}
         <input type="hidden" name="subscription_url" value="{{ request.build_absolute_uri }}search">
         <label for="email">Email: </label>
-        <input id="input_email" type="text" name="email" value=""/>
+        <input id="input_email" type="email" name="email" value=""/>
         <input type="submit" value="OK"/>
     </form>
     <!-- EXAMPLE FORM FOR SEARCH/PAGE SUBSCRIPTION -->
