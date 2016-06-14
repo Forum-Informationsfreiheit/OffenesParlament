@@ -598,6 +598,12 @@ ul {
     width: 200px;
     height: 50px;
     display: inline-block; }
+  .menu_bar .betasign {
+    display: inline-block;
+    vertical-align: bottom;
+    padding-left: 3px;
+    padding-bottom: 5px;
+    font-size: 10px; }
   .menu_bar nav .menu_responsive_sandwich {
     float: right;
     display: none;
