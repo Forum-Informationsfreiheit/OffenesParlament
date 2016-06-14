@@ -1,0 +1,76 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Über uns" "about" %}
+  {% breadcrumb "Doumentation" "docs" %}
+{% endblock %}
+
+{% block title %}Features / Benutzerdokumentation{% endblock %}
+
+{% block content %}
+  <div class="docs">
+    <h1>Features / Benutzerdokumentation</h1>
+
+    <p>OffenesParlament.at ist eine Open-Source Plattform mit dem Ziel, Daten zur Arbeit des Parlaments besser aufbereitet darzustellen. Einmal pro Tag wird die Seite des Österreichischen Parlaments nach neuen Informationen durchsucht und diese neuen Informationen auf OffenesParlament.at importiert.</p>
+    <p>Unser System unterstützt Sie bei Ihrer Arbeit mit Informationen des Parlaments durch eine verbesserte Zugänglichmachung von Informationen und eine Benachrichtigungfunktion für Personen, Aktivitäten und Suchanfragen.</p>
+    <p>Alle unsere Informationen basieren auf Daten der Seite <a class="icon_link icon_parliament" href="https://www.parlament.gv.at">https://www.parlament.gv.at</a>. Da bei der Interpretation dieser Daten Fehler passieren können, verlinken wir auf allen Seiten auf die Seite des Parlaments. Diese Links sind durch ein Parlament-Icon gekennzeichnet.</p>
+
+    <p class="docimg"><img src="{% static "css/img/docshots/parlamentslink.png" %}"></img></p>
+
+    <p class="warning">Die aktuelle Version von OffenesParlament.at ist eine offene Beta-Version. Manche Features sind noch nicht ganz zu unserer Zufriedenheit gelöst. Wir freuen uns aber trotzdem über Feedback und Bug-Reports auf dem <a href="https://github.com/forum-informationsfreiheit/offenesparlament/issues">Github-Projekt</a> oder <a href="/wir/">via Email</a>.</p>
+
+    <h2>Benachrichtigungen</h2>
+
+    <p>Wenn Sie auf dieser Seite eine Suchanfrage stellen, beinhaltet das Suchergebnis eine mit “Benachrichtigung aktivieren”-Schaltfläche. Diese ermöglicht das Abonnieren von Benachrichtigungen an eine beliebige E-Mail-Adresse.</p>
+    <p class="docimg"><img src="{% static "css/img/docshots/suchergebnisse_benachrichtigungen.png" %}"></img></p>
+
+    <p>Wenn Sie Suchbenachrichtigungen abonniert haben, bekommen Sie eine Nachricht, sobald sich an den Suchergebnissen etwas ändert. Entweder kommt ein neues Suchergebnis hinzu, oder ein Suchergebnis verändert sich, in etwa dadurch, dass neue Informationen zu Gesetzesentwürfen online gestellt wurden.</p>
+    <p>Zur Bestellung von solchen Benachrichtigungen ist die Eingabe Ihrer Email-Adresse nötig. Weiters wird Ihnen eine Email zugeschickt, um die Adresse zu bestätigen. Ein Link in dieser Email muss angeklickt werden, um die Abo-Bestellung erfolgreich zu beenden.</p>
+    <p class="docimg"><img src="{% static "css/img/docshots/benachrichtigungen_abo.png" %}"></img></p>
+
+    <p>Sollten Sie sich in Zukunft entscheiden, Ihre Abonnements beenden zu wollen, können Sie dies durch Links in allen Emails rasch und unkompliziert erledigen. Auch im untersten Bereich von OffenesParlament.at finden Sie einen Link, der Ihnen nach Eingabe und Bestätigung Ihrer Email-Adresse die Verwaltung ihrer Abonnements ermöglicht.</p>
+
+    <p>Sie können nicht nur Suchergebnisse, sondern auch Gesetzesvorhaben und Aktivitäten einzelner Parlamentarier abonnieren. Für die nahe Zukunft planen wir außerdem die Möglichkeit einer Benachrichtigung, wenn eine parlamentarische Anfrage beantwortet wurde.</p>
+    <p class="warning">Das Benachrichtigungssystem wird noch laufend optimiert, um die Emails so relevant wie möglich zu halten. <a href="/wir/">Wir freuen uns über Verbesserungsvorschläge!</a></p>
+    <h2>Inhaltstypen</h2>
+
+    <h3>Personen</h3>
+
+
+    <p>In der Sektion “Personen” finden Sie Abgeordnete zum Nationalrat und weitere in der aktuellen Legislaturperiode relevante Politiker, die Sie nach Partei, Geburtsort und Beruf filtern können. Sie können weiters nach Namen suchen.</p>
+    <p>Auf der Detailseite einer Person finden Sie ihre Stammdaten und die parlamentarischen Aktivitäten, mit denen die Person zu tun hat: Redebeiträge, Verhandlungsgegenstände und Parlamentarische Anfragen.</p>
+    <p class="docimg"><img src="{% static "css/img/docshots/personen_suche.png" %}"></img></p>
+
+    <h3>Debatten</h3>
+
+
+    <p class="docimg"><img src="{% static "css/img/docshots/debatte.png" %}"></img></p>
+    <p>Unter “Debatten” finden Sie alle Nationalrats- und Bundesratssitzungen. Die Volltextsuchfunktion durchsucht alle stenografischen Protokolle. Sie können Suchergebnisse abonnieren, um eine Nachricht zu bekommen, wenn das nächste Mal ein Protokoll online kommt, in dem ein Wort verwendet wird - beispielsweise “Amtsgeheimnis”.</p>
+
+    <h3>Anfragen und Beantwortungen</h3>
+
+    <p>Unter “Gesetze” finden Sie alle Gesetzgebungs- und Kontrollaktivitäten des Parlaments. Per Suche nach “Kategorie” können Sie nur die Schriftlichen Anfragen anzeigen lassen.</p>
+    <p>Im Vergleich zur Seite des Parlaments wird dieser Inhaltstyp verbessert dargestellt, indem die Anfrage und die Beantwortung (wenn vorhanden) auf der gleichen Seite - wenn möglich nebeneinander - dargestellt wird.</p>
+    <p class="docimg"><img src="{% static "css/img/docshots/schr_anfrage.png" %}"></img></p>
+
+    <p class="warning">Sollte eine Beantwortung noch nicht eingetroffen sein, werden Sie in naher Zukunft eine Benachrichtigung abonnieren können, die Sie informiert wenn die Antwort eintrifft. Dieses Feature ist noch nicht ganz fertig gestellt.</p>
+    <h3>Gesetzesvorschläge und -begutachtungen</h3>
+
+    <p>Unter “Gesetze” finden Sie alle Gesetzgebungs- und Kontrollaktivitäten des Parlaments. Unter Anderen die vorparlamentarischen Gesetzesbegutachtungen und den parlamentarischen Gesetzgebungsprozess.</p>
+    <p class="docimg"><img src="{% static "css/img/docshots/gesetz.png" %}"></img></p>
+
+    <h3>Bürgerinitiativen, Petitionen, etc</h3>
+
+    <p>Einige weitere Inhaltstypen wie Bürgerinitiativen und Petitionen werden analog zu Gesetzen – mit leichten Anpassungen wie der Darstellung der Online-Unterstützer – angezeigt und wo möglich durchsuchbar gemacht. Auch das Abonnieren von Benachrichtigungen aus dieser Suche heraus ist möglich.</p>
+    <h2>Umgang mit Inhalten des Bundesrats</h2>
+
+    <p>Bei Inhalten des Bundesrats, der keine Gesetzgebungsperioden besitzt, wurde die Lösung des Parlaments übernommen und virtuelle Legislaturperioden, die den Legislaturperioden des Nationalrats entsprechen eingeführt. So ist es möglich, nur Inhalte zu durchsuchen, die in relevante Zeiträume fallen.</p>
+    <h2>Warum das alles?</h2>
+
+    <p>OffenesParlament.at ist ein Transparenz-Projekt des Forum Informationsfreiheit. Mehr dazu unter <a href="/wir">“Über uns / Impressum”</a></p>
+  </div>
+{% endblock %}

@@ -29,6 +29,9 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
+def docs(request):
+    return render(request, 'docs.html')
+
 @ensure_csrf_cookie
 def generic_search_view(request, query):
     return render(request, 'generic_search_view.html')

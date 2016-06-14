@@ -667,7 +667,7 @@ ul.columned_linklist {
       -moz-column-count: 1;
       column-count: 1; } }
   ul.columned_linklist li {
-    margin: 13px 0; }
+    margin-bottom: 13px; }
 
 .top_bar {
   margin: 30px 0 0 0; }
@@ -992,6 +992,15 @@ table {
 
 .section {
   margin-top: 70px; }
+
+.docs p.docimg {
+  text-align: center; }
+  .docs p.docimg img {
+    max-width: 75%;
+    box-shadow: 0px 2px 5px #808080; }
+.docs p.warning {
+  padding: 10px;
+  background: #ffc8c8; }
 
 .about_goal_box {
   margin-top: 33px;
