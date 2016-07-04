@@ -779,11 +779,13 @@ ul.breadcrumbs {
   font-size: 13px;
   overflow: hidden; }
   .footer a {
-    color: white;
-    line-height: 200%; }
+    color: white; }
     .footer a:hover {
       color: #7fb7ea;
       text-decoration: none; }
+
+.footer .footer_right a {
+  line-height: 200%; }
 
 .footer_content {
   margin: 20px auto 100px auto; }
@@ -847,10 +849,16 @@ ul.breadcrumbs {
   .footer_logos a:hover {
     opacity: 1; }
 .footer_logos .netidee {
-  width: 100px;
-  height: 60px;
+  width: 105px;
+  height: 62px;
   background-image: url("img/netidee_logo.png");
-  background-size: auto 60px; }
+  background-size: auto 62px; }
+.footer_logos .nessus {
+  width: 145px;
+  height: 56px;
+  background-image: url("img/nessus_easyname_logo.png");
+  background-size: auto 56px;
+  margin-top: 2px; }
 .footer_logos .foi {
   width: 230px;
   height: 43px;
