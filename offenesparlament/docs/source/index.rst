@@ -41,6 +41,15 @@ Existing Scrapers
    Inquiries <scraper/inquiries.rst>
 
 
+Design
+======
+
+.. toctree::
+   :maxdepth: 2
+
+   Design <design.rst>
+
+
 Indices and tables
 ==================
 
