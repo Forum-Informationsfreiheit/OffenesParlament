@@ -104,7 +104,7 @@ Grid
 Text
 ~~~~~~~~~~
 
-We have a number of basic text formatting covered, such as headlines, lists, … (how much detail here?)
+We have a number of basic text formatting covered, such as headlines, lists, etc …
 
 
 Tables
@@ -118,7 +118,7 @@ Text in tables is smaller than normal paragraph text. Icons can be used as neede
 Links
 ~~~~~~~~~~
 
-Links within the content are formatted in blue and change opacity when hovered. (More details?)
+Links within the content are formatted in blue and change opacity when hovered.
 
 Icons
 ~~~~~~~~~~
