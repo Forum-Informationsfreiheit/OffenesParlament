@@ -5,7 +5,7 @@ Design
 Fonts
 ~~~~~~~~~~
 
-The font used throughout the design is called Source Sans Pro. It’s the first open source font designed by Adobe. It was published under the SIL Open Font License. The source files can be downloaded via Sourceforge and Github. (Source: Wikipedia)
+The font used throughout the design is called Source Sans Pro. It’s the first open source font designed by Adobe. It was published under the SIL Open Font License. The source files can be downloaded via Sourceforge and Github. (Source: `Wikipedia <https://en.wikipedia.org/wiki/Source_Sans_Pro>`_)
 
 The font can also be embedded with Google Fonts.
 
@@ -28,7 +28,7 @@ The icon reminds both the austrian flag (red-white-red) and a sending/transmitti
 
 **Logo Download**
 
-The logo is available in the most current formats for web and print applications:
+The logo is available in the `most current formats for web and print applications <http://www.informationsfreiheit.at/wp-content/uploads/2016/08/OffenesParlament_Logo.zip>`_:
 
 - logo-offenesparlament_cmyk.pdf
 - logo-offenesparlament_rgb.pdf
@@ -41,7 +41,7 @@ Negative versions of the logo are also provided:
 - logo-offenesparlament_rgb_neg.pdf
 
 The icon can be used separately in some cases:
- 
+
 - logo-icon-offenesparlament_rgb.png
 
 
