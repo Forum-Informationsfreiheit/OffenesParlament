@@ -30,7 +30,8 @@ SearchResults = React.createClass
       result_rows = _.map(@props.results, (r) =>
         title = if r.title? then r.title else r.full_name
         key = if r.parl_id? then r.parl_id else r.llp + ";" + r.nr
-        return <SearchResultsRow title={title} url={r.internal_link} date={r.ts} key={key} />
+        date = if r.ts? then r.ts else r.date
+        return <SearchResultsRow title={title} url={r.internal_link} date={date} key={key} />
       )
       search_results = <table className="search_results">
           <thead>
