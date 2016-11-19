@@ -31,6 +31,10 @@ SearchResults = React.createClass
         title = if r.title? then r.title else r.full_name
         key = if r.parl_id? then r.parl_id else r.llp + ";" + r.nr
         date = if r.ts? then r.ts else r.date
+        if r.debate_type? and r.debate_type == 'NR'
+          title += ' des Nationalrats'
+        else if r.debate_type? and r.debate_type == 'BR'
+          title += ' des Bundesrats'
         return <SearchResultsRow title={title} url={r.internal_link} date={date} key={key} />
       )
       search_results = <table className="search_results">
