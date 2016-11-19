@@ -1017,6 +1017,11 @@ SearchResults = React.createClass({displayName: "SearchResults",
           title = r.title != null ? r.title : r.full_name;
           key = r.parl_id != null ? r.parl_id : r.llp + ";" + r.nr;
           date = r.ts != null ? r.ts : r.date;
+          if ((r.debate_type != null) && r.debate_type === 'NR') {
+            title += ' des Nationalrats';
+          } else if ((r.debate_type != null) && r.debate_type === 'BR') {
+            title += ' des Bundesrats';
+          }
           return React.createElement(SearchResultsRow, {
             "title": title,
             "url": r.internal_link,
