@@ -160,8 +160,12 @@ class JsonSearchView(SearchView):
         # Do we have a query or are we just getting all of them?
         if 'q' in query_args:
             qry = query_args['q']
+            ## Currently deactivated due to policy decision to allow the users
+            ## themselves to choose the granularity and fuzzyness of the search
+            ##
             # fuzzify search
-            qry = u'{}~'.format(qry.replace(' ', '~ '))
+            # qry = u'{}~'.format(qry.replace(' ', '~ '))
+
             qs = qs.auto_query(qry)
         elif 'parl_id' in query_args:
             qs = qs.filter(parl_id=query_args['parl_id'])
