@@ -52,12 +52,10 @@ class MultiExtractor(BaseExtractor):
 class GENERIC:
 
     class TIMESTAMP(SingleExtractor):
-        XPATH = '//*[@id="filterListeFW_016"]//table//tr'
-
         @classmethod
         def xt(cls, response):
             tstring = response.xpath(
-                '//*[@id="utilities"]/span/text()').extract()[0]
+                '//*[@id="utilities"]/div/span/text()').extract()[0]
             tstring = tstring.replace(u'LETZTES UPDATE: ', '')
             try:
                 ts = datetime.strptime(tstring, '%d.%m.%Y; %H:%M')

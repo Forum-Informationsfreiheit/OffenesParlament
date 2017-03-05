@@ -358,53 +358,59 @@ class PersonsSpider(BaseSpider):
                             roman_numeral=comittee['legislative_period'])
                         comittee['legislative_period'] = llp
 
-                    comittee_item, created_comittee = Comittee.objects.update_or_create(
-                        parl_id=comittee['parl_id'],
-                        nrbr=comittee['nrbr'],
-                        legislative_period=comittee['legislative_period'],
-                        # source_link=comittee['source_link'],
-                        active=comittee[
-                            'active'] if 'active' in comittee else True,
-                        defaults=comittee)
-                    if created_comittee:
-                        self.logger.info(u"Created comittee {}".format(
-                            green(u"[{}]".format(comittee))
-                        ))
+                    try:
+                        comittee_item, created_comittee = Comittee.objects.update_or_create(
+                            parl_id=comittee['parl_id'],
+                            nrbr=comittee['nrbr'],
+                            legislative_period=comittee['legislative_period'],
+                            # source_link=comittee['source_link'],
+                            active=comittee[
+                                'active'] if 'active' in comittee else True,
+                            defaults=comittee)
+                        if created_comittee:
+                            self.logger.info(u"Created comittee {}".format(
+                                green(u"[{}]".format(comittee))
+                            ))
 
-                    function_data = {
-                        'title': m['function'],
-                        'short': m['function']
-                    }
+                        function_data = {
+                            'title': m['function'],
+                            'short': m['function']
+                        }
 
-                    function_item, created_function = Function.objects.get_or_create(
-                        **function_data)
-                    if created_function:
-                        self.logger.info(u"Created function {}".format(
-                            green(u"[{}]".format(function_item))
-                        ))
+                        function_item, created_function = Function.objects.get_or_create(
+                            **function_data)
+                        if created_function:
+                            self.logger.info(u"Created function {}".format(
+                                green(u"[{}]".format(function_item))
+                            ))
 
-                    membership_data = {
-                        'date_from': m['date_from'],
-                        'comittee': comittee_item,
-                        'person': person_item,
-                        'function': function_item
-                    }
+                        membership_data = {
+                            'date_from': m['date_from'],
+                            'comittee': comittee_item,
+                            'person': person_item,
+                            'function': function_item
+                        }
 
-                    membership_item, created_membership = ComitteeMembership.objects.update_or_create(
-                        defaults={
-                            'date_to': m['date_to']
-                        },
-                        **membership_data
-                    )
+                        membership_item, created_membership = ComitteeMembership.objects.update_or_create(
+                            defaults={
+                                'date_to': m['date_to']
+                            },
+                            **membership_data
+                        )
 
-                    if created_membership:
-                        self.logger.info(u"Created membership {}".format(
-                            green(u"[{}]".format(membership_item))
-                        ))
+                        if created_membership:
+                            self.logger.info(u"Created membership {}".format(
+                                green(u"[{}]".format(membership_item))
+                            ))
+                    except Exception as error:
+                        self.logger.info(
+                            red(u"Error adding Person's comittee membership {}: \n\t{}\n\t{}".format(full_name, error, repr(comittee)))
+                            )
+
 
         except Exception as error:
             self.logger.info(
                 red(u"Error adding Person's comittee memberships {}: \n\t{}".format(full_name, error)))
             #import ipdb
-            # ipdb.set_trace()
+            #ipdb.set_trace()
             return
