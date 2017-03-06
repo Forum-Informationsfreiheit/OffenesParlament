@@ -163,6 +163,8 @@ class Dev(BaseConfig):
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
     #CELERY_RESULT_BACKEND = 'amqp'
 
+    ALLOWED_HOSTS = ['offenesparlament.vm']
+
     # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = '/vagrant/ignore/log/mails' # change this to a proper location
