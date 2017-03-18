@@ -74,6 +74,23 @@ class BaseConfig(Configuration):
             'INDEX_NAME': 'haystack',
             'TIMEOUT': 120,
             'BATCH_SIZE': 50,
+            'EXCLUDED_INDEXES': [
+                'op_scraper.search_indexes.PersonIndexArchive',
+                'op_scraper.search_indexes.LawIndexArchive',
+                'op_scraper.search_indexes.DebateIndexArchive'
+            ]
+        },
+        'archive': {
+            'ENGINE': 'offenesparlament.search_backend.FuzzyElasticsearchSearchEngine',
+            'URL': 'http://localhost:9200/',
+            'INDEX_NAME': 'archive',
+            'TIMEOUT': 120,
+            'BATCH_SIZE': 50,
+            'EXCLUDED_INDEXES': [
+                'op_scraper.search_indexes.PersonIndex',
+                'op_scraper.search_indexes.LawIndex',
+                'op_scraper.search_indexes.DebateIndex'
+            ]
         },
     }
 

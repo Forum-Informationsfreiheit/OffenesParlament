@@ -902,7 +902,8 @@ class SubscribedContent(models.Model):
     ui_url = models.URLField(max_length=255, null=True, blank=True)
 
     latest_content_hashes = models.TextField(null=True, blank=True)
-    latest_content = models.TextField(null=True, blank=True)
+    # deprecated due to usage of ES for archived content
+    # latest_content = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=255, default="")
     single = models.BooleanField(default=False)
     category = models.CharField(max_length=255, default="search")
@@ -917,7 +918,17 @@ class SubscribedContent(models.Model):
         Returns the textual response (json in string)
         """
         content_response = requests.get(self.url)
-        return content_response.text
+        try:
+            content = json.loads(content_response.text)['result']
+        except:
+            logger.error(
+                "Couldn't deserialize SubscribedContent ES response for url {}: {}".format(
+                    self.url,
+                    content_response
+                    )
+                )
+        
+        return content
 
     def generate_content_hashes(self, content=None):
         """
@@ -926,25 +937,55 @@ class SubscribedContent(models.Model):
         Used for speedy comparison of changes
         """
         if not content:
-            es_response = json.loads(self.get_content())
-        else:
-            try:
-                es_response = json.loads(content)
-            except:
-                es_response = json.loads(self.get_content())
-
+            content = self.get_content()
+        
         content_hashes = {}
-        for res in es_response['result']:
-            content_hashes[res['parl_id']] = xxhash.xxh64(
-                json.dumps(res)).hexdigest()
+        for res in content:
+            content_hashes[res['parl_id']] = self._hash_content(res)
         return json.dumps(content_hashes)
+
+    def _hash_content(self, content):
+        # To avoid deleting other SubscribedContent's archived latest_content,
+        # we MUST salt the hash with this SC's URL (which is unique)
+        hash_string = "{} +++ {}".format(self.url, json.dumps(content))
+        hashed = xxhash.xxh64(hash_string).hexdigest()
+        return hashed
+
+    def store_latest_content(self, content):
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch()
+
+        for content_item in content:
+            content_id_hash = self._hash_content(content_item)
+            es.index(index="archive", doc_type='modelresult', id=content_id_hash, body=content_item)
+
+    def retrieve_latest_content(self):
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch()
+
+        hashes = json.loads(self.latest_content_hashes).values()
+        content = []
+        for content_id_hash in hashes:
+            res = es.get(index="archive", doc_type="modelresult", id=content_id_hash)
+            content.append(res['_source'])
+        return content
+
+    def clear_latest_content(self):
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch()
+
+        hashes = json.loads(self.latest_content_hashes).values()
+        for content_id_hash in hashes:
+            if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
+                es.delete(index="archive", doc_type="modelresult", id=content_id_hash)
 
     def reset_content_hashes(self):
         """
         Resets content's hashes after an email-sending
         """
+        self.clear_latest_content()
         self.latest_content_hashes = self.generate_content_hashes()
-        self.latest_content = self.get_content()
+        self.store_latest_content(self.get_content())
         self.save()
 
 

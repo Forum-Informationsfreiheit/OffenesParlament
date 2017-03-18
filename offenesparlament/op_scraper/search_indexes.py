@@ -3,6 +3,7 @@ import datetime
 
 from op_scraper.models import Person, Law, Debate
 import json
+from haystack import connections
 
 # maintain list of which fields are json-content
 JSON_FIELDS = {
@@ -26,9 +27,30 @@ class BaseIndex(object):
 
     # Uncomment the following to limit the amount of objects indexed for
     # debug reasons (it be much faster that way)
-    # def build_queryset(self, start_date=None, end_date=None, using=None):
-    #     "Only index a random 100 Objects"
-    #     return self.get_model().objects.all()[:10]
+    def build_queryset(self, start_date=None, end_date=None, using=None):
+        "Only index a random 100 Objects"
+        return self.get_model().objects.all()[:10]
+
+class ArchiveIndexMixin(object):
+    
+    def _get_backend(self, using):
+        return connections['archive'].get_backend()
+
+    def reindex(self, using='archive'):
+        """
+        Completely clear the index for this model and rebuild it.
+        Always work on 'archive' index/connection
+        """
+        self.clear(using='archive')
+        self.update(using='archive')
+
+    def build_queryset(self, start_date=None, end_date=None, using=None):
+        """
+        Override to always retun an empty array. This archive indices should not
+        be used via rebuild_index or update_index, they shoud only be accessed 
+        through the low-level ES api
+        """
+        return self.get_model().objects.none()
 
 
 class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
@@ -125,7 +147,6 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Person
-
 
 class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
@@ -230,3 +251,14 @@ class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Debate
+
+
+## Index duplication for Archive
+class PersonIndexArchive(ArchiveIndexMixin, PersonIndex):
+    pass
+    
+class LawIndexArchive(ArchiveIndexMixin, LawIndex):
+    pass
+
+class DebateIndexArchive(ArchiveIndexMixin, DebateIndex):
+    pass

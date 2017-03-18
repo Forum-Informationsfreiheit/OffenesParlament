@@ -17,7 +17,7 @@ FIELD_BLACKLIST = ['text', 'ts']
 def collect_changesets(content):
     changes = {}
 
-    old_content = content.latest_content
+    old_content = content.retrieve_latest_content()
     cur_content = content.get_content()
 
     try:

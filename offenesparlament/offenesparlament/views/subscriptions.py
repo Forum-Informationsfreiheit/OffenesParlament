@@ -166,6 +166,7 @@ def subscribe(request):
         'category'] if 'category' in request.POST else 'search'
     ui_url = request.build_absolute_uri(request.POST['search_ui_url'])
 
+    # find or create new user, if this is a first time subscription
     user, created_user = User.objects.get_or_create(email=email)
     if created_user:
         user_verification_hash = uuid.uuid4().hex
