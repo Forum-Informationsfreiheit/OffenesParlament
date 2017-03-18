@@ -369,7 +369,7 @@ class PersonsSpider(BaseSpider):
                             defaults=comittee)
                         if created_comittee:
                             self.logger.info(u"Created comittee {}".format(
-                                green(u"[{}]".format(comittee))
+                                green(u"[{}]".format(comittee_item))
                             ))
 
                         function_data = {
@@ -404,7 +404,7 @@ class PersonsSpider(BaseSpider):
                             ))
                     except Exception as error:
                         self.logger.info(
-                            red(u"Error adding Person's comittee membership {}: \n\t{}\n\t{}".format(full_name, error, repr(comittee)))
+                            red(u"Error adding Person's comittee membership {} {}: \n\t{}\n\t{}\n".format(full_name, person['source_link'], error, repr(comittee)))
                             )
 
 
