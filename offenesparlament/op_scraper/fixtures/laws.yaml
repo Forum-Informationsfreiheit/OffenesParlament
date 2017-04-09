@@ -1,0 +1,2839 @@
+-   fields: {_title_urlsafe: "Verkehr-I-Stra\xDFenverkehr", title: "Verkehr I. Stra\xDF\
+            enverkehr"}
+    model: op_scraper.keyword
+    pk: 2
+-   fields: {_title_urlsafe: Datenverarbeitung, title: Datenverarbeitung}
+    model: op_scraper.keyword
+    pk: 8
+-   fields: {_title_urlsafe: "Steuern-und-Geb\xFChren", title: "Steuern und Geb\xFC\
+            hren"}
+    model: op_scraper.keyword
+    pk: 9
+-   fields: {_title_urlsafe: Familienpolitik, title: Familienpolitik}
+    model: op_scraper.keyword
+    pk: 14
+-   fields: {_title_urlsafe: Kreditwesen, title: Kreditwesen}
+    model: op_scraper.keyword
+    pk: 19
+-   fields: {_title_urlsafe: Strafrecht, title: Strafrecht}
+    model: op_scraper.keyword
+    pk: 20
+-   fields: {_title_urlsafe: Gesundheit, title: Gesundheit}
+    model: op_scraper.keyword
+    pk: 21
+-   fields: {_title_urlsafe: "\xD6ffentlicher-Dienst", title: "\xD6ffentlicher Dienst"}
+    model: op_scraper.keyword
+    pk: 23
+-   fields: {_title_urlsafe: Umweltschutz, title: Umweltschutz}
+    model: op_scraper.keyword
+    pk: 27
+-   fields: {_title_urlsafe: Verkehr-II-Eisenbahnen, title: Verkehr II. Eisenbahnen}
+    model: op_scraper.keyword
+    pk: 29
+-   fields: {_title_urlsafe: "Staatsvertr\xE4ge-internationale", title: "Staatsvertr\xE4\
+            ge (internationale)"}
+    model: op_scraper.keyword
+    pk: 32
+-   fields: {_title_urlsafe: Sicherheitswesen, title: Sicherheitswesen}
+    model: op_scraper.keyword
+    pk: 38
+-   fields: {_title_urlsafe: Wissenschaft-und-Forschung, title: Wissenschaft und Forschung}
+    model: op_scraper.keyword
+    pk: 40
+-   fields: {_title_urlsafe: Bundesverfassung, title: Bundesverfassung}
+    model: op_scraper.keyword
+    pk: 52
+-   fields: {_title_urlsafe: Landesverteidigung, title: Landesverteidigung}
+    model: op_scraper.keyword
+    pk: 53
+-   fields: {_title_urlsafe: Grenzen, title: Grenzen}
+    model: op_scraper.keyword
+    pk: 56
+-   fields: {_title_urlsafe: Verfassungs-und-Verwaltungsgerichtsbarkeit, title: Verfassungs-
+            und Verwaltungsgerichtsbarkeit}
+    model: op_scraper.keyword
+    pk: 58
+-   fields: {_title_urlsafe: Lebensmittel, title: Lebensmittel}
+    model: op_scraper.keyword
+    pk: 60
+-   fields: {_title_urlsafe: "Europ\xE4ische-Integration", title: "Europ\xE4ische\
+            \ Integration"}
+    model: op_scraper.keyword
+    pk: 72
+-   fields: {_title_urlsafe: Volksbegehren, title: Volksbegehren}
+    model: op_scraper.keyword
+    pk: 73
+-   fields: {_title_urlsafe: Bundesrat-V-Sonstiges, title: Bundesrat V. Sonstiges}
+    model: op_scraper.keyword
+    pk: 78
+-   fields: {_title_urlsafe: Abstimmungen-namentliche, title: 'Abstimmungen, namentliche'}
+    model: op_scraper.keyword
+    pk: 90
+-   fields: {_title_urlsafe: "Einspr\xFCche-des-Bundesrates", title: "Einspr\xFCche\
+            \ des Bundesrates"}
+    model: op_scraper.keyword
+    pk: 92
+-   fields: {_title_urlsafe: "B\xFCrgerinitiativen", title: "B\xFCrgerinitiativen"}
+    model: op_scraper.keyword
+    pk: 134
+-   fields: {_title_urlsafe: Petitionen, title: Petitionen}
+    model: op_scraper.keyword
+    pk: 135
+-   fields: {_title_urlsafe: Volksbefragung, title: Volksbefragung}
+    model: op_scraper.keyword
+    pk: 150
+-   fields: {_title_urlsafe: "Vorlagen-\xFCber-Initiativen-und-Beschl\xFCsse-des-Europ\xE4\
+            ischen-Rates-und-des-Rates", title: "Vorlagen \xFCber Initiativen und\
+            \ Beschl\xFCsse des Europ\xE4ischen Rates und des Rates"}
+    model: op_scraper.keyword
+    pk: 153
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00191/fnameorig_518706.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00191/fname_518706.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 34
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00191/fnameorig_518707.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00191/fname_518707.pdf,
+        stripped_html: null, title: Vorblatt und WFA}
+    model: op_scraper.document
+    pk: 35
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00191/fnameorig_518708.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00191/fname_518708.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 36
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00191/imfname_518709.pdf,
+        stripped_html: null, title: "Textgegen\xFCberstellung"}
+    model: op_scraper.document
+    pk: 37
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00191/imfname_518710.pdf,
+        stripped_html: null, title: Begleitschreiben Begutachtungsentwurf}
+    model: op_scraper.document
+    pk: 38
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00186/fnameorig_503638.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00186/fname_503638.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 66
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00186/fnameorig_503639.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00186/fname_503639.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 67
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00186/fnameorig_503640.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00186/fname_503640.pdf,
+        stripped_html: null, title: TextGG}
+    model: op_scraper.document
+    pk: 68
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00186/fnameorig_503641.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00186/fname_503641.pdf,
+        stripped_html: null, title: Vorblatt und vereinfachte WFA}
+    model: op_scraper.document
+    pk: 69
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00186/fnameorig_503642.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00186/fname_503642.pdf,
+        stripped_html: null, title: Begleitschreiben Begutachtungsentwurf}
+    model: op_scraper.document
+    pk: 70
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00152/imfname_470968.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 100
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00152/imfname_470969.pdf,
+        stripped_html: null, title: "Vorblatt und Wirkungsorientierte Folgenabsch\xE4\
+            tzung"}
+    model: op_scraper.document
+    pk: 101
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00152/imfname_470970.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 102
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00152/imfname_470971.pdf,
+        stripped_html: null, title: ''}
+    model: op_scraper.document
+    pk: 103
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00162/fnameorig_478040.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00162/fname_478040.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 1084
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00162/fnameorig_478041.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00162/fname_478041.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 1085
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00162/fnameorig_478042.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00162/fname_478042.pdf,
+        stripped_html: null, title: "TG\xDC"}
+    model: op_scraper.document
+    pk: 1086
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00162/fnameorig_478043.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00162/fname_478043.pdf,
+        stripped_html: null, title: 'WFA, Vorblatt'}
+    model: op_scraper.document
+    pk: 1087
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00162/fnameorig_478044.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00162/fname_478044.pdf,
+        stripped_html: null, title: Begleitschreiben}
+    model: op_scraper.document
+    pk: 1088
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00167/fnameorig_480219.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00167/fname_480219.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 1093
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00167/fnameorig_480220.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00167/fname_480220.pdf,
+        stripped_html: null, title: Vorblatt_und_WFA}
+    model: op_scraper.document
+    pk: 1094
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00167/fnameorig_480221.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00167/fname_480221.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 1095
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00167/fnameorig_480222.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00167/fname_480222.pdf,
+        stripped_html: null, title: "Textgegen\xFCberstellung"}
+    model: op_scraper.document
+    pk: 1096
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00167/fnameorig_480225.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00167/fname_480225.pdf,
+        stripped_html: null, title: Begleitschreiben Begutachtungsentwurf}
+    model: op_scraper.document
+    pk: 1097
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00137/imfname_427874.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 1128
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00137/imfname_427875.pdf,
+        stripped_html: null, title: "Vorblatt und Wirkungsorientierte Folgenabsch\xE4\
+            tzung"}
+    model: op_scraper.document
+    pk: 1129
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00137/imfname_427876.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 1130
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00137/imfname_432384.pdf,
+        stripped_html: null, title: "Entwurf \xD6sterreichische Normungsstrategie"}
+    model: op_scraper.document
+    pk: 1131
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00137/imfname_432386.pdf,
+        stripped_html: null, title: "Begleitschreiben \xD6sterreichische Normungsstrategie"}
+    model: op_scraper.document
+    pk: 1132
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00137/imfname_427877.pdf,
+        stripped_html: null, title: Begleitschreiben}
+    model: op_scraper.document
+    pk: 1133
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00030/imfname_347064.pdf,
+        stripped_html: null, title: Vertragstext}
+    model: op_scraper.document
+    pk: 5500
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00030/imfname_347065.pdf,
+        stripped_html: null, title: "Wirkungsorientierte Folgenabsch\xE4tzung"}
+    model: op_scraper.document
+    pk: 5501
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00030/imfname_347066.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 5502
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00030/imfname_347067.pdf,
+        stripped_html: null, title: Begleitschreiben}
+    model: op_scraper.document
+    pk: 5503
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/A/A_01428/imfname_483081.pdf,
+        stripped_html: null, title: "Selbst\xE4ndiger Antrag (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 6505
+-   fields: {html_link: /PAKT/VHG/XXV/A/A_01428/fnameorig_483091.html, pdf_link: /PAKT/VHG/XXV/A/A_01428/fname_483091.pdf,
+        stripped_html: null, title: "Initiativantrag (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6506
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01057/fnameorig_517397.html, pdf_link: /PAKT/VHG/XXV/I/I_01057/fname_517397.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 6507
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01057/fnameorig_517399.html, pdf_link: /PAKT/VHG/XXV/I/I_01057/fname_517399.pdf,
+        stripped_html: null, title: Vorblatt und WFA}
+    model: op_scraper.document
+    pk: 6508
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01057/fnameorig_517400.html, pdf_link: /PAKT/VHG/XXV/I/I_01057/fname_517400.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 6509
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01057/fnameorig_517401.html, pdf_link: /PAKT/VHG/XXV/I/I_01057/fname_517401.pdf,
+        stripped_html: null, title: "Textgegen\xFCberstellung"}
+    model: op_scraper.document
+    pk: 6510
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01002/fnameorig_504150.html, pdf_link: /PAKT/VHG/XXV/I/I_01002/fname_504150.pdf,
+        stripped_html: null, title: Berichterstattung}
+    model: op_scraper.document
+    pk: 6531
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01002/fnameorig_504151.html, pdf_link: /PAKT/VHG/XXV/I/I_01002/fname_504151.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 6532
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/A/A_01303/imfname_462396.pdf,
+        stripped_html: null, title: "Selbst\xE4ndiger Antrag (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 6533
+-   fields: {html_link: /PAKT/VHG/XXV/A/A_01303/fnameorig_462421.html, pdf_link: /PAKT/VHG/XXV/A/A_01303/fname_462421.pdf,
+        stripped_html: null, title: "Initiativantrag (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6534
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00999/fnameorig_498912.html, pdf_link: /PAKT/VHG/XXV/I/I_00999/fname_498912.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 6541
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00999/fnameorig_498914.html, pdf_link: /PAKT/VHG/XXV/I/I_00999/fname_498914.pdf,
+        stripped_html: null, title: Vorblatt und WFA}
+    model: op_scraper.document
+    pk: 6542
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00999/fnameorig_498915.html, pdf_link: /PAKT/VHG/XXV/I/I_00999/fname_498915.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 6543
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01000/fnameorig_501518.html, pdf_link: /PAKT/VHG/XXV/I/I_01000/fname_501518.pdf,
+        stripped_html: null, title: Vertragstext}
+    model: op_scraper.document
+    pk: 6577
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_01000/imfname_501522.pdf,
+        stripped_html: null, title: Abkommen in deutscher Sprache}
+    model: op_scraper.document
+    pk: 6578
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_01000/imfname_501523.pdf,
+        stripped_html: null, title: Abkommen in tschechischer Sprache}
+    model: op_scraper.document
+    pk: 6579
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01000/fnameorig_501520.html, pdf_link: /PAKT/VHG/XXV/I/I_01000/fname_501520.pdf,
+        stripped_html: null, title: Vorblatt und WFA}
+    model: op_scraper.document
+    pk: 6580
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_01000/fnameorig_501521.html, pdf_link: /PAKT/VHG/XXV/I/I_01000/fname_501521.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 6581
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00989/fnameorig_498182.html, pdf_link: /PAKT/VHG/XXV/I/I_00989/fname_498182.pdf,
+        stripped_html: null, title: Berichterstattung}
+    model: op_scraper.document
+    pk: 6598
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00989/fnameorig_498183.html, pdf_link: /PAKT/VHG/XXV/I/I_00989/fname_498183.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 6599
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00781/fnameorig_461279.html, pdf_link: /PAKT/VHG/XXV/I/I_00781/fname_461279.pdf,
+        stripped_html: null, title: Volksbegehren}
+    model: op_scraper.document
+    pk: 6626
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00904/fnameorig_488264.html, pdf_link: /PAKT/VHG/XXV/I/I_00904/fname_488264.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 6644
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00904/fnameorig_488266.html, pdf_link: /PAKT/VHG/XXV/I/I_00904/fname_488266.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 6645
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00780/fnameorig_460897.html, pdf_link: /PAKT/VHG/XXV/I/I_00780/fname_460897.pdf,
+        stripped_html: null, title: Vertragstext}
+    model: op_scraper.document
+    pk: 6709
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00780/fnameorig_460899.html, pdf_link: /PAKT/VHG/XXV/I/I_00780/fname_460899.pdf,
+        stripped_html: null, title: Vorblatt und WFA}
+    model: op_scraper.document
+    pk: 6710
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00780/fnameorig_460900.html, pdf_link: /PAKT/VHG/XXV/I/I_00780/fname_460900.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 6711
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/A/A_01415/imfname_482800.pdf,
+        stripped_html: null, title: "Selbst\xE4ndiger Antrag (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 6716
+-   fields: {html_link: /PAKT/VHG/XXV/A/A_01415/fnameorig_482815.html, pdf_link: /PAKT/VHG/XXV/A/A_01415/fname_482815.pdf,
+        stripped_html: null, title: "Initiativantrag (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6717
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00883/fnameorig_485200.html, pdf_link: /PAKT/VHG/XXV/I/I_00883/fname_485200.pdf,
+        stripped_html: null, title: Berichterstattung}
+    model: op_scraper.document
+    pk: 6755
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00883/fnameorig_485201.html, pdf_link: /PAKT/VHG/XXV/I/I_00883/fname_485201.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 6756
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471075.pdf,
+        stripped_html: null, title: 01 Kurzfassung T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6757
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471076.pdf,
+        stripped_html: null, title: 02 Kurzfassung T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6758
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471077.pdf,
+        stripped_html: null, title: "03 \xDCberblick (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 6759
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471078.pdf,
+        stripped_html: null, title: 04 Hauptdok.Band 1 Textteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6760
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471079.pdf,
+        stripped_html: null, title: 05 Hauptdok.Band 1 Textteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6761
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471081.pdf,
+        stripped_html: null, title: 06 Hauptdok.Band 1 Textteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6762
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471084.pdf,
+        stripped_html: null, title: 07 Hauptdok.Band 1 Textteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6763
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471085.pdf,
+        stripped_html: null, title: 08 Hauptdok.Band 2 Textteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6764
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471086.pdf,
+        stripped_html: null, title: 09 Hauptdok.Band 2 Textteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6765
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471087.pdf,
+        stripped_html: null, title: 10 Hauptdok.Band 2 Textteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6766
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471088.pdf,
+        stripped_html: null, title: 11 Hauptdok.Band 2 Textteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6767
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471093.pdf,
+        stripped_html: null, title: 12 Hauptdok.Band 2 Textteil T5 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6768
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471094.pdf,
+        stripped_html: null, title: 13 Hauptdok.Band 2 Textteil T6 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6769
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471095.pdf,
+        stripped_html: null, title: 14 Hauptdok.Band 3 Textteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6770
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471096.pdf,
+        stripped_html: null, title: 15 Hauptdok.Band 3 Textteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6771
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471100.pdf,
+        stripped_html: null, title: 16 Hauptdok. Zahlenteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6772
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471104.pdf,
+        stripped_html: null, title: 17 Hauptdok. Zahlenteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6773
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471108.pdf,
+        stripped_html: null, title: 18 Hauptdok. Zahlenteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6774
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471115.pdf,
+        stripped_html: null, title: 19 Hauptdok. Zahlenteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6775
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471119.pdf,
+        stripped_html: null, title: 20 Hauptdok. Zahlenteil T5 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6776
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471325.pdf,
+        stripped_html: null, title: "Kurzfassung gesamt (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6777
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471326.pdf,
+        stripped_html: null, title: "\xDCberblick (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6778
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471330.pdf,
+        stripped_html: null, title: "Hauptdok. Band 1 Textteil gesamt (elektr. \xFC\
+            bermittelte Version)"}
+    model: op_scraper.document
+    pk: 6779
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471333.pdf,
+        stripped_html: null, title: "Hauptdok. Band 2 Textteil gesamt (elektr. \xFC\
+            bermittelte Version)"}
+    model: op_scraper.document
+    pk: 6780
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471334.pdf,
+        stripped_html: null, title: "Hauptdok. Band 3 Textteil gesamt (elektr. \xFC\
+            bermittelte Version)"}
+    model: op_scraper.document
+    pk: 6781
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00199/imfname_471335.pdf,
+        stripped_html: null, title: "Hauptdok. Zahlenteil gesamt (elektr. \xFCbermittelte\
+            \ Version)"}
+    model: op_scraper.document
+    pk: 6782
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402515.pdf,
+        stripped_html: null, title: 01 Kurzfassung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6795
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402517.pdf,
+        stripped_html: null, title: "02 \xDCberblick (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 6796
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402521.pdf,
+        stripped_html: null, title: 03 Hauptdok.Band 1 Textteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6797
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402522.pdf,
+        stripped_html: null, title: 04 Hauptdok.Band 1 Textteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6798
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402523.pdf,
+        stripped_html: null, title: 05 Hauptdok.Band 1 Textteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6799
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402524.pdf,
+        stripped_html: null, title: 06 Hauptdok.Band 2 Textteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6800
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402529.pdf,
+        stripped_html: null, title: 07 Hauptdok.Band 2 Textteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6801
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402530.pdf,
+        stripped_html: null, title: 08 Hauptdok.Band 2 Textteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6802
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402536.pdf,
+        stripped_html: null, title: 09 Hauptdok.Band 2 Textteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6803
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402541.pdf,
+        stripped_html: null, title: 10 Hauptdok. Zahlenteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6804
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402551.pdf,
+        stripped_html: null, title: 11 Hauptdok. Zahlenteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6805
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402556.pdf,
+        stripped_html: null, title: 12 Hauptdok. Zahlenteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6806
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_402560.pdf,
+        stripped_html: null, title: 13 Hauptdok. Zahlenteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 6807
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_403571.pdf,
+        stripped_html: null, title: "Kurzfassung (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6808
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_403572.pdf,
+        stripped_html: null, title: "\xDCberblick (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6809
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_403573.pdf,
+        stripped_html: null, title: "Band 1 Textteil gesamt  (elektr. \xFCbermittelte\
+            \ Version)"}
+    model: op_scraper.document
+    pk: 6810
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_403574.pdf,
+        stripped_html: null, title: "Band 2 Textteil gesamt  (elektr. \xFCbermittelte\
+            \ Version)"}
+    model: op_scraper.document
+    pk: 6811
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00162/imfname_403575.pdf,
+        stripped_html: null, title: "Zahlenteil gesamt  (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 6812
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00579/fnameorig_401162.html, pdf_link: /PAKT/VHG/XXV/I/I_00579/fname_401162.pdf,
+        stripped_html: null, title: Vertragstext}
+    model: op_scraper.document
+    pk: 7237
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401166.pdf,
+        stripped_html: null, title: 02 Abkommen in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7238
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401167.pdf,
+        stripped_html: null, title: 03 Geschehensklausel}
+    model: op_scraper.document
+    pk: 7239
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401168.pdf,
+        stripped_html: null, title: 04 Unterschriftenseiten}
+    model: op_scraper.document
+    pk: 7240
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401169.pdf,
+        stripped_html: null, title: 05 Anhang I bis XIII in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7241
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401170.pdf,
+        stripped_html: null, title: 06 Anhang XIV in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7242
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401171.pdf,
+        stripped_html: null, title: 07 Anhang XV in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7243
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401172.pdf,
+        stripped_html: null, title: 08 Anhang XVI bis XXI in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7244
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401173.pdf,
+        stripped_html: null, title: 09 Anhang XXII bis XXXIV in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7245
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401174.pdf,
+        stripped_html: null, title: 10 Protokoll I u. Gem. Erkl. i. deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7246
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401175.pdf,
+        stripped_html: null, title: 11 Protokoll II in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7247
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401176.pdf,
+        stripped_html: null, title: 12 Protokoll III und IV in deutscher Sprachfassung}
+    model: op_scraper.document
+    pk: 7248
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401177.pdf,
+        stripped_html: null, title: 13 Abkommen in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7249
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401178.pdf,
+        stripped_html: null, title: 14 Anhang I bis XIII in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7250
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401179.pdf,
+        stripped_html: null, title: 15 Anhang XIV in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7251
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401180.pdf,
+        stripped_html: null, title: 16 Anhang XV in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7252
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401181.pdf,
+        stripped_html: null, title: 17 Anhang XVI bis XXI in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7253
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401182.pdf,
+        stripped_html: null, title: 18 Anhang XXII bis XXXIV in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7254
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401183.pdf,
+        stripped_html: null, title: 19 Protokoll I u. Gem. Erkl. in engl. Sprachfassung}
+    model: op_scraper.document
+    pk: 7255
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401184.pdf,
+        stripped_html: null, title: 20 Protokoll II in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7256
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401185.pdf,
+        stripped_html: null, title: 21 Protokoll III und IV in englischer Sprachfassung}
+    model: op_scraper.document
+    pk: 7257
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401164.pdf,
+        stripped_html: null, title: Vorblatt und Ergebnisdarstellung}
+    model: op_scraper.document
+    pk: 7258
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00579/imfname_401165.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 7259
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00452/fnameorig_379198.html, pdf_link: /PAKT/VHG/XXV/I/I_00452/fname_379198.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 7520
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00453/fnameorig_379208.html, pdf_link: /PAKT/VHG/XXV/I/I_00453/fname_379208.pdf,
+        stripped_html: null, title: Einspruch des BR}
+    model: op_scraper.document
+    pk: 7613
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00453/fnameorig_379210.html, pdf_link: /PAKT/VHG/XXV/I/I_00453/fname_379210.pdf,
+        stripped_html: null, title: "Einspruchsbegr\xFCndung"}
+    model: op_scraper.document
+    pk: 7614
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00271/fnameorig_365415.html, pdf_link: /PAKT/VHG/XXV/I/I_00271/fname_365415.pdf,
+        stripped_html: null, title: Vorlage}
+    model: op_scraper.document
+    pk: 7771
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365419.pdf,
+        stripped_html: null, title: 02 Beschluss Deutsch}
+    model: op_scraper.document
+    pk: 7772
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365420.pdf,
+        stripped_html: null, title: 03 Beschluss Bulgarisch}
+    model: op_scraper.document
+    pk: 7773
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365421.pdf,
+        stripped_html: null, title: "04 Beschluss D\xE4nisch"}
+    model: op_scraper.document
+    pk: 7774
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365422.pdf,
+        stripped_html: null, title: 05 Beschluss Englisch}
+    model: op_scraper.document
+    pk: 7775
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365423.pdf,
+        stripped_html: null, title: 06 Beschluss Estnisch}
+    model: op_scraper.document
+    pk: 7776
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365424.pdf,
+        stripped_html: null, title: 07 Beschluss Finnisch}
+    model: op_scraper.document
+    pk: 7777
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365425.pdf,
+        stripped_html: null, title: "08 Beschluss Franz\xF6sisch"}
+    model: op_scraper.document
+    pk: 7778
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365426.pdf,
+        stripped_html: null, title: 09 Beschluss Griechisch}
+    model: op_scraper.document
+    pk: 7779
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365427.pdf,
+        stripped_html: null, title: 10 Beschluss Italienisch}
+    model: op_scraper.document
+    pk: 7780
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365428.pdf,
+        stripped_html: null, title: 11 Beschluss Kroatisch}
+    model: op_scraper.document
+    pk: 7781
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365429.pdf,
+        stripped_html: null, title: 12 Beschluss Lettisch}
+    model: op_scraper.document
+    pk: 7782
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365430.pdf,
+        stripped_html: null, title: 13 Beschluss Litauisch}
+    model: op_scraper.document
+    pk: 7783
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365431.pdf,
+        stripped_html: null, title: 14 Beschluss Maltesisch}
+    model: op_scraper.document
+    pk: 7784
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365432.pdf,
+        stripped_html: null, title: "15 Beschluss Niederl\xE4ndisch"}
+    model: op_scraper.document
+    pk: 7785
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365433.pdf,
+        stripped_html: null, title: 16 Beschluss Polnisch}
+    model: op_scraper.document
+    pk: 7786
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365434.pdf,
+        stripped_html: null, title: 17 Beschluss Portugiesisch}
+    model: op_scraper.document
+    pk: 7787
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365435.pdf,
+        stripped_html: null, title: "18 Beschluss Rum\xE4nisch"}
+    model: op_scraper.document
+    pk: 7788
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365436.pdf,
+        stripped_html: null, title: 19 Beschluss Schwedisch}
+    model: op_scraper.document
+    pk: 7789
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365437.pdf,
+        stripped_html: null, title: 20 Beschluss Slowakisch}
+    model: op_scraper.document
+    pk: 7790
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365438.pdf,
+        stripped_html: null, title: 21 Beschluss Slowenisch}
+    model: op_scraper.document
+    pk: 7791
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365439.pdf,
+        stripped_html: null, title: 22 Beschluss Spanisch}
+    model: op_scraper.document
+    pk: 7792
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365440.pdf,
+        stripped_html: null, title: 23 Beschluss Tschechisch}
+    model: op_scraper.document
+    pk: 7793
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365441.pdf,
+        stripped_html: null, title: 24 Beschluss Ungarisch}
+    model: op_scraper.document
+    pk: 7794
+-   fields: {html_link: /PAKT/VHG/XXV/I/I_00271/fnameorig_365417.html, pdf_link: /PAKT/VHG/XXV/I/I_00271/fname_365417.pdf,
+        stripped_html: null, title: "Vorbl. u. Erl\xE4ut."}
+    model: op_scraper.document
+    pk: 7795
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/I/I_00271/imfname_365418.pdf,
+        stripped_html: null, title: WFA}
+    model: op_scraper.document
+    pk: 7796
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348165.pdf,
+        stripped_html: null, title: 01 Kurzfassung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7799
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348173.pdf,
+        stripped_html: null, title: "02 \xDCberblick (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 7800
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348179.pdf,
+        stripped_html: null, title: 03 Hauptdok.Textteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7801
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348181.pdf,
+        stripped_html: null, title: 04 Hauptdok.Textteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7802
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348184.pdf,
+        stripped_html: null, title: 05 Hauptdok.Textteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7803
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348186.pdf,
+        stripped_html: null, title: 06 Hauptdok.Textteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7804
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348190.pdf,
+        stripped_html: null, title: 07 Hauptdok.Zahlenteil T1 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7805
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348195.pdf,
+        stripped_html: null, title: 08 Hauptdok.Zahlenteil T2 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7806
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348196.pdf,
+        stripped_html: null, title: 09 Hauptdok.Zahlenteil T3 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7807
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_348197.pdf,
+        stripped_html: null, title: 10 Hauptdok.Zahlenteil T4 (gescanntes Original)}
+    model: op_scraper.document
+    pk: 7808
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_351240.pdf,
+        stripped_html: null, title: "Hauptdokument BRA 2103 \xDCberblick Teil 1 (elektr.\
+            \ \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 7809
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_351241.pdf,
+        stripped_html: null, title: "Hauptdokument BRA 2103 Kurzfassung Teil 2 (elektr.\
+            \ \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 7810
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_351242.pdf,
+        stripped_html: null, title: "Hauptdokument BRA 2103 Textteil Teil 3 (elektr.\
+            \ \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 7811
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/III/III_00066/imfname_351243.pdf,
+        stripped_html: null, title: "Hauptdokument BRA 2103 Zahlenteil Teil 4 (elektr.\
+            \ \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 7812
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/J/J_07834/imfname_499840.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 8933
+-   fields: {html_link: /PAKT/VHG/XXV/J/J_07834/fnameorig_500014.html, pdf_link: /PAKT/VHG/XXV/J/J_07834/fname_500014.pdf,
+        stripped_html: null, title: Anfrage (textinterpretierte Version)}
+    model: op_scraper.document
+    pk: 8934
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/J/J_07831/imfname_499831.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 8936
+-   fields: {html_link: /PAKT/VHG/XXV/J/J_07831/fnameorig_500022.html, pdf_link: /PAKT/VHG/XXV/J/J_07831/fname_500022.pdf,
+        stripped_html: null, title: Anfrage (textinterpretierte Version)}
+    model: op_scraper.document
+    pk: 8937
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/AB/AB_07413/imfname_519631.pdf,
+        stripped_html: null, title: Anfragebeantwortung}
+    model: op_scraper.document
+    pk: 8944
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/AB/AB_07461/imfname_519853.pdf,
+        stripped_html: null, title: Anfragebeantwortung}
+    model: op_scraper.document
+    pk: 8947
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ABEU/ABEU_00005/imfname_515814.pdf,
+        stripped_html: null, title: Anfragebeantwortung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 10008
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ABEU/ABEU_00004/imfname_514535.pdf,
+        stripped_html: null, title: Anfragebeantwortung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 10509
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/JPR/JPR_00022/imfname_494821.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 11829
+-   fields: {html_link: /PAKT/VHG/XXV/JPR/JPR_00022/fnameorig_494941.html, pdf_link: /PAKT/VHG/XXV/JPR/JPR_00022/fname_494941.pdf,
+        stripped_html: null, title: "Anfrage  (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 11830
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ABPR/ABPR_00021/imfname_504236.pdf,
+        stripped_html: null, title: Anfragebeantwortung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 11840
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/JPR/JPR_00021/imfname_492739.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 12012
+-   fields: {html_link: /PAKT/VHG/XXV/JPR/JPR_00021/fnameorig_493316.html, pdf_link: /PAKT/VHG/XXV/JPR/JPR_00021/fname_493316.pdf,
+        stripped_html: null, title: Anfrage  (textinterpretierte Version)}
+    model: op_scraper.document
+    pk: 12013
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/JPR/JPR_00020/imfname_492731.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 12015
+-   fields: {html_link: /PAKT/VHG/XXV/JPR/JPR_00020/fnameorig_493317.html, pdf_link: /PAKT/VHG/XXV/JPR/JPR_00020/fname_493317.pdf,
+        stripped_html: null, title: Anfrage  (textinterpretierte Version)}
+    model: op_scraper.document
+    pk: 12016
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ABPR/ABPR_00020/imfname_501414.pdf,
+        stripped_html: null, title: Anfragebeantwortung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 12023
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ABPR/ABPR_00019/imfname_501371.pdf,
+        stripped_html: null, title: Anfragebeantwortung (gescanntes Original)}
+    model: op_scraper.document
+    pk: 12026
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/J-BR/J-BR_03016/imfname_356961.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 35309
+-   fields: {html_link: /PAKT/VHG/BR/J-BR/J-BR_03016/fnameorig_357271.html, pdf_link: /PAKT/VHG/BR/J-BR/J-BR_03016/fname_357271.pdf,
+        stripped_html: null, title: "Anfrage  (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 35310
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/AB-BR/AB-BR_02802/imfname_365482.pdf,
+        stripped_html: null, title: Anfragebeantwortung}
+    model: op_scraper.document
+    pk: 35313
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/AB-BR/AB-BR_02801/imfname_365480.pdf,
+        stripped_html: null, title: Anfragebeantwortung}
+    model: op_scraper.document
+    pk: 35314
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/J-BR/J-BR_03015/imfname_356960.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 35315
+-   fields: {html_link: /PAKT/VHG/BR/J-BR/J-BR_03015/fnameorig_357270.html, pdf_link: /PAKT/VHG/BR/J-BR/J-BR_03015/fname_357270.pdf,
+        stripped_html: null, title: "Anfrage  (elektr. \xFCbermittelte Version)"}
+    model: op_scraper.document
+    pk: 35316
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/J-BR/J-BR_03017/imfname_356962.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 35322
+-   fields: {html_link: /PAKT/VHG/BR/J-BR/J-BR_03017/fnameorig_357311.html, pdf_link: /PAKT/VHG/BR/J-BR/J-BR_03017/fname_357311.pdf,
+        stripped_html: null, title: Anfrage  (textinterpretierte Version)}
+    model: op_scraper.document
+    pk: 35323
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/BI/BI_00057/imfname_370577.pdf,
+        stripped_html: null, title: "B\xFCrgerinitiative  (gescannte datenschutzkonforme\
+            \ Version)"}
+    model: op_scraper.document
+    pk: 35674
+-   fields: {html_link: /PAKT/VHG/XXV/BI/BI_00057/fnameorig_370671.html, pdf_link: /PAKT/VHG/XXV/BI/BI_00057/fname_370671.pdf,
+        stripped_html: null, title: "B\xFCrgerinitiative (textinterpretierte Version)"}
+    model: op_scraper.document
+    pk: 35675
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/PET-BR/PET-BR_00032/imfname_463255.pdf,
+        stripped_html: null, title: Petition  (gescanntes Original)}
+    model: op_scraper.document
+    pk: 36314
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00412/imfname_269654.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 51371
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00412/imfname_269655.pdf,
+        stripped_html: null, title: "Materialien - Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 51372
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00412/imfname_269656.pdf,
+        stripped_html: null, title: "Materialien - Textgegen\xFCberstellung"}
+    model: op_scraper.document
+    pk: 51373
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00412/imfname_269657.pdf,
+        stripped_html: null, title: Begleitschreiben}
+    model: op_scraper.document
+    pk: 51374
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00384/imfname_252582.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 51393
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00384/imfname_252583.pdf,
+        stripped_html: null, title: "Materialien - Vorblatt und Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 51394
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00384/imfname_252584.pdf,
+        stripped_html: null, title: Begleitschreiben}
+    model: op_scraper.document
+    pk: 51395
+-   fields: {html_link: /PAKT/VHG/XXIV/ME/ME_00393/fnameorig_258563.html, pdf_link: /PAKT/VHG/XXIV/ME/ME_00393/fname_258563.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 51572
+-   fields: {html_link: /PAKT/VHG/XXIV/ME/ME_00393/fnameorig_258564.html, pdf_link: /PAKT/VHG/XXIV/ME/ME_00393/fname_258564.pdf,
+        stripped_html: null, title: begmat}
+    model: op_scraper.document
+    pk: 51573
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/ME/ME_00393/imfname_258565.pdf,
+        stripped_html: null, title: begtxt}
+    model: op_scraper.document
+    pk: 51574
+-   fields: {html_link: /PAKT/VHG/XXIV/ME/ME_00393/fnameorig_258566.html, pdf_link: /PAKT/VHG/XXIV/ME/ME_00393/fname_258566.pdf,
+        stripped_html: null, title: Begleitschreiben Begutachtungsentwurf}
+    model: op_scraper.document
+    pk: 51575
+-   fields: {html_link: /PAKT/VHG/XX/I/I_00054/fnameorig_138942.html, pdf_link: /PAKT/VHG/XX/I/I_00054/fname_138942.pdf,
+        stripped_html: null, title: Volltext}
+    model: op_scraper.document
+    pk: 55597
+-   fields: {html_link: /PAKT/VHG/XXI/I/I_00001/fnameorig_142750.html, pdf_link: /PAKT/VHG/XXI/I/I_00001/fname_142750.pdf,
+        stripped_html: null, title: Volksbegehren}
+    model: op_scraper.document
+    pk: 56883
+-   fields: {html_link: /PAKT/VHG/XXII/I/I_01625/fnameorig_067082.html, pdf_link: /PAKT/VHG/XXII/I/I_01625/fname_067082.pdf,
+        stripped_html: null, title: Einspruch des BR}
+    model: op_scraper.document
+    pk: 57295
+-   fields: {html_link: /PAKT/VHG/XXII/I/I_01625/fnameorig_067083.html, pdf_link: /PAKT/VHG/XXII/I/I_01625/fname_067083.pdf,
+        stripped_html: null, title: "Einspruchsbegr\xFCndung"}
+    model: op_scraper.document
+    pk: 57296
+-   fields: {html_link: /PAKT/VHG/XXII/I/I_01621/fnameorig_067070.html, pdf_link: /PAKT/VHG/XXII/I/I_01621/fname_067070.pdf,
+        stripped_html: null, title: Einspruch des BR}
+    model: op_scraper.document
+    pk: 57301
+-   fields: {html_link: /PAKT/VHG/XXII/I/I_01621/fnameorig_067071.html, pdf_link: /PAKT/VHG/XXII/I/I_01621/fname_067071.pdf,
+        stripped_html: null, title: "Einspruchsbegr\xFCndung"}
+    model: op_scraper.document
+    pk: 57302
+-   fields: {html_link: /PAKT/VHG/XXIV/I/I_01909/fnameorig_269099.html, pdf_link: /PAKT/VHG/XXIV/I/I_01909/fname_269099.pdf,
+        stripped_html: null, title: Volksbefragung}
+    model: op_scraper.document
+    pk: 63725
+-   fields: {html_link: /PAKT/VHG/XXIV/I/I_01716/fnameorig_247179.html, pdf_link: /PAKT/VHG/XXIV/I/I_01716/fname_247179.pdf,
+        stripped_html: null, title: Vertragstext}
+    model: op_scraper.document
+    pk: 63956
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247182.pdf,
+        stripped_html: null, title: 02 deutscher Beschluss}
+    model: op_scraper.document
+    pk: 63957
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247183.pdf,
+        stripped_html: null, title: 03 bulgarischer Beschluss}
+    model: op_scraper.document
+    pk: 63958
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247184.pdf,
+        stripped_html: null, title: "04 d\xE4nischer Beschluss"}
+    model: op_scraper.document
+    pk: 63959
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247185.pdf,
+        stripped_html: null, title: 05 englischer Beschluss}
+    model: op_scraper.document
+    pk: 63960
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247186.pdf,
+        stripped_html: null, title: 06 estnischer Beschluss}
+    model: op_scraper.document
+    pk: 63961
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247187.pdf,
+        stripped_html: null, title: 07 finnischer Beschluss}
+    model: op_scraper.document
+    pk: 63962
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247188.pdf,
+        stripped_html: null, title: "08 franz\xF6sischer Beschluss"}
+    model: op_scraper.document
+    pk: 63963
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247189.pdf,
+        stripped_html: null, title: "09 g\xE4lischer Beschluss"}
+    model: op_scraper.document
+    pk: 63964
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247190.pdf,
+        stripped_html: null, title: 10 griechischer Beschluss}
+    model: op_scraper.document
+    pk: 63965
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247191.pdf,
+        stripped_html: null, title: 11 italienischer Beschluss}
+    model: op_scraper.document
+    pk: 63966
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247192.pdf,
+        stripped_html: null, title: 12 lettischer Beschluss}
+    model: op_scraper.document
+    pk: 63967
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247193.pdf,
+        stripped_html: null, title: 13 litauischer Beschluss}
+    model: op_scraper.document
+    pk: 63968
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247194.pdf,
+        stripped_html: null, title: 14 maltesischer Beschluss}
+    model: op_scraper.document
+    pk: 63969
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247195.pdf,
+        stripped_html: null, title: "15 niederl\xE4ndischer Beschluss"}
+    model: op_scraper.document
+    pk: 63970
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247196.pdf,
+        stripped_html: null, title: 16 polnischer Beschluss}
+    model: op_scraper.document
+    pk: 63971
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247197.pdf,
+        stripped_html: null, title: 17 portugiesischer Beschluss}
+    model: op_scraper.document
+    pk: 63972
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247198.pdf,
+        stripped_html: null, title: "18 rum\xE4nischer Beschluss"}
+    model: op_scraper.document
+    pk: 63973
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247199.pdf,
+        stripped_html: null, title: 19 schwedischer Beschluss}
+    model: op_scraper.document
+    pk: 63974
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247200.pdf,
+        stripped_html: null, title: 20 slowakischer Beschluss}
+    model: op_scraper.document
+    pk: 63975
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247201.pdf,
+        stripped_html: null, title: 21 slowenischer Beschluss}
+    model: op_scraper.document
+    pk: 63976
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247202.pdf,
+        stripped_html: null, title: 22 spanischer Beschluss}
+    model: op_scraper.document
+    pk: 63977
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247203.pdf,
+        stripped_html: null, title: 23 tschechischer Beschluss}
+    model: op_scraper.document
+    pk: 63978
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXIV/I/I_01716/imfname_247204.pdf,
+        stripped_html: null, title: 24 ungarischer Beschluss}
+    model: op_scraper.document
+    pk: 63979
+-   fields: {html_link: /PAKT/VHG/XXIV/I/I_01716/fnameorig_247181.html, pdf_link: /PAKT/VHG/XXIV/I/I_01716/fname_247181.pdf,
+        stripped_html: null, title: "Vorbl. u. Erl\xE4ut."}
+    model: op_scraper.document
+    pk: 63980
+-   fields: {html_link: /PAKT/VHG/XX/JPR/JPR_00054/fnameorig_117415.html, pdf_link: /PAKT/VHG/XX/JPR/JPR_00054/fname_117415.pdf,
+        stripped_html: null, title: Anfrage textinterpretiert}
+    model: op_scraper.document
+    pk: 67530
+-   fields: {html_link: /PAKT/VHG/XX/JPR/JPR_00051/fnameorig_117408.html, pdf_link: /PAKT/VHG/XX/JPR/JPR_00051/fname_117408.pdf,
+        stripped_html: null, title: Anfrage textinterpretiert}
+    model: op_scraper.document
+    pk: 67753
+-   fields: {html_link: /PAKT/VHG/XX/JPR/JPR_00017/fnameorig_117376.html, pdf_link: /PAKT/VHG/XX/JPR/JPR_00017/fname_117376.pdf,
+        stripped_html: null, title: Anfrage textinterpretiert}
+    model: op_scraper.document
+    pk: 73971
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/BI/BI_00100/imfname_527877.pdf,
+        stripped_html: null, title: "B\xFCrgerinitiative (gescanntes Original)"}
+    model: op_scraper.document
+    pk: 200805
+-   fields: {html_link: /PAKT/VHG/XXV/BI/BI_00100/fnameorig_528114.html, pdf_link: /PAKT/VHG/XXV/BI/BI_00100/fname_528114.pdf,
+        stripped_html: null, title: "B\xFCrgerinitiative (textinterpretierte Version)"}
+    model: op_scraper.document
+    pk: 200806
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/PET-BR/PET-BR_00033/imfname_531399.pdf,
+        stripped_html: null, title: Petition  (gescanntes Original)}
+    model: op_scraper.document
+    pk: 201481
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/AB/AB_09312/imfname_556773.pdf,
+        stripped_html: null, title: Anfragebeantwortung}
+    model: op_scraper.document
+    pk: 205229
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00127/fnameorig_413483.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00127/fname_413483.pdf,
+        stripped_html: null, title: Gesetzestext}
+    model: op_scraper.document
+    pk: 207977
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00127/imfname_413486.pdf,
+        stripped_html: null, title: Anlage 1 Deutsch}
+    model: op_scraper.document
+    pk: 207978
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00127/imfname_413487.pdf,
+        stripped_html: null, title: Anlage 2 Englisch}
+    model: op_scraper.document
+    pk: 207979
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXV/ME/ME_00127/imfname_413488.pdf,
+        stripped_html: null, title: "Anlage 3 Franz\xF6sisch"}
+    model: op_scraper.document
+    pk: 207980
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00127/fnameorig_413484.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00127/fname_413484.pdf,
+        stripped_html: null, title: 'Vorblatt, WFA'}
+    model: op_scraper.document
+    pk: 207981
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00127/fnameorig_413485.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00127/fname_413485.pdf,
+        stripped_html: null, title: "Erl\xE4uterungen"}
+    model: op_scraper.document
+    pk: 207982
+-   fields: {html_link: /PAKT/VHG/XXV/ME/ME_00127/fnameorig_413489.html, pdf_link: /PAKT/VHG/XXV/ME/ME_00127/fname_413489.pdf,
+        stripped_html: null, title: Begleitschreiben Begutachtungsentwurf}
+    model: op_scraper.document
+    pk: 207983
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/BR/AB-BR/AB-BR_02803/imfname_365484.pdf,
+        stripped_html: null, title: Anfragebeantwortung}
+    model: op_scraper.document
+    pk: 210572
+-   fields: {html_link: '', pdf_link: /PAKT/VHG/XXI/ME/ME_00317/imfname_594316.pdf,
+        stripped_html: null, title: Entwurf (gescanntes Original)}
+    model: op_scraper.document
+    pk: 210948
+-   fields: {html_link: /PAKT/VHG/XXI/J/J_01700/fnameorig_603509.html, pdf_link: /PAKT/VHG/XXI/J/J_01700/fname_603509.pdf,
+        stripped_html: null, title: Anfrage (gescanntes Original)}
+    model: op_scraper.document
+    pk: 217169
+-   fields: {html_link: /PAKT/VHG/XXI/I/I_00013/fnameorig_601438.html, pdf_link: /PAKT/VHG/XXI/I/I_00013/fname_601438.pdf,
+        stripped_html: null, title: Gesetzesantrag BR (gescanntes Original)}
+    model: op_scraper.document
+    pk: 222779
+-   fields:
+        _slug: /gesetze/XXV/191-ME/
+        category: 1
+        description: '
+
+            '
+        documents: [34, 35, 36, 37, 38]
+        keywords: []
+        legislative_period: 1
+        parl_id: (191/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00191/index.shtml
+        status: null
+        title: Signatur- und Vertrauensdienstegesetz (SVG) u.a.
+        ts: 2016-03-18 13:00:00+00:00
+    model: op_scraper.law
+    pk: 9
+-   fields:
+        _slug: /gesetze/XXV/186-ME/
+        category: 1
+        description: '
+
+            '
+        documents: [66, 67, 68, 69, 70]
+        keywords: []
+        legislative_period: 1
+        parl_id: (186/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00186/index.shtml
+        status: null
+        title: Verwertungsgesellschaftengesetz 2016
+        ts: 2016-03-18 14:23:00+00:00
+    model: op_scraper.law
+    pk: 14
+-   fields:
+        _slug: /gesetze/XXV/152-ME/
+        category: 1
+        description: '
+
+            '
+        documents: [100, 101, 102, 103]
+        keywords: []
+        legislative_period: 1
+        parl_id: (152/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00152/index.shtml
+        status: null
+        title: "Bundesgesetz \xFCber den Nationalen Qualifikationsrahmen"
+        ts: 2016-02-25 01:56:00+00:00
+    model: op_scraper.law
+    pk: 21
+-   fields:
+        _slug: /gesetze/XXV/162-ME/
+        category: 1
+        description: '
+
+            '
+        documents: [1088, 1084, 1085, 1086, 1087]
+        keywords: []
+        legislative_period: 1
+        parl_id: (162/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00162/index.shtml
+        status: null
+        title: "Gerichtsgeb\xFChren-Novelle 2015"
+        ts: 2015-11-27 02:04:00+00:00
+    model: op_scraper.law
+    pk: 31
+-   fields:
+        _slug: /gesetze/XXV/167-ME/
+        category: 1
+        description: '
+
+            '
+        documents: [1096, 1097, 1093, 1094, 1095]
+        keywords: []
+        legislative_period: 1
+        parl_id: (167/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00167/index.shtml
+        status: null
+        title: "Mutterschutzgesetz 1979, V\xE4ter-Karenzgesetz u.a., \xC4nderung"
+        ts: 2015-11-27 02:05:00+00:00
+    model: op_scraper.law
+    pk: 33
+-   fields:
+        _slug: /gesetze/XXV/137-ME/
+        category: 1
+        description: '
+
+            '
+        documents: [1128, 1129, 1130, 1131, 1132, 1133]
+        keywords: []
+        legislative_period: 1
+        parl_id: (137/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00137/index.shtml
+        status: null
+        title: Normengesetz 2015
+        ts: 2015-11-27 02:04:00+00:00
+    model: op_scraper.law
+    pk: 40
+-   fields:
+        _slug: /gesetze/XXV/127-ME/
+        category: 4
+        description: '
+
+            '
+        documents: [207977, 207978, 207979, 207980, 207981, 207982, 207983]
+        keywords: []
+        legislative_period: 1
+        parl_id: (127/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00127/index.shtml
+        status: null
+        title: "\xC4nderungen des Protokolls von Kyoto zum Rahmen\xFCbereinkommen\
+            \ der Vereinten Nationen \xFCber Klima\xE4nderungen, die in Doha beschlossen\
+            \ wurden"
+        ts: 2016-01-21 01:52:00+00:00
+    model: op_scraper.law
+    pk: 71
+-   fields:
+        _slug: /gesetze/XXV/92-ME/
+        category: 2
+        description: '
+
+            '
+        documents: []
+        keywords: []
+        legislative_period: 1
+        parl_id: (92/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00092/index.shtml
+        status: null
+        title: "Fremdenrechts\xE4nderungsgesetz 2015"
+        ts: 2015-11-26 02:04:00+00:00
+    model: op_scraper.law
+    pk: 93
+-   fields:
+        _slug: /gesetze/XXV/30-ME/
+        category: 4
+        description: '
+
+            '
+        documents: [5500, 5501, 5502, 5503]
+        keywords: []
+        legislative_period: 1
+        parl_id: (30/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXV/ME/ME_00030/index.shtml
+        status: null
+        title: "Teilweise Zur\xFCckziehung der \xF6sterreichischen Vorbehalte zur\
+            \ Genfer Fl\xFCchtlingskonvention"
+        ts: 2014-05-29 02:26:00+00:00
+    model: op_scraper.law
+    pk: 164
+-   fields:
+        _slug: /gesetze/XXV/1428-A/
+        category: 5
+        description: "\n\n   \tAntrag der Abgeordneten Mag. Gerald Loacker, Kolleginnen\
+            \ und\n\n   \tKollegen betreffend ein Bundesgesetz, mit dem das \n\n \
+            \  \tAllgemeine Sozialversicherungsgesetz \n\n   \tge\xE4ndert wird\n\n\
+            \   \t"
+        documents: [6505, 6506]
+        keywords: []
+        legislative_period: 1
+        parl_id: (1428/A)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/A/A_01428/index.shtml
+        status: Aktenvermerk <a href="/PAKT/VHG/XXV/BAV/BAV_00351/index.shtml">351/BAV</a>
+        title: "Allgemeine Sozialversicherungsgesetz, \xC4nderung"
+        ts: 2017-02-17 13:12:00+00:00
+    model: op_scraper.law
+    pk: 201
+-   fields:
+        _slug: /gesetze/XXV/1057_d.B./
+        category: 6
+        description: "\n\n   \tBundesgesetz \xFCber Verwertungsgesellschaften \n\n\
+            \   \t(Verwertungsgesellschaftengesetz 2016 \u2013 VerwGesG 2016) \n\n\
+            \   \t"
+        documents: [6507, 6508, 6509, 6510]
+        keywords: []
+        legislative_period: 1
+        parl_id: (1057 d.B.)
+        press_releases: []
+        references: 14
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_01057/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00316/index.shtml\"\
+            >316/BNR</a><br>Einhellig<br>Beschlossen im Nationalrat , Daf\xFCr: S,\
+            \ V, F, G, N, T, dagegen: -"
+        title: Verwertungsgesellschaftengesetz 2016
+        ts: 2017-02-20 18:30:00+00:00
+    model: op_scraper.law
+    pk: 202
+-   fields:
+        _slug: /gesetze/XXV/1002_d.B./
+        category: 7
+        description: "\n\n   \tBericht und Antrag des Budgetausschusses \xFCber den\
+            \ Entwurf\n\n   \teines Bundesgesetzes, mit dem das \n\n   \tBundesgesetz\
+            \ zur Schaffung einer Abbaueinheit\n\n   \tge\xE4ndert wird \n\n   \t"
+        documents: [6531, 6532]
+        keywords: []
+        legislative_period: 1
+        parl_id: (1002 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_01002/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00300/index.shtml\"\
+            >300/BNR</a><br>mehrstimmig<br>Beschlossen im Nationalrat , Daf\xFCr:\
+            \ S, V, G, dagegen: F, N, T"
+        title: "Bundesgesetz zur Schaffung einer Abbaueinheit, \xC4nderung"
+        ts: 2017-02-20 18:29:00+00:00
+    model: op_scraper.law
+    pk: 209
+-   fields:
+        _slug: /gesetze/XXV/1303-A/
+        category: 5
+        description: "\n\n   \tAntrag der Abgeordneten Mag. Judith Schwentner, Kolleginnen\n\
+            \n   \tund Kollegen betreffend ein Bundesgesetz, mit dem das\n\n   \t\
+            Allgemeine Sozialversicherungsgesetz, zuletzt ge\xE4ndert mit\n\n   \t\
+            BGBl. I. Nr. 118/2015, abge\xE4ndert wird \n\n   \t"
+        documents: [6533, 6534]
+        keywords: []
+        legislative_period: 1
+        parl_id: (1303/A)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/A/A_01303/index.shtml
+        status: Auf der Tagesordnung der <a href="/PAKT/VHG/XXV/NRSITZ/NRSITZ_00158/index.shtml">158.
+            Sitzung des Nationalrates</a> Miterledigung
+        title: "Allgemeines Sozialversicherungsgesetz, \xC4nderung"
+        ts: 2017-02-17 12:56:00+00:00
+    model: op_scraper.law
+    pk: 210
+-   fields:
+        _slug: /gesetze/XXV/999_d.B./
+        category: 6
+        description: "\n\n   \tBundesgesetz \xFCber den \n\n   \tNationalen Qualifikationsrahmen\
+            \ (NQR-Gesetz) \n\n   \t"
+        documents: [6541, 6542, 6543]
+        keywords: []
+        legislative_period: 1
+        parl_id: (999 d.B.)
+        press_releases: []
+        references: 21
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00999/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00297/index.shtml\"\
+            >297/BNR</a><br>mehrstimmig<br>Beschlossen im Nationalrat , Daf\xFCr:\
+            \ S, V, N, dagegen: F, G, T"
+        title: Nationaler Qualifikationsrahmen (NQR-Gesetz)
+        ts: 2017-02-20 18:29:00+00:00
+    model: op_scraper.law
+    pk: 213
+-   fields:
+        _slug: /gesetze/XXV/1000_d.B./
+        category: 8
+        description: "\n\n   \tRahmenabkommen zwischen der Republik \xD6sterreich\
+            \ und der\n\n   \tTschechischen Republik \xFCber grenz\xFCberschreitende\n\
+            \n   \tZusammenarbeit im Rettungsdienst \n\n   \t"
+        documents: [6577, 6578, 6579, 6580, 6581]
+        keywords: []
+        legislative_period: 1
+        parl_id: (1000 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_01000/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00309/index.shtml\"\
+            >309/BNR</a><br>Einhellig (Zustimmung gem\xE4\xDF Artikel 50 Abs. 2 Ziffer\
+            \ 2 B-VG)<br>Beschlossen im Nationalrat , Daf\xFCr: S, V, F, G, N, T,\
+            \ dagegen: -"
+        title: "Rahmenabkommen zwischen der Republik \xD6sterreich und der Tschechischen\
+            \ Republik \xFCber grenz\xFCberschreitende Zusammenarbeit im Rettungsdienst"
+        ts: 2017-02-20 18:29:00+00:00
+    model: op_scraper.law
+    pk: 229
+-   fields:
+        _slug: /gesetze/XXV/989_d.B./
+        category: 7
+        description: "\n\n   \tBericht und Antrag des Ausschusses f\xFCr innere\n\n\
+            \   \tAngelegenheiten \n\n   \t\xFCber den Entwurf eines Bundesgesetzes,\
+            \ mit dem das \n\n   \tTelekommunikationsgesetz \n\n   \t2003 ge\xE4ndert\
+            \ wird "
+        documents: [6598, 6599]
+        keywords: []
+        legislative_period: 1
+        parl_id: (989 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00989/index.shtml
+        status: "Kein Einspruch<br>Beschlossen im Nationalrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00291/index.shtml\"\
+            >291/BNR</a>, Daf\xFCr: S, V, dagegen: F, G, N, T"
+        title: "Telekommunikationsgesetz, \xC4nderung"
+        ts: 2017-02-20 18:29:00+00:00
+    model: op_scraper.law
+    pk: 236
+-   fields:
+        _slug: /gesetze/XXV/781_d.B./
+        category: 9
+        description: "\n\n   \tVolksbegehren \"EU-AUSTRITTS-VOLKSBEGEHREN\" \n\n \
+            \  \t"
+        documents: [6626]
+        keywords: []
+        legislative_period: 1
+        parl_id: (781 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00781/index.shtml
+        status: Aktenvermerk <a href="/PAKT/VHG/XXV/BAV/BAV_00326/index.shtml">326/BAV</a>
+        title: Volksbegehren "EU-AUSTRITTS-VOLKSBEGEHREN"
+        ts: 2017-02-20 18:24:00+00:00
+    model: op_scraper.law
+    pk: 244
+-   fields:
+        _slug: /gesetze/XXV/904_d.B./
+        category: 6
+        description: "\n\n   \tBundesgesetz, mit dem das \n\n   \tMutterschutzgesetz\
+            \ 1979 und \n\n   \tdas \n\n   \tV\xE4ter-Karenzgesetz \n\n   \tge\xE4\
+            ndert werden \n\n   \t"
+        documents: [6644, 6645]
+        keywords: []
+        legislative_period: 1
+        parl_id: (904 d.B.)
+        press_releases: []
+        references: 33
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00904/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00282/index.shtml\"\
+            >282/BNR</a><br>mehrstimmig<br>Beschlossen im Nationalrat , Daf\xFCr:\
+            \ S, V, G, N, T, dagegen: F"
+        title: "Mutterschutzgesetz 1979, V\xE4ter-Karenzgesetz, \xC4nderung"
+        ts: 2017-02-20 18:29:00+00:00
+    model: op_scraper.law
+    pk: 250
+-   fields:
+        _slug: /gesetze/XXV/780_d.B./
+        category: 8
+        description: "\n\n   \tErkl\xE4rung der Republik \xD6sterreich \xFCber den\
+            \ Einspruch\n\n   \tgegen den Beitritt der Republik Tadschikistan zum\n\
+            \n   \t\xDCbereinkommen zur Befreiung ausl\xE4ndischer \xF6ffentlicher\n\
+            \n   \tUrkunden von der Beglaubigung \n\n   \t"
+        documents: [6709, 6710, 6711]
+        keywords: []
+        legislative_period: 1
+        parl_id: (780 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00780/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00289/index.shtml\"\
+            >289/BNR</a><br>Einhellig<br>Beschlossen im Nationalrat , Daf\xFCr: S,\
+            \ V, F, G, N, T, dagegen: -"
+        title: "Erkl\xE4rung der Republik \xD6sterreich \xFCber den Einspruch gegen\
+            \ den Beitritt der Republik Tadschikistan zum \xDCbereinkommen zur Befreiung\
+            \ ausl\xE4ndischer \xF6ffentlicher Urkunden von der Beglaubigung"
+        ts: 2017-02-20 18:24:00+00:00
+    model: op_scraper.law
+    pk: 269
+-   fields:
+        _slug: /gesetze/XXV/1415-A/
+        category: 5
+        description: "\n\n   \tAntrag der Abgeordneten Dr. Rainer Hable, Kolleginnen\
+            \ und\n\n   \tKollegen betreffend ein Bundesgesetz, mit dem das\n\n  \
+            \ \tBundesgesetz \xFCber die Gesch\xE4ftsordnung des Nationalrates\n\n\
+            \   \t(Gesch\xE4ftsordnungsgesetz 1975) ge\xE4ndert wird \n\n   \t<i>(Aktenvorlagepflicht\
+            \ in Untersuchungsaussch\xFCssen)  </i>\n\n   \t"
+        documents: [6716, 6717]
+        keywords: []
+        legislative_period: 1
+        parl_id: (1415/A)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/A/A_01415/index.shtml
+        status: "Zugewiesen an: <a href=\"/PAKT/VHG/XXV/A-GO/A-GO_00001_00349/index.shtml\"\
+            >Gesch\xE4ftsordnungsausschuss</a>, Beratungen noch nicht aufgenommen"
+        title: "Gesch\xE4ftsordnungsgesetz 1975"
+        ts: 2017-02-17 13:11:00+00:00
+    model: op_scraper.law
+    pk: 271
+-   fields:
+        _slug: /gesetze/XXV/883_d.B./
+        category: 7
+        description: "\n\n   \tBericht und Antrag \n\n   \tdes Budgetausschusses \xFC\
+            ber den Entwurf eines\n\n   \tBundesgesetzes, mit dem das \n\n   \tRechnungshofgesetz\
+            \ 1948 \n\n   \tge\xE4ndert wird\n\n   \t"
+        documents: [6755, 6756]
+        keywords: []
+        legislative_period: 1
+        parl_id: (883 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00883/index.shtml
+        status: "Kein Einspruch<br>Beschlossen im Nationalrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00262/index.shtml\"\
+            >262/BNR</a>, Daf\xFCr: S, V, G, N, dagegen: F, T"
+        title: "Rechnungshofgesetz 1948, \xC4nderung"
+        ts: 2017-02-20 18:27:00+00:00
+    model: op_scraper.law
+    pk: 287
+-   fields:
+        _slug: /gesetze/XXV/III-199_d.B./
+        category: 10
+        description: "\n\n   \tBundesrechnungsabschluss f\xFCr das Jahr 2014 \n\n\
+            \   \t "
+        documents: [6757, 6758, 6759, 6760, 6761, 6762, 6763, 6764, 6765, 6766, 6767,
+            6768, 6769, 6770, 6771, 6772, 6773, 6774, 6775, 6776, 6777, 6778, 6779,
+            6780, 6781, 6782]
+        keywords: []
+        legislative_period: 1
+        parl_id: (III-199 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/III/III_00199/index.shtml
+        status: "Beschlossen im Nationalrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00264/index.shtml\"\
+            >264/BNR</a>, Daf\xFCr: S, V, G, dagegen: F, N, T"
+        title: "Bundesrechnungsabschluss f\xFCr das Jahr 2014"
+        ts: 2017-02-20 19:02:00+00:00
+    model: op_scraper.law
+    pk: 288
+-   fields:
+        _slug: /gesetze/XXV/III-162_d.B./
+        category: 10
+        description: "\n\n   \tBundesrechnungsabschluss f\xFCr das Jahr 2014\n\n \
+            \  \t(Voranschlagsvergleichsrechnungen Stand 31. M\xE4rz 2015) \n\n  \
+            \ \t"
+        documents: [6795, 6796, 6797, 6798, 6799, 6800, 6801, 6802, 6803, 6804, 6805,
+            6806, 6807, 6808, 6809, 6810, 6811, 6812]
+        keywords: []
+        legislative_period: 1
+        parl_id: (III-162 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/III/III_00162/index.shtml
+        status: Auf der Tagesordnung der <a href="/PAKT/VHG/XXV/NRSITZ/NRSITZ_00104/index.shtml">104.
+            Sitzung des Nationalrates</a> Miterledigung
+        title: "Bundesrechnungsabschluss f\xFCr das Jahr 2014 (Voranschlagsvergleichsrechnungen\
+            \ Stand 31. M\xE4rz 2015)"
+        ts: 2017-02-20 18:58:00+00:00
+    model: op_scraper.law
+    pk: 292
+-   fields:
+        _slug: /gesetze/XXV/579_d.B./
+        category: 8
+        description: "\n\n   \tAssoziierungsabkommen zwischen der Europ\xE4ischen\
+            \ Union und\n\n   \tder Europ\xE4ischen Atomgemeinschaft und ihren Mitgliedstaaten\n\
+            \n   \teinerseits und Georgien andererseits \n\n   \t"
+        documents: [7237, 7238, 7239, 7240, 7241, 7242, 7243, 7244, 7245, 7246, 7247,
+            7248, 7249, 7250, 7251, 7252, 7253, 7254, 7255, 7256, 7257, 7258, 7259]
+        keywords: []
+        legislative_period: 1
+        parl_id: (579 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00579/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00218/index.shtml\"\
+            >218/BNR</a><br>mehrstimmig<br>Beschlossen im Nationalrat , Daf\xFCr:\
+            \ S, V, G, N, dagegen: F, T"
+        title: "Assoziierungsabkommen zwischen der Europ\xE4ischen Union und der Europ\xE4\
+            ischen Atomgemeinschaft und ihren Mitgliedstaaten einerseits und Georgien\
+            \ andererseits"
+        ts: 2017-02-20 18:20:00+00:00
+    model: op_scraper.law
+    pk: 383
+-   fields:
+        _slug: /gesetze/XXV/452_d.B./
+        category: 11
+        description: "\n\n   \tGesetzesantrag des Bundesrates vom 18. Dezember 2014\n\
+            \n   \tbetreffend ein Bundesgesetz, mit dem das \n\n   \tVersicherungsaufsichtsgesetz\
+            \ 2016 \n\n   \tge\xE4ndert wird \n\n   \t"
+        documents: [7520]
+        keywords: []
+        legislative_period: 1
+        parl_id: (452 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00452/index.shtml
+        status: "Beschlossen im Bundesrat <a href=\"/PAKT/VHG/XXV/BNR/BNR_00152/index.shtml\"\
+            >152/BNR</a><br>mehrstimmig<br>Beschlossen im Nationalrat , Daf\xFCr:\
+            \ S, V, F, T, N, dagegen: G"
+        title: "Versicherungsaufsichtsgesetz 2016, \xC4nderung"
+        ts: 2017-02-20 18:17:00+00:00
+    model: op_scraper.law
+    pk: 476
+-   fields:
+        _slug: /gesetze/XXV/453_d.B./
+        category: 12
+        description: "\n\n   \tEinspruch des Bundesrates vom 18. Dezember 2014 gegen\
+            \ den\n\n   \tGesetzesbeschluss des Nationalrates vom 10. Dezember 2014\n\
+            \n   \tbetr. ein Bundesgesetz, mit dem das Bundespflegegeldgesetz\n\n\
+            \   \tge\xE4ndert wird \n\n   \t"
+        documents: [7613, 7614]
+        keywords: []
+        legislative_period: 1
+        parl_id: (453 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00453/index.shtml
+        status: "Zugewiesen an: <a href=\"/PAKT/VHG/XXV/A-AS/A-AS_00001_00360/index.shtml\"\
+            >Ausschuss f\xFCr Arbeit und Soziales</a>, Beratungen noch nicht aufgenommen"
+        title: "Einspruch gegen den Gesetzesbeschluss des Nationalrates betr. Bundespflegegeldgesetz,\
+            \ \xC4nderung"
+        ts: 2017-02-20 18:17:00+00:00
+    model: op_scraper.law
+    pk: 510
+-   fields:
+        _slug: /gesetze/XXV/271_d.B./
+        category: 13
+        description: "\n\n   \tBeschluss des Rates vom 26. Mai 2014 \xFCber das\n\n\
+            \   \tEigenmittelsystem der Europ\xE4ischen Union \n\n   \t"
+        documents: [7771, 7772, 7773, 7774, 7775, 7776, 7777, 7778, 7779, 7780, 7781,
+            7782, 7783, 7784, 7785, 7786, 7787, 7788, 7789, 7790, 7791, 7792, 7793,
+            7794, 7795, 7796]
+        keywords: []
+        legislative_period: 1
+        parl_id: (271 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00271/index.shtml
+        status: "Bekanntgabe des Gesetzesbeschlusses<br>Beschlossen im Nationalrat\
+            \ <a href=\"/PAKT/VHG/XXV/BSE/BSE_00001/index.shtml\">1/BSE</a>, Daf\xFC\
+            r: S, V, dagegen: F, G, T, N"
+        title: "Beschluss des Rates vom 26. Mai 2014 \xFCber das Eigenmittelsystem\
+            \ der Europ\xE4ischen Union"
+        ts: 2017-02-20 18:14:00+00:00
+    model: op_scraper.law
+    pk: 549
+-   fields:
+        _slug: /gesetze/XXV/III-66_d.B./
+        category: 10
+        description: "\n\n   \tBundesrechnungsabschluss f\xFCr das Jahr 2013\n\n \
+            \  \t(Voranschlagsvergleichsrechnung Stand 31. M\xE4rz 2014) \n\n   \t"
+        documents: [7808, 7809, 7810, 7811, 7812, 7799, 7800, 7801, 7802, 7803, 7804,
+            7805, 7806, 7807]
+        keywords: []
+        legislative_period: 1
+        parl_id: (III-66 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/III/III_00066/index.shtml
+        status: Auf der Tagesordnung der <a href="/PAKT/VHG/XXV/NRSITZ/NRSITZ_00055/index.shtml">55.
+            Sitzung des Nationalrates</a> Miterledigung
+        title: "Bundesrechnungsabschluss f\xFCr das Jahr 2013 (Voranschlagsvergleichsrechnung\
+            \ Stand 31. M\xE4rz 2014"
+        ts: 2017-02-20 18:49:00+00:00
+    model: op_scraper.law
+    pk: 551
+-   fields:
+        _slug: /gesetze/XXV/J_07834/
+        category: 14
+        description: "Schriftliche Anfrage der Abgeordneten Rupert Doppler, Kolleginnen\
+            \ und Kollegen an den Bundesminister f\xFCr Arbeit, Soziales und Konsumentenschutz\
+            \ betreffend Staats- bzw. Regierungsgeschenke"
+        documents: [8933, 8934]
+        keywords: []
+        legislative_period: 1
+        parl_id: J_07834
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_07834/index.shtml
+        status: response_received
+        title: Staats- bzw. Regierungsgeschenke
+        ts: 2017-02-18 07:44:00+00:00
+    model: op_scraper.law
+    pk: 1081
+-   fields:
+        _slug: /gesetze/XXV/J_07831/
+        category: 14
+        description: "Schriftliche Anfrage der Abgeordneten Rupert Doppler, Kolleginnen\
+            \ und Kollegen an die Bundesministerin f\xFCr Gesundheit betreffend Staats-\
+            \ bzw. Regierungsgeschenke"
+        documents: [8936, 8937]
+        keywords: []
+        legislative_period: 1
+        parl_id: J_07831
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_07831/index.shtml
+        status: response_received
+        title: Staats- bzw. Regierungsgeschenke
+        ts: 2017-02-18 07:44:00+00:00
+    model: op_scraper.law
+    pk: 1083
+-   fields:
+        _slug: /gesetze/XXV/AB_07413/
+        category: 15
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Arbeit,\
+            \ Soziales und Konsumentenschutz Alois St\xF6ger, dipl\xF4m\xE9 zu der\
+            \ schriftlichen Anfrage (7834/J) der Abgeordneten Rupert Doppler, Kolleginnen\
+            \ und Kollegen an den Bundesminister f\xFCr Arbeit, Soziales und Konsumentenschutz\
+            \ betreffend Staats- bzw. Regierungsgeschenke"
+        documents: [8944]
+        keywords: []
+        legislative_period: 1
+        parl_id: AB_07413
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/AB/AB_07413/index.shtml
+        status: null
+        title: Staats- bzw. Regierungsgeschenke
+        ts: null
+    model: op_scraper.law
+    pk: 1088
+-   fields:
+        _slug: /gesetze/XXV/AB_07461/
+        category: 15
+        description: "Anfragebeantwortung durch die Bundesministerin f\xFCr Gesundheit\
+            \ Dr. Sabine Oberhauser, MAS zu der schriftlichen Anfrage (7831/J) der\
+            \ Abgeordneten Rupert Doppler, Kolleginnen und Kollegen an die Bundesministerin\
+            \ f\xFCr Gesundheit betreffend Staats- bzw. Regierungsgeschenke"
+        documents: [8947]
+        keywords: []
+        legislative_period: 1
+        parl_id: AB_07461
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/AB/AB_07461/index.shtml
+        status: null
+        title: Staats- bzw. Regierungsgeschenke
+        ts: null
+    model: op_scraper.law
+    pk: 1090
+-   fields:
+        _slug: /gesetze/XXV/ABEU_00005/
+        category: 19
+        description: "Anfragebeantwortung gem. \xA7 31f GOG durch den Bundesminister\
+            \ f\xFCr Europa, Integration und \xC4u\xDFeres Sebastian Kurz zu der Dokumentenanfrage\
+            \ gem. \xA7 31f GOG (6/JEU) der Abgeordneten Dieter Brosz, MSc, Mag. Ayg\xFC\
+            l Berivan Aslan, Georg Willi, Sigrid Maurer, Mag. Bruno Rossmann, Kolleginnen\
+            \ und Kollegen an den Bundesminister f\xFCr Europa, Integration und \xC4\
+            u\xDFeres Sebastian Kurz betreffend TTIP-Leseraum - Vereinbarung EU-USA"
+        documents: [10008]
+        keywords: []
+        legislative_period: 1
+        parl_id: ABEU_00005
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/ABEU/ABEU_00005/index.shtml
+        status: null
+        title: TTIP-Leseraum - Vereinbarung EU-USA
+        ts: null
+    model: op_scraper.law
+    pk: 1727
+-   fields:
+        _slug: /gesetze/XXV/JEU_00005/
+        category: 18
+        description: ''
+        documents: []
+        keywords: []
+        legislative_period: 1
+        parl_id: JEU_00005
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00005/index.shtml
+        status: response_received
+        title: TTIP-Leseraum - Vereinbarung EU-USA
+        ts: 2016-03-09 08:21:00+00:00
+    model: op_scraper.law
+    pk: 1970
+-   fields:
+        _slug: /gesetze/XXV/ABEU_00004/
+        category: 19
+        description: "Anfragebeantwortung gem. \xA7 31f GOG durch den Bundesminister\
+            \ f\xFCr Wissenschaft, Forschung und Wirtschaft Dr. Reinhold Mitterlehner\
+            \ zu der Dokumentenanfrage gem. \xA7 31f GOG (5/JEU) der Abgeordneten\
+            \ Dr. Eva Glawischnig-Piesczek, Dr. Gabriela Moser, Dr. Harald Walser,\
+            \ Matthias K\xF6chl, Mag. Christiane Brunner, Kolleginnen und Kollegen\
+            \ an den Bundesminister f\xFCr Wissenschaft, Forschung und Wirtschaft\
+            \ Dr. Reinhold Mitterlehner betreffend TTIP-Leseraum - Vereinbarung EU-USA"
+        documents: [10509]
+        keywords: []
+        legislative_period: 1
+        parl_id: ABEU_00004
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/ABEU/ABEU_00004/index.shtml
+        status: null
+        title: TTIP-Leseraum - Vereinbarung EU-USA
+        ts: null
+    model: op_scraper.law
+    pk: 1984
+-   fields:
+        _slug: /gesetze/XXV/JEU_00004/
+        category: 18
+        description: ''
+        documents: []
+        keywords: []
+        legislative_period: 1
+        parl_id: JEU_00004
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00004/index.shtml
+        status: response_received
+        title: "Vereinbarung EU-USA bzgl. TTIP-Leser\xE4umen"
+        ts: 2016-03-02 12:47:00+00:00
+    model: op_scraper.law
+    pk: 2493
+-   fields:
+        _slug: /gesetze/XXV/JPR_00022/
+        category: 16
+        description: "Schriftliche Anfrage an die Pr\xE4sidentin des Nationalrates\
+            \ des Abgeordneten Mag. Gernot Darmann, Kolleginnen und Kollegen betreffend\
+            \ Kosten des Untersuchungsausschusses <i>(Hypo-Untersuchungsausschuss)\
+            \ </i>"
+        documents: [11829, 11830]
+        keywords: []
+        legislative_period: 1
+        parl_id: JPR_00022
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00022/index.shtml
+        status: response_received
+        title: Kosten des Untersuchungsausschusses
+        ts: 2017-02-21 06:28:00+00:00
+    model: op_scraper.law
+    pk: 2745
+-   fields:
+        _slug: /gesetze/XXV/ABPR_00021/
+        category: 20
+        description: "Anfragebeantwortung durch die Pr\xE4sidentin Doris Bures zu\
+            \ der schriftlichen Anfrage (22/JPR) an die Pr\xE4sidentin des Nationalrates\
+            \ des Abgeordneten Mag. Gernot Darmann, Kolleginnen und Kollegen betreffend\
+            \ Kosten des Untersuchungsausschusses"
+        documents: [11840]
+        keywords: []
+        legislative_period: 1
+        parl_id: ABPR_00021
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/ABPR/ABPR_00021/index.shtml
+        status: null
+        title: Kosten des Untersuchungsausschusses
+        ts: null
+    model: op_scraper.law
+    pk: 2752
+-   fields:
+        _slug: /gesetze/XXV/JPR_00021/
+        category: 16
+        description: "Schriftliche Anfrage an die Pr\xE4sidentin des Nationalrates\
+            \ des Abgeordneten Rupert Doppler, Kolleginnen und Kollegen betreffend\
+            \ Fragestunden / m\xFCndliche Anfragen"
+        documents: [12012, 12013]
+        keywords: []
+        legislative_period: 1
+        parl_id: JPR_00021
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00021/index.shtml
+        status: response_received
+        title: "Fragestunden / m\xFCndliche Anfragen"
+        ts: 2017-02-21 06:27:00+00:00
+    model: op_scraper.law
+    pk: 2849
+-   fields:
+        _slug: /gesetze/XXV/JPR_00020/
+        category: 16
+        description: "Schriftliche Anfrage an die Pr\xE4sidentin des Nationalrates\
+            \ des Abgeordneten Rupert Doppler, Kolleginnen und Kollegen betreffend\
+            \ Protokolle der Pr\xE4sidialkonferenz"
+        documents: [12016, 12015]
+        keywords: []
+        legislative_period: 1
+        parl_id: JPR_00020
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00020/index.shtml
+        status: response_received
+        title: "Protokolle der Pr\xE4sidialkonferenz"
+        ts: 2017-02-21 06:27:00+00:00
+    model: op_scraper.law
+    pk: 2851
+-   fields:
+        _slug: /gesetze/XXV/ABPR_00020/
+        category: 20
+        description: "Anfragebeantwortung durch die Pr\xE4sidentin Doris Bures zu\
+            \ der schriftlichen Anfrage (21/JPR) an die Pr\xE4sidentin des Nationalrates\
+            \ des Abgeordneten Rupert Doppler betreffend \"Fragestunden / m\xFCndliche\
+            \ Anfragen\""
+        documents: [12023]
+        keywords: []
+        legislative_period: 1
+        parl_id: ABPR_00020
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/ABPR/ABPR_00020/index.shtml
+        status: null
+        title: "\"Fragestunden / m\xFCndliche Anfragen\""
+        ts: null
+    model: op_scraper.law
+    pk: 2856
+-   fields:
+        _slug: /gesetze/XXV/ABPR_00019/
+        category: 20
+        description: "Anfragebeantwortung durch die Pr\xE4sidentin Doris Bures zu\
+            \ der schriftlichen Anfrage (20/JPR) an die Pr\xE4sidentin des Nationalrates\
+            \ des Abgeordneten Rupert Doppler betreffend \"Protokolle der Pr\xE4sidialkonferenz\""
+        documents: [12026]
+        keywords: []
+        legislative_period: 1
+        parl_id: ABPR_00019
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/ABPR/ABPR_00019/index.shtml
+        status: null
+        title: "\"Protokolle der Pr\xE4sidialkonferenz\""
+        ts: null
+    model: op_scraper.law
+    pk: 2858
+-   fields:
+        _slug: /gesetze/XXV/JEU_00003/
+        category: 18
+        description: ''
+        documents: []
+        keywords: []
+        legislative_period: 1
+        parl_id: JEU_00003
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml
+        status: response_received
+        title: "Verhandlungen \xFCber einen neuen Europ\xE4ischen Pr\xFCfzyklus f\xFC\
+            r Kfz - Technical Committee on Motor Vehicles (TCMV)"
+        ts: 2015-12-01 02:01:00+00:00
+    model: op_scraper.law
+    pk: 4492
+-   fields:
+        _slug: /gesetze/XXV/ABEU_00001/
+        category: 19
+        description: "Anfragebeantwortung gem. \xA7 31f GOG durch den Bundesminister\
+            \ f\xFCr Wissenschaft, Forschung und Wirtschaft Dr. Reinhold Mitterlehner\
+            \ zu der Dokumentenanfrage gem. \xA7 31f GOG (1/JEU) der Abgeordneten\
+            \ Dr. Eva Glawischnig-Piesczek, Mag. Werner Kogler, Mag. Christiane Brunner,\
+            \ Dipl.-Ing. Dr. Wolfgang Pirklhuber, Mag. Judith Schwentner, Kolleginnen\
+            \ und Kollegen an den Bundesminister f\xFCr Wissenschaft, Forschung und\
+            \ Wirtschaft Dr. Reinhold Mitterlehner betreffend Handels- und Investitionsabkommen\
+            \ mit den Vereinigten Staaten von Amerika (TTIP)"
+        documents: []
+        keywords: []
+        legislative_period: 1
+        parl_id: ABEU_00001
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/ABEU/ABEU_00001/index.shtml
+        status: null
+        title: Handels- und Investitionsabkommen mit den Vereinigten Staaten von Amerika
+            (TTIP)
+        ts: null
+    model: op_scraper.law
+    pk: 16143
+-   fields:
+        _slug: /gesetze/AB-BR_02803/
+        category: 23
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Landesverteidigung\
+            \ und Sport Mag. Gerald Klug zu der schriftlichen Anfrage (3029/J-BR/2014)\
+            \ der Bundesr\xE4te Hans-J\xF6rg Jenewein, Kolleginnen und Kollegen an\
+            \ den Bundesminister f\xFCr Landesverteidigung und Sport betreffend Eingriff\
+            \ in milit\xE4rische Kernkompetenzen durch Einsparungen"
+        documents: [210572]
+        keywords: []
+        legislative_period: null
+        parl_id: AB-BR_02803
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/AB-BR/AB-BR_02803/index.shtml
+        status: null
+        title: "Eingriff in milit\xE4rische Kernkompetenzen durch Einsparungen"
+        ts: null
+    model: op_scraper.law
+    pk: 17217
+-   fields:
+        _slug: /gesetze/J-BR_03016/
+        category: 21
+        description: "Anfrage der Bundesr\xE4te Werner Herbert, Kolleginnen und Kollegen\
+            \ an die Bundesministerin f\xFCr Inneres betreffend Verwendung eines Blaulichts\
+            \ auf dem Dienstwagen des N\xD6-Landeshauptmannes"
+        documents: [35309, 35310]
+        keywords: [2]
+        legislative_period: null
+        parl_id: J-BR_03016
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03016/index.shtml
+        status: response_received
+        title: "Verwendung eines Blaulichts auf dem Dienstwagen des N\xD6-Landeshauptmannes"
+        ts: 2016-06-10 18:05:00+00:00
+    model: op_scraper.law
+    pk: 17220
+-   fields:
+        _slug: /gesetze/AB-BR_02802/
+        category: 23
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Landesverteidigung\
+            \ und Sport Mag. Gerald Klug zu der schriftlichen Anfrage (3026/J-BR/2014)\
+            \ der Bundesr\xE4te Hans-J\xF6rg Jenewein, Kolleginnen und Kollegen an\
+            \ den Bundesminister f\xFCr Landesverteidigung und Sport betreffend Ersatz\
+            \ der Saab 105"
+        documents: [35313]
+        keywords: []
+        legislative_period: null
+        parl_id: AB-BR_02802
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/AB-BR/AB-BR_02802/index.shtml
+        status: null
+        title: Ersatz der Saab 105
+        ts: null
+    model: op_scraper.law
+    pk: 17223
+-   fields:
+        _slug: /gesetze/AB-BR_02801/
+        category: 23
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Landesverteidigung\
+            \ und Sport Mag. Gerald Klug zu der schriftlichen Anfrage (3025/J-BR/2014)\
+            \ der Bundesr\xE4te Gerd Krusche, Kolleginnen und Kollegen an den Bundesminister\
+            \ f\xFCr Landesverteidigung und Sport betreffend Milit\xE4rluftfahrtausstellung\
+            \ ZELTWEG"
+        documents: [35314]
+        keywords: []
+        legislative_period: null
+        parl_id: AB-BR_02801
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/AB-BR/AB-BR_02801/index.shtml
+        status: null
+        title: "Milit\xE4rluftfahrtausstellung ZELTWEG"
+        ts: null
+    model: op_scraper.law
+    pk: 17224
+-   fields:
+        _slug: /gesetze/J-BR_03015/
+        category: 21
+        description: "Anfrage der Bundesr\xE4te Hans-J\xF6rg Jenewein, Kolleginnen\
+            \ und Kollegen an die Bundesministerin f\xFCr Inneres betreffend Verhaftung\
+            \ eines Ukrainers in Wien <i>(auf Grund eines amerikanischen Haftbefehls)\
+            \ </i>"
+        documents: [35315, 35316]
+        keywords: [20]
+        legislative_period: null
+        parl_id: J-BR_03015
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03015/index.shtml
+        status: response_received
+        title: Verhaftung eines Ukrainers in Wien
+        ts: 2017-01-25 08:06:00+00:00
+    model: op_scraper.law
+    pk: 17225
+-   fields:
+        _slug: /gesetze/J-BR_03017/
+        category: 21
+        description: "Anfrage der Bundesr\xE4te Monika M\xFChlwerth, Kolleginnen und\
+            \ Kollegen an den Bundesminister f\xFCr Gesundheit betreffend Lebensmittelkennzeichnung\
+            \ darf heimische Wirtshauskultur nicht zerst\xF6ren"
+        documents: [35322, 35323]
+        keywords: [60]
+        legislative_period: null
+        parl_id: J-BR_03017
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03017/index.shtml
+        status: response_received
+        title: "Lebensmittelkennzeichnung darf heimische Wirtshauskultur nicht zerst\xF6\
+            ren"
+        ts: 2017-01-25 08:06:00+00:00
+    model: op_scraper.law
+    pk: 17230
+-   fields:
+        _slug: /gesetze/M-BR_01843/
+        category: 22
+        description: "M\xFCndliche Anfrage der Bundesr\xE4tin Adelheid Ebner (SP\xD6\
+            ) an den Bundesminister f\xFCr Gesundheit Alois St\xF6ger dipl. betreffend\
+            \ schwach ausgepr\xE4gte ambulante allgemeinmedizinische Versorgung in\
+            \ \xD6sterreich"
+        documents: []
+        keywords: [21]
+        legislative_period: null
+        parl_id: M-BR_01843
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/M-BR/M-BR_01843/index.shtml
+        status: null
+        title: "schwach ausgepr\xE4gte ambulante allgemeinmedizinische Versorgung\
+            \ in \xD6sterreich"
+        ts: 2014-09-20 02:01:00+00:00
+    model: op_scraper.law
+    pk: 17300
+-   fields:
+        _slug: /gesetze/XXV/57-BI/
+        category: 24
+        description: "\n\n   \tB\xFCrgerinitiative betreffend \n\n   \t\"Verpflichtung\
+            \ zur Abgabe unverk\xE4uflicher Ware an die\n\n   \tZivilgesellschaft\
+            \ vor der M\xFCllentsorgung -\n\n   \tAnti-Wegwerf-Gesetz\" \n\n   \t"
+        documents: [35674, 35675]
+        keywords: []
+        legislative_period: 1
+        parl_id: (57/BI)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00057/index.shtml
+        status: Aktenvermerk <a href="/PAKT/VHG/XXV/BAV/BAV_00177/index.shtml">177/BAV</a>
+        title: "Verpflichtung zur Abgabe unverk\xE4uflicher Ware an die Zivilgesellschaft\
+            \ vor der M\xFCllentsorgung - Anti-Wegwerf-Gesetz"
+        ts: 2017-02-17 16:23:00+00:00
+    model: op_scraper.law
+    pk: 17388
+-   fields:
+        _slug: /gesetze/XXV/I_00781/
+        category: 9
+        description: "\n\n   \tVolksbegehren \"EU-AUSTRITTS-VOLKSBEGEHREN\" \n\n \
+            \  \t"
+        documents: [6626]
+        keywords: []
+        legislative_period: 1
+        parl_id: I_00781
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/I/I_00781/index.shtml
+        status: Aktenvermerk <a href="/PAKT/VHG/XXV/BAV/BAV_00326/index.shtml">326/BAV</a>
+        title: Volksbegehren "EU-AUSTRITTS-VOLKSBEGEHREN"
+        ts: 2017-02-20 18:24:00+00:00
+    model: op_scraper.law
+    pk: 17518
+-   fields:
+        _slug: /gesetze/32-PET-BR-2015/
+        category: 28
+        description: "\n\n   \tPetition betreffend \"Fairer Umgang mit Vereinen bei\
+            \ der\n\n   \tBesteuerung von Vereinsfesten\" \n\n   \t"
+        documents: [36314]
+        keywords: [135]
+        legislative_period: null
+        parl_id: (32/PET-BR/2015)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/PET-BR/PET-BR_00032/index.shtml
+        status: Kenntnisnahme des Berichts angenommen
+        title: Fairer Umgang mit Vereinen bei der Besteuerung von Vereinsfesten
+        ts: 2017-02-02 12:13:00+00:00
+    model: op_scraper.law
+    pk: 17520
+-   fields:
+        _slug: /gesetze/XXI/317-ME/
+        category: 4
+        description: '
+
+            '
+        documents: [210948]
+        keywords: [32]
+        legislative_period: 5
+        parl_id: (317/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXI/ME/ME_00317/index.shtml
+        status: null
+        title: "Abkommen zwischen der Republik \xD6sterreich und der Bolivarischen\
+            \ Republik Venezuela zur Vermeidung der Doppelbesteuerung und zur Verhinderung\
+            \ der Steuerumgehung und der Steuerhinterziehung auf dem Gebiete der Steuern\
+            \ vom Einkommen und vom Verm\xF6gen"
+        ts: 2014-01-31 00:38:00+00:00
+    model: op_scraper.law
+    pk: 18045
+-   fields:
+        _slug: /gesetze/XXIV/412-ME/
+        category: 29
+        description: '
+
+            '
+        documents: [51371, 51372, 51373, 51374]
+        keywords: [9]
+        legislative_period: 2
+        parl_id: (412/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00412/index.shtml
+        status: null
+        title: "Grundbuchsgeb\xFChrennovelle"
+        ts: 2014-01-28 13:22:00+00:00
+    model: op_scraper.law
+    pk: 19136
+-   fields:
+        _slug: /gesetze/XXIV/384-ME/
+        category: 29
+        description: '
+
+            '
+        documents: [51393, 51394, 51395]
+        keywords: [27]
+        legislative_period: 2
+        parl_id: (384/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00384/index.shtml
+        status: null
+        title: "Bundesgesetz \xFCber die Inverkehrbringung von Gas\xF6len f\xFCr nicht\
+            \ auf See befindliche Binnenschiffe und Sportboote"
+        ts: 2014-01-28 13:21:00+00:00
+    model: op_scraper.law
+    pk: 19141
+-   fields:
+        _slug: /gesetze/XXIV/393-ME/
+        category: 29
+        description: '
+
+            '
+        documents: [51572, 51573, 51574, 51575]
+        keywords: [19]
+        legislative_period: 2
+        parl_id: (393/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00393/index.shtml
+        status: null
+        title: Zentrale Gegenparteien-Vollzugsgesetz
+        ts: 2014-01-28 13:21:00+00:00
+    model: op_scraper.law
+    pk: 19149
+-   fields:
+        _slug: /gesetze/XXIV/385-ME/
+        category: 2
+        description: '
+
+            '
+        documents: []
+        keywords: []
+        legislative_period: 2
+        parl_id: (385/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00385/index.shtml
+        status: null
+        title: "Arzneimittelgesetz, \xC4nderung (Pharmakovigilanz)"
+        ts: 2014-01-28 13:21:00+00:00
+    model: op_scraper.law
+    pk: 19161
+-   fields:
+        _slug: /gesetze/XXIV/323-ME/
+        category: 2
+        description: '
+
+            '
+        documents: []
+        keywords: []
+        legislative_period: 2
+        parl_id: (323/ME)
+        press_releases: []
+        references: null
+        source_link: http://www.parlament.gv.at/PAKT/VHG/XXIV/ME/ME_00323/index.shtml
+        status: null
+        title: "Dienstrechts-Novelle 2011 \u2013 P\xE4dagogische Hochschulen"
+        ts: 2014-01-28 13:20:00+00:00
+    model: op_scraper.law
+    pk: 19224
+-   fields:
+        _slug: /gesetze/XX/54_d.B./
+        category: 11
+        description: "\n\n   \tGesetzesantrag des Bundesrates vom 29. Februar 1996\n\
+            \n   \tbetreffend ein Bundesverfassungsgesetz, mit dem das \n\n   \tBundes-Verfassungsgesetz\
+            \ in der Fassung von 1929 \n\n   \tge\xE4ndert wird \n\n   \t<i>(EU-Ausschu\xDF\
+            \ des Bundesrates)  </i>\n\n   \t"
+        documents: [55597]
+        keywords: [78, 52]
+        legislative_period: 6
+        parl_id: (54 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/I/I_00054/index.shtml
+        status: '<a href="/PAKT/VHG/XX/A-VF/A-VF_00012_00206/index.shtml">Unterausschuss
+            des Verfassungsausschusses</a>: Vorbehandlung in der <a href="/PAKT/VHG/XX/A-VF/A-VF_00012_00206/index.shtml#S_001_30061998">1.
+            Sitzung des Ausschusses</a>'
+        title: Bundes-Verfassungsgesetz in der Fassung von 1929
+        ts: 2016-06-10 18:42:00+00:00
+    model: op_scraper.law
+    pk: 20113
+-   fields:
+        _slug: /gesetze/XXI/13_d.B./
+        category: 11
+        description: "\n\n   \tGesetzesantrag der Bundesr\xE4te Alfred Gerstl, Kolleginnen\
+            \ und\n\n   \tKollegen vom 21. Dezember 1999 betreffend ein Bundesgesetz,\n\
+            \n   \tmit dem das \n\n   \tRichterdienstgesetz \n\n   \t, BGBl.Nr. 305/1961,\
+            \ ge\xE4ndert wird \n\n   \t"
+        documents: [222779]
+        keywords: [78, 23]
+        legislative_period: 5
+        parl_id: (13 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXI/I/I_00013/index.shtml
+        status: 'Zugewiesen an: <a href="/PAKT/VHG/XXI/A-VF/A-VF_00001_00207/index.shtml">Verfassungsausschuss</a>,
+            Beratungen noch nicht aufgenommen'
+        title: Richterdienstgesetz
+        ts: 2017-02-09 15:39:00+00:00
+    model: op_scraper.law
+    pk: 21544
+-   fields:
+        _slug: /gesetze/XXII/1625_d.B./
+        category: 12
+        description: "\n\n   \tEinspruch des Bundesrates vom 6. Juli 2006 gegen den\n\
+            \n   \tGesetzesbeschluss des Nationalrates vom 23. Mai 2006 betr.\n\n\
+            \   \tein Bundesgesetz, mit dem das Eisenbahngesetz 1957, das\n\n   \t\
+            Bundesbahngesetz und das Bundesgesetz zur Errichtung einer\n\n   \t\"\
+            Brenner Basistunnel Aktiengesellschaft\" ge\xE4ndert werden \n\n   \t"
+        documents: [57296, 57295]
+        keywords: [92, 29]
+        legislative_period: 4
+        parl_id: (1625 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXII/I/I_01625/index.shtml
+        status: "<a href=\"/PAKT/VHG/BR/BRSITZ/BRSITZ_00737/index.shtml\">737. Sitzung\
+            \ des Bundesrates</a>: Bekanntgabe des Beharrungsbeschlusses<br>Beschlossen\
+            \ im Nationalrat <a href=\"/PAKT/VHG/XXII/BNR/BNR_00702/index.shtml\"\
+            >702/BNR</a>, Daf\xFCr: V, F,  dagegen: S, G"
+        title: "Einspruch gegen den Gesetzesbeschluss des Nationalrates betr. Eisenbahngesetz\
+            \ 1957, Bundesbahngesetz u.a., \xC4nderung"
+        ts: 2016-06-10 22:30:00+00:00
+    model: op_scraper.law
+    pk: 21571
+-   fields:
+        _slug: /gesetze/XXII/1621_d.B./
+        category: 12
+        description: "\n\n   \tEinspruch des Bundesrates vom 6. Juli 2006 gegen den\n\
+            \n   \tGesetzesbeschluss des Nationalrates vom 23. Mai 2006 betr.\n\n\
+            \   \tein Bundesgesetz, mit dem das Bundesgesetz \xFCber\n\n   \tKrankenanstalten\
+            \ und Kuranstalten, das \xC4rztegesetz 1998 und\n\n   \tdas Rezeptpflichtgesetz\
+            \ ge\xE4ndert werden\n\n   \t(Gesundheitsrechts\xE4nderungsgesetz 2006\
+            \ \u2013 GR\xC4G 2006)\n\n   \t"
+        documents: [57301, 57302]
+        keywords: [92, 21]
+        legislative_period: 4
+        parl_id: (1621 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXII/I/I_01621/index.shtml
+        status: "<a href=\"/PAKT/VHG/BR/BRSITZ/BRSITZ_00737/index.shtml\">737. Sitzung\
+            \ des Bundesrates</a>: Bekanntgabe des Beharrungsbeschlusses<br>Beschlossen\
+            \ im Nationalrat <a href=\"/PAKT/VHG/XXII/BNR/BNR_00699/index.shtml\"\
+            >699/BNR</a>, Daf\xFCr: V, F,  dagegen: S, G"
+        title: "Einspruch gegen den Gesetzesbeschluss des Nationalrates betr. Gesundheitsrechts\xE4\
+            nderungsgesetz 2006"
+        ts: 2016-06-16 03:38:00+00:00
+    model: op_scraper.law
+    pk: 21574
+-   fields:
+        _slug: /gesetze/XXIV/1909_d.B./
+        category: 30
+        description: "\n\n   \tAntrag der Bundesregierung auf Durchf\xFChrung einer\n\
+            \n   \tVolksbefragung gem\xE4\xDF Art. 49b B-VG \n\n   \t<i>(Berufsheer,\
+            \ freiwilliges Sozialjahr, Wehrpflicht, </i>\n\n   \t<i>Zivildienst) \
+            \ </i>\n\n   \t"
+        documents: [63725]
+        keywords: [150]
+        legislative_period: 2
+        parl_id: (1909 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXIV/I/I_01909/index.shtml
+        status: Sonstiger Beschluss (<a href="/PAKT/VHG/XXIV/BS/BS_00130/index.shtml">130/BS</a>)
+        title: "Antrag der Bundesregierung auf Durchf\xFChrung einer Volksbefragung\
+            \ gem\xE4\xDF Art. 49b B-VG"
+        ts: 2017-02-04 12:51:00+00:00
+    model: op_scraper.law
+    pk: 23344
+-   fields:
+        _slug: /gesetze/XXIV/1716_d.B./
+        category: 13
+        description: "\n\n   \tBeschluss des Europ\xE4ischen Rates \n\n   \tvom 25.\
+            \ M\xE4rz 2011 \n\n   \tzur \xC4nderung des Art. 136 AEUV hinsichtlich\
+            \ eines\n\n   \tStabilit\xE4tsmechanismus f\xFCr die Mitgliedstaaten,\
+            \ deren\n\n   \tW\xE4hrung der Euro ist \n\n   \t"
+        documents: [63956, 63957, 63958, 63959, 63960, 63961, 63962, 63963, 63964,
+            63965, 63966, 63967, 63968, 63969, 63970, 63971, 63972, 63973, 63974,
+            63975, 63976, 63977, 63978, 63979, 63980]
+        keywords: [90, 72, 153]
+        legislative_period: 2
+        parl_id: (1716 d.B.)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXIV/I/I_01716/index.shtml
+        status: 'Beschlossen im Bundesrat <a href="/PAKT/VHG/XXIV/BSE/BSE_00001/index.shtml">1/BSE</a><br>Namentliche
+            Abstimmung (Zustimmung gem. Art. 23i Abs. 4 iVm. Art. 50 Abs. 4 B-VG abgegebene
+            Stimmen 55, davon Ja-Stimmen: 45, Nein-Stimmen: 10 )<br>Beschlossen im
+            Nationalrat <a href="/PAKT/VHG/XXIV/BSE/BSE_00001/index.shtml">1/BSE</a>'
+        title: "Beschluss des Europ\xE4ischen Rates zur \xC4nderung des Art. 136 AEUV\
+            \ hinsichtlich eines Stabilit\xE4tsmechanismus f\xFCr die Mitgliedstaaten,\
+            \ deren W\xE4hrung der Euro ist"
+        ts: 2017-02-04 12:46:00+00:00
+    model: op_scraper.law
+    pk: 23385
+-   fields:
+        _slug: /gesetze/XX/JPR_00054/
+        category: 31
+        description: "Schriftliche Anfrage an den Pr\xE4sidenten des Nationalrates\
+            \ der Abgeordneten Dr. Gabriela Moser und Genossen betreffend \xDCberstunden,\
+            \ Teilzeitarbeit und Arbeitszeitverk\xFCrzung <i>(innerhalb der Parlamentsdirektion)\
+            \ </i>"
+        documents: [67530]
+        keywords: [23]
+        legislative_period: 6
+        parl_id: JPR_00054
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/JPR/JPR_00054/index.shtml
+        status: response_received
+        title: "\xDCberstunden, Teilzeitarbeit und Arbeitszeitverk\xFCrzung"
+        ts: 2011-04-07 01:50:00+00:00
+    model: op_scraper.law
+    pk: 25157
+-   fields:
+        _slug: /gesetze/XX/JPR_00051/
+        category: 31
+        description: "Schriftliche Anfrage an den Pr\xE4sidenten des Nationalrates\
+            \ der Abgeorneten Dr. Brigitte Povysil und Genossen betreffend das Jahr-2000-Problem\
+            \ <i>(in der elektronischen Datenverarbeitung) </i> oder \"Y2K\" in der\
+            \ Bundesverwaltung"
+        documents: [67753]
+        keywords: [8]
+        legislative_period: 6
+        parl_id: JPR_00051
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/JPR/JPR_00051/index.shtml
+        status: response_received
+        title: das Jahr-2000-Problem (in der elektronischen Datenverarbeitung) oder
+            "Y2K" in der Bundesverwaltung
+        ts: 2011-04-07 01:50:00+00:00
+    model: op_scraper.law
+    pk: 25380
+-   fields:
+        _slug: /gesetze/XX/JPR_00017/
+        category: 31
+        description: "Schriftliche Anfrage an den Pr\xE4sidenten des Nationalrates\
+            \ des Abgeorneten Dr. Martin Graf und Genossen betreffend die objektive\
+            \ Richterbestellung beim Verfassungsgerichtshof"
+        documents: [73971]
+        keywords: [58]
+        legislative_period: 6
+        parl_id: JPR_00017
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/JPR/JPR_00017/index.shtml
+        status: response_received
+        title: objektive Richterbestellung beim Verfassungsgerichtshof
+        ts: 2011-04-07 01:49:00+00:00
+    model: op_scraper.law
+    pk: 31738
+-   fields:
+        _slug: /gesetze/XX/M_00035/
+        category: 17
+        description: ''
+        documents: []
+        keywords: [40]
+        legislative_period: 6
+        parl_id: M_00035
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00035/index.shtml
+        status: offen
+        title: "weisungsfreien \"\xF6sterreichischen Bioethik-Rat\""
+        ts: 2016-01-28 16:16:00+00:00
+    model: op_scraper.law
+    pk: 35256
+-   fields:
+        _slug: /gesetze/XX/M_00034/
+        category: 17
+        description: ''
+        documents: []
+        keywords: [21]
+        legislative_period: 6
+        parl_id: M_00034
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00034/index.shtml
+        status: offen
+        title: Reform der Krankenanstaltenfinanzierung
+        ts: 2016-01-28 16:16:00+00:00
+    model: op_scraper.law
+    pk: 35257
+-   fields:
+        _slug: /gesetze/M-BR_00706/
+        category: 22
+        description: "M\xFCndliche Anfrage des Bundesrates Erhard Meier (SP\xD6) an\
+            \ den Bundesminister f\xFCr Inneres Mag. Karl Schl\xF6gl betreffend Umsetzung\
+            \ des Schengener Abkommens"
+        documents: []
+        keywords: [56]
+        legislative_period: null
+        parl_id: M-BR_00706
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/M-BR/M-BR_00706/index.shtml
+        status: offen
+        title: Umsetzung des Schengener Abkommens
+        ts: 2015-09-09 11:27:00+00:00
+    model: op_scraper.law
+    pk: 38844
+-   fields:
+        _slug: /gesetze/M-BR_00680/
+        category: 22
+        description: "M\xFCndliche Anfrage des Bundesrates Karl Pischl (\xD6VP) an\
+            \ den Bundesminister f\xFCr Landesverteidigung Dr. Werner Fasslabend betreffend\
+            \ Aufnahme von Frauen in das Bundesheer"
+        documents: []
+        keywords: [53]
+        legislative_period: null
+        parl_id: M-BR_00680
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/M-BR/M-BR_00680/index.shtml
+        status: offen
+        title: Aufnahme von Frauen in das Bundesheer
+        ts: 2015-09-09 10:27:00+00:00
+    model: op_scraper.law
+    pk: 38884
+-   fields:
+        _slug: /gesetze/XXI/M_00113/
+        category: 17
+        description: ''
+        documents: []
+        keywords: [38]
+        legislative_period: 5
+        parl_id: M_00113
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXI/M/M_00113/index.shtml
+        status: offen
+        title: "die Rolle \xD6sterreichs in der internationalen Allianz gegen den\
+            \ Terror"
+        ts: 2016-05-21 01:53:00+00:00
+    model: op_scraper.law
+    pk: 42355
+-   fields:
+        _slug: /gesetze/XXI/J_01700/
+        category: 14
+        description: "Schriftliche Anfrage der Abgeordneten Wolfgang Jung, Kolleginnen\
+            \ und Kollegen an den Bundesminister f\xFCr Justiz betreffend anonyme\
+            \ Anzeige wegen illegaler Weitergabe von Kontoausz\xFCgen durch Beamte\
+            \ <i>(in der sog. \"Spitzelaff\xE4re\") </i>"
+        documents: [217169]
+        keywords: [20]
+        legislative_period: 5
+        parl_id: J_01700
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXI/J/J_01700/index.shtml
+        status: response_received
+        title: "anonyme Anzeige wegen illegaler Weitergabe von Kontoausz\xFCgen durch\
+            \ Beamte (in der sog. \"Spitzelaff\xE4re\")"
+        ts: 2017-01-10 07:06:00+00:00
+    model: op_scraper.law
+    pk: 44827
+-   fields:
+        _slug: /gesetze/AB-BR_01638/
+        category: null
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Justiz Dr.\
+            \ Dieter B\xF6hmdorfer zu der schriftlichen Anfrage (1777/J-BR/2001) der\
+            \ Bundesr\xE4te Theodor Binna und Genossen an den Bundesminister f\xFC\
+            r Justiz betreffend die m\xF6gliche Schlie\xDFung von Bezirksgerichten\
+            \ in der Steiermark"
+        documents: []
+        keywords: []
+        legislative_period: null
+        parl_id: AB-BR_01638
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/AB-BR/AB-BR_01638/index.shtml
+        status: null
+        title: "die m\xF6gliche Schlie\xDFung von Bezirksgerichten in der Steiermark"
+        ts: null
+    model: op_scraper.law
+    pk: 48776
+-   fields:
+        _slug: /gesetze/AB-BR_01548/
+        category: null
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr wirtschaftliche\
+            \ Angelegenheiten Dr. Hannes Farnleitner zu der schriftlichen Anfrage\
+            \ (1668/J-BR/99) der Bundesr\xE4te Albrecht Konecny und Genossen an den\
+            \ Bundesminister f\xFCr wirtschaftliche Angelegenheiten betreffend Subventionen\
+            \ an den Verein \"Austria Nostra\" II"
+        documents: []
+        keywords: []
+        legislative_period: null
+        parl_id: AB-BR_01548
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/AB-BR/AB-BR_01548/index.shtml
+        status: null
+        title: Subventionen an den Verein "Austria Nostra" II
+        ts: null
+    model: op_scraper.law
+    pk: 49049
+-   fields:
+        _slug: /gesetze/XXII/AB_04483/
+        category: null
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Verkehr,\
+            \ Innovation und Technologie Hubert Gorbach zu der schriftlichen Anfrage\
+            \ (4536/J) der Abgeordneten Mag. Johann Maier, Kolleginnen und Kollegen\
+            \ an den Bundesminister f\xFCr Verkehr, Innovation und Technologie betreffend\
+            \ \"Verkehrssicherheit in \xD6sterreich - Zahlen und Fakten - Verkehrspolitische\
+            \ Ma\xDFnahmen (II)\""
+        documents: []
+        keywords: []
+        legislative_period: 4
+        parl_id: AB_04483
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXII/AB/AB_04483/index.shtml
+        status: null
+        title: "\"Verkehrssicherheit in \xD6sterreich - Zahlen und Fakten - Verkehrspolitische\
+            \ Ma\xDFnahmen (II)\""
+        ts: null
+    model: op_scraper.law
+    pk: 49411
+-   fields:
+        _slug: /gesetze/XX/52-PET/
+        category: 27
+        description: "\n\n   \tPetition betreffend die Bek\xE4mpfung von sexuellem\
+            \ Mi\xDFbrauch\n\n   \tvon Kindern und Jugendlichen (Initiative Freiheitliche\n\
+            \n   \tFrauen, Freiheitlicher Parlamentsklub Wien) \xFCberreicht vom\n\
+            \n   \tAbgeordneten Mag. Johann Ewald Stadler \n\n   \t"
+        documents: []
+        keywords: [135]
+        legislative_period: 6
+        parl_id: (52/PET)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/PET/PET_00052/index.shtml
+        status: Ausschussbericht <a href="/PAKT/VHG/XX/I/I_01901/index.shtml">1901
+            d.B.</a> zur Kenntnis genommen
+        title: "die Bek\xE4mpfung von sexuellem Mi\xDFbrauch von Kindern und Jugendlichen,"
+        ts: 2017-02-02 10:08:00+00:00
+    model: op_scraper.law
+    pk: 68493
+-   fields:
+        _slug: /gesetze/XX/45-PET/
+        category: 27
+        description: "\n\n   \tPetition betreffend \"Nein zur Bio-Medizin-Konvention\"\
+            \n\n   \t(Lebenshilfe \xD6sterreich) \xFCberreicht von den Abgeordneten\n\
+            \n   \tMag. Walter Guggenberger, Maria Rauch-Kallat, Mag. Johann\n\n \
+            \  \tEwald Stadler, Theresia Haidlmayr und Dr. Volker Kier\n\n   \t"
+        documents: []
+        keywords: [135]
+        legislative_period: 6
+        parl_id: (45/PET)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/PET/PET_00045/index.shtml
+        status: Ausschussbericht <a href="/PAKT/VHG/XX/I/I_01901/index.shtml">1901
+            d.B.</a> zur Kenntnis genommen
+        title: '"Nein zur Bio-Medizin-Konvention"'
+        ts: 2017-02-02 10:07:00+00:00
+    model: op_scraper.law
+    pk: 68508
+-   fields:
+        _slug: /gesetze/XX/24-PET/
+        category: 27
+        description: "\n\n   \tPetition betreffend Tariferh\xF6hung im Verkehrsverbund\n\
+            \n   \tOstregion (Bewohner des Bezirkes Wiental) \xFCberreicht vom\n\n\
+            \   \tAbgeordneten Peter Rosenstingl \n\n   \t"
+        documents: []
+        keywords: [135]
+        legislative_period: 6
+        parl_id: (24/PET)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XX/PET/PET_00024/index.shtml
+        status: Antrag auf Kenntnisnahme angenommen
+        title: "Tariferh\xF6hung im Verkehrsverbund Ostregion"
+        ts: 2017-02-02 10:06:00+00:00
+    model: op_scraper.law
+    pk: 68521
+-   fields:
+        _slug: /gesetze/XXI/21-BI/
+        category: 24
+        description: "\n\n   \tB\xFCrgerinitiative zur \n\n   \tErhaltung des gemeinn\xFC\
+            tzigen Wohnbaus \n\n   \t"
+        documents: []
+        keywords: [134]
+        legislative_period: 5
+        parl_id: (21/BI)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXI/BI/BI_00021/index.shtml
+        status: Ausschussbericht <a href="/PAKT/VHG/XXI/I/I_01075/index.shtml">1075
+            d.B.</a> zur Kenntnis genommen
+        title: "Erhaltung des gemeinn\xFCtzigen Wohnbaus"
+        ts: 2017-02-02 08:47:00+00:00
+    model: op_scraper.law
+    pk: 68566
+-   fields:
+        _slug: /gesetze/XXI/I_00001/
+        category: 9
+        description: "\n\n   \tFamilien-Volksbegehren \n\n   \t"
+        documents: [56883]
+        keywords: [14, 73]
+        legislative_period: 5
+        parl_id: I_00001
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXI/I/I_00001/index.shtml
+        status: Ausschussbericht <a href="/PAKT/VHG/XXI/I/I_00716/index.shtml">716
+            d.B.</a> zur Kenntnis genommen
+        title: Familien-Volksbegehren
+        ts: 2017-02-04 06:04:00+00:00
+    model: op_scraper.law
+    pk: 68693
+-   fields:
+        _slug: /gesetze/17-PET-BR-2005/
+        category: 28
+        description: "\n\n   \tPetition betreffend faire Gleichstellung der Schausteller\n\
+            \n   \tmit anderen Gewerben, \xFCberreicht von Bundesrat Wolfgang\n\n\
+            \   \tSchimb\xF6ck \n\n   \t"
+        documents: []
+        keywords: [135]
+        legislative_period: null
+        parl_id: (17/PET-BR/2005)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/PET-BR/PET-BR_00017/index.shtml
+        status: "\xDCbermittlung der Petition an das Bundesministerium f\xFCr Wirtschaft\
+            \ und Arbeit"
+        title: faire Gleichstellung der Schausteller mit anderen Gewerben
+        ts: 2016-11-05 02:10:00+00:00
+    model: op_scraper.law
+    pk: 68822
+-   fields:
+        _slug: /gesetze/XXV/100-BI/
+        category: 24
+        description: "\n\n   \tB\xFCrgerinitiative betreffend Stopp der\n\n   \tBundesheer-Zerst\xF6\
+            rung! F\xFCr ein sicheres \xD6sterreich!\n\n   \t"
+        documents: [200805, 200806]
+        keywords: []
+        legislative_period: 1
+        parl_id: (100/BI)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/BI/BI_00100/index.shtml
+        status: Ausschussbericht <a href="/PAKT/VHG/XXV/I/I_01284/index.shtml">1284
+            d.B.</a> zur Kenntnis genommen
+        title: "Stopp der Bundesheer-Zerst\xF6rung! F\xFCr ein sicheres \xD6sterreich!"
+        ts: 2017-02-17 16:13:00+00:00
+    model: op_scraper.law
+    pk: 103777
+-   fields:
+        _slug: /gesetze/33-PET-BR-2016/
+        category: 28
+        description: "\n\n   \tPetition betreffend Schlie\xDFung der Sonderbetreuungsstelle\n\
+            \n   \tSteiermark f\xFCr Asylwerber in Spital/Semmering (Ortsteil\n\n\
+            \   \tSteinhaus) \n\n   \t"
+        documents: [201481]
+        keywords: [135]
+        legislative_period: null
+        parl_id: (33/PET-BR/2016)
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/BR/PET-BR/PET-BR_00033/index.shtml
+        status: "Zuweisung an den <a href=\"/PAKT/VHG/BR/A-BP-BR/A-BP-BR_00001_00272/index.shtml\"\
+            >Ausschuss f\xFCr B\xFCrgerInnenrechte und Petitionen des Bundesrates</a>"
+        title: "Schlie\xDFung der Sonderbetreuungsstelle Steiermark f\xFCr Asylwerber\
+            \ in Spital/Semmering (Ortsteil Steinhaus)"
+        ts: 2017-01-31 13:24:00+00:00
+    model: op_scraper.law
+    pk: 104130
+-   fields:
+        _slug: /gesetze/XXV/AB_09312/
+        category: 15
+        description: "Anfragebeantwortung durch den Bundesminister f\xFCr Landesverteidigung\
+            \ und Sport Mag. Hans Peter Doskozil zu der schriftlichen Anfrage (9727/J)\
+            \ der Abgeordneten Dr. Walter Rosenkranz, Kolleginnen und Kollegen an\
+            \ den Bundesminister f\xFCr Landesverteidigung und Sport betreffend \"\
+            Unser Heer\" - Inserat des BMLVS in \"Heute\" vom 22. Juni 2016"
+        documents: [205229]
+        keywords: []
+        legislative_period: 1
+        parl_id: AB_09312
+        press_releases: []
+        references: null
+        source_link: https://www.parlament.gv.at/PAKT/VHG/XXV/AB/AB_09312/index.shtml
+        status: null
+        title: '"Unser Heer" - Inserat des BMLVS in "Heute" vom 22. Juni 2016'
+        ts: null
+    model: op_scraper.law
+    pk: 106318

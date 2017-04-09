@@ -1,0 +1,1795 @@
+-   fields: {short: '', title: Abgeordnete(r) zum Bundesrat}
+    model: op_scraper.function
+    pk: 1
+-   fields: {short: '', title: Abgeordnete(r) zum Nationalrat}
+    model: op_scraper.function
+    pk: 2
+-   fields: {short: Vorsitzender, title: Vorsitzender}
+    model: op_scraper.function
+    pk: 3
+-   fields: {short: Stellvertretender Ausschussvorsitzender, title: Stellvertretender
+            Ausschussvorsitzender}
+    model: op_scraper.function
+    pk: 4
+-   fields: {short: "Schriftf\xFChrer", title: "Schriftf\xFChrer"}
+    model: op_scraper.function
+    pk: 5
+-   fields: {short: Mitglied, title: Mitglied}
+    model: op_scraper.function
+    pk: 6
+-   fields: {short: Ersatzmitglied, title: Ersatzmitglied}
+    model: op_scraper.function
+    pk: 7
+-   fields: {short: Vorsitzende, title: Vorsitzende}
+    model: op_scraper.function
+    pk: 8
+-   fields: {short: Stellvertretende Ausschussvorsitzende, title: Stellvertretende
+            Ausschussvorsitzende}
+    model: op_scraper.function
+    pk: 9
+-   fields: {short: "Schriftf\xFChrerin", title: "Schriftf\xFChrerin"}
+    model: op_scraper.function
+    pk: 10
+-   fields: {short: Obmann, title: Obmann}
+    model: op_scraper.function
+    pk: 11
+-   fields: {short: Obfraustellvertreter, title: Obfraustellvertreter}
+    model: op_scraper.function
+    pk: 12
+-   fields: {short: Obmannstellvertreter, title: Obmannstellvertreter}
+    model: op_scraper.function
+    pk: 13
+-   fields: {short: Obfrau, title: Obfrau}
+    model: op_scraper.function
+    pk: 14
+-   fields: {short: Obfraustellvertreterin, title: Obfraustellvertreterin}
+    model: op_scraper.function
+    pk: 15
+-   fields: {short: Obmannstellvertreterin, title: Obmannstellvertreterin}
+    model: op_scraper.function
+    pk: 16
+-   fields: {short: Vorsitzende-Stellvertreter, title: Vorsitzende-Stellvertreter}
+    model: op_scraper.function
+    pk: 17
+-   fields: {short: Vorsitzender-Stellvertreterin, title: Vorsitzender-Stellvertreterin}
+    model: op_scraper.function
+    pk: 18
+-   fields: {short: Vertreter verhinderter Mitglieder, title: Vertreter verhinderter
+            Mitglieder}
+    model: op_scraper.function
+    pk: 19
+-   fields: {short: Vertreterin verhinderter Mitglieder, title: Vertreterin verhinderter
+            Mitglieder}
+    model: op_scraper.function
+    pk: 20
+-   fields: {short: Mitglied mit beratender Stimme bzw. Beobachter, title: Mitglied
+            mit beratender Stimme bzw. Beobachter}
+    model: op_scraper.function
+    pk: 21
+-   fields: {short: Ersatzmitglied mit beratender Stimme bzw. Beobachter, title: Ersatzmitglied
+            mit beratender Stimme bzw. Beobachter}
+    model: op_scraper.function
+    pk: 22
+-   fields: {short: Vorsitzende-Vertreter, title: Vorsitzende-Vertreter}
+    model: op_scraper.function
+    pk: 23
+-   fields: {short: "Schriftf\xFChrer (EM)", title: "Schriftf\xFChrer (EM)"}
+    model: op_scraper.function
+    pk: 24
+-   fields: {short: "Schriftf\xFChrerin (EM)", title: "Schriftf\xFChrerin (EM)"}
+    model: op_scraper.function
+    pk: 25
+-   fields: {short: Stellvertr. Ausschussvorsitzender (EM), title: Stellvertr. Ausschussvorsitzender
+            (EM)}
+    model: op_scraper.function
+    pk: 26
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Justiz"}
+    model: op_scraper.function
+    pk: 27
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Verkehr, Innovation\
+            \ und Technologie"}
+    model: op_scraper.function
+    pk: 28
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr Finanzen"}
+    model: op_scraper.function
+    pk: 29
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Landesverteidigung\
+            \ und Sport"}
+    model: op_scraper.function
+    pk: 30
+-   fields: {short: Bundeskanzler, title: ''}
+    model: op_scraper.function
+    pk: 31
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Unterricht,\
+            \ Kunst und Kultur"}
+    model: op_scraper.function
+    pk: 32
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Bildung und\
+            \ Frauen"}
+    model: op_scraper.function
+    pk: 33
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Arbeit, Soziales\
+            \ und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 34
+-   fields: {short: Bundesministerin ohne Portefeuille, title: ''}
+    model: op_scraper.function
+    pk: 35
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Familien und\
+            \ Jugend"}
+    model: op_scraper.function
+    pk: 36
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Verkehr, Innovation\
+            \ und Technologie"}
+    model: op_scraper.function
+    pk: 37
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Europa, Integration\
+            \ und \xC4u\xDFeres"}
+    model: op_scraper.function
+    pk: 38
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr europ\xE4ische und\
+            \ internationale Angelegenheiten"}
+    model: op_scraper.function
+    pk: 39
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr Wissenschaft, Forschung und Wirtschaft"}
+    model: op_scraper.function
+    pk: 40
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Inneres"}
+    model: op_scraper.function
+    pk: 41
+-   fields: {short: Vizekanzler, title: ''}
+    model: op_scraper.function
+    pk: 42
+-   fields: {short: Betraut mit der Leitung des Bundesministeriums, title: "Betraut\
+            \ mit der Leitung des Bundesministeriums f\xFCr Wissenschaft und Forschung"}
+    model: op_scraper.function
+    pk: 43
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wissenschaft, Forschung\
+            \ und Wirtschaft"}
+    model: op_scraper.function
+    pk: 44
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wirtschaft, Familie\
+            \ und Jugend"}
+    model: op_scraper.function
+    pk: 45
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Gesundheit"}
+    model: op_scraper.function
+    pk: 46
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Kunst und Kultur,\
+            \ Verfassung und Medien"}
+    model: op_scraper.function
+    pk: 47
+-   fields: {short: Bundesminister, title: "Bundesminister im B\xFCro des Bundesministers\
+            \ im Bundeskanzleramt"}
+    model: op_scraper.function
+    pk: 48
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Kunst und Kultur,\
+            \ Verfassung und \xF6ffentlichen Dienst"}
+    model: op_scraper.function
+    pk: 49
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Land- und Forstwirtschaft,\
+            \ Umwelt und Wasserwirtschaft"}
+    model: op_scraper.function
+    pk: 50
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Finanzen"}
+    model: op_scraper.function
+    pk: 51
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr Finanzen"}
+    model: op_scraper.function
+    pk: 52
+-   fields: {short: "Staatssekret\xE4rin", title: "Staatssekret\xE4rin im Bundeskanzleramt"}
+    model: op_scraper.function
+    pk: 53
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Gesundheit"}
+    model: op_scraper.function
+    pk: 54
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Justiz"}
+    model: op_scraper.function
+    pk: 55
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Landesverteidigung"}
+    model: op_scraper.function
+    pk: 56
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Finanzen"}
+    model: op_scraper.function
+    pk: 57
+-   fields: {short: Betraut mit der Leitung des Bundesministeriums, title: "Betraut\
+            \ mit der Leitung des Bundesministeriums f\xFCr Justiz"}
+    model: op_scraper.function
+    pk: 58
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wissenschaft und\
+            \ Forschung"}
+    model: op_scraper.function
+    pk: 59
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Frauen und \xF6\
+            ffentlichen Dienst"}
+    model: op_scraper.function
+    pk: 60
+-   fields: {short: Bundesministerin, title: Bundesministerin ohne Portefeuille}
+    model: op_scraper.function
+    pk: 61
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Soziales und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 62
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Wissenschaft\
+            \ und Forschung"}
+    model: op_scraper.function
+    pk: 63
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr Inneres"}
+    model: op_scraper.function
+    pk: 64
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr europ\xE4ische und internationale Angelegenheiten"}
+    model: op_scraper.function
+    pk: 65
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr Wirtschaft und Arbeit"}
+    model: op_scraper.function
+    pk: 66
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr Wirtschaft, Familie und Jugend"}
+    model: op_scraper.function
+    pk: 67
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wirtschaft und Arbeit"}
+    model: op_scraper.function
+    pk: 68
+-   fields: {short: "Staatssekret\xE4r", title: "Staatssekret\xE4r im Bundeskanzleramt"}
+    model: op_scraper.function
+    pk: 69
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Gesundheit, Familie\
+            \ und Jugend"}
+    model: op_scraper.function
+    pk: 70
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr soziale Sicherheit,\
+            \ Generationen und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 71
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Frauen, Medien\
+            \ und \xF6ffentlichen Dienst"}
+    model: op_scraper.function
+    pk: 72
+-   fields: {short: Bundesminister, title: Bundesminister ohne Portefeuille}
+    model: op_scraper.function
+    pk: 73
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Gesundheit und\
+            \ Frauen"}
+    model: op_scraper.function
+    pk: 74
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Gesundheit,\
+            \ Familie und Jugend"}
+    model: op_scraper.function
+    pk: 75
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr Verkehr, Innovation und Technologie"}
+    model: op_scraper.function
+    pk: 76
+-   fields: {short: Betraut mit der Leitung des Bundesministeriums, title: "Betraut\
+            \ mit der Leitung des Bundesministeriums f\xFCr Inneres"}
+    model: op_scraper.function
+    pk: 77
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr ausw\xE4rtige\
+            \ Angelegenheiten"}
+    model: op_scraper.function
+    pk: 78
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr europ\xE4ische\
+            \ und internationale Angelegenheiten"}
+    model: op_scraper.function
+    pk: 79
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Inneres"}
+    model: op_scraper.function
+    pk: 80
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Bildung, Wissenschaft\
+            \ und Kultur"}
+    model: op_scraper.function
+    pk: 81
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Frauen, Medien\
+            \ und Regionalpolitik"}
+    model: op_scraper.function
+    pk: 82
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr ausw\xE4rtige Angelegenheiten"}
+    model: op_scraper.function
+    pk: 83
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr soziale Sicherheit, Generationen und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 84
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr soziale Sicherheit,\
+            \ Generationen und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 85
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr soziale Sicherheit, Generationen und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 86
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr soziale Sicherheit und Generationen"}
+    model: op_scraper.function
+    pk: 87
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr soziale Sicherheit\
+            \ und Generationen"}
+    model: op_scraper.function
+    pk: 88
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr Verkehr, Innovation und Technologie"}
+    model: op_scraper.function
+    pk: 89
+-   fields: {short: "Betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums",
+        title: "Betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums f\xFC\
+            r \xF6ffentliche Leistung und Sport"}
+    model: op_scraper.function
+    pk: 90
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr Gesundheit und Frauen"}
+    model: op_scraper.function
+    pk: 91
+-   fields: {short: "Staatssekret\xE4r (Unterst\xFCtzung in der Gesch\xE4ftsf\xFC\
+            hrung und zur parlamentarischen Vertretung der Bundesministerin Maria\
+            \ Rauch-Kallat)", title: "Staatssekret\xE4r (Unterst\xFCtzung in der Gesch\xE4\
+            ftsf\xFChrung und zur parlamentarischen Vertretung der Bundesministerin\
+            \ Maria Rauch-Kallat) ohne Portefeuille"}
+    model: op_scraper.function
+    pk: 92
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr wirtschaftliche\
+            \ Angelegenheiten"}
+    model: op_scraper.function
+    pk: 93
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Unterricht und\
+            \ kulturelle Angelegenheiten"}
+    model: op_scraper.function
+    pk: 94
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Land- und Forstwirtschaft"}
+    model: op_scraper.function
+    pk: 95
+-   fields: {short: "betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums",
+        title: "Betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums f\xFC\
+            r Umwelt, Jugend und Familie"}
+    model: op_scraper.function
+    pk: 96
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr \xF6ffentliche\
+            \ Leistung und Sport"}
+    model: op_scraper.function
+    pk: 97
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr wirtschaftliche Angelegenheiten"}
+    model: op_scraper.function
+    pk: 98
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wissenschaft und\
+            \ Verkehr"}
+    model: op_scraper.function
+    pk: 99
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Arbeit, Gesundheit\
+            \ und Soziales"}
+    model: op_scraper.function
+    pk: 100
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr soziale Sicherheit\
+            \ und Generationen"}
+    model: op_scraper.function
+    pk: 101
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr soziale Sicherheit und Generationen"}
+    model: op_scraper.function
+    pk: 102
+-   fields: {short: "Staatssekret\xE4r ", title: "Staatssekret\xE4r im Bundesministerium\
+            \ f\xFCr Arbeit, Gesundheit und Soziales"}
+    model: op_scraper.function
+    pk: 103
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Umwelt, Jugend und\
+            \ Familie"}
+    model: op_scraper.function
+    pk: 104
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wissenschaft, Verkehr\
+            \ und Kunst"}
+    model: op_scraper.function
+    pk: 105
+-   fields: {short: "Staatssekret\xE4rin ", title: "Staatssekret\xE4rin im Bundesministerium\
+            \ f\xFCr ausw\xE4rtige Angelegenheiten"}
+    model: op_scraper.function
+    pk: 106
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Arbeit und Soziales"}
+    model: op_scraper.function
+    pk: 107
+-   fields: {short: betraut mit der Leitung des Bundesministeriums, title: "Betraut\
+            \ mit der Leitung des Bundesministeriums f\xFCr Gesundheit und Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 108
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Frauenangelegenheiten\
+            \ und Verbraucherschutz"}
+    model: op_scraper.function
+    pk: 109
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr ausw\xE4rtige Angelegenheiten"}
+    model: op_scraper.function
+    pk: 110
+-   fields: {short: "betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums",
+        title: "Betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums f\xFC\
+            r Jugend und Familie"}
+    model: op_scraper.function
+    pk: 111
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Umwelt"}
+    model: op_scraper.function
+    pk: 112
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Arbeit und Soziales"}
+    model: op_scraper.function
+    pk: 113
+-   fields: {short: "betraut mit der Fortf\xFChrung der Verwaltung des Bundesministeriums\
+            \ f\xFCr Finanzen", title: ''}
+    model: op_scraper.function
+    pk: 114
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr \xF6ffentliche Wirtschaft\
+            \ und Verkehr"}
+    model: op_scraper.function
+    pk: 115
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Frauenangelegenheiten"}
+    model: op_scraper.function
+    pk: 116
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Gesundheit und\
+            \ Konsumentenschutz"}
+    model: op_scraper.function
+    pk: 117
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Jugend und Familie"}
+    model: op_scraper.function
+    pk: 118
+-   fields: {short: "betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums",
+        title: "Betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums f\xFC\
+            r \xF6ffentliche Wirtschaft und Verkehr"}
+    model: op_scraper.function
+    pk: 119
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr Wissenschaft, Forschung\
+            \ und Kunst"}
+    model: op_scraper.function
+    pk: 120
+-   fields: {short: Bundesminister, title: ''}
+    model: op_scraper.function
+    pk: 121
+-   fields: {short: Bundesministerin, title: ''}
+    model: op_scraper.function
+    pk: 122
+-   fields: {short: Bundesminister (mit der Leitung des Bundesministeriums betraut
+            ), title: ''}
+    model: op_scraper.function
+    pk: 123
+-   fields: {short: Bundesminister (mit der Leitung des Bundesministeriums betraut),
+        title: ''}
+    model: op_scraper.function
+    pk: 124
+-   fields: {short: "Staatssekret\xE4r", title: ''}
+    model: op_scraper.function
+    pk: 125
+-   fields: {short: "Staatssekret\xE4rin", title: ''}
+    model: op_scraper.function
+    pk: 126
+-   fields: {short: "Bundesministerin f\xFCr Frauenangelegenheiten", title: ''}
+    model: op_scraper.function
+    pk: 127
+-   fields: {short: "Bundesminister (gem\xE4\xDF Artikel 77 Absatz 4 B-VG mit der\
+            \ Leitung des Bundesministeriums betraut)", title: ''}
+    model: op_scraper.function
+    pk: 128
+-   fields: {short: "Bundesminister ohne Portefeuille, Bundesminister f\xFCr F\xF6\
+            deralismus und Verwaltungsreform", title: ''}
+    model: op_scraper.function
+    pk: 129
+-   fields: {short: "Bundesminister f\xFCr F\xF6deralismus und Verwaltungsreform",
+        title: ''}
+    model: op_scraper.function
+    pk: 130
+-   fields: {short: Bundesminister ohne Portefeuille, title: ''}
+    model: op_scraper.function
+    pk: 131
+-   fields: {short: "Bundesminister (gem\xE4\xDF Artikel 71 B-VG mit der Fortf\xFC\
+            hrung der Leitung des Bundesministeriums betraut)", title: ''}
+    model: op_scraper.function
+    pk: 132
+-   fields: {short: "Bundesminister (mit der vorl\xE4ufigen Leitung betraut)", title: ''}
+    model: op_scraper.function
+    pk: 133
+-   fields: {short: "Bundesministerin (mit der vorl\xE4ufigen Leitung betraut)", title: ''}
+    model: op_scraper.function
+    pk: 134
+-   fields: {short: "Bundesminister f\xFCr Gesundheit und \xF6ffentlicher Dienst",
+        title: ''}
+    model: op_scraper.function
+    pk: 135
+-   fields: {short: "Bundesministerin (gem\xE4\xDF Artikel 77 Absatz 4 B-VG mit der\
+            \ Leitung des Bundesministeriniums betraut)", title: ''}
+    model: op_scraper.function
+    pk: 136
+-   fields: {short: "Bundesminister (gem\xE4\xDF Artikel 71 B-VG mit der Fortf\xFC\
+            hrung der Verwaltung der Bundesminister betraut)", title: ''}
+    model: op_scraper.function
+    pk: 137
+-   fields: {short: "Bundesminister (gem\xE4\xDF Artikel 77 Absatz 4 der B-VG mit\
+            \ der Leitung des Bundesministeriums betraut)", title: ''}
+    model: op_scraper.function
+    pk: 138
+-   fields: {short: "gem\xE4\xDF Artikel 77 Absatz 3 der B-VG mit der Leitung der\
+            \ Agenden des BKA - Verstaatlichte Unternehmungen (Sekt IV) betraut",
+        title: ''}
+    model: op_scraper.function
+    pk: 139
+-   fields: {short: "Mit der Weiterf\xFChrung der Gesch\xE4fte betraut", title: ''}
+    model: op_scraper.function
+    pk: 140
+-   fields: {short: "gem\xE4\xDF Artikel 77 Absatz 4 des B-VG mit der Leitung des\
+            \ Bundesministers f\xFCr Verkehr und Elektrizit\xE4tswirtschaft betraut",
+        title: ''}
+    model: op_scraper.function
+    pk: 141
+-   fields: {short: "Vizekanzler gem\xE4\xDF Artikel 77 Absatz 3 der B-VG mit der\
+            \ Leitung der Agenden der BKA - Verstaatlichte Unternehmungen (Sekt IV)\
+            \ betraut", title: ''}
+    model: op_scraper.function
+    pk: 142
+-   fields: {short: "Bundesminister (f\xFCr die Ausw\xE4rtigen Angelegenheiten)",
+        title: ''}
+    model: op_scraper.function
+    pk: 143
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Ausw\xE4rtigen Angelegenheiten)",
+        title: ''}
+    model: op_scraper.function
+    pk: 144
+-   fields: {short: "Vor\xFCbergehender mit der Leitung der Ausw\xE4rtigen Angelegenheiten\
+            \ betraut", title: ''}
+    model: op_scraper.function
+    pk: 145
+-   fields: {short: "Bundesminister (f\xFCr Angelegenheiten der Landesverteidigung)",
+        title: ''}
+    model: op_scraper.function
+    pk: 146
+-   fields: {short: "Staatssekret\xE4r (f\xFCr Angelegenheiten der Landesverteidigung)",
+        title: ''}
+    model: op_scraper.function
+    pk: 147
+-   fields: {short: "Mit der einstweiligen F\xFChrung der Gesch\xE4fte betraut", title: ''}
+    model: op_scraper.function
+    pk: 148
+-   fields: {short: Bundesminister (mit der Leitung betraut), title: ''}
+    model: op_scraper.function
+    pk: 149
+-   fields: {short: Bundesminister (im BKA), title: ''}
+    model: op_scraper.function
+    pk: 150
+-   fields: {short: Staatskanzler, title: ''}
+    model: op_scraper.function
+    pk: 151
+-   fields: {short: "Unterstaatssekret\xE4r", title: ''}
+    model: op_scraper.function
+    pk: 152
+-   fields: {short: "Unterstaatssekret\xE4r (f\xFCr Kultus)", title: ''}
+    model: op_scraper.function
+    pk: 153
+-   fields: {short: "Staatssekret\xE4r (ohne Portefeuille)", title: ''}
+    model: op_scraper.function
+    pk: 154
+-   fields: {short: "Unterstaatssekret\xE4rin", title: ''}
+    model: op_scraper.function
+    pk: 155
+-   fields: {short: "Unterstaatssekret\xE4r (f\xFCr Heerwesen)", title: ''}
+    model: op_scraper.function
+    pk: 156
+-   fields: {short: "Unterstaatssekret\xE4r (f\xFCr \xC4u\xDFeres)", title: ''}
+    model: op_scraper.function
+    pk: 157
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der gesetzlichen\
+            \ Schutzes der Arbeiter und Angestellten)", title: ''}
+    model: op_scraper.function
+    pk: 158
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der Forstwirtschaft)",
+        title: ''}
+    model: op_scraper.function
+    pk: 159
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der Industrie)",
+        title: ''}
+    model: op_scraper.function
+    pk: 160
+-   fields: {short: Mit der Leitung betraut, title: ''}
+    model: op_scraper.function
+    pk: 161
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der Angelegenheiten
+            der inneren Verwaltung und des Sicherheitswesens betraut), title: ''}
+    model: op_scraper.function
+    pk: 162
+-   fields: {short: "Staatssekret\xE4r (f\xFCr Sicherheitswesen)", title: ''}
+    model: op_scraper.function
+    pk: 163
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten des gesetzlichen\
+            \ Schutzes der Arbeiter und Angestellten)", title: ''}
+    model: op_scraper.function
+    pk: 164
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der Angelegenheiten
+            der inneren Verwaltung betraut), title: ''}
+    model: op_scraper.function
+    pk: 165
+-   fields: {short: "Bundesminister (mit der sachlichen Leitung der Angelegenheiten\
+            \ des Sicherheitswesens und der Vorbereitung der Gesetzgebung \xFCber\
+            \ die berufsst\xE4ndische Neuordnung betraut)", title: ''}
+    model: op_scraper.function
+    pk: 166
+-   fields: {short: "Staatssekret\xE4r f\xFCr Angelegenheiten der Sicherheit", title: ''}
+    model: op_scraper.function
+    pk: 167
+-   fields: {short: "Staatssekret\xE4r (f\xFCr Angelegenheiten des BKA)", title: ''}
+    model: op_scraper.function
+    pk: 168
+-   fields: {short: "Vizekanzler (mit der sachlichen Leitung der Angelegenheiten der\
+            \ inneren Verwaltung einschlie\xDFlich des Sicherheitswesens betraut)",
+        title: ''}
+    model: op_scraper.function
+    pk: 169
+-   fields: {short: "Bundesminister (mit der sachlichen Leitung der Angelegenheiten\
+            \ der administrativen Angelegenheiten der Bundesanstalt f\xFCr Statistik)",
+        title: ''}
+    model: op_scraper.function
+    pk: 170
+-   fields: {short: "Bundesminister (mit der sachlichen Leitung der Angelegenheiten\
+            \ der Sicherheitswesens und der zum Wirkungsbereich der Abt 4 geh\xF6\
+            renden Angelegenheiten betraut)", title: ''}
+    model: op_scraper.function
+    pk: 171
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der Angelegenheiten
+            der inneren Verwaltung  betraut), title: ''}
+    model: op_scraper.function
+    pk: 172
+-   fields: {short: "Bundesminister (mit der sachlichen Leitung der Angelegenheiten\
+            \ der Bek\xE4mpfung staatsgef\xE4hrlicher Bestrebungen in der Privatwirtschaft\
+            \ betraut)", title: ''}
+    model: op_scraper.function
+    pk: 173
+-   fields: {short: "Bundesminister f\xFCr die ausw\xE4rtigen Angelegenheiten", title: ''}
+    model: op_scraper.function
+    pk: 174
+-   fields: {short: "Bundesminister (mit der sachlichen Leitung der  Gesetzgebung\
+            \ \xFCber die berufsst\xE4ndische Neuordnung vorbereitenden T\xE4tigkeit\
+            \ der Bundesministerien betraut)", title: ''}
+    model: op_scraper.function
+    pk: 175
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der Angelegenheiten
+            des Sicherheitswesens und der inneren Verwaltung betraut), title: ''}
+    model: op_scraper.function
+    pk: 176
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten des Sicherheitswesens)",
+        title: ''}
+    model: op_scraper.function
+    pk: 177
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die vom Bundeskanzler gef\xFChrten\
+            \ Angelegenheiten des BKA)", title: ''}
+    model: op_scraper.function
+    pk: 178
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten des BKA mit Ausnahme\
+            \ der ausw\xE4rtigen Angelegenheiten)", title: ''}
+    model: op_scraper.function
+    pk: 179
+-   fields: {short: Bundesminister (mit der Leitung betraut, title: ''}
+    model: op_scraper.function
+    pk: 180
+-   fields: {short: "Bundesminister (mit der Fortf\xFChrung der Gesch\xE4fte betraut)",
+        title: ''}
+    model: op_scraper.function
+    pk: 181
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten des Arbeitsdienstes)",
+        title: ''}
+    model: op_scraper.function
+    pk: 182
+-   fields: {short: "Vizekanzler (mit der sachlichen Leitung der Angelegenheiten der\
+            \ k\xF6rperlichen Ert\xFCchtigung betraut)", title: ''}
+    model: op_scraper.function
+    pk: 183
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der Bergbauernhilfe)",
+        title: ''}
+    model: op_scraper.function
+    pk: 184
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der Arbeitsbeschaffung\
+            \ und des Fremdenverkehrs sowie die Angelegenheiten des Stra\xDFenbaues)",
+        title: ''}
+    model: op_scraper.function
+    pk: 185
+-   fields: {short: Vizekanzler (mit der sachlichen Leitung der Angelegenheiten des
+            Sicherheitswesens betraut), title: ''}
+    model: op_scraper.function
+    pk: 186
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der Angelegenheiten
+            der Verfassungs- und Verwaltungsreform betraut), title: ''}
+    model: op_scraper.function
+    pk: 187
+-   fields: {short: "Bundesminister (mit der vorl\xE4ufigen Fortf\xFChrung der Gesch\xE4\
+            fte betraut)", title: ''}
+    model: op_scraper.function
+    pk: 188
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten des Forstwesens\
+            \ und der Holzbewirtschaftung)", title: ''}
+    model: op_scraper.function
+    pk: 189
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der Arbeitsbeschaffung\
+            \ und des Fremdenverkehrs sowie die Angelegenheiten der Stra\xDFenwesens)",
+        title: ''}
+    model: op_scraper.function
+    pk: 190
+-   fields: {short: "Staatssekret\xE4r (f\xFCr die Angelegenheiten der Holzbewirtschaftung,\
+            \ soweit sie in den Wirkungsbereich des Bundesministers fallen)", title: ''}
+    model: op_scraper.function
+    pk: 191
+-   fields: {short: Vizekanzler (mit der sachlichen Leitung der wirtschaftspolitischen
+            Angelegenheiten betraut), title: ''}
+    model: op_scraper.function
+    pk: 192
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der Angelegenheiten
+            der inneren Verwaltung und der wirtschaftspolitischen Angelegenheiten
+            betraut), title: ''}
+    model: op_scraper.function
+    pk: 193
+-   fields: {short: "Bundesminister (mit der sachlichen Leitung der Angelegenheiten\
+            \ der \xF6ffentlichen Sicherheit betraut)", title: ''}
+    model: op_scraper.function
+    pk: 194
+-   fields: {short: Vizekanzler (mit der sachlichen Leitung der Angelegenheiten der
+            inneren Verwaltung betraut), title: ''}
+    model: op_scraper.function
+    pk: 195
+-   fields: {short: "Vizekanzler (mit der sachlichen Leitung der ausw\xE4rtigen Angelegenheiten\
+            \ betraut)", title: ''}
+    model: op_scraper.function
+    pk: 196
+-   fields: {short: Bundesminister (mit der sachlichen Leitung der inneren Angelegenheiten
+            betraut), title: ''}
+    model: op_scraper.function
+    pk: 197
+-   fields: {short: "Mit der vorl\xE4ufigen Fortf\xFChrung der Gesch\xE4fte betraut",
+        title: ''}
+    model: op_scraper.function
+    pk: 198
+-   fields: {short: "Bundesminister (f\xFCr die sachliche Leitung der ausw\xE4rtigen\
+            \ Angelegenheiten)", title: ''}
+    model: op_scraper.function
+    pk: 199
+-   fields: {short: "Bundesminister (f\xFCr die sachliche Leitung der inneren Angelegenheiten)",
+        title: ''}
+    model: op_scraper.function
+    pk: 200
+-   fields: {short: Vizekanzler (mit der Leitung der Agenden der Sekt II betraut),
+        title: ''}
+    model: op_scraper.function
+    pk: 201
+-   fields: {short: Bundesminister (mit der Leitung der Justizangelegenheiten betraut),
+        title: ''}
+    model: op_scraper.function
+    pk: 202
+-   fields: {short: Vizekanzler (mit der Leitung der Justizangelegenheiten betraut),
+        title: ''}
+    model: op_scraper.function
+    pk: 203
+-   fields: {short: "Bundesminister (mit der F\xFChrung der ausw\xE4rtigen Angelegenheiten\
+            \ betraut)", title: ''}
+    model: op_scraper.function
+    pk: 204
+-   fields: {short: Bundesminister (mit der Leitung der Angelegenheiten des Unterrichts
+            und Kultus betraut), title: ''}
+    model: op_scraper.function
+    pk: 205
+-   fields: {short: Mit der Leitung der Angelegenheiten des Unterrichts und Kultus
+            betraut, title: ''}
+    model: op_scraper.function
+    pk: 206
+-   fields: {short: Mit dem Vorsitz in der einstweiligen Regierung betraut, title: ''}
+    model: op_scraper.function
+    pk: 207
+-   fields: {short: "Mit der F\xFChrung der Gesch\xE4fte betraut", title: ''}
+    model: op_scraper.function
+    pk: 208
+-   fields: {short: "RH-Pr\xE4sidentIn", title: "Rechnungshofpr\xE4sidentIn"}
+    model: op_scraper.function
+    pk: 209
+-   fields: {short: "Betraut mit der vorl\xE4ufigen Fortf\xFChrung", title: ''}
+    model: op_scraper.function
+    pk: 210
+-   fields: {short: "mit der vorl\xE4ufigen Fortf\xFChrung der Verwaltung des Bundeskanzleramtes\
+            \ und mit dem Vorsitz in der Bundesregierung bis zur Bestellung eines\
+            \ neuen Bundeskanzlers betraut", title: ''}
+    model: op_scraper.function
+    pk: 211
+-   fields: {short: Bundesminister, title: "Bundesminister f\xFCr \xD6ffentliche Wirtschaft\
+            \ und Verkehr"}
+    model: op_scraper.function
+    pk: 212
+-   fields: {short: "betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums",
+        title: "Betraut mit der vorl\xE4ufigen Leitung des Bundesministeriums f\xFC\
+            r \xD6ffentliche Wirtschaft und Verkehr"}
+    model: op_scraper.function
+    pk: 213
+-   fields: {short: Bundesministerin, title: "Bundesministerin f\xFCr Bildung"}
+    model: op_scraper.function
+    pk: 214
+-   fields: {short: "\xD6VP", titles: '["Bundesratsfraktion der \u00d6VP", "\u00d6sterreichische
+            Volkspartei", "Parlamentsklub der \u00d6sterreichischen Volkspartei",
+            "Klub der \u00d6sterreichischen Volkspartei"]'}
+    model: op_scraper.party
+    pk: 1
+-   fields: {short: "SP\xD6", titles: '["Bundesratsfraktion der SP\u00d6", "Sozialdemokratische
+            Partei \u00d6sterreichs", "Die Sozialdemokratische Parlamentsfraktion
+            - Klub der sozialdemokratischen Abgeordneten zum Nationalrat, Bundesrat
+            und Europ\u00e4ischen Parlament", "Sozialdemokratische Parlamentsfraktion
+            - Klub der sozialdemokratischen Abgeordneten und Bundesr\u00e4te", "Klub
+            der Sozialistischen Abgeordneten und Bundesr\u00e4te, Sozialdemokratische
+            Parlamentsfraktion - Klub der sozialdemokratischen Abgeordneten und Bundesr\u00e4te",
+            "Klub der Sozialistischen Abgeordneten und Bundesr\u00e4te", "Sozialistische
+            Partei \u00d6sterreichs", "Klub der Sozialistischen Partei \u00d6sterreichs",
+            "Parlamentsklub der Sozialistischen Partei \u00d6sterreichs"]'}
+    model: op_scraper.party
+    pk: 2
+-   fields: {short: "GR\xDCNE", titles: '["Bundesratsfraktion der Gr\u00fcnen", "Der
+            Gr\u00fcne Klub im Parlament - Klub der Gr\u00fcnen Abgeordneten zum Nationalrat,
+            Bundesrat und Europ\u00e4ischen Parlament", "Der Gr\u00fcne Klub", "Der
+            Gr\u00fcne Klub - Klub der Gr\u00fcn-Alternativen Abgeordneten"]'}
+    model: op_scraper.party
+    pk: 3
+-   fields: {short: OF, titles: '["ohne Fraktionszugeh\u00f6rigkeit"]'}
+    model: op_scraper.party
+    pk: 4
+-   fields: {short: "FP\xD6", titles: '["Freiheitliche Bundesratsfraktion", "Freiheitliche
+            Partei \u00d6sterreichs", "Freiheitlicher Parlamentsklub", "Fraktion der
+            Freiheitlichen Bundesr\u00e4te", "Klub der Freiheitlichen Partei \u00d6sterreichs"]'}
+    model: op_scraper.party
+    pk: 5
+-   fields: {short: "Gr\xFCne", titles: '["Die Gr\u00fcnen"]'}
+    model: op_scraper.party
+    pk: 6
+-   fields: {short: FPK, titles: '["Die Freiheitlichen in K\u00e4rnten - Liste Gerhard
+            D\u00f6rfler"]'}
+    model: op_scraper.party
+    pk: 7
+-   fields: {short: "BZ\xD6K", titles: '["Die Freiheitlichen in K\u00e4rnten - BZ\u00d6"]'}
+    model: op_scraper.party
+    pk: 8
+-   fields: {short: "BZ\xD6", titles: '["B\u00fcndnis Zukunft \u00d6sterreich", "Parlamentsklub
+            des BZ\u00d6"]'}
+    model: op_scraper.party
+    pk: 9
+-   fields: {short: F, titles: '["Fraktion der Freiheitlichen Bundesr\u00e4te", "Freiheitlicher
+            Parlamentsklub", "Klub der Freiheitlichen Partei \u00d6sterreichs", "Klub
+            der Freiheitlichen"]'}
+    model: op_scraper.party
+    pk: 10
+-   fields: {short: NEOS-LIF, titles: '["Klub von NEOS und LIF"]'}
+    model: op_scraper.party
+    pk: 11
+-   fields: {short: NEOS, titles: '["Klub von NEOS", "NEOS - Das neue \u00d6sterreich
+            und Liberales Forum"]'}
+    model: op_scraper.party
+    pk: 12
+-   fields: {short: STRONACH, titles: '["Parlamentsklub Team Stronach"]'}
+    model: op_scraper.party
+    pk: 13
+-   fields: {short: OK, titles: '["ohne Klubzugeh\u00f6rigkeit"]'}
+    model: op_scraper.party
+    pk: 14
+-   fields: {short: "F-BZ\xD6", titles: '["Freiheitlicher Parlamentsklub - BZ\u00d6"]'}
+    model: op_scraper.party
+    pk: 15
+-   fields: {short: L, titles: '["Parlamentsklub Liberales Forum", "Parlamentsklub
+            des Liberalen Forums", "Klub Liberales Forum", "Liberales Forum"]'}
+    model: op_scraper.party
+    pk: 16
+-   fields: {short: KuL, titles: '["Klub der Kommunisten und Linkssozialisten", "Kommunisten
+            und Linkssozialisten"]'}
+    model: op_scraper.party
+    pk: 17
+-   fields: {short: WdU, titles: '["Bundesratsfraktion der WdU", "Klub der Wahlpartei
+            der Unabh\u00e4ngigen", "Klub der Unabh\u00e4ngigen", "Wahlpartei der
+            Unabh\u00e4ngigen"]'}
+    model: op_scraper.party
+    pk: 18
+-   fields: {short: VO, titles: '["Klub der \u00d6sterreichischen Volksopposition",
+            "Volksopposition"]'}
+    model: op_scraper.party
+    pk: 19
+-   fields: {short: LB, titles: '["Klub des Linksblocks (Kommunisten und Linkssozialisten)",
+            "Linksblock"]'}
+    model: op_scraper.party
+    pk: 20
+-   fields: {short: "KP\xD6", titles: '["Parlamentsklub der Kommunistischen Partei
+            \u00d6sterreichs", "Kommunistische Partei \u00d6sterreichs"]'}
+    model: op_scraper.party
+    pk: 21
+-   fields: {short: SdP, titles: '["Verband der Sozialdemokratischen Abgeordneten
+            zum Nationalrat", "Sozialdemokratische Arbeiterpartei Deutsch\u00f6sterreichs",
+            "Fraktion der Sozialdemokratischen Bundesratsmitglieder", "Verband der
+            Sozialdemokratischen Abgeordneten zum Nationalrat Deutsch\u00f6sterreichs"]'}
+    model: op_scraper.party
+    pk: 22
+-   fields: {short: CSP, titles: '["Christlichsoziale Vereinigung deutscher Abgeordneter
+            im \u00f6sterreichischen Parlamente", "Christlichsoziale Partei", "Christlichsoziale
+            Fraktion im Bundesrate"]'}
+    model: op_scraper.party
+    pk: 23
+-   fields: {short: HB, titles: '["Parlamentarischer Klub des Heimatblocks", "Heimatblock"]'}
+    model: op_scraper.party
+    pk: 24
+-   fields: {short: LBd, titles: '["Abgeordnetenverband des Landbundes f\u00fcr \u00d6sterreich",
+            "Landbund"]'}
+    model: op_scraper.party
+    pk: 25
+-   fields: {short: NWB, titles: '["Verband der Abgeordneten des Nationalen Wirtschaftsblocks",
+            "Nationaler Wirtschaftsblock"]'}
+    model: op_scraper.party
+    pk: 26
+-   fields: {short: GdP, titles: '["Gro\u00dfdeutsche Volkspartei", "Bundesratsfraktion
+            der Gro\u00dfdeutschen Volkspartei", "Verband der Abgeordneten der Gro\u00dfdeutschen
+            Volkspartei"]'}
+    model: op_scraper.party
+    pk: 27
+-   fields: {short: NSDAP, titles: '["Nationalsozialistische Deutsche Arbeiterpartei"]'}
+    model: op_scraper.party
+    pk: 28
+-   fields: {short: FRITZ, titles: '["Liste Fritz Dinkhauser - FRITZ"]'}
+    model: op_scraper.party
+    pk: 29
+-   fields: {short: STRONA, titles: '["Team Frank Stronach - Frank"]'}
+    model: op_scraper.party
+    pk: 30
+-   fields: {short: BP, titles: '["Bauernpartei"]'}
+    model: op_scraper.party
+    pk: 31
+-   fields: {short: BAP, titles: '["B\u00fcrgerliche Arbeitspartei"]'}
+    model: op_scraper.party
+    pk: 32
+-   fields: {name: T, title: 7 Tirol}
+    model: op_scraper.state
+    pk: 1
+-   fields: {name: W, title: 9 Wien}
+    model: op_scraper.state
+    pk: 2
+-   fields: {name: N, title: "3 Nieder\xF6sterreich"}
+    model: op_scraper.state
+    pk: 3
+-   fields: {name: O, title: "4 Ober\xF6sterreich"}
+    model: op_scraper.state
+    pk: 4
+-   fields: {name: S, title: 5 Salzburg}
+    model: op_scraper.state
+    pk: 5
+-   fields: {name: K, title: "2 K\xE4rnten"}
+    model: op_scraper.state
+    pk: 6
+-   fields: {name: St, title: 6 Steiermark}
+    model: op_scraper.state
+    pk: 7
+-   fields: {name: V, title: 8 Vorarlberg}
+    model: op_scraper.state
+    pk: 8
+-   fields: {name: B, title: 1 Burgenland}
+    model: op_scraper.state
+    pk: 9
+-   fields: {name: K, title: "2 K\xE4rnten, 2 K\xE4rnten"}
+    model: op_scraper.state
+    pk: 10
+-   fields: {name: XXIV, title: vierundzwanzigste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 11
+-   fields: {name: W, title: '9 Wien, 9 Wien'}
+    model: op_scraper.state
+    pk: 12
+-   fields: {name: N, title: 3B Waldviertel}
+    model: op_scraper.state
+    pk: 13
+-   fields: {name: BWV, title: B Bundeswahlvorschlag}
+    model: op_scraper.state
+    pk: 14
+-   fields: {name: S, title: 5C Lungau/Pinzgau/Pongau}
+    model: op_scraper.state
+    pk: 15
+-   fields: {name: W, title: "9D Wien S\xFCd"}
+    model: op_scraper.state
+    pk: 16
+-   fields: {name: W, title: 9G Wien Nord}
+    model: op_scraper.state
+    pk: 17
+-   fields: {name: O, title: 4B Innviertel}
+    model: op_scraper.state
+    pk: 18
+-   fields: {name: W, title: "9E Wien S\xFCd-West"}
+    model: op_scraper.state
+    pk: 19
+-   fields: {name: B, title: "1B Burgenland S\xFCd"}
+    model: op_scraper.state
+    pk: 20
+-   fields: {name: O, title: 4D Traunviertel}
+    model: op_scraper.state
+    pk: 21
+-   fields: {name: O, title: 4A Linz und Umgebung}
+    model: op_scraper.state
+    pk: 22
+-   fields: {name: St, title: 6A Graz und Umgebung}
+    model: op_scraper.state
+    pk: 23
+-   fields: {name: St, title: 6B Oststeiermark}
+    model: op_scraper.state
+    pk: 24
+-   fields: {name: O, title: 4C Hausruckviertel}
+    model: op_scraper.state
+    pk: 25
+-   fields: {name: T, title: 7B Innsbruck-Land}
+    model: op_scraper.state
+    pk: 26
+-   fields: {name: St, title: 6D Obersteiermark}
+    model: op_scraper.state
+    pk: 27
+-   fields: {name: O, title: "4E M\xFChlviertel"}
+    model: op_scraper.state
+    pk: 28
+-   fields: {name: N, title: "3D Nieder\xF6sterreich Mitte"}
+    model: op_scraper.state
+    pk: 29
+-   fields: {name: O, title: "4 Ober\xF6sterreich, 4E M\xFChlviertel"}
+    model: op_scraper.state
+    pk: 30
+-   fields: {name: N, title: 3C Mostviertel}
+    model: op_scraper.state
+    pk: 31
+-   fields: {name: S, title: 5B Flachgau/Tennengau}
+    model: op_scraper.state
+    pk: 32
+-   fields: {name: N, title: 3A Weinviertel}
+    model: op_scraper.state
+    pk: 33
+-   fields: {name: W, title: 9C Wien Innen-Ost}
+    model: op_scraper.state
+    pk: 34
+-   fields: {name: K, title: "2D K\xE4rnten Ost"}
+    model: op_scraper.state
+    pk: 35
+-   fields: {name: K, title: 2A Klagenfurt}
+    model: op_scraper.state
+    pk: 36
+-   fields: {name: T, title: 7C Unterland}
+    model: op_scraper.state
+    pk: 37
+-   fields: {name: K, title: 2B Villach}
+    model: op_scraper.state
+    pk: 38
+-   fields: {name: St, title: 6C Weststeiermark}
+    model: op_scraper.state
+    pk: 39
+-   fields: {name: N, title: "3G Nieder\xF6sterreich S\xFCd-Ost"}
+    model: op_scraper.state
+    pk: 40
+-   fields: {name: T, title: 7D Oberland}
+    model: op_scraper.state
+    pk: 41
+-   fields: {name: B, title: 1A Burgenland Nord}
+    model: op_scraper.state
+    pk: 42
+-   fields: {name: N, title: "3E Nieder\xF6sterreich S\xFCd"}
+    model: op_scraper.state
+    pk: 43
+-   fields: {name: N, title: 3F Wien Umgebung}
+    model: op_scraper.state
+    pk: 44
+-   fields: {name: V, title: 8A Vorarlberg Nord}
+    model: op_scraper.state
+    pk: 45
+-   fields: {name: W, title: 9F Wien Nord-West}
+    model: op_scraper.state
+    pk: 46
+-   fields: {name: St, title: 6A Graz}
+    model: op_scraper.state
+    pk: 47
+-   fields: {name: St, title: 6G Steiermark Nord-West}
+    model: op_scraper.state
+    pk: 48
+-   fields: {name: St, title: 6B Steiermark Mitte}
+    model: op_scraper.state
+    pk: 49
+-   fields: {name: K, title: "2C K\xE4rnten West"}
+    model: op_scraper.state
+    pk: 50
+-   fields: {name: W, title: "9 Wien, 9D Wien S\xFCd"}
+    model: op_scraper.state
+    pk: 51
+-   fields: {name: W, title: "9 Wien, 9E Wien S\xFCd-West"}
+    model: op_scraper.state
+    pk: 52
+-   fields: {name: V, title: "8B Vorarlberg S\xFCd"}
+    model: op_scraper.state
+    pk: 53
+-   fields: {name: St, title: 6E Steiermark Ost}
+    model: op_scraper.state
+    pk: 54
+-   fields: {name: St, title: "6D Steiermark S\xFCd-Ost"}
+    model: op_scraper.state
+    pk: 55
+-   fields: {name: St, title: 6F Steiermark Nord}
+    model: op_scraper.state
+    pk: 56
+-   fields: {name: St, title: "6C Steiermark S\xFCd"}
+    model: op_scraper.state
+    pk: 57
+-   fields: {name: W, title: "9 Wien, 9A Wien Innen-S\xFCd"}
+    model: op_scraper.state
+    pk: 58
+-   fields: {name: S, title: 5A Salzburg Stadt}
+    model: op_scraper.state
+    pk: 59
+-   fields: {name: W, title: 9B Wien Innen-West}
+    model: op_scraper.state
+    pk: 60
+-   fields: {name: W, title: "9A Wien Innen-S\xFCd"}
+    model: op_scraper.state
+    pk: 61
+-   fields: {name: St, title: 6H Steiermark West}
+    model: op_scraper.state
+    pk: 62
+-   fields: {name: W, title: "9D Wien S\xFCd, 9 Wien"}
+    model: op_scraper.state
+    pk: 63
+-   fields: {name: W, title: '9 Wien, 9F Wien Nord-West'}
+    model: op_scraper.state
+    pk: 64
+-   fields: {name: N, title: "3 Nieder\xF6sterreich, 3C Mostviertel"}
+    model: op_scraper.state
+    pk: 65
+-   fields: {name: N, title: "3 Nieder\xF6sterreich, 3F Wien Umgebung"}
+    model: op_scraper.state
+    pk: 66
+-   fields: {name: O, title: "4E M\xFChlviertel, 4 Ober\xF6sterreich"}
+    model: op_scraper.state
+    pk: 67
+-   fields: {name: XXI, title: einundzwanzigste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 68
+-   fields: {name: St, title: '6G Steiermark Nord-West, 6 Steiermark'}
+    model: op_scraper.state
+    pk: 69
+-   fields: {name: T, title: '7 Tirol, 7B Innsbruck-Land'}
+    model: op_scraper.state
+    pk: 70
+-   fields: {name: N, title: "3 Nieder\xF6sterreich, 3 Nieder\xF6sterreich"}
+    model: op_scraper.state
+    pk: 71
+-   fields: {name: T, title: '7C Unterland, 7 Tirol'}
+    model: op_scraper.state
+    pk: 72
+-   fields: {name: K, title: "2 K\xE4rnten, 2D K\xE4rnten Ost"}
+    model: op_scraper.state
+    pk: 73
+-   fields: {name: St, title: '6B Steiermark Mitte, 6 Steiermark'}
+    model: op_scraper.state
+    pk: 74
+-   fields: {name: W, title: '9 Wien, 9G Wien Nord'}
+    model: op_scraper.state
+    pk: 75
+-   fields: {name: O, title: "4C Hausruckviertel, 4 Ober\xF6sterreich"}
+    model: op_scraper.state
+    pk: 76
+-   fields: {name: '2', title: "W2 Wahlkreisverband II (K, O\xD6, S, St, T u V), W2\
+            \ Wahlkreisverband II (K, O\xD6, S, St, T u V)"}
+    model: op_scraper.state
+    pk: 77
+-   fields: {name: '2', title: "W2 Wahlkreisverband II (K, O\xD6, S, St, T u V)"}
+    model: op_scraper.state
+    pk: 78
+-   fields: {name: '1', title: "W1 Wahlkreisverband I (Burgenland, Nieder\xF6sterreich,\
+            \ Wien)"}
+    model: op_scraper.state
+    pk: 79
+-   fields: {name: V, title: '8 Vorarlberg, 8 Vorarlberg'}
+    model: op_scraper.state
+    pk: 80
+-   fields: {name: XV, title: "f\xFCnfzehnte Gesetzgebungsperiode"}
+    model: op_scraper.state
+    pk: 81
+-   fields: {name: W, title: 4 Wien Nordost}
+    model: op_scraper.state
+    pk: 82
+-   fields: {name: B, title: 25 Burgenland}
+    model: op_scraper.state
+    pk: 83
+-   fields: {name: T, title: 18 Tirol}
+    model: op_scraper.state
+    pk: 84
+-   fields: {name: W, title: 3 Wien Nordwest}
+    model: op_scraper.state
+    pk: 85
+-   fields: {name: St, title: 20 Graz und Umgebung}
+    model: op_scraper.state
+    pk: 86
+-   fields: {name: W, title: "6 Wien S\xFCdwest"}
+    model: op_scraper.state
+    pk: 87
+-   fields: {name: N, title: 8 Viertel oberm Wienerwald}
+    model: op_scraper.state
+    pk: 88
+-   fields: {name: V, title: 19 Vorarlberg}
+    model: op_scraper.state
+    pk: 89
+-   fields: {name: '2', title: "W2 Wahlkreisverband II (Nieder\xF6sterreich)"}
+    model: op_scraper.state
+    pk: 90
+-   fields: {name: O, title: 12 Linz und Umgebung}
+    model: op_scraper.state
+    pk: 91
+-   fields: {name: O, title: "16 M\xFChlviertel"}
+    model: op_scraper.state
+    pk: 92
+-   fields: {name: W, title: 7 Wien West}
+    model: op_scraper.state
+    pk: 93
+-   fields: {name: '1', title: W1 Wahlkreisverband I (Wien)}
+    model: op_scraper.state
+    pk: 94
+-   fields: {name: St, title: 23 Obersteier}
+    model: op_scraper.state
+    pk: 95
+-   fields: {name: K, title: "24 K\xE4rnten"}
+    model: op_scraper.state
+    pk: 96
+-   fields: {name: N, title: 11 Viertel unterm Manhartsberg}
+    model: op_scraper.state
+    pk: 97
+-   fields: {name: W, title: "5 Wien S\xFCdost"}
+    model: op_scraper.state
+    pk: 98
+-   fields: {name: S, title: 17 Salzburg}
+    model: op_scraper.state
+    pk: 99
+-   fields: {name: St, title: 21 Mittel- und Untersteier}
+    model: op_scraper.state
+    pk: 100
+-   fields: {name: O, title: 14 Hausruckviertel}
+    model: op_scraper.state
+    pk: 101
+-   fields: {name: N, title: 10 Viertel oberm Manhartsberg}
+    model: op_scraper.state
+    pk: 102
+-   fields: {name: '3', title: "W3 Wahlkreisverband III (O\xD6, S, T u. V)"}
+    model: op_scraper.state
+    pk: 103
+-   fields: {name: St, title: 22 Oststeier}
+    model: op_scraper.state
+    pk: 104
+-   fields: {name: O, title: 13 Innviertel}
+    model: op_scraper.state
+    pk: 105
+-   fields: {name: N, title: 9 Viertel unterm Wienerwald}
+    model: op_scraper.state
+    pk: 106
+-   fields: {name: W, title: 2 Wien Innen-West}
+    model: op_scraper.state
+    pk: 107
+-   fields: {name: W, title: 1 Wien Innen-Ost}
+    model: op_scraper.state
+    pk: 108
+-   fields: {name: '4', title: 'W4 Wahlkreisverband IV (B, K u St.)'}
+    model: op_scraper.state
+    pk: 109
+-   fields: {name: O, title: 15 Traunviertel}
+    model: op_scraper.state
+    pk: 110
+-   fields: {name: W, title: "6 Wien S\xFCdwest, 4 Wien Nordost"}
+    model: op_scraper.state
+    pk: 111
+-   fields: {name: '3', title: "W3 Wahlkreisverband III (O\xD6, S, T u. V), W3 Wahlkreisverband\
+            \ III (O\xD6, S, T u. V)"}
+    model: op_scraper.state
+    pk: 112
+-   fields: {name: III, title: dritte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 113
+-   fields: {name: I, title: erste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 114
+-   fields: {name: '4', title: "W4 Wahlkreisverband IV - K\xE4rnten"}
+    model: op_scraper.state
+    pk: 115
+-   fields: {name: '3', title: "W3 Wahlkreisverband III - Ober\xF6sterreich"}
+    model: op_scraper.state
+    pk: 116
+-   fields: {name: '3', title: W3 Wahlkreisverband III - Salzburg}
+    model: op_scraper.state
+    pk: 117
+-   fields: {name: '4', title: W4 Wahlkreisverband IV - Steiermark}
+    model: op_scraper.state
+    pk: 118
+-   fields: {name: '4', title: W4 Wahlkreisverband IV - Burgenland}
+    model: op_scraper.state
+    pk: 119
+-   fields: {name: '3', title: W3 Wahlkreisverband III - Tirol}
+    model: op_scraper.state
+    pk: 120
+-   fields: {name: T, title: 25 Nordtirol}
+    model: op_scraper.state
+    pk: 121
+-   fields: {name: W, title: "05 Wien S\xFCdost"}
+    model: op_scraper.state
+    pk: 122
+-   fields: {name: RSM, title: RM Reststimmenmandat}
+    model: op_scraper.state
+    pk: 123
+-   fields: {name: O, title: 13 Linz und Umgebung}
+    model: op_scraper.state
+    pk: 124
+-   fields: {name: W, title: 03 Wien Nordwest}
+    model: op_scraper.state
+    pk: 125
+-   fields: {name: W, title: 07 Wien West}
+    model: op_scraper.state
+    pk: 126
+-   fields: {name: O, title: 15 Hausruckviertel}
+    model: op_scraper.state
+    pk: 127
+-   fields: {name: O, title: 14 Innviertel}
+    model: op_scraper.state
+    pk: 128
+-   fields: {name: B, title: 28 Burgenland}
+    model: op_scraper.state
+    pk: 129
+-   fields: {name: N, title: 09 Viertel unterm Wienerwald}
+    model: op_scraper.state
+    pk: 130
+-   fields: {name: W, title: "06 Wien S\xFCdwest"}
+    model: op_scraper.state
+    pk: 131
+-   fields: {name: N, title: 08 Viertel oberm Wienerwald}
+    model: op_scraper.state
+    pk: 132
+-   fields: {name: S, title: 19 Salzburg}
+    model: op_scraper.state
+    pk: 133
+-   fields: {name: W, title: 01 Wien Innen-Ost}
+    model: op_scraper.state
+    pk: 134
+-   fields: {name: W, title: 04 Wien Nordost}
+    model: op_scraper.state
+    pk: 135
+-   fields: {name: V, title: 27 Vorarlberg}
+    model: op_scraper.state
+    pk: 136
+-   fields: {name: O, title: 16 Traunviertel}
+    model: op_scraper.state
+    pk: 137
+-   fields: {name: W, title: 02 Wien Innen-West}
+    model: op_scraper.state
+    pk: 138
+-   fields: {name: O, title: "17 M\xFChlviertel"}
+    model: op_scraper.state
+    pk: 139
+-   fields: {name: T, title: 26 Lienz}
+    model: op_scraper.state
+    pk: 140
+-   fields: {name: XVI, title: sechzehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 141
+-   fields: {name: XII, title: "zw\xF6lfte Gesetzgebungsperiode"}
+    model: op_scraper.state
+    pk: 142
+-   fields: {name: XI, title: elfte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 143
+-   fields: {name: VII, title: siebente Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 144
+-   fields: {name: XX, title: zwanzigste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 145
+-   fields: {name: XXII, title: zweiundzwanzigste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 146
+-   fields: {name: VIII, title: achte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 147
+-   fields: {name: IV, title: vierte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 148
+-   fields: {name: XVIII, title: achtzehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 149
+-   fields: {name: XVII, title: siebzehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 150
+-   fields: {name: XIII, title: dreizehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 151
+-   fields: {name: XXV, title: "f\xFCnfundzwanzigste Gesetzgebungsperiode"}
+    model: op_scraper.state
+    pk: 152
+-   fields: {name: V, title: "f\xFCnfte Gesetzgebungsperiode"}
+    model: op_scraper.state
+    pk: 153
+-   fields: {name: II, title: zweite Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 154
+-   fields: {name: X, title: zehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 155
+-   fields: {name: VI, title: sechste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 156
+-   fields: {name: XIX, title: neunzehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 157
+-   fields: {name: XXIII, title: dreiundzwanzigste Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 158
+-   fields: {name: IX, title: neunte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 159
+-   fields: {name: XIV, title: vierzehnte Gesetzgebungsperiode}
+    model: op_scraper.state
+    pk: 160
+-   fields: {end_date: 2016-05-16, start_date: 2013-12-16, title: Faymann II}
+    model: op_scraper.administration
+    pk: 1
+-   fields: {end_date: 2013-12-15, start_date: 2008-12-02, title: Faymann I}
+    model: op_scraper.administration
+    pk: 2
+-   fields: {end_date: 2008-12-01, start_date: 2007-01-11, title: Gusenbauer}
+    model: op_scraper.administration
+    pk: 3
+-   fields: {end_date: 2007-01-10, start_date: 2003-02-28, title: "Sch\xFCssel II"}
+    model: op_scraper.administration
+    pk: 4
+-   fields: {end_date: 2003-02-27, start_date: 2000-02-04, title: "Sch\xFCssel I"}
+    model: op_scraper.administration
+    pk: 5
+-   fields: {end_date: 2000-02-03, start_date: 1997-01-28, title: Klima I}
+    model: op_scraper.administration
+    pk: 6
+-   fields: {end_date: 1997-01-27, start_date: 1996-01-15, title: Vranitzky V}
+    model: op_scraper.administration
+    pk: 7
+-   fields: {end_date: 1995-12-18, start_date: 1994-11-29, title: Vranitzky (IV)}
+    model: op_scraper.administration
+    pk: 8
+-   fields: {end_date: 1994-10-11, start_date: 1990-12-17, title: Vranitzky (III)}
+    model: op_scraper.administration
+    pk: 9
+-   fields: {end_date: 1990-10-09, start_date: 1987-01-21, title: Vranitzky (II)}
+    model: op_scraper.administration
+    pk: 10
+-   fields: {end_date: 1986-11-25, start_date: 1986-06-16, title: Vranitzky (I)}
+    model: op_scraper.administration
+    pk: 11
+-   fields: {end_date: 1986-06-16, start_date: 1983-05-24, title: Sinowatz}
+    model: op_scraper.administration
+    pk: 12
+-   fields: {end_date: 1983-04-26, start_date: 1979-06-05, title: Kreisky (IV)}
+    model: op_scraper.administration
+    pk: 13
+-   fields: {end_date: 1979-05-09, start_date: 1975-10-28, title: Kreisky (III)}
+    model: op_scraper.administration
+    pk: 14
+-   fields: {end_date: 1975-10-08, start_date: 1971-11-04, title: Kreisky (II)}
+    model: op_scraper.administration
+    pk: 15
+-   fields: {end_date: 1971-10-19, start_date: 1970-04-21, title: Kreisky (I)}
+    model: op_scraper.administration
+    pk: 16
+-   fields: {end_date: 1970-03-03, start_date: 1966-04-19, title: Klaus (II)}
+    model: op_scraper.administration
+    pk: 17
+-   fields: {end_date: 1965-10-25, start_date: 1964-04-02, title: Klaus (I)}
+    model: op_scraper.administration
+    pk: 18
+-   fields: {end_date: 1964-04-02, start_date: 1963-03-27, title: Gorbach (II)}
+    model: op_scraper.administration
+    pk: 19
+-   fields: {end_date: 1962-11-20, start_date: 1961-04-11, title: Gorbach (I)}
+    model: op_scraper.administration
+    pk: 20
+-   fields: {end_date: 1961-04-11, start_date: 1960-11-03, title: Raab (IV)}
+    model: op_scraper.administration
+    pk: 21
+-   fields: {end_date: 1960-11-03, start_date: 1959-07-16, title: Raab (III)}
+    model: op_scraper.administration
+    pk: 22
+-   fields: {end_date: 1959-05-12, start_date: 1956-06-29, title: Raab (II)}
+    model: op_scraper.administration
+    pk: 23
+-   fields: {end_date: 1956-05-14, start_date: 1953-04-02, title: Raab (I)}
+    model: op_scraper.administration
+    pk: 24
+-   fields: {end_date: 1953-02-25, start_date: 1952-10-28, title: Figl (III)}
+    model: op_scraper.administration
+    pk: 25
+-   fields: {end_date: 1952-10-28, start_date: 1949-11-08, title: Figl (II)}
+    model: op_scraper.administration
+    pk: 26
+-   fields: {end_date: 1949-10-11, start_date: 1945-12-20, title: Figl (I)}
+    model: op_scraper.administration
+    pk: 27
+-   fields: {end_date: 1945-12-20, start_date: 1945-04-27, title: Renner (IV)}
+    model: op_scraper.administration
+    pk: 28
+-   fields: {end_date: 1938-03-11, start_date: 1938-02-16, title: Schuschnigg (IV)}
+    model: op_scraper.administration
+    pk: 29
+-   fields: {end_date: 1938-02-16, start_date: 1936-11-03, title: Schuschnigg (III)}
+    model: op_scraper.administration
+    pk: 30
+-   fields: {end_date: 1936-11-03, start_date: 1936-05-14, title: Schuschnigg (II)}
+    model: op_scraper.administration
+    pk: 31
+-   fields: {end_date: 1936-05-14, start_date: 1933-09-21, title: "Dollfu\xDF (II)\
+            \ - Schuschnigg (I)"}
+    model: op_scraper.administration
+    pk: 32
+-   fields: {end_date: 1933-09-21, start_date: 1932-05-20, title: "Dollfu\xDF (I)"}
+    model: op_scraper.administration
+    pk: 33
+-   fields: {end_date: 1932-05-06, start_date: 1932-01-29, title: Buresch (II)}
+    model: op_scraper.administration
+    pk: 34
+-   fields: {end_date: 1932-01-27, start_date: 1931-06-20, title: Buresch (I)}
+    model: op_scraper.administration
+    pk: 35
+-   fields: {end_date: 1931-06-16, start_date: 1930-12-04, title: Ender}
+    model: op_scraper.administration
+    pk: 36
+-   fields: {end_date: 1930-11-29, start_date: 1930-09-30, title: Vaugoin}
+    model: op_scraper.administration
+    pk: 37
+-   fields: {end_date: 1930-09-25, start_date: 1929-09-26, title: Schober (III)}
+    model: op_scraper.administration
+    pk: 38
+-   fields: {end_date: 1929-09-25, start_date: 1929-05-04, title: Streeruwitz}
+    model: op_scraper.administration
+    pk: 39
+-   fields: {end_date: 1929-04-03, start_date: 1927-05-19, title: Seipel (V)}
+    model: op_scraper.administration
+    pk: 40
+-   fields: {end_date: 1927-05-18, start_date: 1926-10-20, title: Seipel (IV)}
+    model: op_scraper.administration
+    pk: 41
+-   fields: {end_date: 1926-10-15, start_date: 1926-01-15, title: Ramek (II)}
+    model: op_scraper.administration
+    pk: 42
+-   fields: {end_date: 1926-01-14, start_date: 1924-11-20, title: Ramek (I)}
+    model: op_scraper.administration
+    pk: 43
+-   fields: {end_date: 1923-11-20, start_date: 1923-04-17, title: Seipel (II und III)}
+    model: op_scraper.administration
+    pk: 44
+-   fields: {end_date: 1923-04-16, start_date: 1922-05-31, title: Seipel (I)}
+    model: op_scraper.administration
+    pk: 45
+-   fields: {end_date: 1922-05-24, start_date: 1922-01-27, title: Schober (II)}
+    model: op_scraper.administration
+    pk: 46
+-   fields: {end_date: 1922-01-27, start_date: 1922-01-26, title: Breisky}
+    model: op_scraper.administration
+    pk: 47
+-   fields: {end_date: 1922-01-26, start_date: 1921-06-21, title: Schober (I)}
+    model: op_scraper.administration
+    pk: 48
+-   fields: {end_date: 1921-06-01, start_date: 1920-11-20, title: Mayr (II)}
+    model: op_scraper.administration
+    pk: 49
+-   fields: {end_date: null, start_date: 2016-05-17, title: Kern}
+    model: op_scraper.administration
+    pk: 50
+-   fields: {end_date: 2000-02-03, start_date: 1997-01-28, title: Klima}
+    model: op_scraper.administration
+    pk: 51
+-   fields:
+        _slug: /personen/PAD_00942/Hans-Kouba/
+        birthdate: 1912-07-08
+        birthplace: ' Wien'
+        deathdate: 1973-11-16
+        deathplace: ' Wiener Neustadt'
+        full_name: Hans Kouba
+        latest_mandate: 4514
+        mandates: [4410, 4514, 4586, 4523, 6165, 6167]
+        occupation: " Sekret\xE4r"
+        photo_copyright: "\xA9\_unbekannt"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_00942/2100724_180.jpg
+        reversed_name: Kouba Hans
+        source_link: https://www.parlament.gv.at/WWER/PAD_00942/index.shtml
+        ts: 2016-09-14 17:20:00+00:00
+    model: op_scraper.person
+    pk: PAD_00942
+-   fields:
+        _slug: /personen/PAD_01722/Anton-Schlager/
+        birthdate: 1921-06-16
+        birthplace: " Soo\xDF (Nieder\xF6sterreich)"
+        deathdate: 1997-10-10
+        deathplace: " Wallern an der Trattnach (Ober\xF6sterreich)"
+        full_name: Anton Schlager
+        latest_mandate: 6176
+        mandates: [4015, 4392, 4450, 4534, 4564, 4613, 4370, 5384, 6169, 6176, 6178,
+            6163]
+        occupation: ' Bauer'
+        photo_copyright: "\xA9\_unbekannt"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_01722/2101012_180.jpg
+        reversed_name: Schlager Anton
+        source_link: https://www.parlament.gv.at/WWER/PAD_01722/index.shtml
+        ts: 2016-08-18 18:36:00+00:00
+    model: op_scraper.person
+    pk: PAD_01722
+-   fields:
+        _slug: /personen/PAD_01926/Ing-Hans-Sylvester/
+        birthdate: 1897-11-10
+        birthplace: ' Nickelsdorf (Burgenland)'
+        deathdate: 1939-01-19
+        deathplace: ' KZ Dachau'
+        full_name: Ing. Hans Sylvester
+        latest_mandate: 6148
+        mandates: [4815, 6148]
+        occupation: " Kammeramtsdirektor der Burgenl\xE4ndischen Landwirtschaftskammer"
+        photo_copyright: "\xA9\_Bildarchiv der \xD6sterreichischen Nationalbibliothek"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_01926/2100368_384.jpg
+        reversed_name: Sylvester Hans, Ing.
+        source_link: https://www.parlament.gv.at/WWER/PAD_01926/index.shtml
+        ts: 2016-08-18 18:45:00+00:00
+    model: op_scraper.person
+    pk: PAD_01926
+-   fields:
+        _slug: /personen/PAD_02852/Theresia-Haidlmayr/
+        birthdate: 1955-09-09
+        birthplace: ' Steyr'
+        deathdate: null
+        deathplace: ''
+        full_name: Theresia Haidlmayr
+        latest_mandate: 3454
+        mandates: [3159, 3454, 3744, 4139, 4252, 3185, 6219, 6136, 4301, 6204]
+        occupation: ' Koordinatorin'
+        photo_copyright: "\xA9\_Agentur Wien Nord"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_02852/2099799_180.jpg
+        reversed_name: Haidlmayr Theresia
+        source_link: https://www.parlament.gv.at/WWER/PAD_02852/index.shtml
+        ts: 2016-09-30 13:28:00+00:00
+    model: op_scraper.person
+    pk: PAD_02852
+-   fields:
+        _slug: /personen/PAD_49947/Elisabeth-Greiderer/
+        birthdate: 1960-06-12
+        birthplace: ' Kufstein'
+        deathdate: null
+        deathplace: ''
+        full_name: Elisabeth Greiderer
+        latest_mandate: 3094
+        mandates: [3094, 3120, 3148, 5306]
+        occupation: ' Fahrschulunternehmerin'
+        photo_copyright: "\xA9\_Parlamentsdirektion / WILKE"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_49947/3491694_384.jpg
+        reversed_name: Greiderer Elisabeth
+        source_link: https://www.parlament.gv.at/WWER/PAD_49947/index.shtml
+        ts: 2016-04-27 19:06:00+00:00
+    model: op_scraper.person
+    pk: PAD_49947
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 2,
+        party: 1, start_date: null, state: 1}
+    model: op_scraper.mandate
+    pk: 3094
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 3,
+        party: 1, start_date: null, state: 1}
+    model: op_scraper.mandate
+    pk: 3120
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 2,
+        party: 1, start_date: null, state: 11}
+    model: op_scraper.mandate
+    pk: 3148
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 4,
+        party: 6, start_date: null, state: 146}
+    model: op_scraper.mandate
+    pk: 3159
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 4,
+        party: 3, start_date: null, state: 14}
+    model: op_scraper.mandate
+    pk: 3185
+-   fields: {administration: null, end_date: 2008-10-27, function: 2, legislative_period: 3,
+        party: 3, start_date: 2006-10-30, state: 14}
+    model: op_scraper.mandate
+    pk: 3454
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 5,
+        party: 3, start_date: null, state: 14}
+    model: op_scraper.mandate
+    pk: 3744
+-   fields: {administration: null, end_date: 1982-12-03, function: 2, legislative_period: 11,
+        party: 1, start_date: 1979-06-05, state: 4}
+    model: op_scraper.mandate
+    pk: 4015
+-   fields: {administration: null, end_date: 1996-01-14, function: 2, legislative_period: 7,
+        party: 3, start_date: 1994-11-07, state: 14}
+    model: op_scraper.mandate
+    pk: 4139
+-   fields: {administration: null, end_date: 1999-10-28, function: 2, legislative_period: 6,
+        party: 3, start_date: 1996-03-14, state: 14}
+    model: op_scraper.mandate
+    pk: 4252
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 6,
+        party: 6, start_date: null, state: 145}
+    model: op_scraper.mandate
+    pk: 4301
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 15,
+        party: 1, start_date: null, state: 101}
+    model: op_scraper.mandate
+    pk: 4370
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 15,
+        party: 1, start_date: null, state: 143}
+    model: op_scraper.mandate
+    pk: 4392
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 14,
+        party: 2, start_date: null, state: 3}
+    model: op_scraper.mandate
+    pk: 4410
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 14,
+        party: 1, start_date: null, state: 101}
+    model: op_scraper.mandate
+    pk: 4450
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 13,
+        party: 2, start_date: null, state: 3}
+    model: op_scraper.mandate
+    pk: 4514
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 13,
+        party: 2, start_date: null, state: 151}
+    model: op_scraper.mandate
+    pk: 4523
+-   fields: {administration: null, end_date: 1979-06-04, function: 2, legislative_period: 12,
+        party: 1, start_date: 1975-11-04, state: 4}
+    model: op_scraper.mandate
+    pk: 4534
+-   fields: {administration: null, end_date: 1975-11-04, function: 2, legislative_period: 13,
+        party: 1, start_date: 1975-05-12, state: 4}
+    model: op_scraper.mandate
+    pk: 4564
+-   fields: {administration: null, end_date: 1969-10-19, function: 1, legislative_period: 15,
+        party: 2, start_date: 1967-06-15, state: 3}
+    model: op_scraper.mandate
+    pk: 4586
+-   fields: {administration: null, end_date: 1966-03-30, function: 2, legislative_period: 16,
+        party: 1, start_date: 1962-12-14, state: 155}
+    model: op_scraper.mandate
+    pk: 4613
+-   fields: {administration: null, end_date: 1931-01-15, function: 2, legislative_period: 22,
+        party: 23, start_date: 1930-12-02, state: 83}
+    model: op_scraper.mandate
+    pk: 4815
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 3,
+        party: 1, start_date: null, state: 158}
+    model: op_scraper.mandate
+    pk: 5306
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 16,
+        party: 1, start_date: null, state: 101}
+    model: op_scraper.mandate
+    pk: 5384
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 3,
+        party: 6, start_date: null, state: 158}
+    model: op_scraper.mandate
+    pk: 6136
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 22,
+        party: 23, start_date: null, state: 148}
+    model: op_scraper.mandate
+    pk: 6148
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 12,
+        party: 1, start_date: null, state: 160}
+    model: op_scraper.mandate
+    pk: 6163
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 14,
+        party: 2, start_date: null, state: 142}
+    model: op_scraper.mandate
+    pk: 6165
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 15,
+        party: 2, start_date: null, state: 143}
+    model: op_scraper.mandate
+    pk: 6167
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 14,
+        party: 1, start_date: null, state: 142}
+    model: op_scraper.mandate
+    pk: 6169
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 11,
+        party: 1, start_date: null, state: 81}
+    model: op_scraper.mandate
+    pk: 6176
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 13,
+        party: 1, start_date: null, state: 151}
+    model: op_scraper.mandate
+    pk: 6178
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 7,
+        party: 6, start_date: null, state: 157}
+    model: op_scraper.mandate
+    pk: 6204
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 5,
+        party: 6, start_date: null, state: 68}
+    model: op_scraper.mandate
+    pk: 6219
