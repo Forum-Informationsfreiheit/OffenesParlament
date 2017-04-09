@@ -153,6 +153,38 @@ python manage.py update_index
 
 to perform a simple update. For this to succeed, make sure ElasticSearch is up and running.
 
+## Testing and Fixtures
+
+The current repo contains a set of fixtures, which can be refreshed from the database by running:
+
+```
+python manage.py generate_fixtures
+```
+
+This creates the necessary fixtures to run the subscription tests in `op_scraper.tests.test_subscriptions`. 
+
+A necessary precondition for running these tests might be to set postgresql's default collate and locale for new dbs. You can do so by entering a psql shell:
+
+```
+sudo -u postgres psql
+```
+and running the following commands:
+
+```
+UPDATE pg_database SET datistemplate=FALSE WHERE datname='template1';
+DROP DATABASE template1;
+CREATE DATABASE template1 WITH owner=postgres template=template0 encoding='UTF8' LC_CTYPE 'en_US.UTF-8' LC_COLLATE 'en_US.UTF-8';
+UPDATE pg_database SET datistemplate=TRUE WHERE datname='template1';
+```
+
+This will redefine django's default settings for (test)databases it creates on the fly, otherwise there will be unicode import errors when django tries to import the fixtures:
+
+```
+Creating test database for alias 'default'...
+Got an error creating the test database: encoding UTF8 does not match locale en_US
+DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1.
+```
+
 ## Staying in Contact
 
 We have a mailing list now, sign up here:
