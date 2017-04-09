@@ -61,13 +61,13 @@ class TestParseDebateXV53(unittest.TestCase):
         self.assertEquals(sections[39]['time_start'], [10, 44, 40])
         self.assertEquals(sections[39]['time_end'], [10, 49])
 
-        self.assertEquals(sections[39]['page_start'], 61)
+        self.assertEquals(sections[39]['page_start'], 60)
         self.assertEquals(sections[39]['page_end'], 62)
         self.assertEquals(sections[40]['page_start'], 62)
         self.assertEquals(sections[40]['page_end'], 62)
         self.assertEquals(sections[190]['page_start'], 167)
         self.assertEquals(sections[190]['page_end'], 167)
-        self.assertEquals(sections[191]['page_start'], 168)
+        self.assertEquals(sections[191]['page_start'], 167)
         self.assertEquals(sections[191]['page_end'], 168)
 
 class TestParseDebateXV51(unittest.TestCase):
