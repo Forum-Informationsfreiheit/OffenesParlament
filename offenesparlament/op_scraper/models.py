@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.utils.html import remove_tags
 from django.core.urlresolvers import reverse
+from django.test import Client
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 from django.contrib.postgres.fields import ArrayField
@@ -917,17 +918,32 @@ class SubscribedContent(models.Model):
 
         Returns the textual response (json in string)
         """
-        content_response = requests.get(self.url)
+
+        ## The following doesn't work for unit tests
+        # content_response = requests.get(self.url)
+        # try:
+        #     content = json.loads(content_response.text)['result']
+        # except:
+        #     logger.error(
+        #         "Couldn't deserialize SubscribedContent ES response for url {}: {}".format(
+        #             self.url,
+        #             content_response
+        #             )
+        #         )
+        
+        c = Client()
+            
         try:
-            content = json.loads(content_response.text)['result']
+            response = c.get(self.url)
+            content = json.loads(response.content)['result']
         except:
             logger.error(
-                "Couldn't deserialize SubscribedContent ES response for url {}: {}".format(
+                "Couldn't get or deserialize SubscribedContent ES response for url {}: {}".format(
                     self.url,
-                    content_response
+                    response.content
                     )
                 )
-        
+            
         return content
 
     def generate_content_hashes(self, content=None):
@@ -971,9 +987,11 @@ class SubscribedContent(models.Model):
         return content
 
     def clear_latest_content(self):
+        if not self.latest_content_hashes:
+            return
+        
         from elasticsearch import Elasticsearch
         es = Elasticsearch()
-
         hashes = json.loads(self.latest_content_hashes).values()
         for content_id_hash in hashes:
             if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
