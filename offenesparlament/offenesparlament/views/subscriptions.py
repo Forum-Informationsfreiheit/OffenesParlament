@@ -118,12 +118,11 @@ def unsubscribe(request, email, key):
         user__email=email,
         verification__verification_hash=key)
 
-    if (User.objects.filter(email=email).exists() and
-            sub_qs.exists() and
-            sub_qs.count() == 1):
+    if (sub_qs.exists() and sub_qs.count() == 1):
 
-        user = User.objects.get(email=email)
         sub = sub_qs.first()
+        user = sub.user
+        
         content = sub.content
         message = MESSAGES.EMAIL.SUBSCRIPTION_DELETED.format(content.url)
 
