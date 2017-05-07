@@ -158,6 +158,7 @@ class BaseConfig(Configuration):
     # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
     STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(PROJECT_PATH)
 
     # Django Celery
     CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
@@ -245,6 +246,78 @@ class Dev(BaseConfig):
         'template_timings_panel.panels.TemplateTimings.TemplateTimings',
     ]
 
+class UnitTest(Dev):
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+    STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': True,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+            'null': {
+                'level': 'INFO',
+                'class': 'django.utils.log.NullHandler',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            },
+            'django.db.backends': {
+                'handlers': ['null'],  # Quiet by default!
+                'propagate': False,
+                'level': 'INFO',
+            },
+            'elasticsearch': {
+                'handlers': ['null'],  # Quiet by default!
+                'propagate': False,
+                'level': 'INFO',
+            },
+            'elasticsearch.trace': {
+                'handlers': ['null'],  # Quiet by default!
+                'propagate': False,
+                'level': 'INFO',
+            },
+            'offenesparlament': {
+                'handlers': ['null'],  # Quiet by default!
+                'propagate': False,
+                'level': 'INFO',
+            },
+        },
+    }
+
+    # Haystack Configuration
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'offenesparlament.search_backend.FuzzyElasticsearchSearchEngine',
+            'URL': 'http://localhost:9200/',
+            'INDEX_NAME': 'haystacktest',
+            'TIMEOUT': 120,
+            'BATCH_SIZE': 50,
+            'EXCLUDED_INDEXES': [
+                'op_scraper.search_indexes.PersonIndexArchive',
+                'op_scraper.search_indexes.LawIndexArchive',
+                'op_scraper.search_indexes.DebateIndexArchive'
+            ]
+        },
+        'archive': {
+            'ENGINE': 'offenesparlament.search_backend.FuzzyElasticsearchSearchEngine',
+            'URL': 'http://localhost:9200/',
+            'INDEX_NAME': 'archivetest',
+            'TIMEOUT': 120,
+            'BATCH_SIZE': 50,
+            'EXCLUDED_INDEXES': [
+                'op_scraper.search_indexes.PersonIndex',
+                'op_scraper.search_indexes.LawIndex',
+                'op_scraper.search_indexes.DebateIndex'
+            ]
+        },
+    }
 
 class ProductionBase(BaseConfig):
     DEBUG = False
