@@ -12,7 +12,7 @@ from offenesparlament.constants import ES_DEFAULT_LIMIT
 import logging
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('elasticsearch')
 
 
 class QuerySetEncoder(json.JSONEncoder):

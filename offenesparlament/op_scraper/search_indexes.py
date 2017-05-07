@@ -10,7 +10,10 @@ JSON_FIELDS = {
     'person': ['mandates', 'statements', 'debate_statements'],
     'law': ['steps', 'opinions', 'documents'],
 }
+import logging
 
+# Get an instance of a logger
+logger = logging.getLogger('elasticsearch')
 
 def extract_json_fields(result, type):
     for field in JSON_FIELDS[type]:
@@ -27,9 +30,9 @@ class BaseIndex(object):
 
     # Uncomment the following to limit the amount of objects indexed for
     # debug reasons (it be much faster that way)
-    def build_queryset(self, start_date=None, end_date=None, using=None):
-        "Only index a random 100 Objects"
-        return self.get_model().objects.all()[:10]
+    # def build_queryset(self, start_date=None, end_date=None, using=None):
+    #     "Only index a random 100 Objects"
+    #     return self.get_model().objects.all()[:10]
 
 class ArchiveIndexMixin(object):
     
@@ -97,7 +100,7 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     def prepare_category(self, obj):
         try:
-            print u"Indexing {}".format(obj.full_name)
+            logger.INFO(u"Indexing {}".format(obj.full_name))
         except:
             # some unicode shit here
             pass
@@ -237,7 +240,7 @@ class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     def prepare_category(self, obj):
         try:
-            print u"Indexing {}".format(obj.title)
+            logger.INFO(u"Indexing {}".format(obj.title))
         except:
             # some unicode shit here
             pass
