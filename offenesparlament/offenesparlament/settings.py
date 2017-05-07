@@ -181,7 +181,7 @@ class Dev(BaseConfig):
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
     #CELERY_RESULT_BACKEND = 'amqp'
 
-    ALLOWED_HOSTS = ['offenesparlament.vm']
+    ALLOWED_HOSTS = ['offenesparlament.vm','testserver']
 
     # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
