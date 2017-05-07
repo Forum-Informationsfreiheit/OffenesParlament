@@ -185,6 +185,12 @@ Got an error creating the test database: encoding UTF8 does not match locale en_
 DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1.
 ```
 
+Then you can run specific unit tests by calling:
+
+```
+env DJANGO_CONFIGURATION=UnitTest python manage.py test op_scraper.tests.test_subscriptions
+```
+
 ## Staying in Contact
 
 We have a mailing list now, sign up here:
