@@ -52,8 +52,8 @@ def _add_law(law):
 
 def _person_fixtures():
     # Persons and dependecies
-    print "Exporting first 5 Persons and Mandates"
-    persons = Person.objects.all()[:5]
+    print "Exporting first 10 Persons and Mandates"
+    persons = Person.objects.filter(latest_mandate__legislative_period__number=25).all()[:10]
     mandates = []
     for p in persons:
         mandates += (p.mandates.all())
@@ -112,7 +112,7 @@ def regen_fixtures():
     _clear_old_fixtures()
 
     _basic_fixtures()
-
+    
     _person_fixtures()
 
     _law_fixtures()
