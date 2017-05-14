@@ -193,10 +193,9 @@ class PERSON:
                         '//span/@title').extract()[0]
                     mandates.append(
                         {'short': party_short, 'title': party_title})
-
                 electoral_state = {
-                    'short': Selector(text=raw_person).xpath('//td[4]//span/text()').extract()[0],
-                    'long': Selector(text=raw_person).xpath('//td[4]//span/@title').extract()[0]}
+                    'short': Selector(text=raw_person).xpath('//td[last()]//span/text()').extract()[0],
+                    'long': Selector(text=raw_person).xpath('//td[last()]//span/@title').extract()[0]}
 
                 persons.append({
                     'source_link': source_link,

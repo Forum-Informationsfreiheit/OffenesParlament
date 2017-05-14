@@ -224,7 +224,7 @@ class PersonsSpider(BaseSpider):
         return party_item
 
     def get_state_item(self, state):
-        # Do we have this party already?
+        # Do we have this state already?
         state_item, created = State.objects.update_or_create(
             name=state['short'],
             title=state['long'])
