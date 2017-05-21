@@ -259,11 +259,13 @@ class StagingBase(ProductionBase):
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Import scrapy settings
-c = os.getcwd()
+
+c = os.path.join(os.path.dirname(os.path.abspath(__file__)),'..')
+old_cd = os.getcwd()
 os.chdir(str(c) + '/op_scraper/scraper')
 d = os.getcwd()
 path.append(d)
-os.chdir(c)
+os.chdir(old_cd)
 d = os.getcwd()
 os.environ['SCRAPY_SETTINGS_MODULE'] = 'parlament.settings'
 
