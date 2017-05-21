@@ -36,7 +36,7 @@ class PRELAW:
         def xt(cls, response):
             steps = []
             raw_table = response.xpath('//table')[1]
-            raw_steps = Selector(text=raw_table.extract()).xpath('//tr')
+            raw_steps = Selector(text=raw_table.extract()).xpath('//tr')[1:] # ignore header
             for index, step in enumerate(raw_steps, start=1):
                 step_selector = Selector(text=step.extract())
                 title = LAW.PHASES.STEPS.TITLE.xt(step_selector)
@@ -46,7 +46,7 @@ class PRELAW:
                 protocol_url = LAW.PHASES.STEPS.PROTOCOL.xt(step_selector)
                 steps.append({
                     'date': date,
-                    'title': title,
+                    'title': title['text'],
                     'sortkey': str(index).zfill(3),
                     'protocol_url': protocol_url
                 })

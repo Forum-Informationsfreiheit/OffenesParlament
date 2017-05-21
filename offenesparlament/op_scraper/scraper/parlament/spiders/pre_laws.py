@@ -124,6 +124,8 @@ class PreLawsSpider(LawsInitiativesSpider):
         # Parse opinions
         opinions = PRELAW.OPINIONS.xt(response)
 
+        self.parse_steps(response, law_item)
+
         callback_requests = []
 
         # is the tab 'Parlamentarisches Verfahren available?'
@@ -252,12 +254,10 @@ class PreLawsSpider(LawsInitiativesSpider):
                 entity_str
             ))
 
-    def parse_steps(self, response):
+    def parse_steps(self, response, law_item):
         """
         Parse the Pre-Law's steps
         """
-        law_item = response.meta['law_item']
-
         # Create phase if we don't have it yet
         phase_item, created = Phase.objects.get_or_create(
             title='default')

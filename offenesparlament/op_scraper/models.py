@@ -221,6 +221,36 @@ class Law(Timestamped, ParlIDMixIn):
     references = models.OneToOneField(
         "self", blank=True, null=True, related_name="laws")
 
+    def PRETTY_PHASES_LAW(self):
+        LAW_PHASES = [
+                ['Vorparlamentarisches Verfahren',
+                    ['Entwurf eingegangen',
+                        'Stellungnahmen'],
+                    ],
+                ['Parlamentarisches Verfahren',
+                    ['Einlangen im Nationalrat',
+                        'Ausschuss',
+                        'Plenarberatung',
+                        'Beschluss im Nationalrat'
+                        'Beschluss im Bundesrat'],
+                    ]
+                ]
+
+        return LAW_PHASES
+
+    def PRETTY_PHASES(self):
+        if self.category.title in ('Gesetzentwurf',
+                'Regierungsvorlage: Bundes(verfassungs)gesetz',):
+            return self.PRETTY_PHASES_LAW()
+
+#                'Schriftliche Anfrage': ['',
+#                    ['Einlangen im Nationalrat', 'Beantwortung']
+#                    ],
+#        }
+#        phases = PHASES.get(self.category.title,None)
+#        if phases:
+#            return phases
+
     def steps_by_phases(self):
         """
         Returns a dict of phases containing the steps for display purposes
@@ -824,6 +854,7 @@ class Step(models.Model):
             return remove_tags(self.title, 'a')
         except:
             return self.title
+
 
 
 class Statement(models.Model):
