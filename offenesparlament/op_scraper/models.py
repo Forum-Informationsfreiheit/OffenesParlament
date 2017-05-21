@@ -10,6 +10,7 @@ import re
 import json
 import xxhash
 import requests
+import collections
 
 # import the logging library
 import logging
@@ -255,7 +256,7 @@ class Law(Timestamped, ParlIDMixIn):
         """
         Returns a dict of phases containing the steps for display purposes
         """
-        phases = {}
+        phases = collections.OrderedDict()
         for step in self.steps.all():
             if step.phase not in phases:
                 phases[step.phase] = []
