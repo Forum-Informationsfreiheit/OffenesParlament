@@ -260,7 +260,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         """
         # Create phase if we don't have it yet
         phase_item, created = Phase.objects.get_or_create(
-            title='default')
+            title='')
         if created:
             log.msg(u"Created Phase {}".format(
                 green(u'[{}]'.format(phase_item.title))))

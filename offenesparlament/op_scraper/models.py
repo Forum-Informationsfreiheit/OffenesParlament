@@ -849,6 +849,9 @@ class Step(models.Model):
     opinion = models.ForeignKey(
         Opinion, null=True, blank=True, related_name='steps')
 
+    class Meta:
+        ordering = ['sortkey']
+
     def __unicode__(self):
         try:
             return remove_tags(self.title, 'a')
