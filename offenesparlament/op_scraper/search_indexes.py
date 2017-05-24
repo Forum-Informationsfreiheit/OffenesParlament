@@ -110,37 +110,37 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         """
         Collects the object's mandates as json
         """
-        return obj.mandates_json
+        return obj.mandates_json()
 
     def prepare_statements(self, obj):
         """
         Collects the object's statements's as json
         """
-        return obj.statements_json
+        return obj.statements_json()
 
     def prepare_debate_statements(self, obj):
         """
         Collects the object's statements's as json
         """
-        return obj.debate_statements_json
+        return obj.debate_statements_json()
 
     def prepare_inquiries_sent(self, obj):
         """
         Collects the object's inquiries sent as json
         """
-        return obj.inquiries_sent_json
+        return obj.inquiries_sent_json()
 
     def prepare_inquiries_received(self, obj):
         """
         Collects the object's inquiries received as json
         """
-        return obj.inquiries_received_json
+        return obj.inquiries_received_json()
 
     def prepare_inquiries_answered(self, obj):
         """
         Collects the object's inquiries answered as json
         """
-        return obj.inquiries_answered_json
+        return obj.inquiries_answered_json()
 
     def prepare_comittee_memberships(self, obj):
         """
