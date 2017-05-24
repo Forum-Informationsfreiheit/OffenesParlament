@@ -2,6 +2,7 @@ from op_scraper.models import SubscribedContent, Subscription, User
 from django.conf import settings
 import json
 import pprint
+from tabulate import tabulate
 
 from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL
 
@@ -9,67 +10,151 @@ from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL
 import logging
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('op_scraper.subscriptions.diff')
 
 FIELD_BLACKLIST = ['text', 'ts']
 
 
-def collect_changesets(content):
-    changes = {}
+class JsonDiffer(object):
 
-    old_content = content.retrieve_latest_content()
-    cur_content = content.get_content()
+    def __init__(self, _content):
+        self.content = _content
+        self.old_content = _content.retrieve_latest_content()
+        self.cur_content = _content.get_content()
+        self.parse_content()
+    
+    def _disp(self,string):
+        try:
+            string = string.replace('\n','\\n')
+            return (string[:20] + ' [...]') if len(string) > 20 else string
+        except:
+            return ""
 
-    try:
-        old_hashes = content.latest_content_hashes
-        cur_hashes = content.generate_content_hashes(content=cur_content)
+
+    def parse_content(self):
+    
+        self.old_hashes = self.content.latest_content_hashes
+        self.cur_hashes = self.content.generate_content_hashes(content=self.cur_content)
 
         # no changes, skip to the next one
-        if old_hashes == cur_hashes:
-            return None
+        if self.old_hashes == self.cur_hashes:
+            self.has_changes = False
+        try:
+            self.old_hashes = json.loads(self.old_hashes)
+        except Exception as e:
+            logger.warn("[JsonDiffer] Error parsing archived content for subscription '{}': {}".format(
+                self.content.title,
+                e.message
+                ))
+            self.has_changes = False
 
-        old_hashes = json.loads(old_hashes)
-        cur_hashes = json.loads(cur_hashes)
-        old_content = json.loads(old_content)['result']
-        cur_content = json.loads(cur_content)['result']
-    except Exception as e:
-        logger.warn(e)
-        return None
+        try:
+            self.cur_hashes = json.loads(self.cur_hashes)
+        except Exception as e:
+            logger.warn("[JsonDiffer] Error parsing current content for subscription '{}': {}".format(
+                self.content.title,
+                e.message
+                ))
+            self.has_changes = False
 
-    old_dict = dict((item['parl_id'], item) for item in old_content)
-    cur_dict = dict((item['parl_id'], item) for item in cur_content)
+        self.has_changes = True
 
-    changed_items = [
-        parl_id for parl_id in old_hashes
-        if parl_id in cur_hashes.keys()
-        and cur_hashes[parl_id] != old_hashes[parl_id]]
+    @classmethod
+    def diff_dicts(cls, dict1, dict2):
+        # Collect all keys in dict1 that aren't equal to dict2 or are not in dict2 at all
+        dict1_diff_keys = [
+                key for key in dict1.keys() if dict1[key] != dict2[key] or key not in dict2]
+        # Collect all keys in dict2 that aren't equal to dict1 or are not in dict1 at all
+        dict2_diff_keys = [
+            key for key in dict2.keys() if dict1[key] != dict2[key] or key not in dict1]
+        diff_keys = set(dict1_diff_keys + dict2_diff_keys)
 
-    for parl_id in changed_items:
-        old = old_dict[parl_id]
-        new = cur_dict[parl_id]
+        return diff_keys
 
-        old_diff_keys = [
-            key for key in old.keys() if old[key] != new[key] or key not in new]
-        new_diff_keys = [
-            key for key in new.keys() if old[key] != new[key] or key not in old]
-        diffkeys = set(old_diff_keys + new_diff_keys)
-        atomic_changeset = {
-            'cur_content': new
-        }
+    @classmethod
+    def diff_arrays(cls,arr1,arr2):
+        # Collect all the array entries from arr1 that aren't in arr2
+        del_entries = [e for e in arr1 if e not in arr2]
+        # Collect all the array entries from arr2 that aren't in arr1
+        new_entries = [e for e in arr2 if e not in arr1]
 
-        for key in diffkeys:
-            atomic_changeset[key] = {
-                'old': old[key] if key in old else None,
-                'new': new[key] if key in new else None,
+        changed_entries = [e for e in new_entries if 'pk' in e and e['pk'] in [e2['pk'] for e2 in del_entries if 'pk' in e2]]
+        new_entries = [e for e in new_entries if e not in changed_entries]
+        
+        for e in del_entries:
+            if e in changed_entries:
+                del_entries.remove(e)
+            if 'pk' in e and e['pk'] in [e2['pk'] for e2 in changed_entries if 'pk' in e2]:
+                del_entries.remove(e)                
+
+        return {'D': del_entries,
+                'N': new_entries,
+                'C': changed_entries}
+        
+
+    def print_changesets(self):
+        old_dict = dict((item['parl_id'], item) for item in self.old_content)
+        cur_dict = dict((item['parl_id'], item) for item in self.cur_content)
+
+        for parl_id in self.old_hashes:
+            if parl_id in self.cur_hashes.keys():
+                if self.cur_hashes[parl_id] != self.old_hashes[parl_id]:
+                    logger.info("[{}] Changes:".format(parl_id))
+                    old = old_dict[parl_id]
+                    new = cur_dict[parl_id]
+                    diff_arr = []
+                    diff_keys = self.diff_dicts(old, new)
+                    for key in diff_keys:
+                        diff_arr.append([
+                            u"{}".format(key),
+                            self._disp(old[key]) if key in old else "",
+                            self._disp(new[key]) if key in new else ""
+                            ])
+                    print tabulate(diff_arr, headers=['key','old value', 'new value'], tablefmt="fancy_grid")
+                else:
+                    logger.info("[{}] No Changes (hash equal)".format(parl_id))
+            else:
+                logger.info("[{}] Item deleted since last hash reset // reindex".format(parl_id))
+
+    def collect_changesets(self):
+        changes = {}
+            
+        changed_items = [
+            parl_id for parl_id in self.old_hashes
+            if parl_id in self.cur_hashes.keys()
+            and self.cur_hashes[parl_id] != self.old_hashes[parl_id]]
+
+        old_dict = dict((item['parl_id'], item) for item in self.old_content)
+        cur_dict = dict((item['parl_id'], item) for item in self.cur_content)
+
+        for parl_id in changed_items:
+            old = old_dict[parl_id]
+            new = cur_dict[parl_id]
+
+            diff_keys = self.diff_dicts(old, new)
+
+            atomic_changeset = {
+                'cur_content': new
             }
-            try:
-                atomic_changeset[key]['old'] = json.loads(old[key])
-                atomic_changeset[key]['new'] = json.loads(new[key])
-            except:
-                # wasn't a json field, no biggie
-                pass
-        changes[parl_id] = atomic_changeset
-    return changes
+
+            for key in diff_keys:
+                atomic_changeset[key] = {
+                    'old': old[key] if key in old else None,
+                    'new': new[key] if key in new else None,
+                }
+                try:
+                    atomic_changeset[key]['old'] = json.loads(old[key])
+                    atomic_changeset[key]['new'] = json.loads(new[key])
+
+                    # both are json, let's diff them against each other
+                    arr_changes = self.diff_arrays(atomic_changeset[key]['old'], atomic_changeset[key]['new'])
+
+                    atomic_changeset[key] = arr_changes
+                except:
+                    # wasn't a json field, no biggie
+                    pass
+            changes[parl_id] = atomic_changeset
+        return changes
 
 FIELD_MESSAGES = {
     'Person': {
@@ -99,7 +184,8 @@ def check_subscriptions():
     changes = {}
 
     for content in SubscribedContent.objects.all():
-        changeset = collect_changesets(content)
+        differ = JsonDiffer(content)
+        changeset = differ.collect_changesets(content)
         if not changeset:
             logger.info(u"No changes for {}".format(content.title))
             continue

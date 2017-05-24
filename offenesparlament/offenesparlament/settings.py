@@ -209,6 +209,10 @@ class Dev(BaseConfig):
                 'handlers': ['console'],
                 'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             },
+            'op_scraper.subscriptions.diff': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            },
             'django.db.backends': {
                 'handlers': ['null'],  # Quiet by default!
                 'propagate': False,
@@ -288,6 +292,11 @@ class UnitTest(Dev):
                 'propagate': False,
                 'level': 'INFO',
             },
+            'op_scraper.subscriptions.diff': {
+                'handlers': ['null'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            },
+            
         },
     }
 
@@ -340,6 +349,11 @@ class ProductionBase(BaseConfig):
                 'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             },
         },
+        'op_scraper.subscriptions.diff': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+            
     }
 
     INSTALLED_APPS = BaseConfig.INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
