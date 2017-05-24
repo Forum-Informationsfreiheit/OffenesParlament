@@ -243,6 +243,7 @@ class Law(Timestamped, ParlIDMixIn):
             if step.phase not in phases:
                 phases[step.phase.title] = []
             phases[step.phase.title].append({
+                'pk': step.pk,
                 'title': step.title,
                 'sortkey': step.sortkey,
                 'date': step.date.isoformat(),
@@ -271,6 +272,7 @@ class Law(Timestamped, ParlIDMixIn):
                 })
             ops.append(
                 {
+                    'pk': op.pk,
                     'parl_id':  op.parl_id,
                     'date':  op.date.isoformat() if op.date else '',
                     'description':  op.description,
@@ -291,6 +293,7 @@ class Law(Timestamped, ParlIDMixIn):
         for doc in self.documents.all():
 
             docs.append({
+                'pk': doc.pk,
                 'title': doc.title,
                 'pdf_link': doc.pdf_link,
                 'html_link': doc.html_link,
@@ -450,7 +453,7 @@ class State(models.Model):
     A state or wahlkreis in Austria
     """
     name = models.CharField(max_length=255)
-    title = title = models.CharField(max_length=1023)
+    title = models.CharField(max_length=1023)
 
 
 class Mandate(models.Model):
@@ -479,6 +482,52 @@ class Mandate(models.Model):
             self.function,
             self.party,
             self.legislative_period)
+
+    def _json(self):
+        mandate = {}
+        mandate['llp'] = unicode(self.legislative_period)
+        mandate['pk'] = self.pk
+        
+        # If we have given start- and end-dates, take them
+        # else take the ones from the legislative period
+        if self.start_date or self.end_date:
+            mandate['start_date'] = self.start_date.isoformat()
+            mandate[
+                'end_date'] = self.end_date.isoformat() if self.end_date else None
+        elif self.legislative_period:
+            llp = self.legislative_period
+            mandate['start_date'] = llp.start_date.isoformat()
+            mandate[
+                'end_date'] = llp.end_date.isoformat() if llp.end_date else None
+
+        if self.administration:
+            adm = self.administration
+            mandate['administration'] = {
+                "title": adm.title,
+                "start_date": adm.start_date.isoformat(),
+                "end_date": adm.end_date.isoformat() if adm.end_date else None,
+            }
+            mandate['start_date'] = adm.start_date.isoformat()
+            mandate[
+                'end_date'] = adm.end_date.isoformat() if adm.end_date else None
+
+        if self.function:
+            mandate['function'] = {
+                "title": self.function.title,
+                "short": self.function.short,
+            }
+        if self.state:
+            mandate['state'] = {
+                "title": self.state.title,
+                "name": self.state.name,
+            }
+        if self.party:
+            mandate['party'] = {
+                "titles": self.party.titles,
+                "short": self.party.short,
+                "short_css_class": self.party.short_css_class,
+            }
+        return mandate
 
     def latest_end_date(self):
 
@@ -604,69 +653,16 @@ class Person(Timestamped, ParlIDMixIn):
         return self._slug
 
     # JSON for ES Index Generation
-    @property
     def mandates_json(self):
         mandates = []
         for mand in self.mandates.all():
-            mandate = {}
-            mandate['llp'] = unicode(mand.legislative_period)
-
-            # If we have given start- and end-dates, take them
-            # else take the ones from the legislative period
-            if mand.start_date or mand.end_date:
-                mandate['start_date'] = mand.start_date.isoformat()
-                mandate[
-                    'end_date'] = mand.end_date.isoformat() if mand.end_date else None
-            elif mand.legislative_period:
-                llp = mand.legislative_period
-                mandate['start_date'] = llp.start_date.isoformat()
-                mandate[
-                    'end_date'] = llp.end_date.isoformat() if llp.end_date else None
-
-            if mand.administration:
-                adm = mand.administration
-                mandate['administration'] = {
-                    "title": adm.title,
-                    "start_date": adm.start_date.isoformat(),
-                    "end_date": adm.end_date.isoformat() if adm.end_date else None,
-                }
-                mandate['start_date'] = adm.start_date.isoformat()
-                mandate[
-                    'end_date'] = adm.end_date.isoformat() if adm.end_date else None
-
-            if mand.function:
-                mandate['function'] = {
-                    "title": mand.function.title,
-                    "short": mand.function.short,
-                }
-            if mand.state:
-                mandate['state'] = {
-                    "title": mand.state.title,
-                    "name": mand.state.name,
-                }
-            if mand.party:
-                mandate['party'] = {
-                    "titles": mand.party.titles,
-                    "short": mand.party.short,
-                    "short_css_class": mand.party.short_css_class,
-                }
-
-            mandates.append(mandate)
+            mandates.append(mand._json())
         return json.dumps(mandates)
 
-    @property
     def statements_json(self):
         statements = []
         for st in self.statements.all():
-            statement = {
-                "type": st.speech_type,
-                "date": st.step.date.isoformat(),
-                "law": st.step.law.title if st.step.law else None,
-                "law_id": st.step.law.id if st.step.law else None,
-                "law_category": st.step.law.category.title if st.step.law else None,
-                "law_slug": st.step.law.slug if st.step.law else None,
-                "protocol_url": st.protocol_url,
-            }
+            statement = st._json()
             if st.protocol_url and self.debate_statements.count():
                 try:
                     page_number = int(
@@ -691,85 +687,28 @@ class Person(Timestamped, ParlIDMixIn):
             statements.append(statement)
         return json.dumps(statements)
 
-    @property
     def debate_statements_json(self):
         debate_statements = []
         for st in self.debate_statements.all():
-            statement = {
-                'id': st.id,
-                'speaker_role': st.speaker_role,
-                'full_text': st.full_text,
-                'annotated_text': st.annotated_text,
-                'text_type': st.text_type,
-                'datetime': st.date.isoformat(),
-                'debate_title': st.debate.title,
-                'debate_date': st.debate.date.date().isoformat(),
-                'debate_type': st.debate.debate_type,
-                'debate_llp': st.debate.llp.facet_repr,
-                'debate_protocol_url': st.debate.protocol_url,
-                'debate_detail_url': st.debate.detail_url,
-            }
-            debate_statements.append(statement)
+            debate_statements.append(st._json())
         return json.dumps(debate_statements)
 
-    @property
     def inquiries_sent_json(self):
         inquiries_sent = []
         for inq in self.inquiries_sent.all():
-            inquiry = {
-                'id': inq.id,
-                'llp': inq.legislative_period.roman_numeral if inq.legislative_period else None,
-                'ts': inq.ts.isoformat() if inq.ts else None,
-                'title': inq.title,
-                'description': inq.description,
-                'category': inq.category.title if inq.category else None,
-                'source_link': inq.source_link,
-                'receiver_id': inq.receiver_id,
-                'receiver_name': inq.receiver.full_name,
-                'keywords': inq.keyword_titles,
-                'status': inq.status,
-            }
-            inquiries_sent.append(inquiry)
+            inquiries_sent.append(inq._json())
         return json.dumps(inquiries_sent)
 
-    @property
     def inquiries_received_json(self):
         inquiries_received = []
         for inq in self.inquiries_received.all():
-            inquiry = {
-                'id': inq.id,
-                'llp': inq.legislative_period.roman_numeral if inq.legislative_period else None,
-                'ts': inq.ts.isoformat() if inq.ts else None,
-                'title': inq.title,
-                'description': inq.description,
-                'category': inq.category.title if inq.category else None,
-                'source_link': inq.source_link,
-                'sender_ids': [s.parl_id for s in inq.sender.all()],
-                'sender_names': [s.full_name for s in inq.sender.all()],
-                'keywords': inq.keyword_titles,
-                'status': inq.status,
-            }
-            inquiries_received.append(inquiry)
+            inquiries_received.append(inq._json())
         return json.dumps(inquiries_received)
 
-    @property
     def inquiries_answered_json(self):
         inquiries_answered = []
         for inq in self.inquiries_answered.all():
-            inquiry = {
-                'id': inq.id,
-                'llp': inq.legislative_period.roman_numeral if inq.legislative_period else None,
-                'ts': inq.ts.isoformat() if inq.ts else None,
-                'title': inq.title,
-                'description': inq.description,
-                'category': inq.category.title if inq.category else None,
-                'source_link': inq.source_link,
-                'sender_ids': [p.parl_id for i in inq.inquiries.all() for p in i.sender.all()],
-                'sender_names': [p.full_name for i in inq.inquiries.all() for p in i.sender.all()],
-                'keywords': inq.keyword_titles,
-                'status': inq.status,
-            }
-            inquiries_answered.append(inquiry)
+            inquiries_answered.append(inq._json())
         return json.dumps(inquiries_answered)
 
 
@@ -780,6 +719,23 @@ class InquiryResponse(Law):
     @property
     def llp_roman(self):
         return self.legislative_period.roman_numeral
+
+    def _json(self):
+        inquiry = {
+            'id': self.id,
+            'pk': self.pk,
+            'llp': self.legislative_period.roman_numeral if self.legislative_period else None,
+            'ts': self.ts.isoformat() if self.ts else None,
+            'title': self.title,
+            'description': self.description,
+            'category': self.category.title if self.category else None,
+            'source_link': self.source_link,
+            'sender_ids': [p.parl_id for i in self.inquiries.all() for p in i.sender.all()],
+            'sender_names': [p.full_name for i in self.inquiries.all() for p in i.sender.all()],
+            'keywords': self.keyword_titles,
+            'status': self.status,
+        }
+        return inquiry
 
 
 class Inquiry(Law):
@@ -794,6 +750,25 @@ class Inquiry(Law):
         Person, related_name='inquiries_received', default="")
     response = models.ForeignKey(
         InquiryResponse, null=True, blank=True, related_name='inquiries', default="")
+
+    def _json(self):
+        inquiry = {
+            'id': self.id,
+            'pk': self.pk,
+            'llp': self.legislative_period.roman_numeral if self.legislative_period else None,
+            'ts': self.ts.isoformat() if self.ts else None,
+            'title': self.title,
+            'description': self.description,
+            'category': self.category.title if self.category else None,
+            'source_link': self.source_link,
+            'receiver_id': self.receiver_id,
+            'receiver_name': self.receiver.full_name,
+            'sender_ids': [s.parl_id for s in self.sender.all()],
+            'sender_names': [s.full_name for s in self.sender.all()],
+            'keywords': self.keyword_titles,
+            'status': self.status,
+        }
+        return inquiry
 
     @property
     def llp_roman(self):
@@ -855,6 +830,20 @@ class Statement(models.Model):
 
     def __unicode__(self):
         return u'{}: {} zu {}'.format(self.person.full_name, self.speech_type, self.step.law.parl_id)
+
+    def _json(self):
+        statement = {
+            'pk': self.pk,
+            "type": self.speech_type,
+            "date": self.step.date.isoformat(),
+            "law": self.step.law.title if self.step.law else None,
+            "law_id": self.step.law.id if self.step.law else None,
+            "law_category": self.step.law.category.title if self.step.law else None,
+            "law_slug": self.step.law.slug if self.step.law else None,
+            "protocol_url": self.protocol_url,
+        }
+        return statement
+        
 
 
 class Verification(models.Model):
@@ -919,18 +908,6 @@ class SubscribedContent(models.Model):
         Returns the textual response (json in string)
         """
 
-        ## The following doesn't work for unit tests
-        # content_response = requests.get(self.url)
-        # try:
-        #     content = json.loads(content_response.text)['result']
-        # except:
-        #     logger.error(
-        #         "Couldn't deserialize SubscribedContent ES response for url {}: {}".format(
-        #             self.url,
-        #             content_response
-        #             )
-        #         )
-        
         c = Client()
             
         try:
@@ -1206,7 +1183,7 @@ class Debate(models.Model):
             return []
 
     def __unicode__(self):
-        return self.title
+        return self.full_title
 
 
 class DebateStatement(models.Model):
@@ -1266,6 +1243,25 @@ class DebateStatement(models.Model):
             self.index,
             self.doc_section,
             self.date)
+
+    def _json(self):
+        statement = {
+                'id': self.id,
+                'pk': self.pk,
+                'speaker_role': self.speaker_role,
+                'full_text': self.full_text,
+                'annotated_text': self.annotated_text,
+                'text_type': self.text_type,
+                'datetime': self.date.isoformat(),
+                'debate_title': self.debate.title,
+                'debate_date': self.debate.date.date().isoformat(),
+                'debate_type': self.debate.debate_type,
+                'debate_llp': self.debate.llp.facet_repr,
+                'debate_protocol_url': self.debate.protocol_url,
+                'debate_detail_url': self.debate.detail_url,
+        }
+
+        return statement
 
     @property
     def speaker_role_verbose(self):
