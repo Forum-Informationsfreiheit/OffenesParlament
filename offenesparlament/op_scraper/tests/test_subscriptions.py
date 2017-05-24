@@ -1,5 +1,8 @@
 # -*- coding: UTF-8 -*-
+import datetime
+ 
 from op_scraper.models import *
+from op_scraper.subscriptions import JsonDiffer
 from offenesparlament.views import subscriptions as views
 
 from django.contrib.auth.models import AnonymousUser, User
@@ -9,10 +12,11 @@ from django.core import mail
 from django.http.response import HttpResponseRedirect
 
 from django.db import transaction
+from django.db.models import Q
 
 class BaseSubscriptionTestCase(TestCase):
 
-    fixtures = ['categories', 'llps', 'persons', 'laws']
+    fixtures = ['categories', 'llps', 'persons', 'laws', 'debates']
     EMAIL = 'foo@bar.com'
 
     def setUp(self):
@@ -116,6 +120,88 @@ class BasePersonSubscriptionsTestCase(BaseSubscriptionTestCase):
             'subscription_title': u'Personen in Periode XXV: ÖVP',
             'email': self.EMAIL
         }
+
+class JsonDifferTestCase(BasePersonSubscriptionsTestCase):
+    def test_json_differ_equal(self):
+        subscription_item = self._prep_person_subscription()
+        differ = JsonDiffer(subscription_item.content)
+        assert differ.collect_changesets() == {}
+
+    def test_json_differ_empty(self):
+        pass    
+    
+    def test_json_differ_changes(self):
+        subscription_item = self._prep_person_subscription()
+        parl_id = [p['parl_id'] for p in subscription_item.content.get_content()][0]
+        person = Person.objects.get(parl_id=parl_id)
+        
+        # Let's test some changes on the primary items
+
+        changes = {
+            'birthdate': datetime.date(1959,6,20),
+            'deathdate': datetime.date(2000,6,20),
+            'full_name': "Barbara Streisand",
+            'reversed_name': "Streisand, Barbara",
+            'birthplace': "Buxtehude",
+            'deathplace': "Wien",
+            'occupation': "Rechte Reckin",
+        }
+        for attr in changes:
+            person.__setattr__(attr, changes[attr])
+
+        person.save()
+
+        call_command('rebuild_index', verbosity=0, interactive=False)
+        differ = JsonDiffer(subscription_item.content)
+        
+        differ.print_changesets()
+        cs = differ.collect_changesets()
+
+        # Assert that the item was flagged as having changes
+        assert person.parl_id in cs
+        cs = cs[parl_id]
+
+        # Assert all our changes were reflected in the changeset
+        for attr in changes: 
+            assert attr in cs
+            if isinstance(changes[attr], datetime.date):
+                assert cs[attr]['new'] == changes[attr].strftime(format='%Y-%m-%dT%H:%M:%S')
+            else:
+                assert cs[attr]['new'] == changes[attr]
+
+        # Now let's get into the juicy part of secondary, JSON-based views
+        
+        subscription_item.content.reset_content_hashes()
+        
+        changed_mandate = person.mandates.first()
+        changed_mandate.end_date = datetime.date(2025,1,1)
+        changed_mandate.start_date = datetime.date(2000,1,1)
+        changed_mandate.save()
+        new_mandate = Mandate.objects.filter(~Q(party__short = person.party.short)).all()[0]
+        person.mandates = [new_mandate, changed_mandate]
+        person.latest_mandates = new_mandate
+        person.save()
+        
+        new_statement = DebateStatement.objects.filter(~Q(person_id = person.pk)).first()
+        new_statement.person = person
+        new_statement.save()
+        
+        call_command('rebuild_index', verbosity=0, interactive=False)
+        differ = JsonDiffer(subscription_item.content)
+        
+        differ.print_changesets()
+        cs = differ.collect_changesets()
+
+        # Assert that the item was flagged as having changes
+        assert person.parl_id in cs
+        cs = cs[parl_id]
+
+        assert 'mandates' in cs
+        assert len(cs['mandates']['N']) == 1
+        assert len(cs['mandates']['C']) == 1
+
+        assert 'debate_statements' in cs
+        assert len(cs['debate_statements'][N]) == 1
 
 class PersonSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
 
