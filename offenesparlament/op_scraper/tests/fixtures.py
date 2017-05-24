@@ -1,4 +1,8 @@
 ###### Export certain data to fixtures for testing
+from django.db.models import Count
+
+from itertools import chain
+
 import subprocess
 import os
 from op_scraper.models import *
@@ -6,7 +10,7 @@ from op_scraper.models import *
 FNULL = open(os.devnull, 'w')
 
 fixtures_path = u"/vagrant/offenesparlament/op_scraper/fixtures/"
-yml_files = ['llps.yaml', 'categories.yaml', 'persons.yaml', 'laws.yaml']
+yml_files = ['llps.yaml', 'categories.yaml', 'persons.yaml', 'laws.yaml', 'debates.yml']
 
 laws = []
 categories = {}
@@ -52,19 +56,50 @@ def _add_law(law):
 
 def _person_fixtures():
     # Persons and dependecies
-    print "Exporting first 10 Persons and Mandates"
-    persons = Person.objects.filter(latest_mandate__legislative_period__number=25).all()[:10]
+    print "Exporting first 10 Persons, Mandates and Debate"
+    persons_nr = Person.objects\
+        .annotate(num_statements=Count('debate_statements'))\
+        .filter(num_statements__gt=0)\
+        .filter(num_statements__lt=20)\
+        .filter(latest_mandate__legislative_period__number=25)\
+        .filter(latest_mandate__function__title__contains='Nationalrat')[:5].all()
+    persons_br = Person.objects\
+        .annotate(num_statements=Count('debate_statements'))\
+        .filter(num_statements__gt=0)\
+        .filter(num_statements__lt=20)\
+        .filter(latest_mandate__legislative_period__number=25)\
+        .filter(latest_mandate__function__title__contains='Bundesrat')[:5].all()
+
+    persons = list(chain(persons_br, persons_nr))
+
     mandates = []
     for p in persons:
         mandates += (p.mandates.all())
+    
+    debate_statements = []
+    for p in persons:
+        debate_statements += (p.debate_statements.all())
+    
+    debates = []
+    for st in debate_statements:
+        if st.debate not in debates: 
+            debates += [st.debate]
 
     person_pks = ",".join([p.pk for p in persons])
     mandates_pks = ",".join([str(m.pk) for m in mandates])
+    debates_pks = ",".join([str(d.pk) for d in debates])
+    debate_statements_pks = ",".join([str(s.pk) for s in debate_statements])
 
     _call_dump("persons.yaml", 'Person', person_pks)
     _call_dump("persons.yaml", 'Mandate', mandates_pks)
+    _call_dump("debates.yaml", 'Debate', debates_pks)
+    _call_dump("debates.yaml", 'DebateStatement', debate_statements_pks)
 
-    print u"-- Exported {} Persons with {} Mandates".format(len(persons), len(mandates))
+    print u"-- Exported {} Persons with {} Mandates, {} Debate Statements and {} Debates".format(
+        len(persons), 
+        len(mandates),
+        len(debate_statements),
+        len(debates))
 
 def _basic_fixtures():
     # Basic Data (LLPS)
@@ -116,5 +151,3 @@ def regen_fixtures():
     _person_fixtures()
 
     _law_fixtures()
-
-
