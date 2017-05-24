@@ -164,6 +164,33 @@
 {% endif %}
   </div>
 {% endif %}
+{% if law.references.steps.all %}
+<br />
+  <table class="pre_law">
+    <thead>
+      <tr>
+        <th class="date">Datum</th>
+        <th class="title">Stand des vorparlamentarischen Verfahrens</th>
+        <th class="protocol">Protokoll</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% autoescape off %}
+        {% for step in law.references.steps.all %}
+        <tr class="step">
+          <td class="date">{{ step.date }}</td>
+          <td class="title">{{ step.title }}</td>
+          <td class="protocol">
+            {% if step.protocol_url %}
+            <a href="{{ step.protocol_url }}" class="icon_link icon_parliament">Protokoll</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      {% endautoescape %}
+    </tbody>
+  </table>
+{% endif %}
 
 {% load jsonify %}
 <script>
