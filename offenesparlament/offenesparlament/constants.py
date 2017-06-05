@@ -122,60 +122,78 @@ class LAW:
         MESSAGE_TEMPLATE = u"hat eine neue Beschreibung: {}"
 
     class STEPS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat Statusänderungem im parl. Verfahren: {}"
+        MESSAGE_TEMPLATE = u"hat {} Statusänderung{} im parl. Verfahren: {}"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            steps_messages = u""
-            for ph in new.keys():
-                for st in new[ph]:
-                    if ph in old and st in old[ph]:
-                        continue
-                    else:
-                        steps_messages += u"\t<li>{}: {} am {}</li>\n".format(
-                            ph,
-                            st['title'],
-                            st['date']
-                        )
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + steps_messages + u"\n</ul>\n"
-            )
+            # Only new ones relevant
+            new = 0
+            if 'N' in changed_content: 
+                new = len(changed_content['N'])
+            if new:
+                steps_messages = u""
+                for st in changed_content['N']:
+                    steps_messages += u"\t<li>{}: {} am {}</li>\n".format(
+                                st['phase'],
+                                st['title'],
+                                st['date']
+                            )
+                
+                message = cls.MESSAGE_TEMPLATE.format(
+                    u"eine" if new == 1 else new, 
+                    u"en" if new > 1 else "",
+                    u"\n<ul>\n" + steps_messages + u"\n</ul>\n"
+                )
+                return message
+            else:
+                return None
 
     class KEYWORDS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat neue Schlagworte: {}"
+        MESSAGE_TEMPLATE = u"hat {} neue{} Schlagwort{}: {}"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-
-            kw_messages = u""
-            for kw in new:
-                if kw not in old:
+            # Only new ones relevant
+            new = 0
+            if 'N' in changed_content: 
+                new = len(changed_content['N'])
+            if new:
+                kw_messages = u""
+                for kw in changed_content['N']:
                     kw_messages += u"\t<li>{}</li>\n".format(kw)
-
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + kw_messages + u"\n</ul>\n"
-            )
+                
+                message = cls.MESSAGE_TEMPLATE.format(
+                    u"ein" if new == 1 else new, 
+                    u"s" if new == 1 else "",
+                    u"e" if new > 1 else "",
+                    u"\n<ul>\n" + kw_messages + u"\n</ul>\n"
+                )
+                return message
+            else:
+                return None
 
     class OPINIONS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat neue Stellungnahmen: {}"
+        MESSAGE_TEMPLATE = u"hat {} neue Stellungnahme{}: {}"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            new_stns = [stn for stn in new if stn not in old]
-            stn_messages = u""
-            for stn in new_stns:
-                stn_messages += u"\t<li>{}</li>\n".format(
-                    stn['description'])
-
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + stn_messages + u"\n</ul>\n"
-            )
+            # Only new ones relevant
+            new = 0
+            if 'N' in changed_content: 
+                new = len(changed_content['N'])
+            if new:
+                op_messages = u""
+                for op in changed_content['N']:
+                    op_messages += u"\t<li>{}</li>\n".format(op['entity'])
+                
+                message = cls.MESSAGE_TEMPLATE.format(
+                    u"eine" if new == 1 else new, 
+                    u"n" if new > 1 else "",
+                    u"\n<ul>\n" + op_messages + u"\n</ul>\n"
+                )
+                return message
+            else:
+                return None
 
 
 class PERSON:

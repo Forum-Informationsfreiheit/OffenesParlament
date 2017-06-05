@@ -82,16 +82,21 @@ class JsonDiffer(object):
         del_entries = [e for e in arr1 if e not in arr2]
         # Collect all the array entries from arr2 that aren't in arr1
         new_entries = [e for e in arr2 if e not in arr1]
-
+    
         changed_entries = [e for e in new_entries if 'pk' in e and e['pk'] in [e2['pk'] for e2 in del_entries if 'pk' in e2]]
         new_entries = [e for e in new_entries if e not in changed_entries]
         
         for e in del_entries:
             if e in changed_entries:
                 del_entries.remove(e)
-            if 'pk' in e and e['pk'] in [e2['pk'] for e2 in changed_entries if 'pk' in e2]:
-                del_entries.remove(e)                
-
+            changed_pks = [e2['pk'] for e2 in changed_entries if 'pk' in e2]
+            try:
+                if changed_pks and 'pk' in e and e['pk'] in changed_pks:
+                    del_entries.remove(e)
+            except:
+                # no biggie, just not a dict
+                pass  
+        
         return {'D': del_entries,
                 'N': new_entries,
                 'C': changed_entries}
@@ -149,13 +154,15 @@ class JsonDiffer(object):
                     atomic_changeset[key]['old'] = json.loads(old[key])
                     atomic_changeset[key]['new'] = json.loads(new[key])
 
-                    # both are json, let's diff them against each other
-                    arr_changes = self.diff_arrays(atomic_changeset[key]['old'], atomic_changeset[key]['new'])
-
-                    atomic_changeset[key] = arr_changes
                 except:
                     # wasn't a json field, no biggie
                     pass
+
+                # if list type, diff them as arrays
+                if isinstance(atomic_changeset[key]['old'], list) and isinstance(atomic_changeset[key]['new'], list):
+                    arr_changes = self.diff_arrays(atomic_changeset[key]['old'], atomic_changeset[key]['new'])
+                    atomic_changeset[key] = arr_changes
+
             self.changes[parl_id] = atomic_changeset
         return self.changes
 
@@ -195,9 +202,14 @@ class PersonDiffer(JsonDiffer):
     def render_snippets(self):
         # Plausibility
         if len(self.current_content) != 1:
-                logger.warn("[JsonDiffer] Expected single Person to diff, got {} persons".format(
+            logger.warn("[PersonDiffer] Expected single Person to diff, got {} persons".format(
                 len(self.current_content)
-                ))
+            ))
+            import ipdb; ipdb.set_trace()
+            return None
+
+        if len(self.changes) == 0:
+            return None
             
         snippets = []
         for parl_id, changeset in self.changes.iteritems():
@@ -227,12 +239,43 @@ class LawDiffer(JsonDiffer):
         'keywords': LAW.KEYWORDS,
         'opinions': LAW.OPINIONS
     }
+    SNIPPET_TEMPLATE_FILE = 'subscription/emails/snippets/law_changes.email'
 
     def _get_item(self, parl_id):
         try:
             return Law.objects.get(parl_id=parl_id)
         except:
             return None
+
+    def render_snippets(self):
+        # Plausibility
+        if len(self.current_content) != 1:
+            logger.warn("[LawDiffer] Expected single Law to diff, got {} laws".format(
+                len(self.current_content)
+                ))
+            return None
+
+        if len(self.changes) == 0:
+            return None
+
+        snippets = []
+        for parl_id, changeset in self.changes.iteritems():
+            item_category = self.current_content[parl_id]['category']
+            law = self._get_item(parl_id)
+
+            messages = self._build_messages(changeset)
+            change_item = {
+                    'parl_id': parl_id,
+                    'ui_url': self.content.ui_url,
+                    'category': item_category,
+                    'messages': messages,
+                    'item': self.current_content[parl_id]
+                }
+            c = Context(change_item)
+            snippets.append(
+                loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None))
+        
+        return u'\n'.join(snippets)
 
 class DebateDiffer(JsonDiffer):
     FIELD_MESSAGES = {}

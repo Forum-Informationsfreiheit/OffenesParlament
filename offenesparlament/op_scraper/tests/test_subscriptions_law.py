@@ -2,7 +2,7 @@
 import datetime
  
 from op_scraper.models import *
-from op_scraper.subscriptions import JsonDiffer, PersonDiffer, LawDiffer, DebateDiffer, SearchDiffer
+from op_scraper.subscriptions import JsonDiffer, LawDiffer
 from op_scraper.tests import BaseSubscriptionTestCase
 from offenesparlament.views import subscriptions as views
 
@@ -236,7 +236,11 @@ class JsonDifferLawTestCase(BaseLawSubscriptionsTestCase):
             assert attr in cs
             assert cs[attr]['new'] == changes[attr]
 
-        #TODO render_snippets
+        # Test the generated message snippets
+        snippets = differ.render_snippets()
+
+        assert u"<li>hat eine neue Beschreibung: Ein ganz tolles neues Gesetz! Frohlocket!</li>" in snippets
+        assert u"<li>hat einen neuen Titel: Novelle zur Novelle der Begutachtung des Hohen Hauses</li>" in snippets
 
     def test_json_differ_json_changes(self):
         subscription_item = self._prep_law_subscription()
@@ -246,9 +250,32 @@ class JsonDifferLawTestCase(BaseLawSubscriptionsTestCase):
         new_keywords = Keyword.objects.all()[:5]
         law.keywords = new_keywords
 
+        new_opinions = [op for op in Opinion.objects.all() if op.prelaw != law][:5]
+        law.opinions = new_opinions
 
+        new_steps = []
+        [new_steps.append(ph.step_set.first()) for ph in Phase.objects.all()[:5]]
+        law.steps = new_steps
+
+        law.save()
         
+        call_command('rebuild_index', verbosity=0, interactive=False)
+        differ = LawDiffer(subscription_item.content)
+        
+        cs = differ.collect_changesets()
 
-        import ipdb; ipdb.set_trace()
-        #TODO render_snippets
+        assert law.parl_id in cs
+        cs = cs[parl_id]
 
+        assert len(cs['keywords']['N']) == 5
+        assert len(cs['opinions']['N']) == 5
+        assert len(cs['steps']['N']) == 5
+
+        # Test the generated message snippets
+        snippets = differ.render_snippets()
+
+        assert law.title in snippets
+        
+        assert u"<li>hat 5 neue Schlagworte:" in snippets
+        assert u"<li>hat 5 neue Stellungnahmen:" in snippets
+        assert u"<li>hat 5 Statusänderungen im parl. Verfahren:" in snippets
