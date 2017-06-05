@@ -1,5 +1,6 @@
-from op_scraper.models import SubscribedContent, Subscription, User
+from op_scraper.models import *
 from django.conf import settings
+from django.template import loader, Context
 import json
 import pprint
 from tabulate import tabulate
@@ -17,6 +18,11 @@ FIELD_BLACKLIST = ['text', 'ts']
 
 class JsonDiffer(object):
 
+    FIELD_MESSAGES = {}
+
+    changes = {}
+    current_content = {}
+
     def __init__(self, _content):
         self.content = _content
         self.old_content = _content.retrieve_latest_content()
@@ -29,7 +35,6 @@ class JsonDiffer(object):
             return (string[:20] + ' [...]') if len(string) > 20 else string
         except:
             return ""
-
 
     def parse_content(self):
     
@@ -117,8 +122,6 @@ class JsonDiffer(object):
                 logger.info("[{}] Item deleted since last hash reset // reindex".format(parl_id))
 
     def collect_changesets(self):
-        changes = {}
-            
         changed_items = [
             parl_id for parl_id in self.old_hashes
             if parl_id in self.cur_hashes.keys()
@@ -133,9 +136,9 @@ class JsonDiffer(object):
 
             diff_keys = self.diff_dicts(old, new)
 
-            atomic_changeset = {
-                'cur_content': new
-            }
+            self.current_content[parl_id] = new
+            
+            atomic_changeset = {}
 
             for key in diff_keys:
                 atomic_changeset[key] = {
@@ -153,30 +156,96 @@ class JsonDiffer(object):
                 except:
                     # wasn't a json field, no biggie
                     pass
-            changes[parl_id] = atomic_changeset
-        return changes
+            self.changes[parl_id] = atomic_changeset
+        return self.changes
 
-FIELD_MESSAGES = {
-    'Person': {
+    def _build_messages(self, changeset):
+        messages = []
+
+        for field in changeset:
+            if field in self.FIELD_MESSAGES:
+                msg = self.FIELD_MESSAGES[field].msg(
+                    changeset[field])
+                if msg is not None:
+                    messages.append(msg)
+            elif field not in FIELD_BLACKLIST:
+                logger.info(
+                    "Ignored Changes for {}".format(field))
+        return messages
+            
+class PersonDiffer(JsonDiffer):
+    FIELD_MESSAGES = {
         'deathdate': PERSON.DEATH,
         'occupation': PERSON.OCCUPATION,
         'debate_statements': PERSON.DEBATE_STATEMENTS,
-        'statements': PERSON.STATEMENTS,
+        'mandates': PERSON.MANDATES,
         'inquiries_sent': PERSON.INQUIRIES_SENT,
         'inquiries_received': PERSON.INQUIRIES_RECEIVED,
         'inquiries_answered': PERSON.INQUIRIES_ANSWERED,
         'comittee_memberships': PERSON.COMITTEE_MEMBERSHIPS,
-    },
-    'Debatte': {},
-    'Gesetz': {
+    }
+    SNIPPET_TEMPLATE_FILE = 'subscription/emails/snippets/person_changes.email'
+    
+    def _get_item(self, parl_id):
+        try:
+            return Person.objects.get(parl_id=parl_id)
+        except:
+            return None
+
+    def render_snippets(self):
+        # Plausibility
+        if len(self.current_content) != 1:
+                logger.warn("[JsonDiffer] Expected single Person to diff, got {} persons".format(
+                len(self.current_content)
+                ))
+            
+        snippets = []
+        for parl_id, changeset in self.changes.iteritems():
+            item_category = self.current_content[parl_id]['category']
+            person = self._get_item(parl_id)
+
+            messages = self._build_messages(changeset)
+            change_item = {
+                    'parl_id': parl_id,
+                    'ui_url': self.content.ui_url,
+                    'category': item_category,
+                    'messages': messages,
+                    'item': self.current_content[parl_id],
+                    'short_css_class':   person.party.short_css_class
+                }
+            c = Context(change_item)
+            snippets.append(
+                loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None))
+        
+        return u'\n'.join(snippets)
+
+class LawDiffer(JsonDiffer):
+    FIELD_MESSAGES = {
         'title': LAW.TITLE,
         'description': LAW.DESCRIPTION,
         'steps': LAW.STEPS,
         'keywords': LAW.KEYWORDS,
         'opinions': LAW.OPINIONS
-    },
-}
+    }
 
+    def _get_item(self, parl_id):
+        try:
+            return Law.objects.get(parl_id=parl_id)
+        except:
+            return None
+
+class DebateDiffer(JsonDiffer):
+    FIELD_MESSAGES = {}
+
+class SearchDiffer(JsonDiffer):
+    pass
+
+CATEGORY_DIFFERS = {
+    'person': PersonDiffer,
+    'law': LawDiffer,
+    'debate': DebateDiffer,
+    'search': SearchDiffer,
+}
 
 def check_subscriptions():
 
@@ -184,6 +253,9 @@ def check_subscriptions():
     changes = {}
 
     for content in SubscribedContent.objects.all():
+        diff_class = CATEGORY_DIFFERS[content.category]
+
+
         differ = JsonDiffer(content)
         changeset = differ.collect_changesets(content)
         if not changeset:

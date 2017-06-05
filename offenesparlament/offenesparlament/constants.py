@@ -196,96 +196,134 @@ class PERSON:
             )
 
     class INQUIRIES_SENT(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"Hat neue Anfragen gestellt: {}"
+        MESSAGE_TEMPLATE = u"hat {} neue parlamentarische Anfrage{} gestellt"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            new_inqs = [inq for inq in new if inq not in old]
-            inq_changes = u""
-            for inq in new_inqs:
-                inq_changes += u"\t<li>{}: {} an {}</li>\n".format(
-                    inq['category'],
-                    inq['title'],
-                    inq['receiver_name'])
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + inq_changes + u"\n</ul>\n"
-            )
+            # Only new ones relevant
+            new = 0
+            if 'N' in changed_content: 
+                new = len(changed_content['N'])
+            if new:
+                message = cls.MESSAGE_TEMPLATE.format(
+                    "eine" if new == 1 else new, 
+                    "n" if new > 1 else ""
+                )
+                return message
+            else:
+                return None
 
     class INQUIRIES_RECEIVED(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"Hat neue Anfragen erhalten: {}"
+        MESSAGE_TEMPLATE = u"hat {} neue parlamentarische Anfrage{} erhalten"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            new_inqs = [inq for inq in new if inq not in old]
-            inq_changes = u""
-            for inq in new_inqs:
-                inq_changes += u"\t<li>{}: {} von {}</li>\n".format(
-                    inq['category'],
-                    inq['title'],
-                    u", ".join(inq['sender_names']))
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + inq_changes + u"\n</ul>\n"
-            )
+            # Only new ones relevant
+            new = 0
+            if 'N' in changed_content: 
+                new = len(changed_content['N'])
+            if new:
+                message = cls.MESSAGE_TEMPLATE.format(
+                    "eine" if new == 1 else new, 
+                    "n" if new > 1 else ""
+                )
+                return message
+            else:
+                return None
 
     class INQUIRIES_ANSWERED(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"Hat neue Anfragen beantwortet: {}"
+        MESSAGE_TEMPLATE = u"hat {} neue parlamentarische Anfrage{} beantwortet"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            new_inqs = [inq for inq in new if inq not in old]
-            inq_changes = u""
-            for inq in new_inqs:
-                inq_changes += u"\t<li>{}: {} von {}</li>\n".format(
-                    inq['category'],
-                    inq['title'],
-                    u", ".join(inq['sender_names']))
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + inq_changes + u"\n</ul>\n"
-            )
+            # Only new ones relevant
+            new = 0
+            if 'N' in changed_content: 
+                new = len(changed_content['N'])
+            if new:
+                message = cls.MESSAGE_TEMPLATE.format(
+                    "eine" if new == 1 else new, 
+                    "n" if new > 1 else ""
+                )
+                return message
+            else:
+                return None
 
     class DEBATE_STATEMENTS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat neue Redeeinträge: {}"
+        MESSAGE_TEMPLATE = u"hat {}{}{} Redeeinträg(e)"
+        MESSAGE_NEW = u"{} neue{}"
+        MESSAGE_CHANGED = u"{} geänderte{}"
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            changed_dstatements = [ds for ds in new if ds not in old]
-            statement_changes = u""
-            for ds in changed_dstatements:
-                ds_full_text = ds['full_text']
-                if len(ds_full_text) > 100:
-                    ds_full_text = ds_full_text[:100]
-                    ds_full_text = ds_full_text[
-                        :ds_full_text.rindex(u' ')] + u" [...]"
-                statement_changes += u"\t<li>{}</li>\n".format(ds_full_text)
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + statement_changes + u"\n</ul>\n"
-            )
+            
+            changed = 0
+            new = 0
+            if 'C' in changed_content: 
+                changed = len(changed_content['C'])
 
-    class STATEMENTS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat neue Redebeiträge: {}"
-
-        @classmethod
-        def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
-            changed_statements = [s for s in new if s not in old]
-            statement_changes = u""
-            for st in changed_statements:
-                statement_changes += u"\t<li>am {} zu {}</li>\n".format(
-                    st['date'],
-                    st['law'],
+            if 'N' in changed_content: new = len(changed_content['N'])
+            if changed or new:
+                message = cls.MESSAGE_TEMPLATE.format(
+                    cls.MESSAGE_NEW.format(
+                        "einen" if new == 1 else new, 
+                        "n" if new == 1 else "") if new else "",
+                    u" und " if new and changed else "",
+                    cls.MESSAGE_CHANGED.format(
+                        "einen" if changed == 1 else changed,
+                        "en" if changed == 1 else "") if changed else ""
                 )
-            return cls.MESSAGE_TEMPLATE.format(
-                u"\n<ul>\n" + statement_changes + u"</ul>\n"
-            )
+                return message
+            else:
+                return None
+    # Removed 05.06.2017 by lk because
+    # - will always be confusing w/ debate statements.
+    # - has no relevant information connected (no content to statement)
+    # 
+    # class STATEMENTS(ChangeMessageGenerator):
+    #     MESSAGE_TEMPLATE = u"hat neue Redebeiträge: {}"
+
+    #     @classmethod
+    #     def msg(cls, changed_content):
+    #         old = changed_content['old']
+    #         new = changed_content['new']
+    #         changed_statements = [s for s in new if s not in old]
+    #         statement_changes = u""
+    #         for st in changed_statements:
+    #             statement_changes += u"\t<li>am {} zu {}</li>\n".format(
+    #                 st['date'],
+    #                 st['law'],
+    #             )
+    #         return cls.MESSAGE_TEMPLATE.format(
+    #             u"\n<ul>\n" + statement_changes + u"</ul>\n"
+    #         )
+
+    class MANDATES(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat {}{}{} Mandat(e)"
+        MESSAGE_NEW = u"{} neue{}"
+        MESSAGE_CHANGED = u"{} geänderte{}"
+
+        @classmethod
+        def msg(cls, changed_content):
+            changed = 0
+            new = 0
+            if 'C' in changed_content: 
+                changed = len(changed_content['C'])
+
+            if 'N' in changed_content: new = len(changed_content['N'])
+            if changed or new:
+                message = cls.MESSAGE_TEMPLATE.format(
+                    cls.MESSAGE_NEW.format(
+                        "ein" if new == 1 else new, 
+                        "s" if new == 1 else "") if new else "",
+                    u" und " if new and changed else "",
+                    cls.MESSAGE_CHANGED.format(
+                        "ein" if changed == 1 else changed, 
+                        "s" if changed == 1 else "") if changed else ""
+                )
+                return message
+            else:
+                return None
 
     class OCCUPATION(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat einen neuen Beruf angegeben: {}"
