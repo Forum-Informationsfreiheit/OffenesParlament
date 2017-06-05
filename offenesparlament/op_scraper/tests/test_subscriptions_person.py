@@ -2,7 +2,7 @@
 import datetime
  
 from op_scraper.models import *
-from op_scraper.subscriptions import JsonDiffer, PersonDiffer, LawDiffer, DebateDiffer, SearchDiffer
+from op_scraper.subscriptions import JsonDiffer, PersonDiffer
 from op_scraper.tests import BaseSubscriptionTestCase
 from offenesparlament.views import subscriptions as views
 
@@ -203,7 +203,7 @@ class PersonsSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
 class JsonDifferPersonEqualTestCase(BasePersonSubscriptionsTestCase):
     def test_json_differ_equal(self):
         subscription_item = self._prep_person_subscription()
-        differ = JsonDiffer(subscription_item.content)
+        differ = PersonDiffer(subscription_item.content)
         assert differ.collect_changesets() == {}
 
 class JsonDifferPersonTestCase(BasePersonSubscriptionsTestCase):

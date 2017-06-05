@@ -204,9 +204,9 @@ class LawsSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
 class JsonDifferLawEqualTestCase(BaseLawSubscriptionsTestCase):
     def test_json_differ_equal(self):
         subscription_item = self._prep_law_subscription()
-        differ = JsonDiffer(subscription_item.content)
+        differ = LawDiffer(subscription_item.content)
         assert differ.collect_changesets() == {}
-
+        
 class JsonDifferLawTestCase(BaseLawSubscriptionsTestCase):
     def test_json_differ_changes(self):
         subscription_item = self._prep_law_subscription()

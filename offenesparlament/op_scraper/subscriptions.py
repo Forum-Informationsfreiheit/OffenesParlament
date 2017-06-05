@@ -7,6 +7,7 @@ from tabulate import tabulate
 
 from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL
 
+current_content = {}
 # import the logging library
 import logging
 
@@ -44,6 +45,7 @@ class JsonDiffer(object):
         # no changes, skip to the next one
         if self.old_hashes == self.cur_hashes:
             self.has_changes = False
+            return
         try:
             self.old_hashes = json.loads(self.old_hashes)
         except Exception as e:
@@ -52,6 +54,7 @@ class JsonDiffer(object):
                 e.message
                 ))
             self.has_changes = False
+            return
 
         try:
             self.cur_hashes = json.loads(self.cur_hashes)
@@ -61,6 +64,7 @@ class JsonDiffer(object):
                 e.message
                 ))
             self.has_changes = False
+            return
 
         self.has_changes = True
 
@@ -82,15 +86,20 @@ class JsonDiffer(object):
         del_entries = [e for e in arr1 if e not in arr2]
         # Collect all the array entries from arr2 that aren't in arr1
         new_entries = [e for e in arr2 if e not in arr1]
-    
-        changed_entries = [e for e in new_entries if 'pk' in e and e['pk'] in [e2['pk'] for e2 in del_entries if 'pk' in e2]]
+        
+        try:
+            changed_entries = [e for e in new_entries if 'pk' in e and e['pk'] in [e2['pk'] for e2 in del_entries if 'pk' in e2]]
+        except:
+            # no biggie, just not a dict
+            changed_entries = []
+        
         new_entries = [e for e in new_entries if e not in changed_entries]
         
         for e in del_entries:
             if e in changed_entries:
                 del_entries.remove(e)
-            changed_pks = [e2['pk'] for e2 in changed_entries if 'pk' in e2]
             try:
+                changed_pks = [e2['pk'] for e2 in changed_entries if 'pk' in e2]
                 if changed_pks and 'pk' in e and e['pk'] in changed_pks:
                     del_entries.remove(e)
             except:
@@ -103,6 +112,8 @@ class JsonDiffer(object):
         
 
     def print_changesets(self):
+        if not self.has_changes:
+            return None
         old_dict = dict((item['parl_id'], item) for item in self.old_content)
         cur_dict = dict((item['parl_id'], item) for item in self.cur_content)
 
@@ -127,6 +138,12 @@ class JsonDiffer(object):
                 logger.info("[{}] Item deleted since last hash reset // reindex".format(parl_id))
 
     def collect_changesets(self):
+        self.current_content = {}
+        self.changes = {}
+
+        if not self.has_changes:
+            return {}
+
         changed_items = [
             parl_id for parl_id in self.old_hashes
             if parl_id in self.cur_hashes.keys()
