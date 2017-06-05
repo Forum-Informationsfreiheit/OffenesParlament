@@ -761,8 +761,8 @@ class InquiryResponse(Law):
             'description': self.description,
             'category': self.category.title if self.category else None,
             'source_link': self.source_link,
-            'sender_ids': [p.parl_id for i in self.inquiries.all() for p in i.sender.all()],
-            'sender_names': [p.full_name for i in self.inquiries.all() for p in i.sender.all()],
+            'sender_id': self.sender.parl_id if self.sender else None,
+            'sender_name': self.sender.full_name if self.sender else None,
             'keywords': self.keyword_titles,
             'status': self.status,
         }
@@ -798,6 +798,8 @@ class Inquiry(Law):
             'sender_names': [s.full_name for s in self.sender.all()],
             'keywords': self.keyword_titles,
             'status': self.status,
+            'response_id': self.response_id if self.response_id else None,
+            'response_title': self.response.title if self.response else None,
         }
         return inquiry
 
