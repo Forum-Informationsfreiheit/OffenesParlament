@@ -525,22 +525,22 @@ class Mandate(models.Model):
             mandate['start_date'] = self.start_date.isoformat()
             mandate[
                 'end_date'] = self.end_date.isoformat() if self.end_date else None
-        elif self.legislative_period:
-            llp = self.legislative_period
-            mandate['start_date'] = llp.start_date.isoformat()
-            mandate[
-                'end_date'] = llp.end_date.isoformat() if llp.end_date else None
-
-        if self.administration:
-            adm = self.administration
-            mandate['administration'] = {
-                "title": adm.title,
-                "start_date": adm.start_date.isoformat(),
-                "end_date": adm.end_date.isoformat() if adm.end_date else None,
-            }
-            mandate['start_date'] = adm.start_date.isoformat()
-            mandate[
-                'end_date'] = adm.end_date.isoformat() if adm.end_date else None
+        else:
+            if self.administration:
+                adm = self.administration
+                mandate['administration'] = {
+                    "title": adm.title,
+                    "start_date": adm.start_date.isoformat(),
+                    "end_date": adm.end_date.isoformat() if adm.end_date else None,
+                }
+                mandate['start_date'] = adm.start_date.isoformat()
+                mandate[
+                    'end_date'] = adm.end_date.isoformat() if adm.end_date else None
+            elif self.legislative_period:
+                llp = self.legislative_period
+                mandate['start_date'] = llp.start_date.isoformat()
+                mandate[
+                    'end_date'] = llp.end_date.isoformat() if llp.end_date else None
 
         if self.function:
             mandate['function'] = {
