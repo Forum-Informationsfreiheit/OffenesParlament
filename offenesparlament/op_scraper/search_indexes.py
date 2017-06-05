@@ -192,7 +192,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         """
         Collects the object's step's as json
         """
-        return obj.steps_by_phases_json()
+        return obj.steps_and_phases_json()
 
     def prepare_opinions(self, obj):
         """

@@ -265,24 +265,23 @@ class Law(Timestamped, ParlIDMixIn):
 
         return phases
 
-    def steps_by_phases_json(self):
+    def steps_and_phases_json(self):
         """
         Returns a json representation of the steps_by_phases dict
         """
-        phases = {}
+        steps = []
         for step in self.steps.all():
-            if step.phase not in phases:
-                phases[step.phase.title] = []
-            phases[step.phase.title].append({
+            steps.append({
                 'pk': step.pk,
                 'title': step.title,
+                'phase': step.phase.title,
                 'sortkey': step.sortkey,
                 'date': step.date.isoformat(),
                 'protocol_url': step.protocol_url,
                 'source_link': step.source_link
             })
 
-        return json.dumps(phases)
+        return json.dumps(steps)
 
     def opinions_and_documents(self):
         return self.opinions.all().prefetch_related('documents')
