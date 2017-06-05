@@ -1506,6 +1506,177 @@
     model: op_scraper.administration
     pk: 51
 -   fields:
+        _slug: /personen/PAD_00060/Dr-Martin-Bartenstein/
+        birthdate: 1953-06-03
+        birthplace: ' Graz'
+        deathdate: null
+        deathplace: ''
+        full_name: Dr. Martin Bartenstein
+        latest_mandate: 6783
+        mandates: [6554, 6783, 6909, 7036, 7263, 7412, 5671, 5702, 5731, 5732, 5758,
+            5779, 5780, 5781, 5810, 5805, 6242, 6280]
+        occupation: ' Bundesminister a.D.'
+        photo_copyright: "\xA9\_Parlamentsdirektion / WILKE"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_00060/3491335_384.jpg
+        reversed_name: Bartenstein Martin, Dr.
+        source_link: https://www.parlament.gv.at/WWER/PAD_00060/index.shtml
+        ts: 2016-09-30 13:36:00+00:00
+    model: op_scraper.person
+    pk: PAD_00060
+-   fields:
+        _slug: /personen/PAD_36450/Faymann-Werner/
+        birthdate: 1960-05-04
+        birthplace: ' Wien'
+        deathdate: null
+        deathplace: ''
+        full_name: Werner Faymann
+        latest_mandate: 6675
+        mandates: [6675, 6789, 5618, 5647, 5678]
+        occupation: ' Bundeskanzler'
+        photo_copyright: "\xA9\_SP\xD6 Presse & Kommunikation"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_36450/4404152_180.jpg
+        reversed_name: Faymann Werner
+        source_link: https://www.parlament.gv.at/WWER/PAD_36450/index.shtml
+        ts: 2016-10-21 02:22:00+00:00
+    model: op_scraper.person
+    pk: PAD_36450
+-   fields:
+        _slug: /personen/PAD_36507/Mag-Laura-Rudas/
+        birthdate: 1981-03-10
+        birthplace: ' Wien'
+        deathdate: null
+        deathplace: ''
+        full_name: Mag. Laura Rudas
+        latest_mandate: 6675
+        mandates: [6565, 6675, 6789]
+        occupation: " Bundesgesch\xE4ftsf\xFChrerin der SP\xD6"
+        photo_copyright: "\xA9\_Parlamentsdirektion / WILKE"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_36507/3490864_384.jpg
+        reversed_name: Rudas Laura, Mag.
+        source_link: https://www.parlament.gv.at/WWER/PAD_36507/index.shtml
+        ts: 2016-04-27 19:06:00+00:00
+    model: op_scraper.person
+    pk: PAD_36507
+-   fields:
+        _slug: /personen/PAD_36907/Dr-Johann-Georg-Schelling/
+        birthdate: 1953-12-27
+        birthplace: ' Hohenems (Vorarlberg)'
+        deathdate: null
+        deathplace: ''
+        full_name: Dr. Johann Georg Schelling
+        latest_mandate: 6238
+        mandates: [6576, 5638, 6238]
+        occupation: ' Unternehmensberater'
+        photo_copyright: "\xA9\_BMF / Loebell"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_36907/5913436_384.jpg
+        reversed_name: Schelling Johann Georg, Dr.
+        source_link: https://www.parlament.gv.at/WWER/PAD_36907/index.shtml
+        ts: 2017-05-13 02:22:00+00:00
+    model: op_scraper.person
+    pk: PAD_36907
+-   fields:
+        _slug: /personen/PAD_51557/Deimek-Gerhard-Dipl-Ing-/
+        birthdate: 1963-01-09
+        birthplace: ' Steyr'
+        deathdate: null
+        deathplace: ''
+        full_name: Dipl.-Ing. Gerhard Deimek
+        latest_mandate: 6677
+        mandates: [6677, 6798]
+        occupation: " Selbst\xE4ndig"
+        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_51557/4444818_180.jpg
+        reversed_name: Deimek Gerhard, Dipl.-Ing.
+        source_link: https://www.parlament.gv.at/WWER/PAD_51557/index.shtml
+        ts: 2017-04-28 02:20:00+00:00
+    model: op_scraper.person
+    pk: PAD_51557
+-   fields:
+        _slug: /personen/PAD_51558/Doppler-Rupert/
+        birthdate: 1958-02-23
+        birthplace: ' Schwarzach im Pongau'
+        deathdate: null
+        deathplace: ''
+        full_name: Rupert Doppler
+        latest_mandate: 6681
+        mandates: [6681, 6682, 6802]
+        occupation: ' Betriebsrat'
+        photo_copyright: "\xA9\_FP\xD6 Salzburg"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_51558/4838939_180.jpg
+        reversed_name: Doppler Rupert
+        source_link: https://www.parlament.gv.at/WWER/PAD_51558/index.shtml
+        ts: 2017-05-13 02:23:00+00:00
+    model: op_scraper.person
+    pk: PAD_51558
+-   fields:
+        _slug: /personen/PAD_52687/Alois-St%C3%B6ger-dipl-m-/
+        birthdate: 1960-09-03
+        birthplace: ' Linz'
+        deathdate: null
+        deathplace: ''
+        full_name: "Alois St\xF6ger, dipl\xF4m\xE9"
+        latest_mandate: 6240
+        mandates: [5621, 5624, 5641, 5669, 5670, 6240]
+        occupation: " Bundesminister f\xFCr Arbeit"
+        photo_copyright: "\xA9\_Grebe Elisabeth"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_52687/2402825_180.jpg
+        reversed_name: "Alois St\xF6ger, dipl\xF4m\xE9"
+        source_link: https://www.parlament.gv.at/WWER/PAD_52687/index.shtml
+        ts: 2017-01-28 02:20:00+00:00
+    model: op_scraper.person
+    pk: PAD_52687
+-   fields:
+        _slug: /personen/PAD_52689/Hundstorfer-Rudolf/
+        birthdate: 1951-09-19
+        birthplace: ' Wien'
+        deathdate: null
+        deathplace: ''
+        full_name: Rudolf Hundstorfer
+        latest_mandate: 6716
+        mandates: [6716, 5621, 5654, 5655]
+        occupation: ''
+        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_52689/4445135_180.jpg
+        reversed_name: Hundstorfer Rudolf
+        source_link: https://www.parlament.gv.at/WWER/PAD_52689/index.shtml
+        ts: 2016-09-23 02:39:00+00:00
+    model: op_scraper.person
+    pk: PAD_52689
+-   fields:
+        _slug: /personen/PAD_59767/Hackl-Heinz-Peter-Ing-/
+        birthdate: 1954-05-17
+        birthplace: " Haslach an der M\xFChl (Ober\xF6sterreich)"
+        deathdate: null
+        deathplace: ''
+        full_name: Ing. Heinz-Peter Hackl
+        latest_mandate: 6702
+        mandates: [6702, 6822]
+        occupation: " Selbst\xE4ndiger EDV-Techniker"
+        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_59767/4444839_180.jpg
+        reversed_name: Hackl Heinz-Peter, Ing.
+        source_link: https://www.parlament.gv.at/WWER/PAD_59767/index.shtml
+        ts: 2016-06-30 02:15:00+00:00
+    model: op_scraper.person
+    pk: PAD_59767
+-   fields:
+        _slug: /personen/PAD_79499/Ledl-Rossmann-Sonja/
+        birthdate: 1974-09-01
+        birthplace: ' Ehenbichl (Tirol)'
+        deathdate: null
+        deathplace: ''
+        full_name: Sonja Ledl-Rossmann
+        latest_mandate: 6411
+        mandates: [6411, 6473]
+        occupation: ' Politikerin'
+        photo_copyright: "\xA9\_Parlamentsdirektion / Photo Simonis"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_79499/6021021_180.jpg
+        reversed_name: Ledl-Rossmann Sonja
+        source_link: https://www.parlament.gv.at/WWER/PAD_79499/index.shtml
+        ts: 2017-05-12 02:20:00+00:00
+    model: op_scraper.person
+    pk: PAD_79499
+-   fields:
         _slug: /personen/PAD_80160/Schmittner-Dietmar-Dr-/
         birthdate: 1958-12-21
         birthplace: ' Salzburg'
@@ -1523,22 +1694,22 @@
     model: op_scraper.person
     pk: PAD_80160
 -   fields:
-        _slug: /personen/PAD_83132/Ing-Thomas-Schellenbacher/
-        birthdate: 1964-07-23
-        birthplace: " Melk (Nieder\xF6sterreich)"
+        _slug: /personen/PAD_83130/Walter-Rauch/
+        birthdate: 1978-02-07
+        birthplace: ' Feldbach (Steiermark)'
         deathdate: null
         deathplace: ''
-        full_name: Ing. Thomas Schellenbacher
-        latest_mandate: 6667
-        mandates: [6667]
-        occupation: " Selbst\xE4ndig"
+        full_name: Walter Rauch
+        latest_mandate: 6754
+        mandates: [6754]
+        occupation: ' Landesbediensteter'
         photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
-        photo_link: https://www.parlament.gv.at/WWER/PAD_83132/4444690_180.jpg
-        reversed_name: Schellenbacher Thomas, Ing.
-        source_link: https://www.parlament.gv.at/WWER/PAD_83132/index.shtml
-        ts: 2017-04-27 14:19:00+00:00
+        photo_link: https://www.parlament.gv.at/WWER/PAD_83130/6346936_180.jpg
+        reversed_name: Rauch Walter
+        source_link: https://www.parlament.gv.at/WWER/PAD_83130/index.shtml
+        ts: 2017-05-13 02:41:00+00:00
     model: op_scraper.person
-    pk: PAD_83132
+    pk: PAD_83130
 -   fields:
         _slug: /personen/PAD_83138/Frank-Stronach/
         birthdate: 1932-09-06
@@ -1557,56 +1728,22 @@
     model: op_scraper.person
     pk: PAD_83138
 -   fields:
-        _slug: /personen/PAD_83267/Bierbauer-Hartinger-Brigitte/
-        birthdate: 1961-04-11
-        birthplace: ' Feldbach (Steiermark)'
+        _slug: /personen/PAD_83296/Dipl-Ing-Andr%C3%A4-Rupprechter/
+        birthdate: 1961-05-31
+        birthplace: ' Brandenberg (Tirol)'
         deathdate: null
         deathplace: ''
-        full_name: Brigitte Bierbauer-Hartinger
-        latest_mandate: 6395
-        mandates: [6395]
-        occupation: " Selbst\xE4ndig"
-        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
-        photo_link: https://www.parlament.gv.at/WWER/PAD_83267/4833552_180.jpg
-        reversed_name: Bierbauer-Hartinger Brigitte
-        source_link: https://www.parlament.gv.at/WWER/PAD_83267/index.shtml
-        ts: 2017-01-17 17:00:00+00:00
+        full_name: "Dipl.-Ing. Andr\xE4 Rupprechter"
+        latest_mandate: 6237
+        mandates: [5637, 6237]
+        occupation: " Bundesminister f\xFCr Land- und Forstwirtschaft"
+        photo_copyright: "\xA9\_Alexander Haiden"
+        photo_link: https://www.parlament.gv.at/WWER/PAD_83296/6542366_384.jpg
+        reversed_name: "Dipl.-Ing. Andr\xE4 Rupprechter"
+        source_link: https://www.parlament.gv.at/WWER/PAD_83296/index.shtml
+        ts: 2017-02-17 02:20:00+00:00
     model: op_scraper.person
-    pk: PAD_83267
--   fields:
-        _slug: /personen/PAD_86675/Hackl-Marianne/
-        birthdate: 1967-06-18
-        birthplace: ' Oberwart (Burgenland)'
-        deathdate: null
-        deathplace: ''
-        full_name: Marianne Hackl
-        latest_mandate: 6406
-        mandates: [6406]
-        occupation: " Selbst\xE4ndig"
-        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
-        photo_link: https://www.parlament.gv.at/WWER/PAD_86675/5881533_180.jpg
-        reversed_name: Hackl Marianne
-        source_link: https://www.parlament.gv.at/WWER/PAD_86675/index.shtml
-        ts: 2017-03-17 02:20:00+00:00
-    model: op_scraper.person
-    pk: PAD_86675
--   fields:
-        _slug: /personen/PAD_86681/J%C3%BCrgen-Schabh%C3%BCttl/
-        birthdate: 1971-11-22
-        birthplace: " G\xFCssing (Burgenland)"
-        deathdate: null
-        deathplace: ''
-        full_name: "J\xFCrgen Schabh\xFCttl"
-        latest_mandate: 6676
-        mandates: [6676]
-        occupation: ' Polizeibeamter'
-        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
-        photo_link: https://www.parlament.gv.at/WWER/PAD_86681/6324793_180.jpg
-        reversed_name: "Schabh\xFCttl J\xFCrgen"
-        source_link: https://www.parlament.gv.at/WWER/PAD_86681/index.shtml
-        ts: 2017-04-27 02:22:00+00:00
-    model: op_scraper.person
-    pk: PAD_86681
+    pk: PAD_83296
 -   fields:
         _slug: /personen/PAD_87003/Lindner-Michael-Mag-/
         birthdate: 1983-02-26
@@ -1625,6 +1762,23 @@
     model: op_scraper.person
     pk: PAD_87003
 -   fields:
+        _slug: /personen/PAD_88386/Mag-Wolfgang-Sobotka/
+        birthdate: 1956-01-05
+        birthplace: ' Waidhofen an der Ybbs'
+        deathdate: null
+        deathplace: ''
+        full_name: Mag. Wolfgang Sobotka
+        latest_mandate: 6239
+        mandates: [6209, 6239]
+        occupation: " Bundesminister f\xFCr Inneres"
+        photo_copyright: "\xA9\_Felicitas Matern - feel image - Fotografie e.U."
+        photo_link: https://www.parlament.gv.at/WWER/PAD_88386/6302763_384.jpg
+        reversed_name: Mag. Wolfgang Sobotka
+        source_link: https://www.parlament.gv.at/WWER/PAD_88386/index.shtml
+        ts: 2017-02-01 02:23:00+00:00
+    model: op_scraper.person
+    pk: PAD_88386
+-   fields:
         _slug: /personen/PAD_88823/David-Lasar/
         birthdate: null
         birthplace: ''
@@ -1641,52 +1795,126 @@
         ts: 2017-04-24 13:59:00+00:00
     model: op_scraper.person
     pk: PAD_88823
--   fields:
-        _slug: /personen/PAD_88857/Ing-Wolfgang-Klinger/
-        birthdate: 1959-05-10
-        birthplace: " Wels (Ober\xF6sterreich)"
-        deathdate: null
-        deathplace: ''
-        full_name: Ing. Wolfgang Klinger
-        latest_mandate: 6702
-        mandates: [6702]
-        occupation: ' Gastwirt und Transportunternehmer'
-        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
-        photo_link: https://www.parlament.gv.at/WWER/PAD_88857/6567303_180.jpg
-        reversed_name: Klinger Wolfgang, Ing.
-        source_link: https://www.parlament.gv.at/WWER/PAD_88857/index.shtml
-        ts: 2017-05-13 02:42:00+00:00
-    model: op_scraper.person
-    pk: PAD_88857
--   fields:
-        _slug: /personen/PAD_88956/Robert-Seeber/
-        birthdate: 1955-03-21
-        birthplace: ' Linz'
-        deathdate: null
-        deathplace: ''
-        full_name: Robert Seeber
-        latest_mandate: 6405
-        mandates: [6405]
-        occupation: ' Gastronom'
-        photo_copyright: "\xA9\_Parlamentsdirektion / PHOTO SIMONIS"
-        photo_link: https://www.parlament.gv.at/WWER/PAD_88956/6566814_384.jpg
-        reversed_name: Seeber Robert
-        source_link: https://www.parlament.gv.at/WWER/PAD_88956/index.shtml
-        ts: 2017-01-28 02:21:00+00:00
-    model: op_scraper.person
-    pk: PAD_88956
--   fields: {administration: null, end_date: null, function: 1, legislative_period: 1,
-        party: 2, start_date: null, state: 162}
+-   fields: {administration: 1, end_date: null, function: 31, legislative_period: 1,
+        party: null, start_date: null, state: null}
     model: op_scraper.mandate
-    pk: 6395
--   fields: {administration: null, end_date: null, function: 1, legislative_period: 1,
-        party: 1, start_date: null, state: 161}
+    pk: 5618
+-   fields: {administration: 1, end_date: null, function: 34, legislative_period: 1,
+        party: null, start_date: null, state: null}
     model: op_scraper.mandate
-    pk: 6405
--   fields: {administration: null, end_date: null, function: 1, legislative_period: 1,
-        party: 1, start_date: null, state: 213}
+    pk: 5621
+-   fields: {administration: 1, end_date: null, function: 37, legislative_period: 1,
+        party: null, start_date: null, state: null}
     model: op_scraper.mandate
-    pk: 6406
+    pk: 5624
+-   fields: {administration: 1, end_date: null, function: 50, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5637
+-   fields: {administration: 1, end_date: null, function: 51, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5638
+-   fields: {administration: 1, end_date: null, function: 54, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5641
+-   fields: {administration: 2, end_date: null, function: 31, legislative_period: 2,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5647
+-   fields: {administration: 2, end_date: null, function: 62, legislative_period: 2,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5654
+-   fields: {administration: 2, end_date: null, function: 34, legislative_period: 2,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5655
+-   fields: {administration: 2, end_date: null, function: 54, legislative_period: 2,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5669
+-   fields: {administration: 2, end_date: null, function: 70, legislative_period: 2,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5670
+-   fields: {administration: 3, end_date: null, function: 68, legislative_period: 3,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5671
+-   fields: {administration: 3, end_date: null, function: 37, legislative_period: 3,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5678
+-   fields: {administration: 4, end_date: null, function: 68, legislative_period: 4,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5702
+-   fields: {administration: 5, end_date: null, function: 93, legislative_period: 5,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5731
+-   fields: {administration: 5, end_date: null, function: 68, legislative_period: 5,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5732
+-   fields: {administration: 6, end_date: null, function: 104, legislative_period: 6,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5758
+-   fields: {administration: 7, end_date: null, function: 111, legislative_period: 6,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5779
+-   fields: {administration: 7, end_date: null, function: 104, legislative_period: 6,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5780
+-   fields: {administration: 7, end_date: null, function: 112, legislative_period: 6,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5781
+-   fields: {administration: 8, end_date: null, function: 121, legislative_period: 7,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5805
+-   fields: {administration: 8, end_date: null, function: 125, legislative_period: 7,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 5810
+-   fields: {administration: 1, end_date: null, function: 80, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 6209
+-   fields: {administration: 50, end_date: null, function: 50, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 6237
+-   fields: {administration: 50, end_date: null, function: 51, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 6238
+-   fields: {administration: 50, end_date: null, function: 80, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 6239
+-   fields: {administration: 50, end_date: null, function: 34, legislative_period: 1,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 6240
+-   fields: {administration: 51, end_date: null, function: 104, legislative_period: 6,
+        party: null, start_date: null, state: null}
+    model: op_scraper.mandate
+    pk: 6242
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 4,
+        party: 1, start_date: null, state: 165}
+    model: op_scraper.mandate
+    pk: 6280
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 1,
+        party: 1, start_date: null, state: 193}
+    model: op_scraper.mandate
+    pk: 6411
 -   fields: {administration: null, end_date: null, function: 1, legislative_period: 1,
         party: 2, start_date: null, state: 161}
     model: op_scraper.mandate
@@ -1700,17 +1928,41 @@
     model: op_scraper.mandate
     pk: 6420
 -   fields: {administration: null, end_date: null, function: 1, legislative_period: 2,
+        party: 1, start_date: null, state: 193}
+    model: op_scraper.mandate
+    pk: 6473
+-   fields: {administration: null, end_date: null, function: 1, legislative_period: 2,
         party: 5, start_date: null, state: 183}
     model: op_scraper.mandate
     pk: 6492
--   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
-        party: 5, start_date: null, state: 174}
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 3,
+        party: 1, start_date: null, state: 165}
     model: op_scraper.mandate
-    pk: 6667
--   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
-        party: 2, start_date: null, state: 191}
+    pk: 6554
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 3,
+        party: 2, start_date: null, state: 177}
     model: op_scraper.mandate
-    pk: 6676
+    pk: 6565
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 3,
+        party: 1, start_date: null, state: 166}
+    model: op_scraper.mandate
+    pk: 6576
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
+        party: 2, start_date: null, state: 175}
+    model: op_scraper.mandate
+    pk: 6675
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
+        party: 5, start_date: null, state: 189}
+    model: op_scraper.mandate
+    pk: 6677
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
+        party: 5, start_date: null, state: 183}
+    model: op_scraper.mandate
+    pk: 6681
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
+        party: 14, start_date: null, state: 183}
+    model: op_scraper.mandate
+    pk: 6682
 -   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
         party: 13, start_date: null, state: 175}
     model: op_scraper.mandate
@@ -1723,3 +1975,47 @@
         party: 5, start_date: null, state: 163}
     model: op_scraper.mandate
     pk: 6702
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
+        party: 2, start_date: null, state: 174}
+    model: op_scraper.mandate
+    pk: 6716
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 1,
+        party: 5, start_date: null, state: 221}
+    model: op_scraper.mandate
+    pk: 6754
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 2,
+        party: 1, start_date: null, state: 175}
+    model: op_scraper.mandate
+    pk: 6783
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 2,
+        party: 2, start_date: null, state: 175}
+    model: op_scraper.mandate
+    pk: 6789
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 2,
+        party: 5, start_date: null, state: 161}
+    model: op_scraper.mandate
+    pk: 6798
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 2,
+        party: 5, start_date: null, state: 183}
+    model: op_scraper.mandate
+    pk: 6802
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 2,
+        party: 5, start_date: null, state: 163}
+    model: op_scraper.mandate
+    pk: 6822
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 5,
+        party: 1, start_date: null, state: 165}
+    model: op_scraper.mandate
+    pk: 6909
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 6,
+        party: 1, start_date: null, state: 165}
+    model: op_scraper.mandate
+    pk: 7036
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 7,
+        party: 1, start_date: null, state: 165}
+    model: op_scraper.mandate
+    pk: 7263
+-   fields: {administration: null, end_date: null, function: 2, legislative_period: 8,
+        party: 1, start_date: null, state: 162}
+    model: op_scraper.mandate
+    pk: 7412
