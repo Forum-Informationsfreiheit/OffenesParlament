@@ -12,10 +12,15 @@ FNULL = open(os.devnull, 'w')
 fixtures_path = u"/vagrant/offenesparlament/op_scraper/fixtures/"
 yml_files = ['llps.yaml', 'categories.yaml', 'persons.yaml', 'laws.yaml', 'debates.yml']
 
+prelaws = []
 laws = []
 categories = {}
 documents = []
 keywords = []
+steps = []
+phases = []
+opinions = []
+entities = []
 
 def _clear_old_fixtures():
     print "Clearing old fixture files"
@@ -34,7 +39,49 @@ def _call_dump(export_filename, model, pks=None):
         args += ["--pks", pks]
 
     subprocess.call(args, stdout=export_file, stderr=FNULL)
-    print u"-- Written to file {}".format(abspath)
+
+    print u"-- Written {} to file {}".format(model,abspath)
+
+def _add_opinion(opinion):
+    if opinion is None:
+        return
+    print "adding opinion {}".format(opinion)        
+    global opinions
+    global documents
+    global entities
+    
+    opinions += [opinion]
+
+    documents += opinion.documents.all()
+    keywords += opinion.keywords.all()
+    entities += [opinion.entity]
+    _add_prelaw(opinion.prelaw)
+    
+def _add_prelaw(law):
+    global prelaws
+    
+    prelaws.append(law)
+    if law.references:
+        _add_law(law.references)
+    
+    global categories
+    if law.category_id in categories:
+        categories[law.category_id] += 1
+    else:
+        categories[law.category_id] = 1
+    
+    global documents
+    global keywords
+    global steps
+    global phases
+    
+    documents += law.documents.all()
+    keywords += law.keywords.all()
+    law_steps = law.steps.all()[:3]
+    steps += law_steps
+    [_add_opinion(step.opinion) for step in law_steps]
+    phases += [step.phase for step in law_steps]
+    
 
 def _add_law(law):
     global laws
@@ -51,8 +98,16 @@ def _add_law(law):
     
     global documents
     global keywords
+    global steps
+    global phases
+    
     documents += law.documents.all()
     keywords += law.keywords.all()
+    law_steps = law.steps.all()[:3]
+    steps += law_steps
+    [_add_opinion(step.opinion) for step in law_steps]
+    phases += [step.phase for step in law_steps]
+    
 
 def _person_fixtures():
     # Persons and dependecies
@@ -129,17 +184,32 @@ def _law_fixtures():
         _add_law(law)
         
     laws_pks = ",".join([str(l.pk) for l in laws])
+    prelaws_pks = ",".join([str(l.pk) for l in prelaws])
     doc_pks = ",".join([str(d.pk) for d in documents])
     kw_pks = ",".join([str(kw.pk) for kw in keywords])
-
+    st_pks = ",".join([str(st.pk) for st in steps])
+    op_pks = ",".join([str(op.pk) for op in opinions])
+    ph_pks = ",".join([str(ph.pk) for ph in phases])
+    en_pks = ",".join([str(en.pk) for en in entities])
+    
     _call_dump("laws.yaml", 'Keyword', kw_pks)
     _call_dump("laws.yaml", 'Document', doc_pks)
+    _call_dump("laws.yaml", 'Phase', ph_pks)
+    _call_dump("laws.yaml", 'Step', st_pks)
+    _call_dump("laws.yaml", 'Entity', en_pks)
+    _call_dump("laws.yaml", 'Law', prelaws_pks)
+    _call_dump("laws.yaml", 'Opinion', op_pks)
     _call_dump("laws.yaml", 'Law', laws_pks)
 
-    print u"-- Exported {} Laws, {} Documents, {} Keywords".format(
+    
+
+    print u"-- Exported {} Laws, {} Documents, {} Keywords, {} Steps, {} Phases, {} Opinions".format(
         len(laws),
         len(documents),
-        len(keywords))
+        len(keywords),
+        len(steps),
+        len(phases),
+        len(opinions))
 
 
 def regen_fixtures():
