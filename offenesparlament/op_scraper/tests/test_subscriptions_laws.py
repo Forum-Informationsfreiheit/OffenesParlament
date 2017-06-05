@@ -2,7 +2,8 @@
 import datetime
  
 from op_scraper.models import *
-from op_scraper.subscriptions import JsonDiffer
+from op_scraper.subscriptions import JsonDiffer, PersonDiffer, LawDiffer, DebateDiffer, SearchDiffer
+from op_scraper.tests import BaseSubscriptionTestCase
 from offenesparlament.views import subscriptions as views
 
 from django.contrib.auth.models import AnonymousUser, User
@@ -13,52 +14,6 @@ from django.http.response import HttpResponseRedirect
 
 from django.db import transaction
 from django.db.models import Q
-
-class BaseSubscriptionTestCase(TestCase):
-
-    fixtures = ['categories', 'llps', 'persons', 'laws', 'debates']
-    EMAIL = 'foo@bar.com'
-
-    def setUp(self):
-        # Every test needs access to the request factory.
-        self.factory = RequestFactory()
-
-        call_command('rebuild_index', verbosity=0, interactive=False)
-
-    def _extract_verify_url(self,email):
-        urls = re.findall('href="http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', email.alternatives[0][0])
-        for url in urls:
-            if '/verify/'.format(self.EMAIL) in url:
-                verify_url = url.replace('href="','')
-                break
-        key = verify_url[verify_url.rfind('/') + 1:]
-        return key
-
-    def _prep_subscription(self, post_vars):
-        # Create an instance of a subscribe POST request.
-        request = self.factory.post('/susbcribe')
-        request.user = AnonymousUser()
-        request.POST.update(post_vars)
-        
-        # Call subscribe view
-        response = views.subscribe(request)
-
-        # Extract verification urls, key from email body
-        email = mail.outbox.pop()
-        key = self._extract_verify_url(email)
-        
-        # Find Subscription item
-        sub_qs = Subscription.objects.filter(
-            user__email=self.EMAIL,
-            verification__verification_hash=key)
-        
-        # Assert subscription item isn't verified yet
-        subscription_item = sub_qs.first()
-        subscription_item.verification.verified = True
-        subscription_item.verification.save()
-        subscription_item.user.verification.verified = True
-        subscription_item.user.verification.save()
-        return subscription_item
 
 class BaseLawSubscriptionsTestCase(BaseSubscriptionTestCase):
 
@@ -91,117 +46,56 @@ class BaseLawSubscriptionsTestCase(BaseSubscriptionTestCase):
             'email': self.EMAIL
         }
 
-class BasePersonSubscriptionsTestCase(BaseSubscriptionTestCase):
-
-    def _prep_person_subscription(self):
-        person = Person.objects.first()
-        post_vars = self._get_person_subscription_post_vars(person)
-        return self._prep_subscription(post_vars)
-        
-    def _prep_persons_subscription(self):
-        post_vars = self._get_persons_subscription_post_vars()
-        return self._prep_subscription(post_vars)
-
-    def _get_person_subscription_post_vars(self,person):
-        return {
-            'subscription_url': '/personen/search?parl_id={}'.format(
-                person.parl_id
-                ),
-            'search_ui_url': person.slug,
-            'subscription_title': person.full_name,
-            'category': 'person',
-            'email': self.EMAIL
-        }
-
-    def _get_persons_subscription_post_vars(self):
-        return {
-            'subscription_url': '/personen/search?llps=XXV&type=Personen&party=%C3%96VP',
-            'search_ui_url': '/personen/search?llps=XXV&type=Personen&party=%C3%96VP',
-            'subscription_title': u'Personen in Periode XXV: ÖVP',
-            'email': self.EMAIL
-        }
-
-class JsonDifferTestCase(BasePersonSubscriptionsTestCase):
+class JsonDifferLawEqualTestCase(BaseLawSubscriptionsTestCase):
     def test_json_differ_equal(self):
-        subscription_item = self._prep_person_subscription()
+        subscription_item = self._prep_law_subscription()
         differ = JsonDiffer(subscription_item.content)
         assert differ.collect_changesets() == {}
 
-    def test_json_differ_empty(self):
-        pass    
-    
+class JsonDifferLawTestCase(BaseLawSubscriptionsTestCase):    
     def test_json_differ_changes(self):
-        subscription_item = self._prep_person_subscription()
-        parl_id = [p['parl_id'] for p in subscription_item.content.get_content()][0]
-        person = Person.objects.get(parl_id=parl_id)
-        
+        subscription_item = self._prep_law_subscription()
+        parl_id = [l['parl_id'] for l in subscription_item.content.get_content()][0]
+        law = Law.objects.get(parl_id=parl_id)
         # Let's test some changes on the primary items
 
         changes = {
-            'birthdate': datetime.date(1959,6,20),
-            'deathdate': datetime.date(2000,6,20),
-            'full_name': "Barbara Streisand",
-            'reversed_name': "Streisand, Barbara",
-            'birthplace': "Buxtehude",
-            'deathplace': "Wien",
-            'occupation': "Rechte Reckin",
+            'title': "Novelle zur Novelle der Begutachtung des Hohen Hauses",
+            'description': "Ein ganz tolles neues Gesetz! Frohlocket!",
         }
         for attr in changes:
-            person.__setattr__(attr, changes[attr])
+            law.__setattr__(attr, changes[attr])
 
-        person.save()
+        law.save()
 
         call_command('rebuild_index', verbosity=0, interactive=False)
-        differ = JsonDiffer(subscription_item.content)
+        differ = LawDiffer(subscription_item.content)
         
         differ.print_changesets()
         cs = differ.collect_changesets()
-
-        # Assert that the item was flagged as having changes
-        assert person.parl_id in cs
+        
         cs = cs[parl_id]
-
+        
         # Assert all our changes were reflected in the changeset
         for attr in changes: 
             assert attr in cs
-            if isinstance(changes[attr], datetime.date):
-                assert cs[attr]['new'] == changes[attr].strftime(format='%Y-%m-%dT%H:%M:%S')
-            else:
-                assert cs[attr]['new'] == changes[attr]
+            assert cs[attr]['new'] == changes[attr]
 
-        # Now let's get into the juicy part of secondary, JSON-based views
-        
-        subscription_item.content.reset_content_hashes()
-        
-        changed_mandate = person.mandates.first()
-        changed_mandate.end_date = datetime.date(2025,1,1)
-        changed_mandate.start_date = datetime.date(2000,1,1)
-        changed_mandate.save()
-        new_mandate = Mandate.objects.filter(~Q(party__short = person.party.short)).all()[0]
-        person.mandates = [new_mandate, changed_mandate]
-        person.latest_mandates = new_mandate
-        person.save()
-        
-        new_statement = DebateStatement.objects.filter(~Q(person_id = person.pk)).first()
-        new_statement.person = person
-        new_statement.save()
-        
-        call_command('rebuild_index', verbosity=0, interactive=False)
-        differ = JsonDiffer(subscription_item.content)
-        
-        differ.print_changesets()
-        cs = differ.collect_changesets()
+        #TODO render_snippets
 
-        # Assert that the item was flagged as having changes
-        assert person.parl_id in cs
-        cs = cs[parl_id]
+    def test_json_differ_json_changes(self):
+        subscription_item = self._prep_law_subscription()
+        parl_id = [l['parl_id'] for l in subscription_item.content.get_content()][0]
+        law = Law.objects.get(parl_id=parl_id)
 
-        assert 'mandates' in cs
-        assert len(cs['mandates']['N']) == 1
-        assert len(cs['mandates']['C']) == 1
+        new_keywords = Keyword.objects.all()[:5]
+        law.keywords = new_keywords
 
-        assert 'debate_statements' in cs
-        assert len(cs['debate_statements'][N]) == 1
+
+        
+
+        import ipdb; ipdb.set_trace()
+        #TODO render_snippets
 
 class PersonSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
 
