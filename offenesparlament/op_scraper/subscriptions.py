@@ -29,7 +29,7 @@ class JsonDiffer(object):
         self.old_content = _content.retrieve_latest_content()
         self.cur_content = _content.get_content()
         self.parse_content()
-    
+
     def _disp(self,string):
         try:
             string = string.replace('\n','\\n')
@@ -38,7 +38,7 @@ class JsonDiffer(object):
             return ""
 
     def parse_content(self):
-    
+
         self.old_hashes = self.content.latest_content_hashes
         self.cur_hashes = self.content.generate_content_hashes(content=self.cur_content)
 
@@ -86,15 +86,15 @@ class JsonDiffer(object):
         del_entries = [e for e in arr1 if e not in arr2]
         # Collect all the array entries from arr2 that aren't in arr1
         new_entries = [e for e in arr2 if e not in arr1]
-        
+
         try:
             changed_entries = [e for e in new_entries if 'pk' in e and e['pk'] in [e2['pk'] for e2 in del_entries if 'pk' in e2]]
         except:
             # no biggie, just not a dict
             changed_entries = []
-        
+
         new_entries = [e for e in new_entries if e not in changed_entries]
-        
+
         for e in del_entries:
             if e in changed_entries:
                 del_entries.remove(e)
@@ -104,12 +104,12 @@ class JsonDiffer(object):
                     del_entries.remove(e)
             except:
                 # no biggie, just not a dict
-                pass  
-        
+                pass
+
         return {'D': del_entries,
                 'N': new_entries,
                 'C': changed_entries}
-        
+
 
     def print_changesets(self):
         if not self.has_changes:
@@ -139,10 +139,11 @@ class JsonDiffer(object):
 
     def collect_changesets(self):
         self.current_content = {}
-        self.changes = {}
 
-        if not self.has_changes:
-            return {}
+        # Don't run this twice if we already have collected changes in self.changes
+        # OR if there aren't any changes
+        if self.changes or not self.has_changes:
+            return self.changes
 
         changed_items = [
             parl_id for parl_id in self.old_hashes
@@ -159,7 +160,7 @@ class JsonDiffer(object):
             diff_keys = self.diff_dicts(old, new)
 
             self.current_content[parl_id] = new
-            
+
             atomic_changeset = {}
 
             for key in diff_keys:
@@ -196,7 +197,7 @@ class JsonDiffer(object):
                 logger.info(
                     "Ignored Changes for {}".format(field))
         return messages
-            
+
 class PersonDiffer(JsonDiffer):
     FIELD_MESSAGES = {
         'deathdate': PERSON.DEATH,
@@ -209,7 +210,7 @@ class PersonDiffer(JsonDiffer):
         'comittee_memberships': PERSON.COMITTEE_MEMBERSHIPS,
     }
     SNIPPET_TEMPLATE_FILE = 'subscription/emails/snippets/person_changes.email'
-    
+
     def _get_item(self, parl_id):
         try:
             return Person.objects.get(parl_id=parl_id)
@@ -222,18 +223,19 @@ class PersonDiffer(JsonDiffer):
             logger.warn("[PersonDiffer] Expected single Person to diff, got {} persons".format(
                 len(self.current_content)
             ))
-            import ipdb; ipdb.set_trace()
             return None
 
         if len(self.changes) == 0:
             return None
-            
+
         snippets = []
         for parl_id, changeset in self.changes.iteritems():
             item_category = self.current_content[parl_id]['category']
             person = self._get_item(parl_id)
 
             messages = self._build_messages(changeset)
+            if not messages:
+                continue
             change_item = {
                     'parl_id': parl_id,
                     'ui_url': self.content.ui_url,
@@ -245,7 +247,8 @@ class PersonDiffer(JsonDiffer):
             c = Context(change_item)
             snippets.append(
                 loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None))
-        
+        if not snippets:
+            return None
         return u'\n'.join(snippets)
 
 class LawDiffer(JsonDiffer):
@@ -281,6 +284,8 @@ class LawDiffer(JsonDiffer):
             law = self._get_item(parl_id)
 
             messages = self._build_messages(changeset)
+            if not messages:
+                continue
             change_item = {
                     'parl_id': parl_id,
                     'ui_url': self.content.ui_url,
@@ -291,14 +296,21 @@ class LawDiffer(JsonDiffer):
             c = Context(change_item)
             snippets.append(
                 loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None))
-        
+        if not snippets:
+            return None
         return u'\n'.join(snippets)
 
 class DebateDiffer(JsonDiffer):
     FIELD_MESSAGES = {}
 
+    def render_snippets(self):
+        # TODO
+        return u'TODODODODOD\n'
+
 class SearchDiffer(JsonDiffer):
-    pass
+    def render_snippets(self):
+        # TODO
+        return u'TODODODODOD\n'
 
 CATEGORY_DIFFERS = {
     'person': PersonDiffer,
@@ -310,71 +322,36 @@ CATEGORY_DIFFERS = {
 def check_subscriptions():
 
     emails_to_changesets = {}
-    changes = {}
+    change_snippets = {}
 
     for content in SubscribedContent.objects.all():
         diff_class = CATEGORY_DIFFERS[content.category]
-
-
-        differ = JsonDiffer(content)
-        changeset = differ.collect_changesets(content)
-        if not changeset:
+        differ = diff_class(content)
+        if not differ.has_changes or not differ.collect_changesets():
             logger.info(u"No changes for {}".format(content.title))
             continue
 
-        # Collect all the users we need to contact for this changeset/content
-        emails = [sub.user.email for sub in content.subscriptions.all()]
+        snippet = differ.render_snippets()
+        if snippet is None:
+            logger.info(u"Only untracked changes for {}".format(content.title))
+            continue
 
-        # changed_content
-        changed_items = {
-            'person': [],
-            'debatte': [],
-            'law': [],
-            'search': [],
-            'content': content
+        category = 'search' if 'search' in content.category else content.category
+
+        change_snippets[content.id] = {
+            'snippet': snippet,
+            'category': content.category
         }
 
-        # iterate changed content
-        for parl_id in changeset.keys():
-            content_changes = changeset[parl_id]
-            complete_result = content_changes.pop('cur_content')
-            item_category = complete_result['category']
-            item_index = item_category if item_category in [
-                'Person', 'Debatte'] else 'Gesetz'
-
-            change_item = {
-                'parl_id': parl_id,
-                'ui_url': content.ui_url,
-                'category': item_category,
-                'messages': [],
-                'item': complete_result
-            }
-
-            for field in content_changes:
-                if field in FIELD_MESSAGES[item_index]:
-                    msg = FIELD_MESSAGES[item_index][field].msg(
-                        content_changes[field])
-                    try:
-                        print msg
-                    except:
-                        pass
-                    change_item['messages'].append(msg)
-                elif field not in FIELD_BLACKLIST:
-                    logger.info(
-                        "Ignored Changes for {}: {}".format(item_index, field))
-                    # import ipdb
-                    # ipdb.set_trace()
-
-            changed_items[content.category].append(change_item)
-
-        changes[content.id] = changed_items
+        # Collect all the users we need to contact for this changeset/content
+        emails = [sub.user.email for sub in content.subscriptions.all()]
 
         for email in emails:
             if email not in emails_to_changesets:
                 emails_to_changesets[email] = []
             emails_to_changesets[email].append(content.id)
 
-    process_emails(emails_to_changesets, changes)
+    process_emails(emails_to_changesets, change_snippets)
 
     # Reset the content hashes for all SubscribedContent items we just
     # processed
@@ -384,8 +361,7 @@ def check_subscriptions():
         for content in SubscribedContent.objects.all():
             content.reset_content_hashes()
 
-
-def process_emails(emails_to_changesets, change_items):
+def process_emails(emails_to_changesets, change_snippets):
 
     logger.info(
         "Preparing to send {} emails".format(len(emails_to_changesets)))
@@ -395,28 +371,18 @@ def process_emails(emails_to_changesets, change_items):
         # changed_content
         changed_items = {
             'person': [],
-            'debatte': [],
             'law': [],
             'search': [],
         }
 
         for content_id in set(emails_to_changesets[email]):
-            change_item = change_items[content_id]
-            content = change_item['content']
-            for category_key in ['person', 'debatte', 'law', 'search']:
-                if change_item[category_key]:
-                    if category_key != 'search':
-                        changed_items[
-                            category_key] += (change_item[category_key])
-                    else:
-                        changed_items[category_key].append({
-                            'content_id': content.id,
-                            'ui_url': content.ui_url,
-                            'search_title': content.title,
-                            'changes': change_item[category_key]
-                        })
+            snippets = change_snippets[content_id]
+            snippet = snippets['snippet']
+            category = snippets['category']
+            changed_items[category].append(snippet)
+
         template_parameters = {'changes': changed_items}
         email_sent = EMAIL.SUBSCRIPTION_CHANGES.send(
             email, template_parameters)
         if email_sent:
-            logger.info("Email sent to {}".format(email))
+            logger.info(u"Email sent to {}: {}".format(email, email_sent))

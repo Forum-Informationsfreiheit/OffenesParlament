@@ -60,8 +60,8 @@ class EmailController():
             )
         except Exception as e:
             print e
-            return False
-        return True
+            return None
+        return rendered_mail
 
     @classmethod
     def render_email(cls, context_params):
@@ -128,7 +128,7 @@ class LAW:
         def msg(cls, changed_content):
             # Only new ones relevant
             new = 0
-            if 'N' in changed_content: 
+            if 'N' in changed_content:
                 new = len(changed_content['N'])
             if new:
                 steps_messages = u""
@@ -138,9 +138,9 @@ class LAW:
                                 st['title'],
                                 st['date']
                             )
-                
+
                 message = cls.MESSAGE_TEMPLATE.format(
-                    u"eine" if new == 1 else new, 
+                    u"eine" if new == 1 else new,
                     u"en" if new > 1 else "",
                     u"\n<ul>\n" + steps_messages + u"\n</ul>\n"
                 )
@@ -155,15 +155,15 @@ class LAW:
         def msg(cls, changed_content):
             # Only new ones relevant
             new = 0
-            if 'N' in changed_content: 
+            if 'N' in changed_content:
                 new = len(changed_content['N'])
             if new:
                 kw_messages = u""
                 for kw in changed_content['N']:
                     kw_messages += u"\t<li>{}</li>\n".format(kw)
-                
+
                 message = cls.MESSAGE_TEMPLATE.format(
-                    u"ein" if new == 1 else new, 
+                    u"ein" if new == 1 else new,
                     u"s" if new == 1 else "",
                     u"e" if new > 1 else "",
                     u"\n<ul>\n" + kw_messages + u"\n</ul>\n"
@@ -179,15 +179,15 @@ class LAW:
         def msg(cls, changed_content):
             # Only new ones relevant
             new = 0
-            if 'N' in changed_content: 
+            if 'N' in changed_content:
                 new = len(changed_content['N'])
             if new:
                 op_messages = u""
                 for op in changed_content['N']:
                     op_messages += u"\t<li>{}</li>\n".format(op['entity'])
-                
+
                 message = cls.MESSAGE_TEMPLATE.format(
-                    u"eine" if new == 1 else new, 
+                    u"eine" if new == 1 else new,
                     u"n" if new > 1 else "",
                     u"\n<ul>\n" + op_messages + u"\n</ul>\n"
                 )
@@ -220,11 +220,11 @@ class PERSON:
         def msg(cls, changed_content):
             # Only new ones relevant
             new = 0
-            if 'N' in changed_content: 
+            if 'N' in changed_content:
                 new = len(changed_content['N'])
             if new:
                 message = cls.MESSAGE_TEMPLATE.format(
-                    "eine" if new == 1 else new, 
+                    "eine" if new == 1 else new,
                     "n" if new > 1 else ""
                 )
                 return message
@@ -238,11 +238,11 @@ class PERSON:
         def msg(cls, changed_content):
             # Only new ones relevant
             new = 0
-            if 'N' in changed_content: 
+            if 'N' in changed_content:
                 new = len(changed_content['N'])
             if new:
                 message = cls.MESSAGE_TEMPLATE.format(
-                    "eine" if new == 1 else new, 
+                    "eine" if new == 1 else new,
                     "n" if new > 1 else ""
                 )
                 return message
@@ -256,11 +256,11 @@ class PERSON:
         def msg(cls, changed_content):
             # Only new ones relevant
             new = 0
-            if 'N' in changed_content: 
+            if 'N' in changed_content:
                 new = len(changed_content['N'])
             if new:
                 message = cls.MESSAGE_TEMPLATE.format(
-                    "eine" if new == 1 else new, 
+                    "eine" if new == 1 else new,
                     "n" if new > 1 else ""
                 )
                 return message
@@ -274,17 +274,17 @@ class PERSON:
 
         @classmethod
         def msg(cls, changed_content):
-            
+
             changed = 0
             new = 0
-            if 'C' in changed_content: 
+            if 'C' in changed_content:
                 changed = len(changed_content['C'])
 
             if 'N' in changed_content: new = len(changed_content['N'])
             if changed or new:
                 message = cls.MESSAGE_TEMPLATE.format(
                     cls.MESSAGE_NEW.format(
-                        "einen" if new == 1 else new, 
+                        "einen" if new == 1 else new,
                         "n" if new == 1 else "") if new else "",
                     u" und " if new and changed else "",
                     cls.MESSAGE_CHANGED.format(
@@ -297,7 +297,7 @@ class PERSON:
     # Removed 05.06.2017 by lk because
     # - will always be confusing w/ debate statements.
     # - has no relevant information connected (no content to statement)
-    # 
+    #
     # class STATEMENTS(ChangeMessageGenerator):
     #     MESSAGE_TEMPLATE = u"hat neue Redebeiträge: {}"
 
@@ -325,18 +325,18 @@ class PERSON:
         def msg(cls, changed_content):
             changed = 0
             new = 0
-            if 'C' in changed_content: 
+            if 'C' in changed_content:
                 changed = len(changed_content['C'])
 
             if 'N' in changed_content: new = len(changed_content['N'])
             if changed or new:
                 message = cls.MESSAGE_TEMPLATE.format(
                     cls.MESSAGE_NEW.format(
-                        "ein" if new == 1 else new, 
+                        "ein" if new == 1 else new,
                         "s" if new == 1 else "") if new else "",
                     u" und " if new and changed else "",
                     cls.MESSAGE_CHANGED.format(
-                        "ein" if changed == 1 else changed, 
+                        "ein" if changed == 1 else changed,
                         "s" if changed == 1 else "") if changed else ""
                 )
                 return message

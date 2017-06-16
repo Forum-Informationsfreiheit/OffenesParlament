@@ -1,0 +1,31 @@
+<p><a href="{{ content.ui_url }}">{{ content.search_title }}</a></p>
+
+      {% for change in content.changes %}
+        <table class="change_item change_item_person change_item_law">
+          <tr>
+            {% if change.item.category == "Person" %}
+            <td class="change_item_person_photo"><img src="{{ change.item.photo_link }}" width="80" /></td>
+            <td class="change_item_person_content">
+              <h3>
+                {{ change.item.full_name }}
+                {% if change.item.party.short %}
+                  <span class="party_tag {{ change.party.short_css_class }}">{{ change.party.short }}</span>
+                {% endif %}
+              </h3>
+            {% else %}
+            <td class="change_item_law_content">
+              <h3>
+                <a href="{{ change.ui_url }}">{{ change.item.title }}</a>
+              </h3>
+            {% endif %}
+              <ul>
+                {% for msg in change.messages %}
+                  <li>{{ msg|safe }}</li>
+                {% empty %}
+                  <li>hat Änderungen.</li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+        </table>
+      {% endfor %}
