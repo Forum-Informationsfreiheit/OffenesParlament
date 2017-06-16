@@ -35,7 +35,7 @@ class BaseIndex(object):
     #     return self.get_model().objects.all()[:10]
 
 class ArchiveIndexMixin(object):
-    
+
     def _get_backend(self, using):
         return connections['archive'].get_backend()
 
@@ -50,7 +50,7 @@ class ArchiveIndexMixin(object):
     def build_queryset(self, start_date=None, end_date=None, using=None):
         """
         Override to always retun an empty array. This archive indices should not
-        be used via rebuild_index or update_index, they shoud only be accessed 
+        be used via rebuild_index or update_index, they shoud only be accessed
         through the low-level ES api
         """
         return self.get_model().objects.none()
@@ -63,7 +63,7 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     }
 
     text = indexes.CharField(document=True, use_template=True)
-    ts = indexes.DateTimeField(model_attr='ts', faceted=True)
+    ts = indexes.DateTimeField(model_attr='ts', faceted=True, default=datetime.datetime(1970, 1, 1, 0, 0))
     parl_id = indexes.CharField(model_attr='parl_id')
 
     source_link = indexes.CharField(model_attr='source_link')
@@ -259,7 +259,7 @@ class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 ## Index duplication for Archive
 class PersonIndexArchive(ArchiveIndexMixin, PersonIndex):
     pass
-    
+
 class LawIndexArchive(ArchiveIndexMixin, LawIndex):
     pass
 
