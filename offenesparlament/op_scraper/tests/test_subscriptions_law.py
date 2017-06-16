@@ -2,7 +2,7 @@
 import datetime
 
 from op_scraper.models import *
-from op_scraper.subscriptions import JsonDiffer, LawDiffer, check_subscriptions
+from op_scraper.subscriptions import JsonDiffer, LawDiffer, SearchDiffer, check_subscriptions
 from op_scraper.tests import BaseSubscriptionTestCase
 from offenesparlament.views import subscriptions as views
 
@@ -219,6 +219,43 @@ class LawsSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
 
         assert response.__class__ == HttpResponseRedirect
 
+    def test_process_email_empty_laws_subscription(self):
+        subscription_item = self._prep_laws_subscription()
+
+        # Test no changes
+        check_subscriptions()
+        assert len(mail.outbox) == 0
+
+    def test_process_emails_laws_subscription(self):
+        subscription_item = self._prep_laws_subscription()
+        parl_ids = [l['parl_id'] for l in subscription_item.content.get_content()]
+        for parl_id in parl_ids[:2]:
+            law = Law.objects.get(parl_id=parl_id)
+            law.pk = None
+            law.title = u"{}2".format(law.title)
+            law.parl_id = u"{}2".format(law.parl_id)
+            law.references = None
+            law.save()
+
+        law = Law.objects.get(parl_id=parl_ids[-1])
+        law.title = u"{}2".format(law.title)
+        law.save()
+
+        call_command('rebuild_index', verbosity=0, interactive=False)
+
+        check_subscriptions()
+
+        assert len(mail.outbox) == 1
+        email = mail.outbox[0]
+        alts = email.alternatives
+        assert len(alts) == 1
+        assert alts[0][1] == u'text/html'
+
+        html_text = alts[0][0]
+
+        assert "2 neue Ergebnisse</li>" in html_text
+        assert "ndertes Ergebnis</li>" in html_text
+
     def test_create_laws_search_subscription(self):
         """
         Tests the creation of a single law subscription step-by-step,
@@ -270,7 +307,7 @@ class LawsSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
 
 class JsonDifferLawEqualTestCase(BaseLawSubscriptionsTestCase):
     def test_json_differ_equal(self):
-        subscription_item = self._prep_law_subscription()
+        subscription_item = self._prep_laws_subscription()
         differ = LawDiffer(subscription_item.content)
         assert differ.collect_changesets() == {}
 
@@ -346,3 +383,41 @@ class JsonDifferLawTestCase(BaseLawSubscriptionsTestCase):
         assert u"<li>hat 5 neue Schlagworte:" in snippets
         assert u"<li>hat 5 neue Stellungnahmen:" in snippets
         assert u"<li>hat 5 Statusänderungen im parl. Verfahren:" in snippets
+
+class JsonDifferLawsEqualTestCase(BaseLawSubscriptionsTestCase):
+    def test_json_differ_equal(self):
+        subscription_item = self._prep_laws_subscription()
+        differ = LawDiffer(subscription_item.content)
+        assert differ.collect_changesets() == {}
+
+class JsonDifferLawsTestCase(BaseLawSubscriptionsTestCase):
+    def test_json_differ_changes(self):
+        subscription_item = self._prep_laws_subscription()
+        parl_ids = [l['parl_id'] for l in subscription_item.content.get_content()]
+        for parl_id in parl_ids[:2]:
+            law = Law.objects.get(parl_id=parl_id)
+            law.pk = None
+            law.title = u"{}2".format(law.title)
+            law.parl_id = u"{}2".format(law.parl_id)
+            law.references = None
+            law.save()
+
+        law = Law.objects.get(parl_id=parl_ids[-1])
+        law.title = u"{}2".format(law.title)
+        law.save()
+
+        call_command('rebuild_index', verbosity=0, interactive=False)
+
+        differ = SearchDiffer(subscription_item.content)
+
+        cs = differ.collect_changesets()
+        assert parl_ids[-1] in cs
+        assert 'title' in cs[parl_ids[-1]]
+        assert cs[parl_ids[-1]]['title']['new'][-1] == '2'
+
+        new = differ.collect_new()
+        deleted = differ.collect_deleted()
+
+        assert len(deleted) == 0
+        assert len(new) == 2
+

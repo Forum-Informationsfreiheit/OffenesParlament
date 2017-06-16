@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 import datetime
- 
+
 from op_scraper.models import *
-from op_scraper.subscriptions import JsonDiffer, PersonDiffer, LawDiffer, DebateDiffer, SearchDiffer
+from op_scraper.subscriptions import JsonDiffer, PersonDiffer, LawDiffer, SearchDiffer
 from offenesparlament.views import subscriptions as views
 
 from django.contrib.auth.models import AnonymousUser, User
@@ -39,19 +39,19 @@ class BaseSubscriptionTestCase(TestCase):
         request = self.factory.post('/susbcribe')
         request.user = AnonymousUser()
         request.POST.update(post_vars)
-        
+
         # Call subscribe view
         response = views.subscribe(request)
 
         # Extract verification urls, key from email body
         email = mail.outbox.pop()
         key = self._extract_verify_url(email)
-        
+
         # Find Subscription item
         sub_qs = Subscription.objects.filter(
             user__email=self.EMAIL,
             verification__verification_hash=key)
-        
+
         # Assert subscription item isn't verified yet
         subscription_item = sub_qs.first()
         subscription_item.verification.verified = True

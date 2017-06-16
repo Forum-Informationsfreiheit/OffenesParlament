@@ -517,7 +517,7 @@ class Mandate(models.Model):
         mandate = {}
         mandate['llp'] = unicode(self.legislative_period)
         mandate['pk'] = self.pk
-        
+
         # If we have given start- and end-dates, take them
         # else take the ones from the legislative period
         if self.start_date or self.end_date:
@@ -879,7 +879,7 @@ class Statement(models.Model):
             "protocol_url": self.protocol_url,
         }
         return statement
-        
+
 
 
 class Verification(models.Model):
@@ -945,7 +945,7 @@ class SubscribedContent(models.Model):
         """
 
         c = Client()
-            
+
         try:
             response = c.get(self.url)
             content = json.loads(response.content)['result']
@@ -956,7 +956,7 @@ class SubscribedContent(models.Model):
                     response.content
                     )
                 )
-            
+
         return content
 
     def generate_content_hashes(self, content=None):
@@ -967,7 +967,7 @@ class SubscribedContent(models.Model):
         """
         if not content:
             content = self.get_content()
-        
+
         content_hashes = {}
         for res in content:
             content_hashes[res['parl_id']] = self._hash_content(res)
@@ -992,8 +992,16 @@ class SubscribedContent(models.Model):
         from elasticsearch import Elasticsearch
         es = Elasticsearch()
 
-        hashes = json.loads(self.latest_content_hashes).values()
         content = []
+
+        try:
+            hashes = json.loads(self.latest_content_hashes).values()
+        except:
+            # something went wrong with the latest content hashes saved in the
+            # db. ignore & fail gracefully, b/c they will be regenerated the next time reset_content_hashes
+            # is called
+            pass
+
         for content_id_hash in hashes:
             res = es.get(index="archive", doc_type="modelresult", id=content_id_hash)
             content.append(res['_source'])
@@ -1002,7 +1010,7 @@ class SubscribedContent(models.Model):
     def clear_latest_content(self):
         if not self.latest_content_hashes:
             return
-        
+
         from elasticsearch import Elasticsearch
         es = Elasticsearch()
         hashes = json.loads(self.latest_content_hashes).values()

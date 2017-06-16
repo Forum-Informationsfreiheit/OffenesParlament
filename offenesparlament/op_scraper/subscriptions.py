@@ -5,7 +5,7 @@ import json
 import pprint
 from tabulate import tabulate
 
-from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL
+from offenesparlament.constants import LAW, PERSON, DEBATE, EMAIL, SEARCH
 
 current_content = {}
 # import the logging library
@@ -300,23 +300,74 @@ class LawDiffer(JsonDiffer):
             return None
         return u'\n'.join(snippets)
 
-class DebateDiffer(JsonDiffer):
-    FIELD_MESSAGES = {}
-
-    def render_snippets(self):
-        # TODO
-        return u'TODODODODOD\n'
-
 class SearchDiffer(JsonDiffer):
+    new = []
+    deleted = []
+
+    SNIPPET_TEMPLATE_FILE = 'subscription/emails/snippets/search_changes.email'
+
+    SEARCH_MESSAGES = {
+        'new': SEARCH.NEW,
+        'changed': SEARCH.CHANGED,
+        }
+
+    def collect_new(self):
+        self.new = []
+
+        # Don't run this twice if we already have collected changes in self.changes
+        # OR if there aren't any changes
+        if self.new or not self.has_changes:
+            return self.new
+
+        self.new = [
+            parl_id for parl_id in self.cur_hashes
+            if parl_id not in self.old_hashes]
+
+        return self.new
+
+    def collect_deleted(self):
+        self.deleted = []
+
+        # Don't run this twice if we already have collected changes in self.changes
+        # OR if there aren't any changes
+        if self.deleted or not self.has_changes:
+            return self.deleted
+
+        self.deleted = [
+            parl_id for parl_id in self.old_hashes
+            if parl_id not in self.cur_hashes]
+
+        return self.deleted
+
     def render_snippets(self):
-        # TODO
-        return u'TODODODODOD\n'
+
+        new = self.collect_new()
+
+        new_msg = self.SEARCH_MESSAGES['new'].msg(new)
+        changed_msg = self.SEARCH_MESSAGES['changed'].msg(self.changes)
+
+        if not new_msg and not changed_msg:
+            return None
+        changes = {
+                    'ui_url': self.content.ui_url,
+                    'title': self.content.title,
+                    'messages': [new_msg,changed_msg]
+                }
+        c = Context(changes)
+        snippet = loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None)
+
+        if not snippet:
+            return None
+        return snippet
+
 
 CATEGORY_DIFFERS = {
     'person': PersonDiffer,
     'law': LawDiffer,
-    'debate': DebateDiffer,
     'search': SearchDiffer,
+    'search_laws': SearchDiffer,
+    'search_debates': SearchDiffer,
+    'search_persons': SearchDiffer,
 }
 
 def check_subscriptions():
@@ -340,7 +391,7 @@ def check_subscriptions():
 
         change_snippets[content.id] = {
             'snippet': snippet,
-            'category': content.category
+            'category': category
         }
 
         # Collect all the users we need to contact for this changeset/content

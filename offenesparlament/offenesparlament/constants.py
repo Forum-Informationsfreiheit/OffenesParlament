@@ -332,12 +332,12 @@ class PERSON:
             if changed or new:
                 message = cls.MESSAGE_TEMPLATE.format(
                     cls.MESSAGE_NEW.format(
-                        "ein" if new == 1 else new,
-                        "s" if new == 1 else "") if new else "",
+                        u"ein" if new == 1 else new,
+                        u"s" if new == 1 else "") if new else "",
                     u" und " if new and changed else "",
                     cls.MESSAGE_CHANGED.format(
-                        "ein" if changed == 1 else changed,
-                        "s" if changed == 1 else "") if changed else ""
+                        u"ein" if changed == 1 else changed,
+                        u"s" if changed == 1 else "") if changed else ""
                 )
                 return message
             else:
@@ -359,6 +359,38 @@ class PERSON:
                 # couldn't parse isoformat, return as is
                 return cls.MESSAGE_TEMPLATE.format(new_content)
 
+class SEARCH:
+    class NEW(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"{} neue{} Ergebnis{}"
+
+        @classmethod
+        def msg(cls, new):
+            if len(new) < 1:
+                return None
+
+            return u"<li>{}</li>".format(
+                cls.MESSAGE_TEMPLATE.format(
+                    len(new) if len(new) > 1 else "ein ",
+                    u"s" if len(new) == 1 else "",
+                    u"se" if len(new) > 1 else ""
+                    )
+                )
+
+    class CHANGED(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"{} geänderte{} Ergebnis{}"
+
+        @classmethod
+        def msg(cls, changed):
+            if len(changed) < 1:
+                return None
+
+            return u"<li>{}</li>".format(
+                cls.MESSAGE_TEMPLATE.format(
+                    len(changed) if len(changed) > 1 else u"ein",
+                    u"" if len(changed) > 1 else "s",
+                    u"" if len(changed) == 1 else "se"
+                    )
+                )
 
 class DEBATE:
     pass
