@@ -122,7 +122,7 @@ def unsubscribe(request, email, key):
 
         sub = sub_qs.first()
         user = sub.user
-        
+
         content = sub.content
         message = MESSAGES.EMAIL.SUBSCRIPTION_DELETED.format(content.url)
 
@@ -161,8 +161,22 @@ def subscribe(request):
         request.POST['subscription_url']) + "&limit=-1&fieldset=all"
     title = request.POST['subscription_title']
     email = request.POST['email']
-    category = request.POST[
-        'category'] if 'category' in request.POST else 'search'
+
+    # set default cat first
+    category = "search"
+    # can we determine special subscription cases from the POST variable?
+    if 'category' in request.POST:
+        category = request.POST['category']
+    else:
+        # ... or maybe from the subscription URL?
+        if 'search' in url or 'suche' in url:
+            if 'debatten' in url:
+                category = "search_debates"
+            if 'gesetze' in url:
+                category = "search_laws"
+            if 'personen' in url:
+                category = "search_persons"
+
     ui_url = request.build_absolute_uri(request.POST['search_ui_url'])
 
     # find or create new user, if this is a first time subscription
