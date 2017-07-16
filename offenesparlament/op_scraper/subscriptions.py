@@ -346,10 +346,14 @@ class SearchDiffer(JsonDiffer):
         new_msg = self.SEARCH_MESSAGES['new'].msg(new)
         changed_msg = self.SEARCH_MESSAGES['changed'].msg(self.changes)
 
+        # create ui_url_param to mark all the parl_ids that are new or have changes
+        mark_ids = set(self.changes.keys() + self.new)
+        ui_url_params = u";mark_ids=" + u";mark_id=".join(mark_ids)
+
         if not new_msg and not changed_msg:
             return None
         changes = {
-                    'ui_url': self.content.ui_url,
+                    'ui_url': self.content.ui_url + ui_url_params,
                     'title': self.content.title,
                     'messages': [new_msg,changed_msg]
                 }
@@ -437,3 +441,4 @@ def process_emails(emails_to_changesets, change_snippets):
             email, template_parameters)
         if email_sent:
             logger.info(u"Email sent to {}: {}".format(email, email_sent))
+            # logger.info(u"Email sent to {}".format(email))

@@ -41,7 +41,7 @@ class BaseLawSubscriptionsTestCase(BaseSubscriptionTestCase):
     def _get_laws_subscription_post_vars(self):
         return {
             'subscription_url': '/gesetze/search?llps=XXV&type=Gesetze&q=Gesetz',
-            'search_ui_url': '/gesetze/search?llps=XXV&type=Gesetze&q=Gesetz',
+            'search_ui_url': '/suche/gesetze?llps=XXV&q=Gesetz',
             'subscription_title': 'Gesetze in Periode XXV: Gesetz',
             'email': self.EMAIL
         }

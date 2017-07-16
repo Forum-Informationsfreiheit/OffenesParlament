@@ -40,7 +40,7 @@ class BasePersonSubscriptionsTestCase(BaseSubscriptionTestCase):
     def _get_persons_subscription_post_vars(self):
         return {
             'subscription_url': '/personen/search?llps=XXV&type=Personen',
-            'search_ui_url': '/personen/search?llps=XXV&type=Personen',
+            'search_ui_url': '/suche/personen?llps=XXV',
             'subscription_title': u'Personen in Periode XXV',
             'email': self.EMAIL
         }
@@ -261,7 +261,7 @@ class PersonsSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
             person.full_name = u"{}2".format(person.full_name)
             person.parl_id = u"{}2".format(person.parl_id)
             person.save()
-            cperson.mandates = Person.objects.get(parl_id=parl_id).mandates.all()
+            person.mandates = Person.objects.get(parl_id=parl_id).mandates.all()
             person.save()
 
         person = Person.objects.get(parl_id=parl_ids[-1])
