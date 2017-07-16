@@ -226,7 +226,7 @@ class LawsSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
         check_subscriptions()
         assert len(mail.outbox) == 0
 
-    def test_process_emails_laws_subscription(self):
+    def test_process_email_laws_subscription(self):
         subscription_item = self._prep_laws_subscription()
         parl_ids = [l['parl_id'] for l in subscription_item.content.get_content()]
         for parl_id in parl_ids[:2]:
@@ -258,7 +258,7 @@ class LawsSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
 
     def test_create_laws_search_subscription(self):
         """
-        Tests the creation of a single law subscription step-by-step,
+        Tests the creation of a law search subscription step-by-step,
         including verification
         """
         post_vars = self._get_laws_subscription_post_vars()

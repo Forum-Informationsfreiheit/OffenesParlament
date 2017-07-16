@@ -39,9 +39,9 @@ class BasePersonSubscriptionsTestCase(BaseSubscriptionTestCase):
 
     def _get_persons_subscription_post_vars(self):
         return {
-            'subscription_url': '/personen/search?llps=XXV&type=Personen&party=%C3%96VP',
-            'search_ui_url': '/personen/search?llps=XXV&type=Personen&party=%C3%96VP',
-            'subscription_title': u'Personen in Periode XXV: ÖVP',
+            'subscription_url': '/personen/search?llps=XXV&type=Personen',
+            'search_ui_url': '/personen/search?llps=XXV&type=Personen',
+            'subscription_title': u'Personen in Periode XXV',
             'email': self.EMAIL
         }
 
@@ -244,6 +244,44 @@ class PersonsSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
         response = views.unsubscribe(request,self.EMAIL,key)
 
         assert response.__class__ == HttpResponseRedirect
+
+    def test_process_email_empty_persons_subscription(self):
+        subscription_item = self._prep_persons_subscription()
+
+        # Test no changes
+        check_subscriptions()
+        assert len(mail.outbox) == 0
+
+    def test_process_email_persons_subscription(self):
+        subscription_item = self._prep_persons_subscription()
+        parl_ids = [p['parl_id'] for p in subscription_item.content.get_content()]
+
+        for parl_id in parl_ids[:2]:
+            person = Person.objects.get(parl_id=parl_id)
+            person.full_name = u"{}2".format(person.full_name)
+            person.parl_id = u"{}2".format(person.parl_id)
+            person.save()
+            cperson.mandates = Person.objects.get(parl_id=parl_id).mandates.all()
+            person.save()
+
+        person = Person.objects.get(parl_id=parl_ids[-1])
+        person.full_name = u"{}2".format(person.full_name)
+        person.save()
+
+        call_command('rebuild_index', verbosity=0, interactive=False)
+
+        check_subscriptions()
+
+        assert len(mail.outbox) == 1
+        email = mail.outbox[0]
+        alts = email.alternatives
+        assert len(alts) == 1
+        assert alts[0][1] == u'text/html'
+
+        html_text = alts[0][0]
+
+        assert "2 neue Ergebnisse</li>" in html_text
+        assert "nderte Ergebnisse</li>" in html_text
 
     def test_create_persons_search_subscription(self):
         """
