@@ -236,9 +236,13 @@ class PersonDiffer(JsonDiffer):
             messages = self._build_messages(changeset)
             if not messages:
                 continue
+
+            # create ui_url_param to mark all the fields that are new or have changes
+            ui_url_params = u"?mark_fields=" + u";mark_fields=".join(changeset.keys())
+
             change_item = {
                     'parl_id': parl_id,
-                    'ui_url': self.content.ui_url,
+                    'ui_url': self.content.ui_url + ui_url_params,
                     'category': item_category,
                     'messages': messages,
                     'item': self.current_content[parl_id],
@@ -286,9 +290,13 @@ class LawDiffer(JsonDiffer):
             messages = self._build_messages(changeset)
             if not messages:
                 continue
+
+            # create ui_url_param to mark all the fields that are new or have changes
+            ui_url_params = u"?mark_fields=" + u";mark_fields=".join(changeset.keys())
+
             change_item = {
                     'parl_id': parl_id,
-                    'ui_url': self.content.ui_url,
+                    'ui_url': self.content.ui_url + ui_url_params,
                     'category': item_category,
                     'messages': messages,
                     'item': self.current_content[parl_id]
@@ -296,6 +304,7 @@ class LawDiffer(JsonDiffer):
             c = Context(change_item)
             snippets.append(
                 loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None))
+
         if not snippets:
             return None
         return u'\n'.join(snippets)

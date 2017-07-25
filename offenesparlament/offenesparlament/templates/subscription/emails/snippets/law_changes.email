@@ -2,7 +2,7 @@
         <tr>
           <td class="change_item_law_content">
             <h3>
-              <a href="{{ item.ui_url }}">{{ item.title }}</a>
+              <a href="{{ ui_url }}">{{ item.title }}</a>
             </h3>
             <ul>
               {% for msg in messages %}
