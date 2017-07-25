@@ -50,6 +50,7 @@ class BaseConfig(Configuration):
         'jsonify',
         'djcelery',
         'django_inlinecss',
+        'rest_framework'
     )
 
     MIDDLEWARE_CLASSES = (
@@ -173,6 +174,14 @@ class BaseConfig(Configuration):
     # }
 
     # CELERY_TIMEZONE = 'UTC'
+    #
+    REST_FRAMEWORK = {
+        # Use Django's standard `django.contrib.auth` permissions,
+        # or allow read-only access for unauthenticated users.
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        ]
+}
 
 
 class Dev(BaseConfig):

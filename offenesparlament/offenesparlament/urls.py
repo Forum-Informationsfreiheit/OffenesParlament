@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from offenesparlament.views import base_views
 from offenesparlament.views import subscriptions
+from offenesparlament.views.api import router
 from op_scraper import admin_views
 from django.conf import settings
 from offenesparlament.views import search
@@ -87,6 +88,9 @@ urlpatterns = patterns(
         subscriptions.list,
         name='list_subscriptions'),
 
+    # REST Api
+    url(r'^api/', include(router.urls)),
+    # url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
 
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
