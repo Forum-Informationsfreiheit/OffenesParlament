@@ -33,7 +33,7 @@ class LAW:
             return prelaw_id
 
     class KEYWORDS(MultiExtractor):
-        XPATH = '//*[@id="schlagwortBox"]/ul//li/a/text()'
+        XPATH = '//*[@id="schlagwortBoxintern"]/ul//li/a/text()'
 
     class DOCS(MultiExtractor):
         LI_XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/div/ul/li'
