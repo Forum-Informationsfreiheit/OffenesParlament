@@ -180,8 +180,10 @@ class BaseConfig(Configuration):
         # or allow read-only access for unauthenticated users.
         'DEFAULT_PERMISSION_CLASSES': [
             'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-        ]
-}
+        ],
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+        'PAGE_SIZE': 100
+    }
 
 
 class Dev(BaseConfig):
@@ -305,7 +307,7 @@ class UnitTest(Dev):
                 'handlers': ['null'],
                 'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
             },
-            
+
         },
     }
 
@@ -362,7 +364,7 @@ class ProductionBase(BaseConfig):
                 'handlers': ['console'],
                 'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
-            
+
     }
 
     INSTALLED_APPS = BaseConfig.INSTALLED_APPS + ('raven.contrib.django.raven_compat',)

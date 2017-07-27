@@ -113,7 +113,7 @@ class PERSON:
                                 bio['birthdate']))
                             bio['birthdate'] = None
                         if len(birth.split(',')) > 1:
-                            bio['birthplace'] = birth.split(',')[1]
+                            bio['birthplace'] = birth.split(',')[1].strip()
 
                     # Death Data
                     death = Selector(text=data)\
@@ -130,7 +130,7 @@ class PERSON:
                                 bio['deathdate']))
                             bio['deathdate'] = None
                         if len(death.split(',')) > 1:
-                            bio['deathplace'] = death.split(',')[1]
+                            bio['deathplace'] = death.split(',')[1].strip()
 
                     # Occupation
                     occupation = Selector(text=data)\
@@ -138,7 +138,7 @@ class PERSON:
                         .extract()
                     if occupation:
                         occupation = occupation[0]
-                        bio['occupation'] = occupation.split(',')[0]
+                        bio['occupation'] = occupation.split(',')[0].strip()
                 return bio
 
     class PARTY(SingleExtractor):
