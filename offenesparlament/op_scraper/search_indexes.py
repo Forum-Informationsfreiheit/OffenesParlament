@@ -58,8 +58,53 @@ class ArchiveIndexMixin(object):
 
 class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric', 'mandates', 'statements', 'debate_statements', 'inquiries_sent', 'inquiries_received', 'inquiries_answered', 'comittee_memberships'],
-        'list': ['text', 'category', 'ts', 'parl_id', 'source_link', 'internal_link', 'photo_link', 'photo_copyright', 'birthdate', 'deathdate', 'full_name', 'reversed_name', 'birthplace', 'deathplace', 'occupation', 'party', 'llps', 'llps_numeric'],
+        'all': [
+            'text',
+            'category',
+            'ts',
+            'parl_id',
+            'source_link',
+            'internal_link',
+            'photo_link',
+            'photo_copyright',
+            'birthdate',
+            'deathdate',
+            'full_name',
+            'reversed_name',
+            'birthplace',
+            'deathplace',
+            'occupation',
+            'party',
+            'llps',
+            'llps_numeric',
+            'mandates',
+            'statements',
+            'debate_statements',
+            'inquiries_sent',
+            'inquiries_received',
+            'inquiries_answered',
+            'comittee_memberships'
+        ],
+        'list': [
+            'text',
+            'category',
+            'ts',
+            'parl_id',
+            'source_link',
+            'internal_link',
+            'photo_link',
+            'photo_copyright',
+            'birthdate',
+            'deathdate',
+            'full_name',
+            'reversed_name',
+            'birthplace',
+            'deathplace',
+            'occupation',
+            'party',
+            'llps',
+            'llps_numeric'
+        ],
     }
 
     text = indexes.CharField(document=True, use_template=True)
@@ -154,8 +199,36 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     FIELDSETS = {
-        'all': ['text', 'parl_id', 'ts', 'internal_link', 'title', 'description', 'category', 'llps', 'llps_numeric', 'steps', 'opinions', 'documents', 'keywords'],
-        'list': ['text', 'parl_id', 'ts', 'internal_link', 'title', 'description', 'category', 'llps', 'llps_numeric', 'steps', 'opinions', 'documents', 'keywords'],
+        'all': [
+            'text',
+            'parl_id',
+            'ts',
+            'internal_link',
+            'title',
+            'description',
+            'category',
+            'llps',
+            'llps_numeric',
+            'steps',
+            'opinions',
+            'documents',
+            'keywords'
+        ],
+        'list': [
+            'text',
+            'parl_id',
+            'ts',
+            'internal_link',
+            'title',
+            'description',
+            'category',
+            'llps',
+            'llps_numeric',
+            'steps',
+            'opinions',
+            'documents',
+            'keywords'
+        ],
     }
 
     text = indexes.CharField(document=True, use_template=True)
@@ -212,8 +285,32 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
 class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
-        'all': ['text', 'parl_id', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'statements', 'internal_link'],
-        'list': ['parl_id', 'category', 'date', 'title', 'debate_type', 'protocol_url', 'detail_url', 'nr', 'llp', 'internal_link'],
+        'all': [
+            'text',
+            'parl_id',
+            'category',
+            'date',
+            'title',
+            'debate_type',
+            'protocol_url',
+            'detail_url',
+            'nr',
+            'llp',
+            'statements',
+            'internal_link'
+        ],
+        'list': [
+            'parl_id',
+            'category',
+            'date',
+            'title',
+            'debate_type',
+            'protocol_url',
+            'detail_url',
+            'nr',
+            'llp',
+            'internal_link'
+        ],
     }
 
     text = indexes.CharField(document=True, use_template=True)

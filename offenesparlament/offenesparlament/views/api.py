@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from django.conf.urls import url, include
 from django.shortcuts import get_object_or_404
 from op_scraper.models import *
@@ -89,20 +90,23 @@ class CategorySerializer(DynamicFieldsModelSerializer):
         model = Category
         fields = ('pk', 'title')
 
-
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all categories.
+    """
     model = Category
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
 
 class KeywordSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Keyword
         fields = ('pk', 'title')
 
-
 class KeywordViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all keywords.
+    """
     model = Keyword
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
@@ -115,6 +119,11 @@ class LegislativePeriodSerializer(DynamicFieldsModelSerializer):
 
 
 class LegislativePeriodViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all legislative periods.
+
+    Phases group law steps.
+    """
     model = LegislativePeriod
     queryset = LegislativePeriod.objects.all()
     serializer_class = LegislativePeriodSerializer
@@ -127,6 +136,9 @@ class DocumentSerializer(DynamicFieldsModelSerializer):
 
 
 class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all documents.
+    """
     model = Document
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
@@ -139,6 +151,10 @@ class FunctionSerializer(DynamicFieldsModelSerializer):
 
 
 class FunctionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all political functions that persons can have in the form
+    of mandates.
+    """
     model = Function
     queryset = Function.objects.all()
     serializer_class = FunctionSerializer
@@ -151,6 +167,10 @@ class PartySerializer(DynamicFieldsModelSerializer):
 
 
 class PartyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all parties, including their different names at different
+    times.
+    """
     model = Party
     queryset = Party.objects.all()
     serializer_class = PartySerializer
@@ -163,6 +183,9 @@ class StateSerializer(DynamicFieldsModelSerializer):
 
 
 class StateViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all states or electoral districts
+    """
     model = State
     queryset = State.objects.all()
     serializer_class = StateSerializer
@@ -175,45 +198,21 @@ class AdministrationSerializer(DynamicFieldsModelSerializer):
 
 
 class AdministrationViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all administrations since the second republic.
+    """
     model = Administration
     queryset = Administration.objects.all()
     serializer_class = AdministrationSerializer
 
-
-class DebateSerializer(DynamicFieldsModelSerializer):
-    llp = LegislativePeriodSerializer(
-        required=True, fields=('pk', 'roman_numeral', 'number'))
-
-    class Meta:
-        model = Debate
-        fields = (
-            'pk',
-            'date',
-            'title',
-            'debate_type',
-            'protocol_url',
-            'detail_url',
-            'nr',
-            'llp'
-        )
-
-
-class DebateViewSet(viewsets.ReadOnlyModelViewSet):
-    model = Debate
-    queryset = Debate.objects.all()
-    serializer_class = DebateSerializer
-
-
 class DebateStatementSerializer(DynamicFieldsModelSerializer):
-    debate = DebateSerializer()
-
+    debate_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = DebateStatement
         fields = (
             'pk',
             'date',
             'date_end',
-            'debate',
             'index',
             'doc_section',
             'text_type',
@@ -226,14 +225,44 @@ class DebateStatementSerializer(DynamicFieldsModelSerializer):
             'raw_text',
             'annotated_text',
             'speaker_name',
+            'debate_id'
         )
 
 
 class DebateStatementViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all debate statements.
+    """
     model = DebateStatement
     queryset = DebateStatement.objects.all()
     serializer_class = DebateStatementSerializer
 
+class DebateSerializer(DynamicFieldsModelSerializer):
+    llp = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+    debate_statements = DebateStatementSerializer(required=False, many=True)
+
+    class Meta:
+        model = Debate
+        fields = (
+            'pk',
+            'date',
+            'title',
+            'debate_type',
+            'protocol_url',
+            'detail_url',
+            'nr',
+            'llp',
+            'debate_statements',
+        )
+
+class DebateViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all debates, with their debate statements, where existing.
+    """
+    model = Debate
+    queryset = Debate.objects.all()
+    serializer_class = DebateSerializer
 
 class MandateSerializer(DynamicFieldsModelSerializer):
     function = FunctionSerializer()
@@ -258,11 +287,114 @@ class MandateSerializer(DynamicFieldsModelSerializer):
 
 
 class MandateViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all mandates.
+
+    A mandate is a persons function, delimited with a start- and end-date.
+    """
     model = Mandate
     queryset = Mandate.objects.all()
     serializer_class = MandateSerializer
     pagination_class = LargeResultsSetPagination
 
+class PhaseSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Phase
+        fields = (
+            'pk',
+            'title'
+        )
+
+class PhaseViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all phases.
+
+    Phases group law steps.
+    """
+    model = Phase
+    queryset = Phase.objects.all()
+    serializer_class = PhaseSerializer
+
+class StepSerializer(DynamicFieldsModelSerializer):
+
+    phase = PhaseSerializer(required=False)
+
+    class Meta:
+        model = Step
+        fields = (
+            'pk',
+            'title',
+            'date',
+            'sortkey',
+            'protocol_url',
+            'source_link',
+            'phase'
+        )
+
+
+class StepViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all steps.
+
+    Laws undergo steps as they move through the legislative process.
+    Each step is part of one phase.
+    """
+    model = Step
+    queryset = Step.objects.all()
+    serializer_class = StepSerializer
+
+class EntitySerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Entity
+        fields = (
+            'pk',
+            'title',
+            'title_detail',
+            'email',
+            'phone')
+
+
+class EntityViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all entities.
+
+    An entity is a person or organisation that has at some point given an
+    opinion (Stellungnahme) about a propsed law.
+    """
+    model = Entity
+    queryset = Entity.objects.all()
+    serializer_class = EntitySerializer
+
+class OpinionSerializer(DynamicFieldsModelSerializer):
+
+    documents = DocumentSerializer(required=False, many=True)
+    category = CategorySerializer(required=False)
+    keywords = KeywordSerializer(required=False, many=True)
+    entity = EntitySerializer()
+
+    class Meta:
+        model = Opinion
+        fields = (
+            'pk',
+            'parl_id',
+            'date',
+            'description',
+            'source_link',
+            'documents',
+            'category',
+            'keywords',
+            'entity',
+        )
+
+class OpinionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Return a list of all opinions ('Stellungnahmen') for Pre-Laws (Ministerialentwürfe, etc.)
+    """
+    model = Opinion
+    queryset = Opinion.objects.all()
+    serializer_class = OpinionSerializer
 
 ### Primary Models Person, Law and Debaite
 ###
@@ -276,6 +408,8 @@ class LawSerializer(DynamicFieldsModelSerializer):
     documents = DocumentSerializer(required=False, many=True)
     references_id = serializers.IntegerField(read_only=True)
     slug = serializers.CharField(read_only=True)
+    steps = StepSerializer(required=False, many=True)
+    opinions = OpinionSerializer(required=False, many=True)
 
     class Meta:
         model = Law
@@ -290,11 +424,16 @@ class LawSerializer(DynamicFieldsModelSerializer):
             'legislative_period',
             'documents',
             'references_id',
-            'slug'
+            'slug',
+            'steps',
+            'opinions',
         )
 
 
 class LawViewSet(ESViewSet):
+    """
+    Return a list of all laws.
+    """
     model = Law
     queryset = Law.objects.all()
     serializer = LawSerializer
@@ -347,7 +486,7 @@ class PersonSerializer(DynamicFieldsModelSerializer):
 
 class PersonViewSet(ESViewSet):
     """
-
+    Return a list of all persons.
     """
     model = Person
     queryset = Person.objects.all()
@@ -374,6 +513,10 @@ router.register(r'debates', DebateViewSet, base_name="Debate")
 
 router.register(r'categories', CategoryViewSet, base_name="Category")
 router.register(r'keywords', KeywordViewSet, base_name="Keyword")
+router.register(r'phases', PhaseViewSet, base_name="Phase")
+router.register(r'steps', StepViewSet, base_name="Step")
+router.register(r'entities', EntityViewSet, base_name="Entity")
+router.register(r'opinions', OpinionViewSet, base_name="Opinion")
 router.register(r'documents', DocumentViewSet, base_name="Document")
 router.register(r'functions', FunctionViewSet, base_name="Function")
 router.register(r'mandates', MandateViewSet, base_name="Mandate")

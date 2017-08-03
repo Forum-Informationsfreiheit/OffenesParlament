@@ -900,6 +900,12 @@ ul.breadcrumbs {
   .button_source:hover, .button_source:focus {
     background-image: url("img/icons/flagged_parliament_white.svg"); }
 
+.button_api {
+  background-image: url("img/icons/paper_box_green.svg");
+  background-position-y: 6px; }
+  .button_api:hover, .button_api:focus {
+    background-image: url("img/icons/paper_box_green.svg"); }
+
 .button_notifications {
   background-image: url("img/icons/notification_red.svg");
   background-position-y: 8px; }

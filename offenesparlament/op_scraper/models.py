@@ -253,6 +253,9 @@ class Law(Timestamped, ParlIDMixIn):
 #        if phases:
 #            return phases
 
+    def api_slug(self):
+        return "/api/laws/{}".format(self.pk)
+
     def steps_by_phases(self):
         """
         Returns a dict of phases containing the steps for display purposes
@@ -615,6 +618,9 @@ class Person(Timestamped, ParlIDMixIn):
 
     def __unicode__(self):
         return self.full_name or self.reversed_name
+
+    def api_slug(self):
+        return "/api/persons/{}".format(self.pk)
 
     @property
     def party(self):
@@ -1167,6 +1173,9 @@ class Debate(models.Model):
             self.nr,
             "_{}".format(self.llp.roman_numeral) if self.llp else u"",
         )
+
+    def api_slug(self):
+        return "/api/debates/{}".format(self.pk)
 
     @property
     def slug(self):
