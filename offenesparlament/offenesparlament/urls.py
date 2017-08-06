@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from offenesparlament.views import base_views
 from offenesparlament.views import subscriptions
+from offenesparlament.views import commentedcontent
 from op_scraper import admin_views
 from django.conf import settings
 from offenesparlament.views import search
@@ -45,6 +46,8 @@ urlpatterns = patterns(
     url(r'^ausschuss/(?P<ggp>[XVIMCD]{1,})/(?P<parl_id>.{1,60})$', base_views.committee_detail, name='committee_detail'),
     url(r'^ausschuss/(?P<parl_id>.{1,60})$', base_views.committee_detail, name='committee_detail'),
 
+
+
     url(r'^suche/(.*)/?$', base_views.generic_search_view, name='generic_search_view'),
 
     # Search Urls
@@ -60,7 +63,7 @@ urlpatterns = patterns(
     # Subscription URLS
 
     # Verify a new subscription
-    url(r'^verify/(?P<email>.+)/(?P<key>.+)/?$',
+    url(r'^verify/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
         subscriptions.verify,
         name='verify'),
 
@@ -69,7 +72,7 @@ urlpatterns = patterns(
         subscriptions.subscribe),
 
     # Unsubscribe from a certain subscription
-    url(r'^unsubscribe/(?P<email>.+)/(?P<key>.+)/?$',
+    url(r'^unsubscribe/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
         subscriptions.unsubscribe,
         name='unsubscribe'),
 
@@ -77,16 +80,43 @@ urlpatterns = patterns(
     url(r'^abos/$', subscriptions.login, name='subscriptions'),
 
     # List emails subscriptions
-    url(r'^abos/(?P<email>.+)/(?P<key>.+)/?$',
+    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
+        subscriptions.list,
+        name='list_subscriptions'),
+
+    # List emails subscriptions
+    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
         subscriptions.list,
         name='list_subscriptions'),
 
 
     # Resend list hashkey for email
-    url(r'^abos/(?P<email>.+)/?$',
+    url(r'^abos/(?P<email>[^/]+)/?$',
         subscriptions.list,
         name='list_subscriptions'),
 
+    # Resend list hashkey for email
+    url(r'^abos/(?P<email>[^/]+)/?$',
+        subscriptions.list,
+        name='list_subscriptions'),
+
+
+    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/new/?$',
+        commentedcontent.CommentedContentCreate.as_view(),
+        name='commentedcontent_create'),
+    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/(?P<pk>.*)/edit/?$',
+        commentedcontent.CommentedContentUpdate.as_view(),
+        name='commentedcontent_update'),
+    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/(?P<pk>.*)/delete/?$',
+        commentedcontent.CommentedContentDelete.as_view(),
+        name='commentedcontent_delete'),
+    url(r'^abos/kommentiert/preview/?$',
+        commentedcontent.preview,
+        name='commentedcontent_preview'),
+
+    url(r'^kommentiert/(?P<pk>.*)/?$',
+        commentedcontent.view,
+        name='commentedcontent_view'),
 
 
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
@@ -99,6 +129,9 @@ urlpatterns = patterns(
 
 if settings.DEBUG:
     import debug_toolbar
+    urlpatterns += patterns('',
+                            (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+                             'document_root': settings.MEDIA_ROOT}))
     urlpatterns += patterns('',
                             url(r'^__debug__/', include(debug_toolbar.urls)),
                             )

@@ -6,11 +6,16 @@ from django.core.urlresolvers import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 from annoying import fields
 from django.contrib.postgres.fields import ArrayField
+from django.conf import settings
+from django.template.loader import render_to_string
 import re
 import json
 import xxhash
 import requests
 import collections
+
+import markdown
+import bleach
 
 # import the logging library
 import logging
@@ -223,34 +228,104 @@ class Law(Timestamped, ParlIDMixIn):
         "self", blank=True, null=True, related_name="laws")
 
     def PRETTY_PHASES_LAW(self):
+        just_spans = lambda s,g: u''.join(
+                u'<span class="timeline_{k} timeline_value">{v}</span>'.format(k=k,v=v)
+                for k,v in g.iteritems()) if hasattr(g,'iteritems') else None
         LAW_PHASES = [
-                ['Vorparlamentarisches Verfahren',
-                    ['Entwurf eingegangen',
-                        'Stellungnahmen'],
+                ['Vorparlamentarisches Verfahren', 'vorparl', 
+                    [
+                        ['vp_ein', 'Entwurf eingegangen', r'^Einlangen im Nationalrat',
+                            lambda s,g: """<span class="date">%s</span>""" % s.date.strftime('%d.%m.%Y')
+                        ],
+                        ['vp_st', 'Stellungnahmen', lambda x: 
+                            {'count': x.law.opinions.all().count(), 'end': x.title.replace('Ende der Begutachtungsfrist','').strip(' :')} if
+                            'Ende der Begutachtungsfrist' in x.title and 
+                            x.law.opinions.all().count() else False,
+                            just_spans],
                     ],
-                ['Parlamentarisches Verfahren',
-                    ['Einlangen im Nationalrat',
-                        'Ausschuss',
-                        'Plenarberatung',
-                        'Beschluss im Nationalrat'
-                        'Beschluss im Bundesrat'],
+                ],
+                ['Parlamentarisches Verfahren', 'parl', 
+                    [
+                        ['nr_ein', 'Einlangen im Nationalrat', r'^Einlangen im Nationalrat',
+                            lambda s,g: """<span class="date">%s</span>""" % s.date.strftime('%d.%m.%Y')
+                            ],
+                        ['nr_auss', 'Ausschuss', r': Zuweisung an den (?P<ausschuss>.*)',
+                            lambda s,g:
+                                just_spans(s,g)+u"""
+                                <span class="date">%s</span>
+                                """ % s.date.strftime('%d.%m.%Y')
+                            ],
+                        ['nr_plen', 'Plenarberatung',
+                            r'Sitzung des Nationalrates',
+                            lambda s,g: u"""<span class="text">%s</span>
+                            <span class="date">%s</span>
+                            """ % ( s.title.split(' der ',2)[-1].replace('Nationalrates','NR'),
+                                s.date.strftime('%d.%m.%Y'),)
+                            ],
+                        ['nr_besch', 'Beschluss im Nationalrat', r'Gesetzesvorschlag in dritter Lesung',
+                            lambda s,g: u"""
+                                <span class="results">Dafür:%s</span>
+                            """ % s.title.lower().split(u'dafür:',1)[1].replace('dagegen:','<br />Dagegen:') \
+                                if u'dafür' in s.title.lower() else
+                                        'Angenommen'
+                            ],
+                        ['br_besch', 'Beschluss im Bundesrat', r'Beschluss im Bundesrat',
+                            lambda s,g: u"""<span class="date">%s</span>""" % s.date.strftime('%d.%m.%Y')
+                            ],
                     ]
                 ]
+            ]
 
         return LAW_PHASES
 
     def PRETTY_PHASES(self):
-        if self.category.title in ('Gesetzentwurf',
+        PHASES = []
+        if self.category and self.category.title in ('Gesetzentwurf',
                 'Regierungsvorlage: Bundes(verfassungs)gesetz',):
-            return self.PRETTY_PHASES_LAW()
+            PHASES = self.PRETTY_PHASES_LAW()
 
-#                'Schriftliche Anfrage': ['',
-#                    ['Einlangen im Nationalrat', 'Beantwortung']
-#                    ],
-#        }
-#        phases = PHASES.get(self.category.title,None)
-#        if phases:
-#            return phases
+#        if self.category.title in (u'Schriftliche Anfrage',
+#                u'Anfragebeantwortung',):
+#            PHASES = ['','',
+#                    [
+#                        ['ein', 'Einlangen im Nationalrat',r'^Einlangen im Nationalrat']
+#                        ['ant', 'Beantwortung', r'asdf']
+#                    ]
+#                ]
+
+        if not PHASES:
+            return None
+
+        steps = []
+
+        if self.references:
+            steps = steps + list(self.references.steps.all())
+
+        steps = steps + list(self.steps.all())
+
+        remaining_steps = steps
+
+        for large_key, large_slug, stepdefs in PHASES:
+            for stepdef in stepdefs:
+                stepslug, steptitle, stepre, steptextf = stepdef
+
+                for i,s in enumerate(remaining_steps):
+                    refind = None
+                    if not callable(stepre):
+                        refind = re.search(stepre, s.title)
+                        if refind:
+                            refind = refind.groupdict() or True
+                    else:
+                        refind = stepre(s)
+                    if refind:
+                        stepdef.append(s)
+                        stepdef.append(refind)
+                        stepdef.append(steptextf(s,refind))
+                        remaining_steps = remaining_steps[i+1:]
+                        break
+
+        return PHASES
+
 
     def steps_by_phases(self):
         """
@@ -1014,6 +1089,73 @@ class Subscription(models.Model):
             self.save()
 
         return self._unsub_slug
+
+
+class CommentedContent(models.Model):
+    created_by = models.ForeignKey(User)
+    created_by_name = models.CharField(max_length=120, verbose_name='Name des Autors oder der Organisation')
+    created_by_link = models.URLField(max_length=250, verbose_name='Website des Autors', blank=True)
+
+    image = models.ImageField(null=True,
+            help_text='Wird auf 100pxx100px verkleinert und in einem Kreis dargestellt',
+            verbose_name='Autorenbild')
+
+    title = models.CharField(max_length=240, verbose_name='Titel')
+    body = models.TextField(verbose_name='Text', help_text='Überschriften und Formatierung im Markdown-Format, Links auf OffenesParlament.at werden verlinkt')
+
+    admin_notification_sent = models.BooleanField(default=False)
+
+    approved_by = models.ForeignKey(User, null=True, related_name='approved_content')
+    approved_at = models.DateTimeField(null=True)
+
+    def __unicode__(self):
+        return u'CommentedContent %d by %s: %s' % (
+                self.pk,
+                self.created_by_name,
+                self.title,)
+
+    def get_absolute_url(self):
+        if self.approved_at:
+            return reverse(
+                    'commentedcontent_view',
+                    kwargs={
+                        'pk': self.pk,
+                    })
+        return None
+
+    def get_edit_url(self):
+        return reverse('commentedcontent_update', kwargs={
+            'email': self.created_by.email,
+            'key': self.created_by.verification.verification_hash,
+            'pk': self.pk
+            })
+
+    @classmethod
+    def sanitize_and_expand_text(cls,text):
+        matches = list(re.finditer('^https://offenesparlament.at(/gesetze/.*)$', text, re.MULTILINE))
+        objs = [[x.group(0), Law.objects.filter(_slug=x.group(1).strip()).first()] for x in matches]
+        texts_between = [text[0:matches[0].start()]]+[text[a.end():b.start()] for a,b in zip(matches[0:-1],matches[1:])]+[text[matches[-1].end():]]
+
+        obj_renders = [render_to_string('op_scraper/kontext_law_partial.html', {'law': o[1], 'link': o[0]}) for o in
+                objs]
+
+
+        texts_between_clean = [bleach.linkify(bleach.clean(markdown.markdown(t),
+                tags=settings.BLEACH_ALLOWED_TAGS,
+                attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
+                strip=settings.BLEACH_STRIP_TAGS
+                ))
+                for t in texts_between]
+
+        output = []
+        for i,t in enumerate(texts_between_clean):
+            output.append(t)
+            if i<len(obj_renders):
+                output.append(obj_renders[i])
+        return ''.join(output)
+
+    def rendered_text(self):
+        return type(self).sanitize_and_expand_text(self.body)
 
 
 class Petition(Law):

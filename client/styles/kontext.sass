@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700&subset=latin-ext');
+
+body.kontext
+  background: rgb(233,236,239)
+  .search_bar
+    display: none
+  .menu_bar
+    ul.main_menu
+      display: none
+  .container
+    max-width: 850px
+  .content
+    margin-top: 50px
+    h1
+      margin-top: 0
+      margin-bottom: 1em
+
+    h3
+      font-size: 1em;
+      margin-bottom: 0
+
+  .kontext_content, .about_kontext
+    padding: 50px
+    @media screen and (max-width: 500px)
+      padding: 10px
+  .kontext_content
+    background: white
+    font-size: 15px
+    p
+      font-family: 'Source Serif Pro', serif;
+      margin-top: 0
+      &:last-child
+        margin-bottom: 0
+  .parlamentsarbeit
+    font-family: 'Source Serif Pro', serif;
+    font-size: 16px
+    float: right
+    line-height: 50px
+    .kontextkontext
+      font-weight: bold
+    @media screen and (max-width: 500px)
+      float: none
+      text-align: center
+      line-height: 20px
+  .kontext_detail
+    border: 1px solid rgb(240,240,240)
+    border-left: 4px solid rgb(29,70,96)
+    padding: 1em
+    margin-bottom: 1em
+    .status
+      margin-top: 0.5em
+      margin-bottom: 0.2em
+
+    h3
+      margin-top: 0
+  .context_head
+    margin-top: 2.5em
+    margin-bottom: 2em
+    font-size: 16px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    @media screen and (max-width: 500px)
+      margin-top: 1em
+      margin-bottom: 0.5em
+      display: block
+      text-align: center
+
+    img
+      margin-right: 1em;
+      width: 50px
+      height: 50px
+      border-radius: 25px
+      vertical-align: middle
+    .context_by
+      display: flex
+      align-items: center
+    .context_at
+      font-size: 14px
+      font-weight: bold
+
+  .about_kontext
+    padding-bottom: 1em

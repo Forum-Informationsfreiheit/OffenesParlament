@@ -146,4 +146,20 @@ $(document).ready( () ->
     category = btn.data('subscription_category')
     SubscriptionModalActions.showModal(url, ui_url, title, category)
   )
+
+
+
+
+  Array.prototype.map.call(document.querySelectorAll('.law_timeline'),
+    (x) ->
+      ae = Array.prototype.slice.call(x.querySelectorAll('.active'),-1)[0]
+      ol = 0
+      ew = ae.clientWidth
+      e = ae
+      while(e!=x)
+        ol+=e.offsetLeft
+        e=e.parentNode
+      w = x.clientWidth
+      x.scrollLeft=(ol+ew/2)-w/2
+  )
 )

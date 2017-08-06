@@ -48,6 +48,24 @@
   </div>
 </div>
 
+{% if law.PRETTY_PHASES %}
+<div class="law_timeline">
+  {% for catname,catslug,tlsteps in law.PRETTY_PHASES %}
+  <div class="law_timeline_cat law_timeline_cat_{{catslug}}">
+    <div class="law_timeline_cat_name">
+      {{catname}}
+    </div>
+    {% for tlslug,tlname,tlre,steptextf,tlstep,tldict,steptext in tlsteps %}
+      <div class="law_timeline_step law_timeline_step_{{tlslug}} {% if tlstep %}active{% endif %}">
+        {% if steptext %}<div class="law_timeline_step_value">{{steptext|safe}}</div>{% endif %}
+        <div class="law_timeline_step_name"><span>{{tlname}}</span></div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
 {% if law.press_releases.all %}
   <div class="section">
     <h2>Meldungen der Parlamentskorrespondenz</h2>

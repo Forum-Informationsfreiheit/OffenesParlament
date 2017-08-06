@@ -8,7 +8,7 @@ sudo apt-get install -y python python-pip python-twisted vim curl python-softwar
 
 # requirements for scrapy
 sudo apt-get -qq update
-sudo apt-get install -y python-dev libxml2-dev libxslt-dev libffi-dev
+sudo apt-get install -y python-dev libxml2-dev libxslt-dev libffi-dev libssl-dev
 
 # requirements for django extensions
 sudo apt-get -qq update
@@ -37,7 +37,8 @@ sudo /etc/init.d/elasticsearch restart
 
 # supervisor
 sudo pip install pip --upgrade
-sudo pip install supervisor psycopg2
+sudo pip install supervisor psycopg2 requests[security]
+sudo pip install ndg-httpsclient --upgrade
 sudo cp /vagrant/provision/conf/supervisord.conf /etc/
 mkdir -p /vagrant/ignore/var/log
 sudo supervisord

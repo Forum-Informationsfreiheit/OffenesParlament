@@ -1,7 +1,7 @@
 Django>=1.8.0,<1.9
 django-annoying==0.8.1
 cffi
-Jinja2==2.7.4
+Jinja2==2.7.3
 MarkupSafe==0.18
 Pygments==2.2.0
 Sphinx==1.5.3
@@ -30,7 +30,7 @@ Werkzeug
 django-bootstrap-breadcrumbs
 django-import-export
 django-grappelli==2.6.5
-django-haystack==1.4.0
+django-haystack==2.4.0
 elasticsearch==1.7.0
 xxhash==0.4.3
 requests==2.8.1
@@ -40,3 +40,7 @@ django_inlinecss==0.1.2
 html2text
 pyopenssl==16.2.0
 twisted==16.6
+Pillow
+-e git+https://github.com/dbrgn/django-auth-mixins#egg=auth_mixins
+django-bleach
+Markdown

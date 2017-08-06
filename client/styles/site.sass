@@ -23,6 +23,13 @@ $background_light_gray: rgb(244, 246, 247)
 $border_light_gray: rgb(221, 227, 232)
 
 
+$timeline_inactive_border: rgb(227,227,229)
+$timeline_inactive_text: rgb(163,159,175)
+$timeline_margin_right: 10px
+$timeline_active_bg: rgb(152, 198, 234)
+$timeline_active_name_vorparl_bg: rgb(84,79,93)
+$timeline_active_name_bg: rgb(21,128,210)
+
 @import './anysearch.sass'
 @import './modal.sass'
 @import './search_results.sass'
@@ -550,7 +557,7 @@ table
 
 .law_status
   background-repeat: no-repeat
-  padding: 0 0 0 25px
+  padding: 0 0 0 28px
   background-size: contain
 .law_status_offen
   background-image: url('img/icons/status_open.svg')
@@ -590,6 +597,148 @@ table
     vertical-align: top
     p
       margin: 0 50px 28px 0
+
+.law_timeline
+  overflow-x: scroll
+  white-space: nowrap
+  .law_timeline_cat
+    position: relative
+    margin-right: $timeline_margin_right
+    display: inline-block
+    min-height: 243px
+    vertical-align: top
+    padding-bottom: 43px
+
+
+    &:last-child
+      margin-right: 0
+
+    .law_timeline_cat_name
+      position: absolute
+      width: 100%
+      height: 43px
+      bottom: 0
+      text-align: center
+      border: 1px solid $timeline_inactive_border
+      line-height: 43px
+      border-top: none
+    &:last-child
+      .law_timeline_step
+        &:last-child::after, &:last-child::before
+          display: none
+    &.law_timeline_cat_vorparl
+      .law_timeline_step.active
+        .law_timeline_step_name
+          background: $timeline_active_name_vorparl_bg
+        &.active::before, &.active::after
+          border-left: 10px solid $timeline_active_name_vorparl_bg
+    .law_timeline_step
+      color: $timeline_inactive_text
+      &.active
+        color: white
+      text-align: center
+      display: inline-block
+      width: 156px
+      height: 200px
+      margin-right: $timeline_margin_right
+      position: relative
+      vertical-align: middle
+
+      a
+        color: inherit
+        text-decoration: underline
+
+      &::after
+        width: 0;
+        height: 0;
+        border-top: 10px solid rgba(0, 0, 0, 0);
+        border-bottom: 10px solid rgba(0, 0, 0, 0);
+        border-left: 10px solid white;
+        display: block;
+        content: "";
+        margin-top: 157px;
+        margin-left: 153px;
+        text-align: left;
+        position: absolute
+        z-index: 5
+      &::before
+        width: 0;
+        height: 0;
+        border-top: 10px solid rgba(0, 0, 0, 0);
+        border-bottom: 10px solid rgba(0, 0, 0, 0);
+        border-left: 10px solid $timeline_inactive_border;
+        display: block;
+        content: "";
+        margin-top: 157px;
+        margin-left: 155px;
+        text-align: left;
+        position: absolute
+        z-index: 5
+      &.active::before, &.active::after
+        border-left: 10px solid $timeline_active_name_bg
+
+      &:last-child
+        margin-right: 0
+
+      .law_timeline_step_name
+        border: 1px solid rgb(229,229,231)
+        display: inline-block
+        width: 100%
+        height: 65px
+        position: absolute
+        bottom: 0
+        left: 0
+        line-height: 1.3em
+        padding: 9px
+        box-sizing: border-box
+        white-space: initial
+
+        &::before
+          display: inline-block;
+          content: '';
+          height: 100%;
+          vertical-align: middle;
+
+        span
+          vertical-align: middle
+          display: inline-block
+
+
+      .law_timeline_step_value
+        white-space: normal
+        word-wrap: initial
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        bottom: 65px
+        overflow: hidden;
+        display: flex
+        justify-content: center
+        align-items: center
+        flex-flow: row wrap
+        span
+          vertical-align: middle
+          width: 100%
+          box-sizing: border-box
+          padding: 6px
+        .timeline_count
+          display: block
+          font-size: 52px
+        .timeline_end::before
+          content: "bis "
+          padding-right: 4px
+          font-size: 14px
+        .date, .timeline_end
+          font-size: 24px
+      &.active
+        background: $timeline_active_bg 
+        .law_timeline_step_name
+          background: $timeline_active_name_bg
+          border: none
+
+
+
 
 .law_vorparlamentarisch_background
   margin: 70px 0 -70px 0
@@ -656,3 +805,17 @@ ul.petitions_creators
   background-size: 20px
   text-indent: 27px
   background-position: 0
+
+
+.kontext_form
+  form
+    max-width: 650px
+    margin-left: auto
+    margin-right: auto
+  label
+    display: block
+    font-weight: bold
+  input,textarea
+    width: 100%
+  #id_body
+    height: 600px

@@ -1,0 +1,40 @@
+{% extends "base_content.html" %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Inhalte kommentieren" "subscriptions" %}
+{% endblock %}
+
+{% block title %}Inhalte kommentieren{% endblock %}
+
+{% block content %}
+<div class="kontext_form">
+  {% if form %}
+  {% else %}
+    <h1>Login</h1>
+  {% endif %}
+
+    <p class="explanation">
+      {% if message %}
+        {{ message }}
+      {% endif %}
+    </p>
+
+    {% if form %}
+      <form method="post" enctype="multipart/form-data">
+        {%csrf_token%}
+        {{form.as_p}}
+        <input type="submit" value="{% if form.instance and form.instance.pk %}Speichern{% else %}Anlegen{% endif %}" />
+        {% if not form.instance or not form.instance.approved_at %}
+        <p>Die Inhalte werden erst nach Prüfung des OffenesParlament.at-Teams öffentlich einsehbar! Dies dauert üblicherweise 1-2 Tage.  </p>
+        {% else %}
+        <p>Die Inhalte wurden durch das OffenesParlament.at-Team geprüft und sind unter folgendem Link öffentlich einsehbar:<br />
+        <a href="{{form.instance.get_absolute_url}}">
+          {{form.instance.get_absolute_url}}
+        </a>
+        </p>
+        {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

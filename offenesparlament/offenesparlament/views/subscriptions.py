@@ -32,8 +32,16 @@ def login(request):
         form = SubscriptionsLoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            if User.objects.filter(email=email).exists() and len(form.cleaned_data['message']) == 0:  #honey trap was not filled out
-                user = User.objects.get(email=email)
+            # User.objects.filter(email=email).exists() and 
+            if len(form.cleaned_data['message']) == 0:  #honey trap was not filled out
+                user, created_user = User.objects.get_or_create(email=email)
+                if created_user:
+                    user_verification_hash = uuid.uuid4().hex
+                    user_verification = Verification.objects.create(
+                        verified=False,
+                        verification_hash=user_verification_hash)
+                    user.verification = user_verification
+                    user.save()
                 list_url = request.build_absolute_uri(
                     reverse(
                         'list_subscriptions',
@@ -80,7 +88,6 @@ def verify(request, email, key):
 
     return render(request, 'subscription/verification.html', {'message': message})
 
-
 @never_cache
 def list(request, email, key=None):
     """
@@ -90,15 +97,23 @@ def list(request, email, key=None):
     if User.objects.filter(email=email).exists():
         user = User.objects.get(email=email)
         if key is not None and user.verification.verification_hash == key:
+            if not user.verification.verified:
+                user.verification.verified=True
+                user.verification.save()
             subscriptions = user.subscription_set.filter(verification__verified=True) \
                     .select_related('content')
+            commentedcontents = user.commentedcontent_set.all()
+
+            commentedcontent_new= reverse('commentedcontent_create', kwargs={'email': email, 'key': key})
             return render(
                 request,
                 'subscription/list_subscriptions.html',
                 {
                     'message': message,
                     'email': email,
-                    'subscriptions': subscriptions
+                    'subscriptions': subscriptions,
+                    'commentedcontent_new': commentedcontent_new,
+                    'commentedcontents': commentedcontents,
                 }
             )
         else:

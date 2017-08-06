@@ -37,7 +37,7 @@
     cursor: default;
     opacity: 0.5; }
     .anysearch_box .anysearch_subscribe_button.active {
-      opacity: 1;
+      opacity: 1.0;
       background-image: url("img/icons/subscribe_red.svg");
       cursor: pointer; }
   .anysearch_box .anysearch_placeholder {
@@ -93,7 +93,7 @@
       cursor: pointer;
       padding: 3px 6px; }
       .anysearch_box .anysearch_suggestions .anysearch_suggestions_item:hover {
-        background-color: #e6e6e6; }
+        background-color: #e6e5e5; }
 
 #anysearch_container_homepage .anysearch_box {
   padding: 10px;
@@ -194,6 +194,7 @@
 .title_with_button h1 {
   display: inline-block;
   vertical-align: middle; }
+
 .title_with_button .button, .title_with_button .button_large {
   margin: 50px 0 0 25px;
   vertical-align: middle; }
@@ -389,7 +390,7 @@ ul.pagination {
     .homepage_teasers a.homepage_teaser_item p {
       line-height: 180%; }
     .homepage_teasers a.homepage_teaser_item h3, .homepage_teasers a.homepage_teaser_item p {
-      opacity: 1; }
+      opacity: 1.0; }
     .homepage_teasers a.homepage_teaser_item:hover h3, .homepage_teasers a.homepage_teaser_item:hover p {
       opacity: 0.8; }
 
@@ -398,8 +399,8 @@ ul.pagination {
   .projectintro .container {
     width: 1400px;
     background-color: #f55f57;
-    background-image: -webkit-linear-gradient(-360deg, #f55f57, #f55f57 66.66667%, white 66.66667%, white 100%);
-    background-image: linear-gradient(90deg,#f55f57, #f55f57 66.66667%, white 66.66667%, white 100%); }
+    background-image: -webkit-linear-gradient(-360deg, #f55f57, #f55f57 66.666666666%, white 66.666666666%, white 100%);
+    background-image: linear-gradient(90deg,#f55f57, #f55f57 66.666666666%, white 66.666666666%, white 100%); }
     @media screen and (max-width: 1400px) {
       .projectintro .container {
         width: 100%; } }
@@ -410,7 +411,7 @@ ul.pagination {
   .projectintro .projectintro_item, .projectintro .projectintro_item_inverse {
     color: white;
     display: inline-block;
-    width: 33.33333%;
+    width: 33.333333333%;
     vertical-align: top;
     overflow: hidden; }
     @media screen and (max-width: 940px) {
@@ -453,6 +454,22 @@ ul.pagination {
       .projectintro .projectintro_item:first-child .projectintro_item_border_inlay {
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.5); } }
+
+.add_commentedcontent {
+  background-image: url("img/icons/plus.png");
+  background-repeat: no-repeat;
+  padding: 0 0 0 35px;
+  background-position: 0 50%;
+  line-height: 30px; }
+
+ul.errorlist {
+  list-style-type: none;
+  background: #f55f57;
+  color: white;
+  padding: 5px 9px; }
+  ul.errorlist li {
+    padding: 0;
+    margin: 0; }
 
 form.abo_login {
   width: 100%;
@@ -519,7 +536,7 @@ h1 .abo_email {
       color: #006fd5; }
 
 body {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 14px;
   overflow-y: scroll; }
 
@@ -700,7 +717,7 @@ ul.breadcrumbs {
       font-weight: normal; }
 
 .breadcrumbs > li + li:before {
-  content: "»";
+  content: "\00bb";
   margin-right: 5px;
   color: black; }
 
@@ -847,18 +864,21 @@ ul.breadcrumbs {
     .footer_logos a {
       margin: 10px 20px 10px 0; } }
   .footer_logos a:hover {
-    opacity: 1; }
+    opacity: 1.0; }
+
 .footer_logos .netidee {
   width: 105px;
   height: 62px;
   background-image: url("img/netidee_logo.png");
   background-size: auto 62px; }
+
 .footer_logos .nessus {
   width: 145px;
   height: 56px;
   background-image: url("img/nessus_easyname_logo.png");
   background-size: auto 56px;
   margin-top: 2px; }
+
 .footer_logos .foi {
   width: 230px;
   height: 43px;
@@ -1012,6 +1032,7 @@ table {
   .docs p.docimg img {
     max-width: 75%;
     box-shadow: 0px 2px 5px #808080; }
+
 .docs p.warning {
   padding: 10px;
   background: #ffc8c8; }
@@ -1055,7 +1076,7 @@ table {
 
 .law_status {
   background-repeat: no-repeat;
-  padding: 0 0 0 25px;
+  padding: 0 0 0 28px;
   background-size: contain; }
 
 .law_status_offen {
@@ -1097,6 +1118,130 @@ table {
     .law_details_box .column p {
       margin: 0 50px 28px 0; }
 
+.law_timeline {
+  overflow-x: scroll;
+  white-space: nowrap; }
+  .law_timeline .law_timeline_cat {
+    position: relative;
+    margin-right: 10px;
+    display: inline-block;
+    min-height: 243px;
+    vertical-align: top;
+    padding-bottom: 43px; }
+    .law_timeline .law_timeline_cat:last-child {
+      margin-right: 0; }
+    .law_timeline .law_timeline_cat .law_timeline_cat_name {
+      position: absolute;
+      width: 100%;
+      height: 43px;
+      bottom: 0;
+      text-align: center;
+      border: 1px solid #e3e3e5;
+      line-height: 43px;
+      border-top: none; }
+    .law_timeline .law_timeline_cat:last-child .law_timeline_step:last-child::after, .law_timeline .law_timeline_cat:last-child .law_timeline_step:last-child::before {
+      display: none; }
+    .law_timeline .law_timeline_cat.law_timeline_cat_vorparl .law_timeline_step.active .law_timeline_step_name {
+      background: #544f5d; }
+    .law_timeline .law_timeline_cat.law_timeline_cat_vorparl .law_timeline_step.active.active::before, .law_timeline .law_timeline_cat.law_timeline_cat_vorparl .law_timeline_step.active.active::after {
+      border-left: 10px solid #544f5d; }
+    .law_timeline .law_timeline_cat .law_timeline_step {
+      color: #a39faf;
+      text-align: center;
+      display: inline-block;
+      width: 156px;
+      height: 200px;
+      margin-right: 10px;
+      position: relative;
+      vertical-align: middle; }
+      .law_timeline .law_timeline_cat .law_timeline_step.active {
+        color: white; }
+      .law_timeline .law_timeline_cat .law_timeline_step a {
+        color: inherit;
+        text-decoration: underline; }
+      .law_timeline .law_timeline_cat .law_timeline_step::after {
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid white;
+        display: block;
+        content: "";
+        margin-top: 157px;
+        margin-left: 153px;
+        text-align: left;
+        position: absolute;
+        z-index: 5; }
+      .law_timeline .law_timeline_cat .law_timeline_step::before {
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid #e3e3e5;
+        display: block;
+        content: "";
+        margin-top: 157px;
+        margin-left: 155px;
+        text-align: left;
+        position: absolute;
+        z-index: 5; }
+      .law_timeline .law_timeline_cat .law_timeline_step.active::before, .law_timeline .law_timeline_cat .law_timeline_step.active::after {
+        border-left: 10px solid #1580d2; }
+      .law_timeline .law_timeline_cat .law_timeline_step:last-child {
+        margin-right: 0; }
+      .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_name {
+        border: 1px solid #e5e5e7;
+        display: inline-block;
+        width: 100%;
+        height: 65px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        line-height: 1.3em;
+        padding: 9px;
+        box-sizing: border-box;
+        white-space: initial; }
+        .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_name::before {
+          display: inline-block;
+          content: '';
+          height: 100%;
+          vertical-align: middle; }
+        .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_name span {
+          vertical-align: middle;
+          display: inline-block; }
+      .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_value {
+        white-space: normal;
+        word-wrap: initial;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        bottom: 65px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: row wrap; }
+        .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_value span {
+          vertical-align: middle;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 6px; }
+        .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_value .timeline_count {
+          display: block;
+          font-size: 52px; }
+        .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_value .timeline_end::before {
+          content: "bis ";
+          padding-right: 4px;
+          font-size: 14px; }
+        .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_value .date, .law_timeline .law_timeline_cat .law_timeline_step .law_timeline_step_value .timeline_end {
+          font-size: 24px; }
+      .law_timeline .law_timeline_cat .law_timeline_step.active {
+        background: #98c6ea; }
+        .law_timeline .law_timeline_cat .law_timeline_step.active .law_timeline_step_name {
+          background: #1580d2;
+          border: none; }
+
 .law_vorparlamentarisch_background {
   margin: 70px 0 -70px 0;
   padding: 0 0 70px 0;
@@ -1115,10 +1260,12 @@ table {
 
 table.phases_list tr:nth-child(odd) {
   background-color: white; }
+
 table.phases_list tr.phase {
   background-color: #f4f6f7;
   color: #1f4563;
   font-weight: bold; }
+
 table.phases_list tr .date {
   padding-right: 50px;
   padding-left: 15px; }
@@ -1158,4 +1305,17 @@ ul.petitions_creators {
   text-indent: 27px;
   background-position: 0; }
 
-/*# sourceMappingURL=site.css.map */
+.kontext_form form {
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto; }
+
+.kontext_form label {
+  display: block;
+  font-weight: bold; }
+
+.kontext_form input, .kontext_form textarea {
+  width: 100%; }
+
+.kontext_form #id_body {
+  height: 600px; }
