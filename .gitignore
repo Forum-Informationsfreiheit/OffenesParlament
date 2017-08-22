@@ -17,3 +17,4 @@ local_settings.py
 local_manage.py
 db.sqlite2
 offenesparlament/offenesparlament/media/
+*.swp
