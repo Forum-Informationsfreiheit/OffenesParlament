@@ -1,3 +1,4 @@
 django-debug-toolbar
 django-debug-toolbar-template-timings
 sphinx_rtd_theme
+tabulate

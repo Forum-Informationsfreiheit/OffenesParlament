@@ -146,6 +146,8 @@ class BaseConfig(Configuration):
             'PASSWORD': 'secret',
             'HOST': '127.0.0.1',
             'PORT': '5432',
+            'CHARSET': 'UTF8',
+            'TEST_CHARSET': 'UTF8',
         }
     }
 
