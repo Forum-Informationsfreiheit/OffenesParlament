@@ -496,7 +496,7 @@ class PersonViewSet(ESViewSet):
         'full_name',
         'birthdate',
         'birthplace',
-        'occupation'
+        'occupation',
         'ts',
         'deathdate',
         'deathplace',
