@@ -1,0 +1,9 @@
+<div class="kontext_detail">
+  {% if law %}
+    <h3><a href="{{law.slug}}">{{ law.description|safe }}</a></h3>
+    <div class="status"><span class="law_status law_status_{{ law.simple_status }}"><strong>{{law.simple_status}}</strong>
+    {{ law.status|striptags }}</span></div>
+  {% else %}
+    <a href="{{link}}">{{link}}</a>
+  {% endif %}
+</div>

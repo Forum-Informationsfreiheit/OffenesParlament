@@ -20,11 +20,13 @@ module.exports = (grunt) ->
         files:
           'offenesparlament/offenesparlament/static/css/vendor.css': 'client/styles/vendor/vendor.sass'
           'offenesparlament/offenesparlament/static/css/site.css': 'client/styles/site.sass'
+          'offenesparlament/offenesparlament/static/css/kontext.css': 'client/styles/kontext.sass'
           'offenesparlament/offenesparlament/static/css/email.css': 'client/styles/emails/base.sass'
     watch:
       styles:
         files: 'client/styles/**/*'
-        tasks: [ 'clean:style_images', 'build_styles' ]
+        #tasks: [ 'clean:style_images', 'build_styles' ]
+        tasks: [ 'build_styles_tiny' ]
       scripts:
         files: 'client/scripts/**/*'
         tasks: [ 'browserify:dev' ]
@@ -83,16 +85,18 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-browser-sync'
   grunt.loadNpmTasks 'grunt-contrib-clean'
-  grunt.loadNpmTasks 'grunt-contrib-sass'
+  grunt.loadNpmTasks 'grunt-sass'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-favicons'
 
   grunt.registerTask 'build_styles', ['sass:dev', 'copy:images', 'copy:fonts']
+  grunt.registerTask 'build_styles_tiny', ['sass:dev']
   grunt.registerTask 'clean_except_icons', [ 'clean:build', 'clean:style_images', 'clean:style_fonts', 'clean:scripts' ]
   grunt.registerTask 'icons', ['favicons:icons']
   grunt.registerTask 'once', ['clean_except_icons', 'build_styles', 'browserify:dev']
   grunt.registerTask 'dev', ['clean_except_icons', 'build_styles', 'browserify:dev', 'watch']
+  grunt.registerTask 'dev_tiny', ['build_styles', 'watch']
   grunt.registerTask 'reloading', ['clean_except_icons', 'build_styles', 'browserify:dev', 'browserSync', 'watch']
 

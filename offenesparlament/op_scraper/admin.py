@@ -116,6 +116,9 @@ class Inquiryadmin(BaseAdmin):
 class PetitionAdmin(BaseAdmin):
     pass
 
+@admin.register(CommentedContent)
+class CommentedContentAdmin(BaseAdmin):
+    pass
 
 @admin.register(DebateStatement)
 class DebateStatementAdmin(BaseAdmin):

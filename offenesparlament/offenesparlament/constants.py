@@ -75,14 +75,13 @@ class EmailController():
 
 
 class EMAIL:
-
     class VERIFY_SUBSCRIPTION(EmailController):
         template_file = 'subscription/emails/verify_subscription.email'
         subject = 'OffenesParlament.at - Abo bestätigen'
 
     class SUBSCRIPTION_LIST(EmailController):
         template_file = 'subscription/emails/subscription_list.email'
-        subject = 'OffenesParlament.at - Abos verwalten: Login'
+        subject = 'OffenesParlament.at - Abos und Inhalte verwalten: Login'
 
     class SUBSCRIPTION_CHANGES(EmailController):
         template_file = 'subscription/emails/subscription_changes.email'

@@ -51,6 +51,7 @@ class BaseSpider(scrapy.Spider):
     {title}
 
       Scraping LLPs: {llps}
+      Ignoring Timestamps: {IGNORE_TIMESTAMP}
       Base URL:      {url}
 
     {bar}
@@ -59,7 +60,8 @@ class BaseSpider(scrapy.Spider):
                 '############################################################'),
             title=red(self.title),
             llps=self.LLP or "Not applicable",
-            url=self.BASE_URL
+            url=self.BASE_URL,
+            IGNORE_TIMESTAMP=self.IGNORE_TIMESTAMP,
         )
         print message
 

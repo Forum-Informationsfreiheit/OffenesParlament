@@ -39,5 +39,30 @@
       </tbody>
     </table>
   {% endif %}
+  <p>Sie können neue Abos erstellen, indem Sie eine Suche durführen und sie dann abonnieren.</p>
 
+  <h1>Kommentierte Parlamentsarbeit von <span class="abo_email">{{ email }}</span></h1>
+  {% if commentedcontents %}
+    <table>
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cc in commentedcontents %}
+        <tr>
+          <td class="">
+            {% if cc.get_absolute_url %}<a href="{{ cc.get_absolute_url }}" target="_blank">{{ cc.title }}</a>{% else %}
+              {{cc.title}}
+              {% endif %}
+          </td>
+          <td class=""><a href="{{ cc.get_edit_url }}">Editieren</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  <p class="add_commentedcontent"><a href="{{commentedcontent_new}}">Kommentartext erstellen</a></p>
 {% endblock %}

@@ -46,13 +46,14 @@
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'favicons/favicon.png' %}">
 
   </head>
-  <body>
+  <body class="{% block bodyclass %}{% endblock %}">
 
     <div class="menu_bar">
       <div class="container">
         <nav>
           <a href="{% url 'home' %}" class="logo navbar-brand">offenesparlament.at</a>
           <span class="betasign">(beta)</span>
+          {% block menu_bar %}
           <a href="#" class="menu_responsive_sandwich">Menü</a>
           <ul class="main_menu menu_bar_items nav navbar-nav">
             <li>
@@ -68,6 +69,7 @@
               <a href="{% url 'keyword_list' %}">Schlagworte</a>
             </li>
           </ul>
+          {% endblock %}
         </nav>
       </div>
     </div>

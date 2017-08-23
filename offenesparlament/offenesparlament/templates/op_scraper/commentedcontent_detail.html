@@ -1,0 +1,46 @@
+{% extends "base_content.html" %}
+  {% load staticfiles %}
+
+{% block bodyclass %}kontext{% endblock %}
+
+{% block menu_bar %}
+  <div class="parlamentsarbeit">
+    Parlamentsarbeit <span class="kontextkontext">kommentiert</span>
+  </div>
+{% endblock %}
+
+{% block js_files %}
+    <link rel="stylesheet" href="{% static 'css/kontext.css' %}">
+{% endblock %}
+
+{% block title %}Test{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block content %}
+
+  <div class="context_head">
+    <div class="context_by">
+      {% if commentedcontent.image %}<img src="{{commentedcontent.image.url}}" alt="" />
+      {% endif %}
+      <div>{{commentedcontent.created_by_name}}</div>
+    </div>
+    <div class="context_at">
+      {% if commentedcontent.approved_at %}
+      {{commentedcontent.approved_at}}
+      {% else %}
+      Noch nicht veröffentlicht
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="kontext_content">
+    <h1>{{commentedcontent.title}}</h1>
+    {{commentedcontent.rendered_text|safe}}
+  </div>
+
+  <div class="about_kontext">
+    <p><strong>»Parlamentsarbeit kommentiert«</strong> ermöglicht interessierten Bürgerinnen, NGOs und Parteien, die Arbeit des Parlaments direkt auf OffenesParlament.at zu kommentieren.</p>
+    <p>Die Inhalte fallen unter die Zuständigkeit der Autorinnen und Autoren und werden nach Begutachtung durch das Team freigeschalten. Sachlichkeit und ein Bezug zur Arbeit des Parlaments sind Voraussetzungen für die Veröffentlichung.</p>
+    <p>Wenn Sie selbst an dieser Stelle die Arbeit des Parlaments in Kontext setzen möchten, können Sie dies über die Schaltfläche »Abos verwalten« in der Fußzeile tun.</p>
+  </div>
+{% endblock %}

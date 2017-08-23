@@ -287,7 +287,7 @@ $(document).ready(function() {
   };
   SubscriptionModalStore.addChangeListener(render_modal);
   render_modal();
-  return $('.subscription_button').click(function(e) {
+  $('.subscription_button').click(function(e) {
     var btn, category, title, ui_url, url;
     e.preventDefault();
     btn = $(e.target);
@@ -296,6 +296,19 @@ $(document).ready(function() {
     title = btn.data('subscription_title');
     category = btn.data('subscription_category');
     return SubscriptionModalActions.showModal(url, ui_url, title, category);
+  });
+  return Array.prototype.map.call(document.querySelectorAll('.law_timeline'), function(x) {
+    var ae, e, ew, ol, w;
+    ae = Array.prototype.slice.call(x.querySelectorAll('.active'), -1)[0];
+    ol = 0;
+    ew = ae.clientWidth;
+    e = ae;
+    while (e !== x) {
+      ol += e.offsetLeft;
+      e = e.parentNode;
+    }
+    w = x.clientWidth;
+    return x.scrollLeft = (ol + ew / 2) - w / 2;
   });
 });
 
@@ -1841,7 +1854,6 @@ module.exports = {
 },{"../actions/AnysearchActions.coffee":1,"backbone":26}],26:[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.3.3
-
 //     (c) 2010-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Backbone may be freely distributed under the MIT license.
 //     For all details and documentation:

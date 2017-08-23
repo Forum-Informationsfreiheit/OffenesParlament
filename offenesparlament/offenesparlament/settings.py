@@ -26,6 +26,15 @@ logging.basicConfig(
 class BaseConfig(Configuration):
     STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
     DEBUG_SUBSCRIPTIONS = True
+    BLEACH_ALLOWED_TAGS = ['h2', 'h3', 'p', 'b', 'i', 'strong', 'a']
+    BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style']
+    BLEACH_ALLOWED_STYLES = []
+    BLEACH_STRIP_TAGS = True
+
+    MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
+    MEDIA_URL= '/media/'
+
+
 
     SECRET_KEY = 'tk5l_92mqo3406we8^s*x%%=*7*m*!ce0^o^s7_t9lrg@f46_n'
     DEBUG = False
@@ -143,7 +152,7 @@ class BaseConfig(Configuration):
     # Internationalization
     # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-    LANGUAGE_CODE = 'en-us'
+    LANGUAGE_CODE = 'de-de'
 
     TIME_ZONE = 'UTC'
 
@@ -154,6 +163,7 @@ class BaseConfig(Configuration):
     USE_TZ = True
 
     DATE_FORMAT = "j.n.Y"
+    DATETIME_FORMAT = "j.n.Y H:i"
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -189,6 +199,7 @@ class BaseConfig(Configuration):
 class Dev(BaseConfig):
     DEBUG = True
     TEMPLATE_DEBUG = True
+    ADMINS = [('Test', 'test@example.com',)]
     BROKER_URL = 'amqp://offenesparlament:op_dev_qwerty@offenesparlament.vm:5672//'
     #CELERY_RESULT_BACKEND = 'amqp'
 

@@ -1,7 +1,7 @@
 {% extends "subscription/emails/base.email" %}
 
 {% block content %}
-  <h1>Übersicht der Benachrichtigungen</h1>
+  <h1>Übersicht der Benachrichtigungen und Inhalte</h1>
   <p>
     Hallo,
   </p>
@@ -9,7 +9,7 @@
     jemand hat versucht sich mit dieser E-Mail-Adresse auf offenesparlament.at einzuloggen.
   </p>
   <p>
-    Wenn Sie sich einloggen möchten, klicken Sie bitte auf den Button "Abos
+    Wenn Sie sich einloggen möchten, klicken Sie bitte auf den Button "Abos und Inhalte
     verwalten" oder kopieren Sie folgenden Link in die Adresszeile Ihres
     Browsers: <a href="{{ list_url }}">{{ list_url }}</a>
   </p>
@@ -21,7 +21,7 @@
   <table class="btn_primary btn_primary_red" cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td>
-        <a href="{{ list_url }}">Abos verwalten</a>
+        <a href="{{ list_url }}">Abos und Inhalte verwalten</a>
       </td>
     </tr>
   </table>

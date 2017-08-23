@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,700&subset=latin-ext");
+body.kontext {
+  background: #e9ecef; }
+  body.kontext .search_bar {
+    display: none; }
+  body.kontext .menu_bar ul.main_menu {
+    display: none; }
+  body.kontext .container {
+    max-width: 850px; }
+  body.kontext .content {
+    margin-top: 50px; }
+    body.kontext .content h1 {
+      margin-top: 0;
+      margin-bottom: 1em; }
+    body.kontext .content h3 {
+      font-size: 1em;
+      margin-bottom: 0; }
+  body.kontext .kontext_content, body.kontext .about_kontext {
+    padding: 50px; }
+    @media screen and (max-width: 500px) {
+      body.kontext .kontext_content, body.kontext .about_kontext {
+        padding: 10px; } }
+  body.kontext .kontext_content {
+    background: white;
+    font-size: 15px; }
+    body.kontext .kontext_content p {
+      font-family: 'Source Serif Pro', serif;
+      margin-top: 0; }
+      body.kontext .kontext_content p:last-child {
+        margin-bottom: 0; }
+  body.kontext .parlamentsarbeit {
+    font-family: 'Source Serif Pro', serif;
+    font-size: 16px;
+    float: right;
+    line-height: 50px; }
+    body.kontext .parlamentsarbeit .kontextkontext {
+      font-weight: bold; }
+    @media screen and (max-width: 500px) {
+      body.kontext .parlamentsarbeit {
+        float: none;
+        text-align: center;
+        line-height: 20px; } }
+  body.kontext .kontext_detail {
+    border: 1px solid #f0f0f0;
+    border-left: 4px solid #1d4660;
+    padding: 1em;
+    margin-bottom: 1em; }
+    body.kontext .kontext_detail .status {
+      margin-top: 0.5em;
+      margin-bottom: 0.2em; }
+    body.kontext .kontext_detail h3 {
+      margin-top: 0; }
+  body.kontext .context_head {
+    margin-top: 2.5em;
+    margin-bottom: 2em;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+    @media screen and (max-width: 500px) {
+      body.kontext .context_head {
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+        display: block;
+        text-align: center; } }
+    body.kontext .context_head img {
+      margin-right: 1em;
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      vertical-align: middle; }
+    body.kontext .context_head .context_by {
+      display: flex;
+      align-items: center; }
+    body.kontext .context_head .context_at {
+      font-size: 14px;
+      font-weight: bold; }
+  body.kontext .about_kontext {
+    padding-bottom: 1em; }
