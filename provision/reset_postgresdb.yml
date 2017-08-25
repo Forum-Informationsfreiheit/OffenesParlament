@@ -12,6 +12,11 @@
       become: true
       become_user: postgres
 
+    - name: Recreate local test postgresdb
+      postgresql_db: name=op_test encoding='UTF-8' lc_collate='de_DE.UTF-8' lc_ctype='de_DE.UTF-8' template='template0'
+      become: true
+      become_user: postgres
+
     - name: Create op user
       postgresql_user: db=op name=op password=secret priv=ALL
       become: true

@@ -231,7 +231,7 @@ def _person_fixtures():
     
     debate_statements = []
     for p in persons:
-        debate_statements += (p.debate_statements.all()[:2])
+        debate_statements += (p.debate_statements.all()[:20])
     
     debates = []
     for st in debate_statements:
