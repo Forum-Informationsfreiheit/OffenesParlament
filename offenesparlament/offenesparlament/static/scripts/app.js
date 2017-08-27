@@ -1499,11 +1499,15 @@ _replace_search = function(type, query) {
 
 _get_additional_urlparams = function() {
   var p;
-  p = deparam(_additional_urlparams);
-  if (typeof p === 'string') {
-    p = [p];
+  if (_additional_urlparams.length) {
+    p = deparam(_additional_urlparams);
+    if (typeof p === 'string') {
+      p = [p];
+    }
+    return p;
+  } else {
+    return [];
   }
-  return p;
 };
 
 AnysearchStore = assign({}, EventEmitter.prototype, {

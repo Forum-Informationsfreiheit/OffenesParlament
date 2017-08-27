@@ -207,10 +207,13 @@ _replace_search = (type, query) ->
   _debounced_update_search_results()
 
 _get_additional_urlparams = () ->
-  p = deparam(_additional_urlparams)
-  if typeof(p)=='string'
-    p = [p]
-  p
+  if _additional_urlparams.length
+    p = deparam(_additional_urlparams)
+    if typeof(p)=='string'
+      p = [p]
+    p
+  else
+    []
 
 AnysearchStore = assign({}, EventEmitter.prototype, {
 
