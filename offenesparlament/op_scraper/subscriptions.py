@@ -238,11 +238,11 @@ class PersonDiffer(JsonDiffer):
                 continue
 
             # create ui_url_param to mark all the fields that are new or have changes
-            ui_url_params = u"?mark_fields=" + u";mark_fields=".join(changeset.keys())
+            ui_url_params = u"&mark_fields=".join(changeset.keys())
 
             change_item = {
                     'parl_id': parl_id,
-                    'ui_url': self.content.ui_url + ui_url_params,
+                    'ui_url': self.content.ui_url + ('?' if not '?' in self.content.ui_url else '&') + ui_url_params[1:],
                     'category': item_category,
                     'messages': messages,
                     'item': self.current_content[parl_id],
@@ -292,7 +292,7 @@ class LawDiffer(JsonDiffer):
                 continue
 
             # create ui_url_param to mark all the fields that are new or have changes
-            ui_url_params = u"?mark_fields=" + u";mark_fields=".join(changeset.keys())
+            ui_url_params = u"?mark_fields=" + u"&mark_fields=".join(changeset.keys())
 
             change_item = {
                     'parl_id': parl_id,
@@ -357,12 +357,12 @@ class SearchDiffer(JsonDiffer):
 
         # create ui_url_param to mark all the parl_ids that are new or have changes
         mark_ids = set(self.changes.keys() + self.new)
-        ui_url_params = u";mark_ids=" + u";mark_id=".join(mark_ids)
+        ui_url_params = u"&mark_id=".join(mark_ids)
 
         if not new_msg and not changed_msg:
             return None
         changes = {
-                    'ui_url': self.content.ui_url + ui_url_params,
+                    'ui_url': self.content.ui_url + ('?' if '?' not in self.content.ui_url else '&') + ui_url_params[1:],
                     'title': self.content.title,
                     'messages': [new_msg,changed_msg]
                 }

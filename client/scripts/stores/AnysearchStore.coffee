@@ -15,6 +15,7 @@ LLP_REGEXP = /(.+)(\()([XVICDM]{1,})(\))/  # matches "aktuell seit 2013-10-29 (X
 
 _id_counter = 0
 _terms = []
+_additional_urlparams = []
 _loading = false
 _suggested_categories = []
 _suggested_values = []
@@ -186,6 +187,10 @@ _update_suggested_categories = (fields, selected_term_id) ->
     )
 
 _replace_search = (type, query) ->
+  qs = query.split('&mark_')
+  query = qs[0]
+  if(qs.length>1)
+    _additional_urlparams = '&mark_'+qs.slice(1).join('&mark_')
   _terms = []
   query_obj = {}
   if _.isString(query)
@@ -201,6 +206,11 @@ _replace_search = (type, query) ->
   _pad_terms_with_helpers()
   _debounced_update_search_results()
 
+_get_additional_urlparams = () ->
+  p = deparam(_additional_urlparams)
+  if typeof(p)=='string'
+    p = [p]
+  p
 
 AnysearchStore = assign({}, EventEmitter.prototype, {
 
@@ -219,10 +229,13 @@ AnysearchStore = assign({}, EventEmitter.prototype, {
   get_search_results: () ->
     return _search_results
 
+  get_additional_urlparams : () ->
+    return _get_additional_urlparams
+
   get_search_ui_url: () ->
     params = _.omit(_get_terms_as_object(), (value) -> _.isEmpty(value))
     params = _.omit(params, 'type')
-    return _get_search_humanfacing_endpoint() + '?' + $.param(params)
+    return _get_search_humanfacing_endpoint() + '?' + $.param(params) + _additional_urlparams
 
   get_subscription_url: () ->
     return _get_search_api_endpoint() + '?' + $.param(_get_terms_as_object())

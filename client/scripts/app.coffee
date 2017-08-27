@@ -100,7 +100,8 @@ $(document).ready( () ->
       $('.law_vorparlamentarisch_background').remove()
       ReactDOM.render(
         React.createElement(SearchResults, {
-          results: results
+          results: results,
+          additional_urlparams: AnysearchStore.get_additional_urlparams()
           allow_subscription: AnysearchStore.is_subscription_allowed()
           subscription_url: AnysearchStore.get_subscription_url()
           search_ui_url: AnysearchStore.get_search_ui_url()
@@ -123,6 +124,7 @@ $(document).ready( () ->
     if modal_container
       data =
         show: SubscriptionModalStore.is_modal_shown()
+        additional_urlparams: AnysearchStore.get_additional_urlparams()
         subscription_url: SubscriptionModalStore.get_subscription_url()
         search_ui_url: AnysearchStore.get_search_ui_url()
         subscription_title: SubscriptionModalStore.get_subscription_title()

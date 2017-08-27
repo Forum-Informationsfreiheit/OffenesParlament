@@ -26,6 +26,7 @@ SearchResults = React.createClass
 
   render: ->
     htmlClassnames = classnames('button', 'button_notifications', 'disabled': !@props.allow_subscription)
+    mark_parl_ids = @props.additional_urlparams()['mark_id'] or []
     if @props.results.length > 0
       result_rows = _.map(@props.results, (r) =>
         title = if r.title? then r.title else r.full_name
@@ -35,7 +36,8 @@ SearchResults = React.createClass
           title += ' des Nationalrats'
         else if r.debate_type? and r.debate_type == 'BR'
           title += ' des Bundesrats'
-        return <SearchResultsRow title={title} url={r.internal_link} date={date} key={key} />
+        mark = if r.parl_id? then r.parl_id in mark_parl_ids else 0
+        return <SearchResultsRow title={title} url={r.internal_link} date={date} key={key} mark={mark} />
       )
       search_results = <table className="search_results">
           <thead>
