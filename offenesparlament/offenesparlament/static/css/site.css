@@ -867,10 +867,10 @@ ul.breadcrumbs {
     opacity: 1.0; }
 
 .footer_logos .netidee {
-  width: 105px;
-  height: 62px;
+  width: 180px;
+  height: 45px;
   background-image: url("img/netidee_logo.png");
-  background-size: auto 62px; }
+  background-size: auto 45px; }
 
 .footer_logos .nessus {
   width: 145px;
