@@ -55,6 +55,37 @@ class ESViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.serializer(obj, context={'request': request})
         return Response(serializer.data)
 
+class PaginatedFilteredViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = None
+    list_serializer_class = None
+
+    def list(self, request):
+        limit = int(request.GET['limit']) if 'limit' in request.GET else 100
+        offset = int(request.GET['offset']) if 'offset' in request.GET else 0
+
+        lower = offset
+        upper = offset + limit
+        if self.list_serializer_class is None:
+            self.list_serializer_class = self.serializer_class
+
+        serializer = self.list_serializer_class(
+            self.queryset[lower:upper],
+            many=True,
+            context={'request': request})
+
+        result_list = serializer.data
+
+        self.paginate_queryset(result_list)
+        self.paginator.count = self.queryset.count()
+        self.paginator.display_page_controls = True
+
+        return self.get_paginated_response(result_list)
+
+    def retrieve(self, request, pk=None):
+        result = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(result)
+        return Response(serializer.data)
 
 class DynamicFieldsModelSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -90,7 +121,7 @@ class CategorySerializer(DynamicFieldsModelSerializer):
         model = Category
         fields = ('pk', 'title')
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all categories.
     """
@@ -103,7 +134,7 @@ class KeywordSerializer(DynamicFieldsModelSerializer):
         model = Keyword
         fields = ('pk', 'title')
 
-class KeywordViewSet(viewsets.ReadOnlyModelViewSet):
+class KeywordViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all keywords.
     """
@@ -118,7 +149,7 @@ class LegislativePeriodSerializer(DynamicFieldsModelSerializer):
         fields = ('pk', 'roman_numeral', 'number', 'start_date', 'end_date')
 
 
-class LegislativePeriodViewSet(viewsets.ReadOnlyModelViewSet):
+class LegislativePeriodViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all legislative periods.
 
@@ -135,7 +166,7 @@ class DocumentSerializer(DynamicFieldsModelSerializer):
         fields = ('pk', 'title', 'pdf_link', 'html_link', 'stripped_html')
 
 
-class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
+class DocumentViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all documents.
     """
@@ -150,7 +181,7 @@ class FunctionSerializer(DynamicFieldsModelSerializer):
         fields = ('pk', 'title', 'short')
 
 
-class FunctionViewSet(viewsets.ReadOnlyModelViewSet):
+class FunctionViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all political functions that persons can have in the form
     of mandates.
@@ -166,7 +197,7 @@ class PartySerializer(DynamicFieldsModelSerializer):
         fields = ('pk', 'short', 'titles')
 
 
-class PartyViewSet(viewsets.ReadOnlyModelViewSet):
+class PartyViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all parties, including their different names at different
     times.
@@ -182,7 +213,7 @@ class StateSerializer(DynamicFieldsModelSerializer):
         fields = ('pk', 'name', 'title')
 
 
-class StateViewSet(viewsets.ReadOnlyModelViewSet):
+class StateViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all states or electoral districts
     """
@@ -197,7 +228,7 @@ class AdministrationSerializer(DynamicFieldsModelSerializer):
         fields = ('pk', 'title', 'start_date', 'end_date')
 
 
-class AdministrationViewSet(viewsets.ReadOnlyModelViewSet):
+class AdministrationViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all administrations since the second republic.
     """
@@ -229,7 +260,7 @@ class DebateStatementSerializer(DynamicFieldsModelSerializer):
         )
 
 
-class DebateStatementViewSet(viewsets.ReadOnlyModelViewSet):
+class DebateStatementViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all debate statements.
     """
@@ -256,13 +287,31 @@ class DebateSerializer(DynamicFieldsModelSerializer):
             'debate_statements',
         )
 
-class DebateViewSet(viewsets.ReadOnlyModelViewSet):
+class DebateListSerializer(DynamicFieldsModelSerializer):
+    llp = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+
+    class Meta:
+        model = Debate
+        fields = (
+            'pk',
+            'date',
+            'title',
+            'debate_type',
+            'protocol_url',
+            'detail_url',
+            'nr',
+            'llp',
+        )
+
+class DebateViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all debates, with their debate statements, where existing.
     """
     model = Debate
     queryset = Debate.objects.all()
     serializer_class = DebateSerializer
+    list_serializer_class = DebateListSerializer
 
 class MandateSerializer(DynamicFieldsModelSerializer):
     function = FunctionSerializer()
@@ -286,7 +335,7 @@ class MandateSerializer(DynamicFieldsModelSerializer):
         )
 
 
-class MandateViewSet(viewsets.ReadOnlyModelViewSet):
+class MandateViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all mandates.
 
@@ -306,7 +355,7 @@ class PhaseSerializer(DynamicFieldsModelSerializer):
             'title'
         )
 
-class PhaseViewSet(viewsets.ReadOnlyModelViewSet):
+class PhaseViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all phases.
 
@@ -333,7 +382,7 @@ class StepSerializer(DynamicFieldsModelSerializer):
         )
 
 
-class StepViewSet(viewsets.ReadOnlyModelViewSet):
+class StepViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all steps.
 
@@ -356,7 +405,7 @@ class EntitySerializer(DynamicFieldsModelSerializer):
             'phone')
 
 
-class EntityViewSet(viewsets.ReadOnlyModelViewSet):
+class EntityViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all entities.
 
@@ -388,7 +437,7 @@ class OpinionSerializer(DynamicFieldsModelSerializer):
             'entity',
         )
 
-class OpinionViewSet(viewsets.ReadOnlyModelViewSet):
+class OpinionViewSet(PaginatedFilteredViewSet):
     """
     Return a list of all opinions ('Stellungnahmen') for Pre-Laws (Ministerialentwürfe, etc.)
     """
@@ -414,6 +463,7 @@ class LawSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Law
         fields = (
+            'pk',
             'title',
             'status',
             'source_link',
@@ -505,6 +555,138 @@ class PersonViewSet(ESViewSet):
         'llps_numeric')
 
 
+class ComitteeMeetingSerializer(DynamicFieldsModelSerializer):
+
+    comittee_id = serializers.IntegerField(read_only=True)
+    agenda = DocumentSerializer()
+
+    class Meta:
+        model = ComitteeMeeting
+        fields = (
+            'pk',
+            'number',
+            'date',
+            'comittee_id',
+            'agenda',
+        )
+
+class ComitteeMeetingViewSet(PaginatedFilteredViewSet):
+    """
+    Return a list of all comittee meetings + their agendas
+    """
+    model = ComitteeMeeting
+    queryset = ComitteeMeeting.objects.all()
+    serializer_class = ComitteeMeetingSerializer
+
+class ComitteeMembershipSerializer(DynamicFieldsModelSerializer):
+
+    comittee_id = serializers.IntegerField(read_only=True)
+    function = FunctionSerializer()
+    person = PersonSerializer(fields=('pk', 'parl_id', 'full_name'))
+
+    class Meta:
+        model = ComitteeMembership
+        fields = (
+            'pk',
+            'date_from',
+            'date_to',
+            'comittee_id',
+            'person',
+            'function',
+        )
+
+class ComitteeMembershipViewSet(PaginatedFilteredViewSet):
+    """
+    Return a list of all comittee meetings + their agendas
+    """
+    model = ComitteeMembership
+    queryset = ComitteeMembership.objects.all()
+    serializer_class = ComitteeMembershipSerializer
+
+
+class ComitteeSerializer(DynamicFieldsModelSerializer):
+
+    legislative_period = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+    laws = LawSerializer(many=True, fields=('pk', 'parl_id', 'title'))
+    parent_comittee_id = serializers.IntegerField(read_only=True)
+    comittee_meetings = ComitteeMeetingSerializer(many=True)
+    comittee_members = ComitteeMembershipSerializer(many=True)
+
+    class Meta:
+        model = Comittee
+        fields = (
+            'pk',
+            'parl_id',
+            'name',
+            'source_link',
+            'nrbr',
+            'description',
+            'active',
+            'legislative_period',
+            'laws',
+            'parent_comittee_id',
+            'comittee_meetings',
+            'comittee_members'
+        )
+
+class ComitteeListSerializer(DynamicFieldsModelSerializer):
+
+    legislative_period = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+    laws = LawSerializer(many=True, fields=('pk', 'parl_id', 'title'))
+    parent_comittee_id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Comittee
+        fields = (
+            'pk',
+            'parl_id',
+            'name',
+            'source_link',
+            'nrbr',
+            'description',
+            'active',
+            'legislative_period',
+            'laws',
+            'parent_comittee_id',
+        )
+
+
+
+class ComitteeViewSet(PaginatedFilteredViewSet):
+    """
+    Return a list of all comittees
+    """
+    queryset = Comittee.objects.all()
+    serializer_class = ComitteeSerializer
+    list_serializer_class = ComitteeListSerializer
+
+class ComitteeAgendaTopicSerializer(DynamicFieldsModelSerializer):
+
+    meeting = ComitteeMeetingSerializer(required=True)
+    law = LawSerializer(fields=('pk', 'parl_id', 'title'))
+    class Meta:
+        model = ComitteeAgendaTopic
+        fields = (
+            'pk',
+            'number',
+            'text',
+            'comment',
+            'meeting',
+            'law'
+        )
+
+class ComitteeAgendaTopicViewSet(PaginatedFilteredViewSet):
+    """
+    Return a list of all comittee meetings + their agendas
+    """
+    model = ComitteeAgendaTopic
+    queryset = ComitteeAgendaTopic.objects.all()
+    serializer_class = ComitteeAgendaTopicSerializer
+
+
+
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'persons', PersonViewSet, base_name="Person")
@@ -528,3 +710,13 @@ router.register(r'legislative_periods', LegislativePeriodViewSet,
                 base_name="LegislativePeriod")
 router.register(r'debate_statements', DebateStatementViewSet,
                 base_name="DebateStatement")
+router.register(r'comittees', ComitteeViewSet,
+                base_name="Comittee")
+router.register(r'comittee_meetings', ComitteeMeetingViewSet,
+                base_name="ComitteeMeeting")
+router.register(r'comittee_agenda_topic', ComitteeAgendaTopicViewSet,
+                base_name="ComitteeAgendaTopic")
+router.register(r'comittee_membership', ComitteeMembershipViewSet,
+                base_name="ComitteeMembership")
+
+
