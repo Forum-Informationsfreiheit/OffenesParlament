@@ -7,8 +7,19 @@ from haystack import connections
 
 # maintain list of which fields are json-content
 JSON_FIELDS = {
-    'person': ['mandates', 'statements', 'debate_statements'],
-    'law': ['steps', 'opinions', 'documents'],
+    'person': [
+        'mandates',
+        'statements',
+        'debate_statements',
+        'inquiries_sent',
+        'inquiries_received',
+        'inquiries_answered'
+    ],
+    'law': [
+        'steps',
+        'opinions',
+        'documents'
+    ],
 }
 import logging
 
@@ -65,6 +76,7 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'parl_id',
             'source_link',
             'internal_link',
+            'api_url',
             'photo_link',
             'photo_copyright',
             'birthdate',
@@ -92,6 +104,7 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'parl_id',
             'source_link',
             'internal_link',
+            'api_url',
             'photo_link',
             'photo_copyright',
             'birthdate',
@@ -142,6 +155,10 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     # Static items
     category = indexes.CharField(faceted=True, null=True)
+    api_url = indexes.CharField()
+
+    def prepare_api_url(self, obj):
+        return obj.api_slug()
 
     def prepare_category(self, obj):
         try:
@@ -204,6 +221,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'parl_id',
             'ts',
             'internal_link',
+            'api_url',
             'title',
             'description',
             'category',
@@ -219,6 +237,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'parl_id',
             'ts',
             'internal_link',
+            'api_url',
             'title',
             'description',
             'category',
@@ -238,6 +257,8 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         model_attr='ts', faceted=True, default=datetime.datetime(1970, 1, 1, 0, 0))
 
     internal_link = indexes.CharField(model_attr=u'slug')
+    api_url = indexes.CharField()
+
     title = indexes.CharField(model_attr='title')
     description = indexes.CharField(model_attr='description')
     status = indexes.CharField(model_attr='status', null=True)
@@ -248,7 +269,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         model_attr='llps_facet_numeric', faceted=True)
 
     # Related, aggregated and Multi - Value Fields
-    steps = indexes.CharField()
+    'api_url',
     opinions = indexes.CharField()
     documents = indexes.CharField()
     keywords = indexes.MultiValueField(
@@ -260,6 +281,9 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     #     return self.get_model().objects\
     #         .filter(inquiry__isnull=False)\
     #         .filter(inquiryresponse__isnull=False)
+
+    def prepare_api_url(self, obj):
+        return obj.api_slug()
 
     def prepare_steps(self, obj):
         """
