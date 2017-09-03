@@ -1,5 +1,5 @@
 Design
-=====
+======
 
 
 Fonts
@@ -11,7 +11,7 @@ The font can also be embedded with Google Fonts.
 
 At the beginning, the Roboto font by Google was considered as an alternative. Both fonts – Source Sans Pro and Roboto – have very complete families, from very light to bold font styles.
 
-We went for the Source Sans Pro because of her more distinctive character while being extremly readable. This font choice gives the website a modern look. 
+We went for the Source Sans Pro because of her more distinctive character while being extremly readable. This font choice gives the website a modern look.
 
 We use the font weights Regular and Bold. For emphasizing text, the italics provided with the font can be used. Please take care of using the real italics, not only slanting the regular font with <em>.
 
@@ -82,20 +82,20 @@ The main color (used in the navigation bar throughout the site) is blue. It is a
 
 **Other:**
 - Green box element (Top10, etc.)
-	fill color (10%) 235/244/238
-	border color (25%) 207/228/214
+    - fill color (10%) 235/244/238
+    - border color (25%) 207/228/214
 
--	Light red box element (subscription form)
-	fill color (5%) 254/247/246
-	border color (20%) 253/223/221
+- Light red box element (subscription form)
+  - fill color (5%) 254/247/246
+  - border color (20%) 253/223/221
 
--	Blue box element (laws)
-	border color and fill color lower part (15%) 221/227/232
-	fill color upper part (5%) 244/246/247
-	
+- Blue box element (laws)
+  - border color and fill color lower part (15%) 221/227/232
+  - fill color upper part (5%) 244/246/247
+
 - Buttons
-	border color light red 245/95/87 and fill color 255/255/255 (text and icon in light red)
-	hover: border and fill color 245/95/87 (text and icon changes to white)
+  - border color light red 245/95/87 and fill color 255/255/255 (text and icon in light red)
+  - hover: border and fill color 245/95/87 (text and icon changes to white)
 
 Grid
 ~~~~~~~~~~
@@ -110,7 +110,7 @@ We have a number of basic text formatting covered, such as headlines, lists, etc
 Tables
 ~~~~~~~~~~
 
-Tables always start with a white header row and bold text. All the other rows are alternating a a white and light grey background (5% of blue 30/69/99). The rows are separated by light grey horizontal lines. There are no vertical lines or other elements to reinforce the columns. This way, the tables look simple, yet organised. 
+Tables always start with a white header row and bold text. All the other rows are alternating a a white and light grey background (5% of blue 30/69/99). The rows are separated by light grey horizontal lines. There are no vertical lines or other elements to reinforce the columns. This way, the tables look simple, yet organised.
 
 Text in tables is smaller than normal paragraph text. Icons can be used as needed. There is a generous padding in the table fields.
 
@@ -123,6 +123,6 @@ Links within the content are formatted in blue and change opacity when hovered.
 Icons
 ~~~~~~~~~~
 
-offenesparlament.at is a very text and table-heavy site. While more visualisations are part of our wishlist and might be realized in a next step, we needed smaller visual elements to help our readers and make the content easier to understand. That is where colors and, just as important, icons come in. 
+offenesparlament.at is a very text and table-heavy site. While more visualisations are part of our wishlist and might be realized in a next step, we needed smaller visual elements to help our readers and make the content easier to understand. That is where colors and, just as important, icons come in.
 
 We used symbols that are based on the Streamline Icon Set (Line Version). To fit our needs, some icons were edited or created from scratch and added, such as the parliament icon.

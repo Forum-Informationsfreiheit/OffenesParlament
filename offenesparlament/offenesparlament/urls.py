@@ -102,7 +102,7 @@ urlpatterns = patterns(
         name='list_subscriptions'),
 
     # REST Api
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include(router.urls, namespace='op_api')),
     # url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/new/?$',

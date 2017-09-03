@@ -41,18 +41,57 @@ class ESViewSet(viewsets.ReadOnlyModelViewSet):
         for sr in qs.values(*self.fields)[lower:upper]:
             result_list.append(sr)
 
+        hostname = request._request.META['HTTP_HOST']
+        https = 'https://' if request._request.is_secure() else 'http://'
+        for r in result_list:
+            if 'api_url' in r:
+                r['api_url'] = "{}{}{}".format(https,hostname,r['api_url'])
+
+
         self.paginate_queryset(result_list)
         self.paginator.count = qs.count()
         self.paginator.display_page_controls = True
 
         return self.get_paginated_response(result_list)
 
-        # return Response(result_list)
-
     def retrieve(self, request, pk=None):
         queryset = self.model.objects.all()
         obj = get_object_or_404(queryset, pk=pk)
         serializer = self.serializer(obj, context={'request': request})
+        return Response(serializer.data)
+
+
+class PaginatedFilteredViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = None
+    list_serializer_class = None
+
+    def list(self, request):
+        limit = int(request.GET['limit']) if 'limit' in request.GET else 100
+        offset = int(request.GET['offset']) if 'offset' in request.GET else 0
+
+        lower = offset
+        upper = offset + limit
+        if self.list_serializer_class is None:
+            self.list_serializer_class = self.serializer_class
+
+        serializer = self.list_serializer_class(
+            self.queryset[lower:upper],
+            many=True,
+            context={'request': request})
+
+        result_list = serializer.data
+
+        self.paginate_queryset(result_list)
+        self.paginator.count = self.queryset.count()
+        self.paginator.display_page_controls = True
+
+        return self.get_paginated_response(result_list)
+
+    def retrieve(self, request, pk=None):
+        result = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(
+            result, context={'request': request})
         return Response(serializer.data)
 
 
@@ -80,133 +119,251 @@ class DynamicFieldsModelSerializer(serializers.HyperlinkedModelSerializer):
 #  Model Serializers and Viewsets  #
 ####################################
 
-### Auxiliary, non primary models
+# Auxiliary, non primary models
 ###
-### These aren't loaded through ES since we don't have them indexed there
+# These aren't loaded through ES since we don't have them indexed there
 
+
+### MODEL: Category ###
 
 class CategorySerializer(DynamicFieldsModelSerializer):
+    """
+    The category of a law (and all its sub-forms like pre-laws or inquiries) or
+    of an opinion.
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Category-detail")
+
     class Meta:
         model = Category
-        fields = ('pk', 'title')
+        fields = ('pk', 'title', 'api_url')
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+
+class CategoryViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all categories.
+    The category of a law (and all its sub-forms like pre-laws or inquiries) or
+    of an opinion.
     """
     model = Category
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+### MODEL: Keyword ###
+
+
 class KeywordSerializer(DynamicFieldsModelSerializer):
+    """
+    Keywords are assigned to laws and opinions.
+    """
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Keyword-detail")
+
     class Meta:
         model = Keyword
-        fields = ('pk', 'title')
+        fields = ('pk', 'title', 'api_url')
 
-class KeywordViewSet(viewsets.ReadOnlyModelViewSet):
+
+class KeywordViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all keywords.
+    Keywords are assigned to laws and opinions.
     """
     model = Keyword
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
 
+### MODEL: LegislativePeriod ###
+
 
 class LegislativePeriodSerializer(DynamicFieldsModelSerializer):
+    """
+    Legislative periods are needed to identify laws beyond their parl_id
+    (which alone isn't unique) and, generally run from election to election.
+
+    LLPs are denoted both with a roman numeral and an arabic one; this is
+    inconsistently handled at the official parliament website as well.
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:LegislativePeriod-detail")
+
     class Meta:
         model = LegislativePeriod
-        fields = ('pk', 'roman_numeral', 'number', 'start_date', 'end_date')
+        fields = ('pk', 'roman_numeral', 'number',
+                  'start_date', 'end_date', 'api_url')
 
 
-class LegislativePeriodViewSet(viewsets.ReadOnlyModelViewSet):
+class LegislativePeriodViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all legislative periods.
+    Legislative periods are needed to identify laws beyond their parl_id
+    (which alone isn't unique) and, generally run from election to election.
 
-    Phases group law steps.
+    LLPs are denoted both with a roman numeral and an arabic one; this is
+    inconsistently handled at the official parliament website as well.
     """
     model = LegislativePeriod
     queryset = LegislativePeriod.objects.all()
     serializer_class = LegislativePeriodSerializer
 
+### MODEL: Document ###
+
 
 class DocumentSerializer(DynamicFieldsModelSerializer):
+    """
+    Documents can be assigned to a number of objects and represent downloadable
+    resources., often PDF or Word documents.
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Document-detail")
+
     class Meta:
         model = Document
-        fields = ('pk', 'title', 'pdf_link', 'html_link', 'stripped_html')
+        fields = ('pk', 'title', 'pdf_link', 'html_link',
+                  'stripped_html', 'api_url')
 
 
-class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
+class DocumentViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all documents.
+    Documents can be assigned to a number of objects and represent downloadable
+    resources., often PDF or Word documents.
     """
+
     model = Document
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
+### MODEL: Function ###
+
 
 class FunctionSerializer(DynamicFieldsModelSerializer):
+    """
+    A function represents the generic position that a mandate can fill.
+
+    Functions, like "Abgeordnete(r) zum Bundesrat" or "Vorsitzende" are not
+    assigned per se to people, but must be encapsulated within a mandate (with
+    a start- and end-date).
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Function-detail")
+
     class Meta:
         model = Function
-        fields = ('pk', 'title', 'short')
+        fields = ('pk', 'title', 'short', 'api_url')
 
 
-class FunctionViewSet(viewsets.ReadOnlyModelViewSet):
+class FunctionViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all political functions that persons can have in the form
-    of mandates.
+    A function represents the generic position that a mandate can fill.
+
+    Functions, like "Abgeordnete(r) zum Bundesrat" or "Vorsitzende" are not
+    assigned per se to people, but must be encapsulated within a mandate (with
+    a start- and end-date).
     """
     model = Function
     queryset = Function.objects.all()
     serializer_class = FunctionSerializer
 
+### MODEL: Party ###
+
 
 class PartySerializer(DynamicFieldsModelSerializer):
+    """
+    A political party. While the titles of a single party might have changed
+    over time (which is reflected in the array of titles collected for that
+    party), the short form stays unique.
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Party-detail")
+
     class Meta:
         model = Party
-        fields = ('pk', 'short', 'titles')
+        fields = ('pk', 'short', 'titles', 'api_url')
 
 
-class PartyViewSet(viewsets.ReadOnlyModelViewSet):
+class PartyViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all parties, including their different names at different
-    times.
+    A political party. While the titles of a single party might have changed
+    over time (which is reflected in the array of titles collected for that
+    party), the short form stays unique.
     """
     model = Party
     queryset = Party.objects.all()
     serializer_class = PartySerializer
 
+### MODEL: State ###
+
 
 class StateSerializer(DynamicFieldsModelSerializer):
+    """
+    An electoral district or state an official can be elected in. Due to
+    inconsistencies on the official parliament webpage, titles of legislative
+    periods show up in this list as well.
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:State-detail")
+
     class Meta:
         model = State
-        fields = ('pk', 'name', 'title')
+        fields = ('pk', 'name', 'title', 'api_url')
 
 
-class StateViewSet(viewsets.ReadOnlyModelViewSet):
+class StateViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all states or electoral districts
+    An electoral district or state an official can be elected in. Due to
+    inconsistencies on the official parliament webpage, titles of legislative
+    periods show up in this list as well.
     """
     model = State
     queryset = State.objects.all()
     serializer_class = StateSerializer
 
 
+### MODEL: Administration ###
+
 class AdministrationSerializer(DynamicFieldsModelSerializer):
+    """
+    An administration in the Austrian government, usually runs from
+    election to election. This is necesary for those Persons that aren't
+    elected officials, but rather put in their office by the winning parties
+    after elections.
+    """
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Administration-detail")
+
     class Meta:
         model = Administration
-        fields = ('pk', 'title', 'start_date', 'end_date')
+        fields = ('pk', 'title', 'start_date', 'end_date', 'api_url')
 
 
-class AdministrationViewSet(viewsets.ReadOnlyModelViewSet):
+class AdministrationViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all administrations since the second republic.
+    An administration in the Austrian government, usually runs from
+    election to election. This is necesary for those Persons that aren't
+    elected officials, but rather put in their office by the winning parties
+    after elections.
     """
     model = Administration
     queryset = Administration.objects.all()
     serializer_class = AdministrationSerializer
 
+### MODEL: DebateStatement ###
+
+
 class DebateStatementSerializer(DynamicFieldsModelSerializer):
+    """
+    A debate statement is part of a debate should usually contain speech by
+    only one speaker.
+    """
+
     debate_id = serializers.IntegerField(read_only=True)
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:DebateStatement-detail")
+
     class Meta:
         model = DebateStatement
         fields = (
@@ -225,22 +382,37 @@ class DebateStatementSerializer(DynamicFieldsModelSerializer):
             'raw_text',
             'annotated_text',
             'speaker_name',
-            'debate_id'
+            'debate_id',
+            'api_url'
         )
 
 
-class DebateStatementViewSet(viewsets.ReadOnlyModelViewSet):
+class DebateStatementViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all debate statements.
+    A debate statement is part of a debate should usually contain speech by
+    only one speaker.
     """
     model = DebateStatement
     queryset = DebateStatement.objects.all()
     serializer_class = DebateStatementSerializer
 
+
+### MODEL: Debate ###
+
 class DebateSerializer(DynamicFieldsModelSerializer):
+    """
+    A parliamentary debate (either in the Nationalrat or the Bundesrat).
+
+    It is comprised of debate statements (shown only in the debate detail view
+    for brevity and performance reasons).
+    """
+
     llp = LegislativePeriodSerializer(
         required=True, fields=('pk', 'roman_numeral', 'number'))
     debate_statements = DebateStatementSerializer(required=False, many=True)
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Debate-detail")
 
     class Meta:
         model = Debate
@@ -254,23 +426,73 @@ class DebateSerializer(DynamicFieldsModelSerializer):
             'nr',
             'llp',
             'debate_statements',
+            'api_url'
         )
 
-class DebateViewSet(viewsets.ReadOnlyModelViewSet):
+
+class DebateListSerializer(DynamicFieldsModelSerializer):
     """
-    Return a list of all debates, with their debate statements, where existing.
+    A parliamentary debate (either in the Nationalrat or the Bundesrat).
+
+    It is comprised of debate statements (shown only in the debate detail view
+    for brevity and performance reasons).
+    """
+    llp = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Debate-detail")
+
+    class Meta:
+        model = Debate
+        fields = (
+            'pk',
+            'api_url',
+            'date',
+            'title',
+            'debate_type',
+            'protocol_url',
+            'detail_url',
+            'nr',
+            'llp',
+        )
+
+
+class DebateViewSet(PaginatedFilteredViewSet):
+    """
+    A parliamentary debate (either in the Nationalrat or the Bundesrat).
+
+    It is comprised of debate statements (shown only in the debate detail view
+    for brevity and performance reasons).
     """
     model = Debate
     queryset = Debate.objects.all()
     serializer_class = DebateSerializer
+    list_serializer_class = DebateListSerializer
+
+
+### MODEL: Mandate ###
 
 class MandateSerializer(DynamicFieldsModelSerializer):
+    """
+    A mandate is a persons function, delimited with a start- and end-date.
+
+    It can either retain it's start- and end-time from itself or the
+    legislative period it is granted for.
+
+    For mandates acquired through election, the state can be defined.
+    For mandates granted by an administration, that administration is
+    defined.
+    """
     function = FunctionSerializer()
     party = PartySerializer(fields=('pk', 'short'))
     legislative_period = LegislativePeriodSerializer(
         required=True, fields=('pk', 'roman_numeral', 'number'))
     state = StateSerializer()
     administration = AdministrationSerializer()
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Mandate-detail")
 
     class Meta:
         model = Mandate
@@ -282,43 +504,72 @@ class MandateSerializer(DynamicFieldsModelSerializer):
             'party',
             'legislative_period',
             'state',
-            'administration'
+            'administration',
+            'api_url'
         )
 
 
-class MandateViewSet(viewsets.ReadOnlyModelViewSet):
+class MandateViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all mandates.
-
     A mandate is a persons function, delimited with a start- and end-date.
+
+    It can either retain it's start- and end-time from itself or the
+    legislative period it is granted for.
+
+    For mandates acquired through election, the state can be defined.
+    For mandates granted by an administration, that administration is
+    defined.
     """
     model = Mandate
     queryset = Mandate.objects.all()
     serializer_class = MandateSerializer
-    pagination_class = LargeResultsSetPagination
+
+### MODEL: Phase ###
 
 class PhaseSerializer(DynamicFieldsModelSerializer):
+    """
+    Phases group law steps.
+
+    A Phase defines a series of steps that belong to the same process,
+    for instance a law being brought to, discussed, and passed through a
+    comittee.
+    """
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Phase-detail")
 
     class Meta:
         model = Phase
         fields = (
             'pk',
-            'title'
+            'title',
+            'api_url'
         )
 
-class PhaseViewSet(viewsets.ReadOnlyModelViewSet):
+class PhaseViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all phases.
-
     Phases group law steps.
+
+    A Phase defines a series of steps that belong to the same process,
+    for instance a law being brought to, discussed, and passed through a
+    comittee.
     """
+
     model = Phase
     queryset = Phase.objects.all()
     serializer_class = PhaseSerializer
 
-class StepSerializer(DynamicFieldsModelSerializer):
 
+### MODEL: Step ###
+
+class StepSerializer(DynamicFieldsModelSerializer):
+    """
+    Laws undergo steps as they move through the legislative process.
+    Each step is part of one phase.
+    """
     phase = PhaseSerializer(required=False)
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Step-detail")
 
     class Meta:
         model = Step
@@ -329,14 +580,13 @@ class StepSerializer(DynamicFieldsModelSerializer):
             'sortkey',
             'protocol_url',
             'source_link',
-            'phase'
+            'phase',
+            'api_url'
         )
 
 
-class StepViewSet(viewsets.ReadOnlyModelViewSet):
+class StepViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all steps.
-
     Laws undergo steps as they move through the legislative process.
     Each step is part of one phase.
     """
@@ -344,7 +594,22 @@ class StepViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
 
+
+### MODEL: Entity ###
+
 class EntitySerializer(DynamicFieldsModelSerializer):
+    """
+    Entities are external actors (persons or organisations) that aren't part
+    of the normal parliamentary process. They come into play when
+    the general public is being asked to give an opinion on a proposed
+    law ('Begutachtungsverfahren').
+
+    Given the shoddy implementation of how these entities are described on
+    the official parliament website, these data need to be taken with a grain
+    of salt and most likely contain errors or incomplete data.
+    """
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Entity-detail")
 
     class Meta:
         model = Entity
@@ -353,26 +618,42 @@ class EntitySerializer(DynamicFieldsModelSerializer):
             'title',
             'title_detail',
             'email',
-            'phone')
+            'phone',
+            'api_url')
 
-
-class EntityViewSet(viewsets.ReadOnlyModelViewSet):
+class EntityViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all entities.
+    Entities are external actors (persons or organisations) that aren't part
+    of the normal parliamentary process. They come into play when
+    the general public is being asked to give an opinion on a proposed
+    law ('Begutachtungsverfahren').
 
-    An entity is a person or organisation that has at some point given an
-    opinion (Stellungnahme) about a propsed law.
+    Given the shoddy implementation of how these entities are described on
+    the official parliament website, these data need to be taken with a grain
+    of salt and most likely contain errors or incomplete data.
     """
     model = Entity
     queryset = Entity.objects.all()
     serializer_class = EntitySerializer
 
-class OpinionSerializer(DynamicFieldsModelSerializer):
 
+### MODEL: Opinion ###
+
+class OpinionSerializer(DynamicFieldsModelSerializer):
+    """
+    Opinions are being given by entities as part of the "Begutachtungsverfahren"
+    for proposed laws.
+
+    Among other things, they can be assigned documents, keywords and a category
+    and must always refer to the entity that gave the opinion.
+    """
     documents = DocumentSerializer(required=False, many=True)
     category = CategorySerializer(required=False)
     keywords = KeywordSerializer(required=False, many=True)
     entity = EntitySerializer()
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Opinion-detail")
 
     class Meta:
         model = Opinion
@@ -386,21 +667,35 @@ class OpinionSerializer(DynamicFieldsModelSerializer):
             'category',
             'keywords',
             'entity',
+            'api_url'
         )
 
-class OpinionViewSet(viewsets.ReadOnlyModelViewSet):
+
+class OpinionViewSet(PaginatedFilteredViewSet):
     """
-    Return a list of all opinions ('Stellungnahmen') for Pre-Laws (Ministerialentwürfe, etc.)
+    Opinions are being given by entities as part of the "Begutachtungsverfahren"
+    for proposed laws.
+
+    Among other things, they can be assigned documents, keywords and a category
+    and must always refer to the entity that gave the opinion.
     """
     model = Opinion
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
 
-### Primary Models Person, Law and Debaite
+# Primary Models Person, Law and Debaite
 ###
-### ViewSet loads the result content through ES instead of through the DjangoDB
+# ViewSet loads the result content through ES instead of through the DjangoDB
+
+### MODEL: Keyword ###
+
 
 class LawSerializer(DynamicFieldsModelSerializer):
+    """
+    Laws represent any matter of legislation or discussion in the Nationalrat or
+    Bundesrat ("Verhandlungssache"). There are multiple sub-types of laws
+    (such as inquiries), which can be determined through a laws category.
+    """
     category = CategorySerializer(required=False)
     keywords = KeywordSerializer(required=False, many=True)
     legislative_period = LegislativePeriodSerializer(
@@ -411,9 +706,13 @@ class LawSerializer(DynamicFieldsModelSerializer):
     steps = StepSerializer(required=False, many=True)
     opinions = OpinionSerializer(required=False, many=True)
 
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Law-detail")
+
     class Meta:
         model = Law
         fields = (
+            'pk',
             'title',
             'status',
             'source_link',
@@ -427,12 +726,15 @@ class LawSerializer(DynamicFieldsModelSerializer):
             'slug',
             'steps',
             'opinions',
+            'api_url'
         )
 
 
 class LawViewSet(ESViewSet):
     """
-    Return a list of all laws.
+    Laws represent any matter of legislation or discussion in the Nationalrat or
+    Bundesrat ("Verhandlungssache"). There are multiple sub-types of laws
+    (such as inquiries), which can be determined through a laws category.
     """
     model = Law
     queryset = Law.objects.all()
@@ -448,12 +750,15 @@ class LawViewSet(ESViewSet):
         'keywords',
         'category',
         'ts',
-        'internal_link')
+        'internal_link',
+        'api_url')
 
+### MODEL: Person ###
 
 class PersonSerializer(DynamicFieldsModelSerializer):
     """
-    Serializer class for Person object.
+    A person can either be holding mandate(s) for the Nationalrat or the
+    Bundesrat, or be an appointed official for an administration.
     """
 
     mandates = MandateSerializer(
@@ -462,6 +767,9 @@ class PersonSerializer(DynamicFieldsModelSerializer):
     )
     latest_mandate = MandateSerializer()
     debate_statements = DebateStatementSerializer(many=True)
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Person-detail")
 
     class Meta:
         model = Person
@@ -480,13 +788,15 @@ class PersonSerializer(DynamicFieldsModelSerializer):
             '_slug',
             'mandates',
             'latest_mandate',
-            'debate_statements'
+            'debate_statements',
+            'api_url'
         )
 
 
 class PersonViewSet(ESViewSet):
     """
-    Return a list of all persons.
+    A person can either be holding mandate(s) for the Nationalrat or the
+    Bundesrat, or be an appointed official for an administration.
     """
     model = Person
     queryset = Person.objects.all()
@@ -502,10 +812,198 @@ class PersonViewSet(ESViewSet):
         'deathplace',
         'party',
         'llps',
-        'llps_numeric')
+        'llps_numeric',
+        'api_url')
 
 
+### MODEL: ComiteeMeeting ###
+
+class ComitteeMeetingSerializer(DynamicFieldsModelSerializer):
+    """
+    Comitee meetings ('Sitzung') happen on a given date and follow an agenda.
+    """
+    comittee_id = serializers.IntegerField(read_only=True)
+    agenda = DocumentSerializer()
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:ComitteeMeeting-detail")
+
+    class Meta:
+        model = ComitteeMeeting
+        fields = (
+            'pk',
+            'number',
+            'date',
+            'comittee_id',
+            'agenda',
+            'api_url'
+        )
+
+
+class ComitteeMeetingViewSet(PaginatedFilteredViewSet):
+    """
+    Comitee meetings ('Sitzung') happen on a given date and follow an agenda.
+    """
+    model = ComitteeMeeting
+    queryset = ComitteeMeeting.objects.all()
+    serializer_class = ComitteeMeetingSerializer
+
+### MODEL: Keyword ###
+
+
+class ComitteeMembershipSerializer(DynamicFieldsModelSerializer):
+    """
+    A comittee membership declares which Persons hold positions within the
+    referenced comittee.
+    """
+    comittee_id = serializers.IntegerField(read_only=True)
+    function = FunctionSerializer()
+    person = PersonSerializer(fields=('pk', 'parl_id', 'full_name'))
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:ComitteeMembership-detail")
+
+    class Meta:
+        model = ComitteeMembership
+        fields = (
+            'pk',
+            'date_from',
+            'date_to',
+            'comittee_id',
+            'person',
+            'function',
+            'api_url'
+        )
+
+
+class ComitteeMembershipViewSet(PaginatedFilteredViewSet):
+    """
+    A comittee membership declares which Persons hold positions within the
+    referenced comittee.
+    """
+    model = ComitteeMembership
+    queryset = ComitteeMembership.objects.all()
+    serializer_class = ComitteeMembershipSerializer
+
+
+### MODEL: Comitee ###
+
+class ComitteeSerializer(DynamicFieldsModelSerializer):
+    """
+    A parliamentary comittee, usually with a limited area of responsibility.
+
+    Has a list of members and meetings with agendas.
+    """
+    legislative_period = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+    laws = LawSerializer(many=True, fields=('pk', 'parl_id', 'title'))
+    parent_comittee_id = serializers.IntegerField(read_only=True)
+    comittee_meetings = ComitteeMeetingSerializer(many=True)
+    comittee_members = ComitteeMembershipSerializer(many=True)
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Comittee-detail")
+
+    class Meta:
+        model = Comittee
+        fields = (
+            'pk',
+            'parl_id',
+            'name',
+            'source_link',
+            'nrbr',
+            'description',
+            'active',
+            'legislative_period',
+            'laws',
+            'parent_comittee_id',
+            'comittee_meetings',
+            'comittee_members',
+            'api_url'
+        )
+
+
+class ComitteeListSerializer(DynamicFieldsModelSerializer):
+    """
+    A parliamentary comittee, usually with a limited area of responsibility.
+
+    Has a list of members and meetings with agendas.
+    """
+    legislative_period = LegislativePeriodSerializer(
+        required=True, fields=('pk', 'roman_numeral', 'number'))
+    laws = LawSerializer(many=True, fields=('pk', 'parl_id', 'title'))
+    parent_comittee_id = serializers.IntegerField(read_only=True)
+
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Comittee-detail")
+
+    class Meta:
+        model = Comittee
+        fields = (
+            'pk',
+            'parl_id',
+            'name',
+            'source_link',
+            'nrbr',
+            'description',
+            'active',
+            'legislative_period',
+            'laws',
+            'parent_comittee_id',
+            'api_url'
+        )
+
+
+class ComitteeViewSet(PaginatedFilteredViewSet):
+    """
+    A parliamentary comittee, usually with a limited area of responsibility.
+
+    Has a list of members and meetings with agendas.
+    """
+    queryset = Comittee.objects.all()
+    serializer_class = ComitteeSerializer
+    list_serializer_class = ComitteeListSerializer
+
+### MODEL: Keyword ###
+
+
+class ComitteeAgendaTopicSerializer(DynamicFieldsModelSerializer):
+    """
+    Agenda topics define the talking points ('Tagesordnung') for a given
+    comittee meeting.
+    """
+    meeting = ComitteeMeetingSerializer(required=True)
+    law = LawSerializer(fields=('pk', 'parl_id', 'title'))
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:ComitteeAgendaTopic-detail")
+
+    class Meta:
+        model = ComitteeAgendaTopic
+        fields = (
+            'pk',
+            'number',
+            'text',
+            'comment',
+            'meeting',
+            'law',
+            'api_url'
+        )
+
+
+class ComitteeAgendaTopicViewSet(PaginatedFilteredViewSet):
+    """
+    Agenda topics define the 'Tagesordnung' for a given comittee meeting.
+    """
+
+    model = ComitteeAgendaTopic
+    queryset = ComitteeAgendaTopic.objects.all()
+    serializer_class = ComitteeAgendaTopicSerializer
+
+
+# Routing definition for API viewsets
+###
 # Routers provide an easy way of automatically determining the URL conf.
+
 router = routers.DefaultRouter()
 router.register(r'persons', PersonViewSet, base_name="Person")
 router.register(r'laws', LawViewSet, base_name="Law")
@@ -521,10 +1019,18 @@ router.register(r'documents', DocumentViewSet, base_name="Document")
 router.register(r'functions', FunctionViewSet, base_name="Function")
 router.register(r'mandates', MandateViewSet, base_name="Mandate")
 router.register(r'parties', PartyViewSet, base_name="Party")
-router.register(r'state', PartyViewSet, base_name="State")
+router.register(r'state', StateViewSet, base_name="State")
 router.register(r'administration', AdministrationViewSet,
                 base_name="Administration")
 router.register(r'legislative_periods', LegislativePeriodViewSet,
                 base_name="LegislativePeriod")
 router.register(r'debate_statements', DebateStatementViewSet,
                 base_name="DebateStatement")
+router.register(r'comittees', ComitteeViewSet,
+                base_name="Comittee")
+router.register(r'comittee_meetings', ComitteeMeetingViewSet,
+                base_name="ComitteeMeeting")
+router.register(r'comittee_agenda_topic', ComitteeAgendaTopicViewSet,
+                base_name="ComitteeAgendaTopic")
+router.register(r'comittee_membership', ComitteeMembershipViewSet,
+                base_name="ComitteeMembership")

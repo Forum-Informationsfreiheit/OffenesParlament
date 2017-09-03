@@ -31,6 +31,7 @@ Technical Documentation
    Admin-Interface <admin.rst>
    Frontend <frontend.rst>
    Subscriptions <subscriptions.rst>
+   API <api.rst>
 
 Existing Scrapers
 ~~~~~~~~~~~~~~~~~~~~~~~
