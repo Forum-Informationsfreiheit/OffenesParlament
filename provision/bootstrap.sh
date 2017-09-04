@@ -4,6 +4,7 @@
 # for postgres
 sudo locale-gen de_DE.UTF-8
 sudo apt-get -qq update
+sudo apt-get install debian-archive-keyring
 sudo apt-get install -y python python-pip python-twisted vim curl python-software-properties git htop postgresql libpq-dev
 
 # requirements for scrapy
