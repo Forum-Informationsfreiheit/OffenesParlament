@@ -38,7 +38,6 @@ class JsonDiffer(object):
             return ""
 
     def parse_content(self):
-
         self.old_hashes = self.content.latest_content_hashes
         self.cur_hashes = self.content.generate_content_hashes(content=self.cur_content)
 
@@ -309,6 +308,13 @@ class LawDiffer(JsonDiffer):
             return None
         return u'\n'.join(snippets)
 
+class InquiryDiffer(LawDiffer):
+    @property
+    def FIELD_MESSAGES(self):
+        fm = super(InquiryDiffer, self).FIELD_MESSAGES
+        fm['response_id'] = LAW.RESPONSE
+        return fm
+
 class SearchDiffer(JsonDiffer):
     new = []
     deleted = []
@@ -377,6 +383,7 @@ class SearchDiffer(JsonDiffer):
 CATEGORY_DIFFERS = {
     'person': PersonDiffer,
     'law': LawDiffer,
+    'inquiry': InquiryDiffer,
     'search': SearchDiffer,
     'search_laws': SearchDiffer,
     'search_debates': SearchDiffer,
@@ -437,6 +444,7 @@ def process_emails(emails_to_changesets, change_snippets):
             'person': [],
             'law': [],
             'search': [],
+            'inquiry': [],
         }
 
         for content_id in set(emails_to_changesets[email]):

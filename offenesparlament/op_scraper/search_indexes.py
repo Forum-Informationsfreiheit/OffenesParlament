@@ -1,7 +1,7 @@
 from haystack import indexes
 import datetime
 
-from op_scraper.models import Person, Law, Debate
+from op_scraper.models import Person, Law, Debate, Inquiry
 import json
 from haystack import connections
 
@@ -230,7 +230,8 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'steps',
             'opinions',
             'documents',
-            'keywords'
+            'keywords',
+            'response_id',
         ],
         'list': [
             'text',
@@ -246,7 +247,8 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'steps',
             'opinions',
             'documents',
-            'keywords'
+            'keywords',
+            'response_id',
         ],
     }
 
@@ -274,6 +276,8 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     documents = indexes.CharField()
     keywords = indexes.MultiValueField(
         model_attr='keyword_titles', faceted=True)
+    response_id = indexes.CharField()
+
 
     # Use this to limit which (inherited) laws should be scraped
     # The example shows how to remove inquiries/responses from the list
@@ -303,8 +307,15 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         """
         return obj.documents_json()
 
+    def prepare_response_id(self, obj):
+        if hasattr(obj, 'inquiry'):
+            r = obj.inquiry.response
+            return None if not r else r.pk
+        return None
+
     def get_model(self):
         return Law
+
 
 
 class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):

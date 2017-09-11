@@ -59,6 +59,13 @@
           <span class="party_tag {{ inquiry.receiver.party.short_css_class }}">{{ inquiry.receiver.party.short }}</span>
         {% endif %}
         <br/><span class="info">{{ reveiver_mandate }}</span></p>
+        <div class="info_buttons">
+          <a href="#" class="button button_notifications subscription_button"
+            data-subscription_url="{{ subscription_url|safe }}"
+            data-search_ui_url="{{ request.path|safe }}"
+            data-subscription_category="inquiry"
+            data-subscription_title="{{ subscription_title }}">Benachrichtigung aktivieren</a>
+        </div>
     {% endif %}
     </div>
   </div>
