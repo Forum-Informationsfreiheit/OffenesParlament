@@ -10,7 +10,7 @@ from op_scraper.models import *
 FNULL = open(os.devnull, 'w')
 
 fixtures_path = u"/vagrant/offenesparlament/op_scraper/fixtures/"
-yml_files = ['llps.yaml', 'categories.yaml', 'persons.yaml', 'laws.yaml', 'debates.yaml']
+yml_files = ['llps.yaml', 'categories.yaml', 'persons.yaml', 'laws.yaml', 'debates.yaml', 'inquiries.yaml']
 
 prelaws = []
 laws = []
@@ -118,7 +118,10 @@ def _add_law(law):
 def _add_inq(inq):
     global inquiries
     #print u"--- Adding inq {}".format(law.title)
-    inquiries.append(inq)
+    if inq not in inquiries:
+        inquiries.append(inq)
+    else:
+        return
     if inq.references:
         _add_law(inq.references)
     
@@ -196,13 +199,20 @@ def _person_fixtures():
         .filter(num_inq_a__gt=2)\
         .filter(latest_mandate__legislative_period__number=25)\
         .filter(latest_mandate__function__title__contains='Nationalrat')[:2].all()
+    persons_inq2_a = []
+    for inq in Inquiry.objects.exclude(status='response_received').exclude(parl_id__startswith='M')[:10]:
+        for s in inq.sender.all():
+            persons_inq2_a.append(s)
+        persons_inq2_a.append(inq.receiver)
+
 
     persons = list(chain(
         persons_br, 
         persons_nr, 
         persons_inq_s, 
         persons_inq_r, 
-        persons_inq_a))
+        persons_inq_a,
+        persons_inq2_a))
     
     inq_persons = []
     global laws
@@ -210,7 +220,7 @@ def _person_fixtures():
         for inq in p.inquiries_answered.all()[:2]:
             _add_inq(inq)
 
-        for inq in p.inquiries_sent.all()[:2]:
+        for inq in chain(p.inquiries_sent.all()[:2], p.inquiries_sent.exclude(status='response_received').exclude(parl_id__startswith='M')[:2]):
             _add_inq(inq)
             inq_persons.append(inq.receiver)
             if inq.response:
@@ -275,7 +285,7 @@ def _basic_fixtures():
 def _law_fixtures():
     # Laws and dependencies
     print u"Exporting Laws with Documents, Keywords"
-    
+
     for law in Law.objects.all():
         if law.category_id is not None and law.category_id in categories and categories[law.category_id] > 1:
             continue
@@ -285,14 +295,14 @@ def _law_fixtures():
     inq_resp_pks = ",".join([str(l.pk) for l in set(inquiries_responses)])
     prelaws_pks = ",".join([str(l.pk) for l in set(prelaws) if l not in inquiries and l not in inquiries_responses])
     laws_pks = ",".join([str(l.pk) for l in set(laws) if l not in prelaws and l not in inquiries and l not in inquiries_responses])
-    
+
     doc_pks = ",".join([str(d.pk) for d in documents])
     kw_pks = ",".join([str(kw.pk) for kw in keywords])
     st_pks = ",".join([str(st.pk) for st in steps])
     op_pks = ",".join([str(op.pk) for op in opinions])
     ph_pks = ",".join([str(ph.pk) for ph in phases])
     en_pks = ",".join([str(en.pk) for en in entities])
-    
+
     print u"-- Exporting {} Laws, {} Prelaws, {} Inquiries, {} Inquiry Responses, {} Documents, {} Keywords, {} Steps, {} Phases, {} Opinions".format(
         len(laws),
         len(prelaws),
@@ -326,6 +336,7 @@ def _law_fixtures():
         _call_dump("laws.yaml", 'Opinion', op_pks)
     if laws_pks:
         _call_dump("laws.yaml", 'Law', laws_pks)   
+
 
 def regen_fixtures():
     # Clear old fixtures

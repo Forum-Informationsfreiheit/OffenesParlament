@@ -21,6 +21,15 @@
   </div>
   {% endif %}
 
+  {% if changes.inquiry|length > 0 %}
+  <div class="change_section">
+    <h2>Anfragen</h2>
+    {% for snippet in changes.inquiry %}
+       {{ snippet|safe }}
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {% if changes.search|length > 0 %}
   <div class="change_section">
     <h2>Suchen</h2>

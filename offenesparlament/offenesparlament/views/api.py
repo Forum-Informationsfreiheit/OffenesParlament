@@ -1004,7 +1004,16 @@ class ComitteeAgendaTopicViewSet(PaginatedFilteredViewSet):
 ###
 # Routers provide an easy way of automatically determining the URL conf.
 
-router = routers.DefaultRouter()
+class OffenesparlamentAPI(routers.APIRootView):
+    """
+    The OffenesParlament (read-only) API exposes the following endpoints. Click through to them to discover details on how they work.
+    """
+    pass
+
+class MyDefaultRouter(routers.DefaultRouter):
+     APIRootView = OffenesparlamentAPI
+
+router = MyDefaultRouter()
 router.register(r'persons', PersonViewSet, base_name="Person")
 router.register(r'laws', LawViewSet, base_name="Law")
 router.register(r'debates', DebateViewSet, base_name="Debate")

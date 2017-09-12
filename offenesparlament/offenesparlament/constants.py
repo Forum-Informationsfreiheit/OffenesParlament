@@ -117,6 +117,9 @@ class LAW:
     class TITLE(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat einen neuen Titel: {}"
 
+    class RESPONSE(ChangeMessageGenerator):
+        MESSAGE_TEMPLATE = u"hat eine neue Antwort"
+
     class DESCRIPTION(ChangeMessageGenerator):
         MESSAGE_TEMPLATE = u"hat eine neue Beschreibung: {}"
 

@@ -169,6 +169,9 @@ def inquiry_detail(request, inq_id, ggp=None):
                 receiver_mandate = mandate.function.title
                 break
         # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=first_date), Q(end_date__gte=last_date) | Q(end_date__isnull=True))
+    url_params = {'parl_id': inquiry.parl_id}
+    subscription_url = '/gesetze/search?{}'.format(
+        urllib.urlencode(url_params))
 
     steps = inquiry.steps.order_by('-date')
     for step in steps:
@@ -180,7 +183,10 @@ def inquiry_detail(request, inq_id, ggp=None):
                'inquiry_response': inquiry_response, 'first_date': first_date,
                'inquiry_sender': inquiry_sender, 'steps': steps,
                'last_date': last_date, 'inquiry_type_verbal': inquiry_type_verbal,
-               'reveiver_mandate': receiver_mandate}
+               'reveiver_mandate': receiver_mandate,
+               'subscription_url': subscription_url,
+               'subscription_title': inquiry.title,
+               }
     return render(request, 'inquiry_detail.html', context)
 
 
