@@ -44,3 +44,4 @@ markdown==2.6.8
 django-filter==1.0.4
 Pillow
 django-bleach
+tabulate
