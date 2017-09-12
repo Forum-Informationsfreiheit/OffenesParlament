@@ -35,7 +35,6 @@ elasticsearch==1.7.0
 xxhash==0.4.3
 requests==2.8.1
 django-jsonify==0.3.0
-distribute>=0.6,<0.7
 django_inlinecss==0.1.2
 html2text
 pyopenssl==16.2.0
