@@ -233,19 +233,19 @@ class Law(Timestamped, ParlIDMixIn):
                 u'<span class="timeline_{k} timeline_value">{v}</span>'.format(k=k,v=v)
                 for k,v in g.iteritems()) if hasattr(g,'iteritems') else None
         LAW_PHASES = [
-                ['Vorparlamentarisches Verfahren', 'vorparl', 
+                ['Vorparlamentarisches Verfahren', 'vorparl',
                     [
                         ['vp_ein', 'Entwurf eingegangen', r'^Einlangen im Nationalrat',
                             lambda s,g: """<span class="date">%s</span>""" % s.date.strftime('%d.%m.%Y')
                         ],
-                        ['vp_st', 'Stellungnahmen', lambda x: 
+                        ['vp_st', 'Stellungnahmen', lambda x:
                             {'count': x.law.opinions.all().count(), 'end': x.title.replace('Ende der Begutachtungsfrist','').strip(' :')} if
-                            'Ende der Begutachtungsfrist' in x.title and 
+                            'Ende der Begutachtungsfrist' in x.title and
                             x.law.opinions.all().count() else False,
                             just_spans],
                     ],
                 ],
-                ['Parlamentarisches Verfahren', 'parl', 
+                ['Parlamentarisches Verfahren', 'parl',
                     [
                         ['nr_ein', 'Einlangen im Nationalrat', r'^Einlangen im Nationalrat',
                             lambda s,g: """<span class="date">%s</span>""" % s.date.strftime('%d.%m.%Y')
@@ -267,7 +267,7 @@ class Law(Timestamped, ParlIDMixIn):
                             lambda s,g: u"""
                                 <span class="results">Dafür:%s</span>
                             """ % s.title.lower().split(u'dafür:',1)[1].replace('dagegen:','<br />Dagegen:') \
-                                if u'dafür' in s.title.lower() else
+                                if u'dafür:' in s.title.lower() else
                                         'Angenommen'
                             ],
                         ['br_besch', 'Beschluss im Bundesrat', r'Beschluss im Bundesrat',
