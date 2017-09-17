@@ -66,6 +66,14 @@ class ArchiveIndexMixin(object):
         """
         return self.get_model().objects.none()
 
+    def index_queryset(self, start_date=None, end_date=None, using=None):
+        """
+        Override to always retun an empty array. This archive indices should not
+        be used via rebuild_index or update_index, they shoud only be accessed
+        through the low-level ES api
+        """
+        return self.get_model().objects.none()
+
 
 class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
