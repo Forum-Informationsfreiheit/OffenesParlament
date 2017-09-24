@@ -34,6 +34,8 @@ class BaseConfig(Configuration):
     MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
     MEDIA_URL= '/media/'
 
+    ANALYTICS_CODE = 'OHAI'
+
 
 
     SECRET_KEY = 'tk5l_92mqo3406we8^s*x%%=*7*m*!ce0^o^s7_t9lrg@f46_n'
@@ -122,7 +124,8 @@ class BaseConfig(Configuration):
                     'django.core.context_processors.static',
                     'django.core.context_processors.tz',
                     'django.contrib.messages.context_processors.messages',
-                    'django.core.context_processors.request'
+                    'django.core.context_processors.request',
+                    'offenesparlament.context_processors.analytics_code',
                 )
             },
         },
