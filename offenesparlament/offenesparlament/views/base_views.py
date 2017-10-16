@@ -13,6 +13,8 @@ from op_scraper.models import ComitteeMeeting
 from django.db.models import Count, Max, Min, Q
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.urlresolvers import reverse
+from django.http import Http404
+
 
 from offenesparlament.views.search import PersonSearchView
 from op_scraper.search_indexes import extract_json_fields
@@ -151,6 +153,9 @@ def inquiry_detail(request, inq_id, ggp=None):
             .first()
     else:
         inquiry = Inquiry.objects.filter(parl_id=inq_id).first()
+    if not inquiry:
+        raise Http404('Inquiry does not exist')
+
     inquiry_type_verbal = inquiry.parl_id.split('_')[0][0] == 'M'
     inquiry_sender = inquiry.sender
     documents = inquiry.documents
@@ -158,8 +163,9 @@ def inquiry_detail(request, inq_id, ggp=None):
     mandates_receiver = inquiry.receiver.mandates.order_by('-end_date')
     # mandates_receiver_filtered = mandates_receiver.filter(legislative_period__in=LegislativePeriod.objects.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True)))
     # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True))
-    first_date = inquiry.steps.order_by('date').first().date
-    last_date = inquiry.steps.order_by('date').last().date
+    
+    first_date = inquiry.steps.order_by('date').first().date if inquiry.steps.count() else None
+    last_date = inquiry.steps.order_by('date').last().date if inquiry.steps.count() else None
     receiver_mandate = mandates_receiver.first().function.title
     if first_date is not None:
         for mandate in mandates_receiver:
