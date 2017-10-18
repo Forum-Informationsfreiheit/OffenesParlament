@@ -25,7 +25,7 @@ eval "$CMD scrape crawl petitions"
 eval "$CMD scrape crawl statement"
 
 # run es update
-eval "$CMD update_index op_scraper.Debate -b 100"
+eval "$CMD update_index op_scraper.Debate -b 25"
 eval "$CMD update_index op_scraper.Law -b 1000"
 eval "$CMD update_index op_scraper.Person"
 
