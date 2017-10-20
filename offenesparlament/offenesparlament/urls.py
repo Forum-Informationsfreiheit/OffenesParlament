@@ -80,13 +80,12 @@ urlpatterns = patterns(
     # Show login form (only email address)
     url(r'^abos/$', subscriptions.login, name='subscriptions'),
 
-    # List emails subscriptions
-    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
-        subscriptions.list,
-        name='list_subscriptions'),
+    # login
+    url(r'^abos/login/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
+        subscriptions.login2, name='subscriptions_login2'),
 
     # List emails subscriptions
-    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/?$',
+    url(r'^abos/list/?$',
         subscriptions.list,
         name='list_subscriptions'),
 
@@ -105,13 +104,13 @@ urlpatterns = patterns(
     url(r'^api/', include(router.urls, namespace='op_api')),
     # url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/new/?$',
+    url(r'^abos/kommentiert/new/?$',
         commentedcontent.CommentedContentCreate.as_view(),
         name='commentedcontent_create'),
-    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/(?P<pk>.*)/edit/?$',
+    url(r'^abos/kommentiert/(?P<pk>.*)/edit/?$',
         commentedcontent.CommentedContentUpdate.as_view(),
         name='commentedcontent_update'),
-    url(r'^abos/(?P<email>[^/]+)/(?P<key>[^/]+)/kommentiert/(?P<pk>.*)/delete/?$',
+    url(r'^abos/kommentiert/(?P<pk>.*)/delete/?$',
         commentedcontent.CommentedContentDelete.as_view(),
         name='commentedcontent_delete'),
     url(r'^abos/kommentiert/preview/?$',

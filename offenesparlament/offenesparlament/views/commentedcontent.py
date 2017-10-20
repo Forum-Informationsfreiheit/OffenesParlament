@@ -5,13 +5,17 @@ from offenesparlament.constants import MESSAGES
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
+
 
 from django.core.mail import mail_admins
+from offenesparlament.views.subscriptions import needs_login
 
 class SameUserMixin(object):
+    @method_decorator(needs_login)
     def dispatch(self, request, *args, **kwargs):
-        email = kwargs['email']
-        key = kwargs['key']
+        email = request.myuser.email
+        key = request.myuser.verification.verification_hash
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
@@ -28,9 +32,12 @@ class CommentedContentCreate(SameUserMixin, CreateView):
     form_class = CommentedContentForm
     model = CommentedContent
 
+    def dispatch(self, *args, **kwargs):
+        return super(CommentedContentCreate,self).dispatch(*args, **kwargs)
+
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.created_by=User.objects.get(email=self.kwargs['email'])
+        obj.created_by = self.request.myuser
         obj.save()
 
         ka = {}

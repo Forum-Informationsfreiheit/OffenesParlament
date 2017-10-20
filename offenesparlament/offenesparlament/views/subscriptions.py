@@ -44,7 +44,7 @@ def login(request):
                     user.save()
                 list_url = request.build_absolute_uri(
                     reverse(
-                        'list_subscriptions',
+                        'subscriptions_login2',
                         kwargs={
                             'email': email,
                             'key': user.verification.verification_hash}
@@ -63,6 +63,32 @@ def login(request):
 
 
 @never_cache
+def login2(request, email, key):
+    if User.objects.filter(email=email).exists():
+        user = User.objects.get(email=email)
+        if key is not None and user.verification.verification_hash == key:
+            user.verification.verified=True
+            user.verification.created_at = None
+            user.verification.save()
+            request.session['myuser']=user.pk
+            return redirect(reverse('list_subscriptions'))
+    return render(request, 'subscription/list_subscriptions.html',
+            {'message': MESSAGES.EMAIL.VERIFICATION_HASH_WRONG})
+
+
+def needs_login(fun):
+    @never_cache
+    def needs_login_inside(request, *args, **kwargs):
+        if not request.session.get('myuser', False):
+            message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
+            return render(request, 'subscription/list_subscriptions.html', {'message': message})
+        print request, 'setting myuser'
+        request.myuser = User.objects.get(pk=request.session.get('myuser'))
+        print request.myuser
+        return fun(request, *args, **kwargs)
+    return needs_login_inside
+
+@needs_login
 def verify(request, email, key):
     """
     Verify a user's subscription for the given email
@@ -88,40 +114,29 @@ def verify(request, email, key):
 
     return render(request, 'subscription/verification.html', {'message': message})
 
-@never_cache
-def list(request, email, key=None):
+@needs_login
+def list(request):
     """
     List a user's subscriptions or (re-)send the email with the hashkey
     """
     message = ""
-    if User.objects.filter(email=email).exists():
-        user = User.objects.get(email=email)
-        if key is not None and user.verification.verification_hash == key:
-            if not user.verification.verified:
-                user.verification.verified=True
-                user.verification.save()
-            subscriptions = user.subscription_set.filter(verification__verified=True) \
-                    .select_related('content')
-            commentedcontents = user.commentedcontent_set.all()
+    user = request.myuser
+    subscriptions = user.subscription_set.filter(verification__verified=True) \
+            .select_related('content')
+    commentedcontents = user.commentedcontent_set.all()
 
-            commentedcontent_new= reverse('commentedcontent_create', kwargs={'email': email, 'key': key})
-            return render(
-                request,
-                'subscription/list_subscriptions.html',
-                {
-                    'message': message,
-                    'email': email,
-                    'subscriptions': subscriptions,
-                    'commentedcontent_new': commentedcontent_new,
-                    'commentedcontents': commentedcontents,
-                }
-            )
-        else:
-            message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
-            return render(request, 'subscription/list_subscriptions.html', {'message': message})
-    else:
-        message = MESSAGES.EMAIL.VERIFICATION_HASH_WRONG
-        return render(request, 'subscription/list_subscriptions.html', {'message': message})
+    commentedcontent_new= reverse('commentedcontent_create')
+    return render(
+        request,
+        'subscription/list_subscriptions.html',
+        {
+            'message': message,
+            'email': user.email,
+            'subscriptions': subscriptions,
+            'commentedcontent_new': commentedcontent_new,
+            'commentedcontents': commentedcontents,
+        }
+    )
 
 
 @never_cache
@@ -147,7 +162,7 @@ def unsubscribe(request, email, key):
 
         list_subscriptions_link = request.build_absolute_uri(
             reverse(
-                'list_subscriptions',
+                'subscriptions_login2',
                 kwargs={
                     'email': email,
                     'key': user.verification.verification_hash}

@@ -972,6 +972,7 @@ class Verification(models.Model):
 
     verified = models.BooleanField()
     verification_hash = models.CharField(max_length=32)
+    created_at = models.DateTimeField(auto_now=True, null=True)
 
 
 class User(models.Model):
@@ -1176,8 +1177,6 @@ class CommentedContent(models.Model):
 
     def get_edit_url(self):
         return reverse('commentedcontent_update', kwargs={
-            'email': self.created_by.email,
-            'key': self.created_by.verification.verification_hash,
             'pk': self.pk
             })
 
