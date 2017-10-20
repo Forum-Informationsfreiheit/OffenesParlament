@@ -42,7 +42,7 @@ class EmailController():
         try:
             user = User.objects.get(email=recipient)
             context_params['manage_subscriptions_link'] = reverse(
-                'list_subscriptions',
+                'subscriptions_login2',
                 kwargs={
                     'email': recipient,
                     'key': user.verification.verification_hash}
