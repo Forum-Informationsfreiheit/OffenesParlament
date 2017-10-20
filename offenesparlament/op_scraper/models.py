@@ -9,12 +9,12 @@ from annoying import fields
 from django.contrib.postgres.fields import ArrayField
 from django.conf import settings
 from django.template.loader import render_to_string
-from raven.contrib.django.raven_compat.models import client
 import re
 import json
 import xxhash
 import requests
 import collections
+import uuid
 
 import markdown
 import bleach
@@ -971,9 +971,17 @@ class Verification(models.Model):
     and is being used for one-time links as well.
     """
 
-    verified = models.BooleanField()
+    verified = models.BooleanField(default=False)
     verification_hash = models.CharField(max_length=32)
     created_at = models.DateTimeField(auto_now=True, null=True)
+
+    def regen_verification_hash(self):
+        self.verification_hash = uuid.uuid4().hex
+
+    def save(self, *args, **kwargs):
+        if self.verification_hash==None:
+            self.regen_verification_hash()
+        super(Verification,self).save(*args,**kwargs)
 
 
 class User(models.Model):
@@ -1090,6 +1098,7 @@ class SubscribedContent(models.Model):
                 res = es.get(index="archive", doc_type="modelresult", id=content_id_hash)
                 content.append(res['_source'])
             except Exception, e:
+                from raven.contrib.django.raven_compat.models import client
                 client.captureException()
         return content
 

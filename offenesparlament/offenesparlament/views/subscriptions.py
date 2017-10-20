@@ -16,7 +16,6 @@ from django.shortcuts import render
 
 import xxhash
 import requests
-import uuid
 import json
 
 # import the logging library
@@ -36,12 +35,11 @@ def login(request):
             if len(form.cleaned_data['message']) == 0:  #honey trap was not filled out
                 user, created_user = User.objects.get_or_create(email=email)
                 if created_user:
-                    user_verification_hash = uuid.uuid4().hex
-                    user_verification = Verification.objects.create(
-                        verified=False,
-                        verification_hash=user_verification_hash)
+                    user_verification = Verification.objects.create()
                     user.verification = user_verification
                     user.save()
+                user.verification.regen_verification_hash()
+                user.verification.save()
                 list_url = request.build_absolute_uri(
                     reverse(
                         'subscriptions_login2',
@@ -160,6 +158,8 @@ def unsubscribe(request, email, key):
         if content.subscriptions.count() == 0:
             content.delete()
 
+        user.verification.regen_verification_hash()
+        user.verification.save()
         list_subscriptions_link = request.build_absolute_uri(
             reverse(
                 'subscriptions_login2',
@@ -212,10 +212,7 @@ def subscribe(request):
     # find or create new user, if this is a first time subscription
     user, created_user = User.objects.get_or_create(email=email)
     if created_user:
-        user_verification_hash = uuid.uuid4().hex
-        user_verification = Verification.objects.create(
-            verified=False,
-            verification_hash=user_verification_hash)
+        user_verification = Verification.objects.create()
         user.verification = user_verification
         user.save()
 
@@ -230,18 +227,14 @@ def subscribe(request):
         content.reset_content_hashes()
 
     if not Subscription.objects.filter(user=user, content=content).exists():
-        verification_hash = uuid.uuid4().hex
+        verification_item = Verification.objects.create()
         verification_url = request.build_absolute_uri(
             reverse(
                 'verify',
                 kwargs={
                     'email': email,
-                    'key': verification_hash}
+                    'key': verification_item.verification_hash}
             )
-        )
-        verification_item = Verification.objects.create(
-            verified=False,
-            verification_hash=verification_hash
         )
 
         Subscription.objects.create(
