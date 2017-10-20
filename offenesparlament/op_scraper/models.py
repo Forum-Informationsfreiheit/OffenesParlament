@@ -9,6 +9,7 @@ from annoying import fields
 from django.contrib.postgres.fields import ArrayField
 from django.conf import settings
 from django.template.loader import render_to_string
+from raven.contrib.django.raven_compat.models import client
 import re
 import json
 import xxhash
@@ -1085,8 +1086,11 @@ class SubscribedContent(models.Model):
             pass
 
         for content_id_hash in hashes:
-            res = es.get(index="archive", doc_type="modelresult", id=content_id_hash)
-            content.append(res['_source'])
+            try:
+                res = es.get(index="archive", doc_type="modelresult", id=content_id_hash)
+                content.append(res['_source'])
+            except Exception, e:
+                client.captureException()
         return content
 
     def clear_latest_content(self):
