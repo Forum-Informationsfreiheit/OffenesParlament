@@ -11,6 +11,10 @@
 
 {% block title %}{{ person.reversed_name }}{% endblock %}
 
+{% block top_bar_additional %}
+<div id="apibtn"><a href="{{ person.api_slug }}" class="button button_api" target="_blank">API</a></div>
+{% endblock %}
+
 {% block content %}
   <h1>{{ person.reversed_name }}</h1>
   <p>
@@ -77,7 +81,6 @@
           data-search_ui_url="{{ request.path|safe }}"
           data-subscription_category="person"
           data-subscription_title="{{ subscription_title }}">Benachrichtigung aktivieren</a>
-        <a href="{{ person.api_slug }}" class="button button_api" target="_blank">API</a>
       </div>
 
     </div>

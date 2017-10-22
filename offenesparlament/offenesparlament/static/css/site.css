@@ -693,6 +693,7 @@ ul.columned_linklist {
     margin-bottom: 13px; }
 
 .top_bar {
+  position: relative;
   margin: 30px 0 0 0; }
   @media screen and (max-width: 500px) {
     .top_bar {
@@ -1327,3 +1328,22 @@ ul.petitions_creators {
 
 .kontext_form #id_body {
   height: 600px; }
+
+#apibtn {
+  position: absolute;
+  right: 0;
+  top: 0; }
+  #apibtn .button, #apibtn .button_large {
+    border: none;
+    margin: 0;
+    padding: 10px;
+    padding-left: 30px;
+    color: #000;
+    background-position-x: 0;
+    line-height: 20px;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-position-y: -1px; }
+  @media (max-width: 500px) {
+    #apibtn {
+      display: none; } }

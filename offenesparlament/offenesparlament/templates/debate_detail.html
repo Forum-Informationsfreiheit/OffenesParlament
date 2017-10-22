@@ -9,6 +9,10 @@
 
 {% block title %}{{ debate.full_title }}{% endblock %}
 
+{% block top_bar_additional %}
+<div id="apibtn"><a href="{{ debate.api_slug }}" class="button button_api" target="_blank">API</a></div>
+{% endblock %}
+
 {% block content %}
 <h1>{{ debate.full_title }}</h1>
 
@@ -16,7 +20,6 @@
 
 <div class="info_buttons law_info_buttons">
   <a href="{{ debate.protocol_url }}" class="button button_source" target="_blank">Zur Parlamentsseite</a>
-  <a href="{{ debate.api_slug }}" class="button button_api" target="_blank">API</a>
 </div>
 
 {% if statements %}
