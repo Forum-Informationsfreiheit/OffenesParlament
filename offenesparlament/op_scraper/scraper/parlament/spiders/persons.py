@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import feedparser
+import urlparse
+import collections
 
 from django.core.urlresolvers import reverse
 
@@ -49,30 +51,33 @@ class PersonsSpider(BaseSpider):
         'BR': 'Abgeordnete(r) zum Bundesrat'
     }
 
-    URLOPTIONS_NR = {
-        'xdocumentUri': '/WWER/PARL/index.shtml',
-        'PR': '',
-        'R_BW': 'BL',
-        'anwenden': 'Anwenden',
-        'GP': '',
-        'BL': 'ALLE',
-        'FR': 'ALLE',
-        'M': 'M',
-        'NRBR': '',
-        'FBEZ': 'FW_008',
-        'view': '',
-        'WK': 'ALLE',
-        'jsMode': '',
-        'LISTE': '',
-        'W': 'W',
-        'letter': '',
-        'WP': 'ALLE',
-        'listeId': '8',
-        'R_WF': 'FR'
-    }
+#    URLOPTIONS_NR = {
+#        'xdocumentUri': '/WWER/PARL/index.shtml',
+#        'PR': '',
+#        'R_BW': 'BL',
+#        'anwenden': 'Anwenden',
+#        'GP': '',
+#        'BL': 'ALLE',
+#        'FR': 'ALLE',
+#        'M': 'M',
+#        'NRBR': '',
+#        'FBEZ': 'FW_008',
+#        'view': '',
+#        'WK': 'ALLE',
+#        'jsMode': '',
+#        'LISTE': '',
+#        'W': 'W',
+#        'letter': '',
+#        'WP': 'ALLE',
+#        'listeId': '8',
+#        'R_WF': 'FR',
+#        'requestId': 'B19D9DFCF0', # apparently parliaments needs this to be present, maybe even valid
+#        'STEP': '2010'
+#    }
     name = "persons"
     title = "Persons Spider"
     persons_scraped = []
+    start_urls = []
 
     def __init__(self, **kw):
         super(PersonsSpider, self).__init__(**kw)
@@ -92,6 +97,8 @@ class PersonsSpider(BaseSpider):
         """
         Overwritten from BaseSpider for non-LLP-based retrieval
         """
+        u = ['https://www.parlament.gv.at/WWER/PARL/filter.psp?jsMode=EVAL&xdocumentUri=%2FWWER%2FPARL%2Findex.shtml&NRBR=NR&anwenden=Anwenden&R_WF=FR&FR=ALLE&R_BW=BL&BL=ALLE&W=W&M=M&listeId=8&FBEZ=FW_008', # NR
+             'https://www.parlament.gv.at/WWER/PARL/filter.psp?jsMode=EVAL&xdocumentUri=%2FWWER%2FPARL%2Findex.shtml&NRBR=BR&anwenden=Anwenden&R_WF=FR&FR=ALLE&R_BW=BL&BL=ALLE_BL&W=W&M=M&listeId=8&FBEZ=FW_008'] # BR
         urls = []
         if self.ALLOWED_LLPS:
             llps = LegislativePeriod.objects.filter(
@@ -99,18 +106,34 @@ class PersonsSpider(BaseSpider):
         else:
             llps = LegislativePeriod.objects.all()
         for llp in llps:
-            for nrbr in ['NR', 'BR']:
-                urloptions = self.URLOPTIONS_NR.copy()
-                urloptions['GP'] = llp.roman_numeral
-                urloptions['NRBR'] = nrbr
-                url_options = urlencode(urloptions)
-                url = "{}?{}".format(self.BASE_URL, url_options)
-                urls.append(url)
-            self.LLP.append(llp.number)
+            for up in u:
+            #    for nrbr in ['NR', 'BR']:
+                #urloptions = self.URLOPTIONS_NR.copy()
+                #urloptions['GP'] = llp.roman_numeral
+            #        urloptions['NRBR'] = nrbr
+                #url_options = urlencode(urloptions)
+                #url = "{}?{}".format(self.BASE_URL, url_options)
+                urls.append(up+'&GP='+llp.roman_numeral)
+                if not llp.number in self.LLP:
+                    self.LLP.append(llp.number)
 
         return urls
 
     def parse(self, response):
+        URLOPTIONS = collections.OrderedDict(
+            urlparse.parse_qsl(
+                urlparse.urlparse(
+                    response.xpath('''//a[starts-with(text(),'Alle anzeigen')]/@href''')[0].extract()
+                ).query)
+        )
+        URLOPTIONS['LISTE']=''
+        URLOPTIONS['letter']=''
+        new_url = '{}?{}'.format(self.BASE_URL,
+                                             urlencode(URLOPTIONS))
+        yield response.follow(new_url,
+                              self.parse_list)
+
+    def parse_list(self, response):
 
         # rss = feedparser.parse(response.url)
 

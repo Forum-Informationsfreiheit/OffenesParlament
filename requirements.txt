@@ -14,7 +14,7 @@ virtualenv-clone==0.2.4
 virtualenvwrapper==4.2
 wsgiref
 yolk==0.4.3
-scrapy==1.1.0
+scrapy>=1.4.0
 celery==3.1.18
 flower
 django-celery==3.1.17
