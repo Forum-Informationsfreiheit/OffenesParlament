@@ -40,7 +40,7 @@ import re
 
 
 class PersonsSpider(BaseSpider):
-    BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filter.psp")
+    BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filterRearrange.psp")
 
     ALLOWED_LLPS = []
 
@@ -56,7 +56,6 @@ class PersonsSpider(BaseSpider):
         'anwenden': 'Anwenden',
         'GP': '',
         'BL': 'ALLE',
-        'STEP': ' ',
         'FR': 'ALLE',
         'M': 'M',
         'NRBR': '',

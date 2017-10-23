@@ -169,7 +169,7 @@ class PERSON:
             return parties
 
     class LIST(SingleExtractor):
-        XPATH = '//*[@id="filterListeFW_008"]/table//tbody//tr'
+        XPATH = '//table//tbody//tr'
 
         @classmethod
         def xt(cls, response):
@@ -189,13 +189,15 @@ class PERSON:
                 for party_span in party_spans:
                     party_short = Selector(text=party_span).xpath(
                         '//span/text()').extract()[0]
-                    party_title = Selector(text=party_span).xpath(
-                        '//span/@title').extract()[0]
+                    party_title = '' #disabled because it became huge
                     mandates.append(
                         {'short': party_short, 'title': party_title})
+
                 electoral_state = {
-                    'short': Selector(text=raw_person).xpath('//td[last()]//span/text()').extract()[0],
-                    'long': Selector(text=raw_person).xpath('//td[last()]//span/@title').extract()[0]}
+                    'short': Selector(text=raw_person).xpath('//td[last()]//span/text()').extract(),
+                    'long': Selector(text=raw_person).xpath('//td[last()]//span/@title').extract()}
+                electoral_state['short'] = electoral_state['short'][0] if len(electoral_state['short'])>0 else ''
+                electoral_state['long'] = electoral_state['long'][0] if len(electoral_state['long'])>0 else ''
 
                 persons.append({
                     'source_link': source_link,
