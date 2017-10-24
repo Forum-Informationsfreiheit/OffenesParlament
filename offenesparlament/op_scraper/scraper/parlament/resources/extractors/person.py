@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
 import datetime
+import roman
+import re
+
 from django.utils.html import remove_tags
 from scrapy import Selector
 
@@ -43,39 +47,59 @@ class PERSON:
 
                     function = mandate.split(u'<br>')[0].split(',')[0]
                     party = mandate.split(u'<br>')[0].split(',')[1]
+                    llp_raw = re.match(
+                        '^.*\((.*)\. GP\).*$', function
+                        )
+                    m_llp_roman_begin = \
+                        m_llp_roman_end = \
+                            llp_raw.group(1) if llp_raw else ''
 
-                    # Start Date
-                    try:
-                        start_date = _clean(
-                            mandate.split('<br>')[1].split(u'\u2013')[0])
+                    logger.debug(function)
+                    logger.debug(m_llp_roman_begin)
 
-                        start_date = datetime.datetime.strptime(
-                            start_date, "%d.%m.%Y").date()
-                    except:
-                        logger.error(
-                            u"Failed to parse mandate start date: {}".format(start_date))
-                        start_date = None
+                    if u'–' in m_llp_roman_begin:
+                        m_llp_roman_begin,m_llp_roman_end = m_llp_roman_begin.split(u'–')
 
-                    # End Date
-                    try:
-                        end_date = mandate.split(
-                            '<br>')[1].split(u'\u2013')
-                        if len(end_date) > 1 and end_date[1]:
-                            end_date = datetime.datetime.strptime(
-                                _clean(end_date[1]), "%d.%m.%Y").date()
-                        else:
+                    for llp in range(roman.fromRoman(m_llp_roman_begin.strip('. ')),
+                                    roman.fromRoman(m_llp_roman_end.strip('. '))+1
+                                    ) if m_llp_roman_begin else [None]:
+                        llp_roman = roman.toRoman(llp) if llp else None
+                        logger.debug(llp)
+
+                        # Start Date
+                        try:
+                            start_date = _clean(
+                                mandate.split('<br>')[1].split(u'\u2013')[0])
+
+                            start_date = datetime.datetime.strptime(
+                                start_date, "%d.%m.%Y").date()
+                        except:
+                            logger.error(
+                                u"Failed to parse mandate start date: {}".format(start_date))
+                            start_date = None
+
+                        # End Date
+                        try:
+                            end_date = mandate.split(
+                                '<br>')[1].split(u'\u2013')
+                            if len(end_date) > 1 and end_date[1]:
+                                end_date = datetime.datetime.strptime(
+                                    _clean(end_date[1]), "%d.%m.%Y").date()
+                            else:
+                                end_date = None
+                        except:
+                            logger.error(
+                                u"Failed to parse mandate end date: {}".format(end_date))
                             end_date = None
-                    except:
-                        logger.error(
-                            u"Failed to parse mandate end date: {}".format(end_date))
-                        end_date = None
 
-                    mandates.append({
-                        'function': function,
-                        'party': _clean(party),
-                        'start_date': start_date,
-                        'end_date': end_date,
-                    })
+                        mandates.append({
+                            'function': function,
+                            'party': _clean(party),
+                            'start_date': start_date,
+                            'end_date': end_date,
+                            'llp': llp,
+                            'llp_roman': llp_roman,
+                        })
 
                 return mandates
 

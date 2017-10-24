@@ -65,7 +65,7 @@ class LawsInitiativesSpider(BaseSpider):
         self.start_urls = self.get_urls()
 
         self.cookies_seen = set()
-        self.print_debug()
+        #self.print_debug()
 
     def parse(self, response):
         self.SCRAPED_COUNTER += 1
@@ -80,7 +80,7 @@ class LawsInitiativesSpider(BaseSpider):
         status = LAW.STATUS.xt(response)
 
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
-            self.logger.info(
+            (self.logger.debug if self.SCRAPED_COUNTER%1000!=0 else self.logger.info)(
                 green(u"[{} of {}] Skipping Law, no changes: {}".format(
                     self.SCRAPED_COUNTER,
                     self.TOTAL_COUNTER,
@@ -94,7 +94,7 @@ class LawsInitiativesSpider(BaseSpider):
         # Create category if we don't have it yet
         cat, created = Category.objects.get_or_create(title=category)
         if created:
-            log.msg(u"Created category {}".format(
+            self.logger.debug(u"Created category {}".format(
                 green(u'[{}]'.format(category))))
 
         # Create and save Law
@@ -131,7 +131,7 @@ class LawsInitiativesSpider(BaseSpider):
             green(unicode(LLP)),
             blue(response.url)
         )
-        log.msg(logtext, level=log.INFO)
+        (self.logger.debug if self.SCRAPED_COUNTER%1000!=0 else self.logger.info)(logtext, level='DEBUG' if self.SCRAPED_COUNTER%1000!=0 else 'INFO')
 
         response.meta['law_item'] = law_item
 
@@ -167,7 +167,7 @@ class LawsInitiativesSpider(BaseSpider):
         for keyword in keywords:
             kw, created = Keyword.objects.get_or_create(title=keyword)
             if created:
-                log.msg(u"Created keyword {}".format(
+                self.logger.debug(u"Created keyword {}".format(
                     green(u'[{}]'.format(keyword))))
             keyword_items.append(kw)
 
@@ -217,7 +217,7 @@ class LawsInitiativesSpider(BaseSpider):
             phase_item, created = Phase.objects.get_or_create(
                 title=phase['title'])
             if created:
-                log.msg(u"Created Phase {}".format(
+                self.logger.debug(u"Created Phase {}".format(
                     green(u'[{}]'.format(phase_item.title))))
 
             # Create steps
@@ -265,7 +265,7 @@ class LawsInitiativesSpider(BaseSpider):
                         else:
                             # We can't save statements if we can't find the
                             # Person
-                            log.msg(
+                            self.logger.debug(
                                 red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
                                     green(
                                         u'[{}]'.format(stmnt['person_name'])),

@@ -67,6 +67,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         self.idlist = {}
 
     def parse(self, response):
+        self.logger.debug(response.url)
         # Extract fields
         ts = GENERIC.TIMESTAMP.xt(response)
         title = LAW.TITLE.xt(response)
@@ -75,7 +76,7 @@ class PreLawsSpider(LawsInitiativesSpider):
             roman_numeral=response.url.split('/')[-4])
 
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
-            self.logger.info(
+            self.logger.debug(
                 green(u"Skipping Law, no changes: {}".format(
                     title)))
             return
@@ -97,7 +98,7 @@ class PreLawsSpider(LawsInitiativesSpider):
             green(unicode(LLP)),
             blue(response.url)
         )
-        log.msg(logtext, level=log.INFO)
+        self.logger.debug(logtext)
 
         # Create and save Law
         pre_law_data = {
@@ -143,8 +144,9 @@ class PreLawsSpider(LawsInitiativesSpider):
 
                 callback_requests.append(post_req)
 
-            log.msg(green("Open/Skipped Callback requests: {}/{}".format(
-                len(callback_requests), skipped_ops)), level=log.INFO)
+            self.logger.info(green(
+                "Open/Skipped Callback requests: {}/{}".format(
+                len(callback_requests), skipped_ops)))
 
         return callback_requests
 
@@ -160,7 +162,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         for keyword in keywords:
             kw, created = Keyword.objects.get_or_create(title=keyword)
             if created:
-                log.msg(u"Created keyword {}".format(
+                self.logger.debug(u"Created keyword {}".format(
                     green(u'[{}]'.format(keyword))))
             keyword_items.append(kw)
 
@@ -191,7 +193,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         # Create category if we don't have it yet
         cat, created = Category.objects.get_or_create(title=category)
         if created:
-            log.msg(u"Created category {}".format(
+            self.logger.debug(u"Created category {}".format(
                 green(u'[{}]'.format(category))))
 
         return cat
@@ -248,7 +250,7 @@ class PreLawsSpider(LawsInitiativesSpider):
             entity_item.email,
             'new' if created else 'updated')
 
-        log.msg(
+        self.logger.debug(
             u"Opinion: {} by {}".format(
                 magenta(opinion_item.parl_id),
                 entity_str
@@ -262,12 +264,12 @@ class PreLawsSpider(LawsInitiativesSpider):
         phase_item, created = Phase.objects.get_or_create(
             title='')
         if created:
-            log.msg(u"Created Phase {}".format(
+            self.logger.debug(u"Created Phase {}".format(
                 green(u'[{}]'.format(phase_item.title))))
 
         steps = PRELAW.STEPS.xt(response)
         if steps:
-            log.msg(u"Creating {} steps".format(
+            self.logger.debug(u"Creating {} steps".format(
                 cyan(u'[{}]'.format(len(steps)))))
 
         # Create steps
@@ -294,7 +296,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         phase_item, created = Phase.objects.get_or_create(
             title='default_op')
         if created:
-            log.msg(u"Created Phase {}".format(
+            self.logger.debug(u"Created Phase {}".format(
                 green(u'[{}]'.format(phase_item.title))))
 
         steps = OPINION.STEPS.xt(response)

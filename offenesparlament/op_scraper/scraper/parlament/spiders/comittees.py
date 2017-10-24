@@ -37,15 +37,15 @@ class ComitteesSpider(BaseSpider):
 
     URLOPTIONS = {
         'view': 'RSS',
+        'RSS': 'RSS',
         'jsMode': 'RSS',
         'xdocumentUri': '/PAKT/AUS/index.shtml',
+        'view': 'RSS',
         'NRBR': '',
-        'anwenden': 'Anwenden',
-        'BBET': '',
         'SUCH': '',
+        'LISTE': 'Anzeigen',
         'listeId': '109',
         'FBEZ': 'FP_009',
-        'UA': 'J',
     }
 
     name = "comittees"
@@ -82,8 +82,9 @@ class ComitteesSpider(BaseSpider):
                 url_llp = "{}?{}".format(self.BASE_URL, url_options)
                 rss = feedparser.parse(url_llp)
 
-                print "GP {}: NR: {} Comittees".format(
-                    roman_numeral, len(rss['entries']))
+
+                self.logger.debug("GP {}: NR: {} Comittees".format(
+                    roman_numeral, len(rss['entries'])))
                 urls = urls + [entry['link'] for entry in rss['entries']]
 
         # AKT = aktiv, AUF = aufgeloest
@@ -106,6 +107,7 @@ class ComitteesSpider(BaseSpider):
         ts = GENERIC.TIMESTAMP.xt(response)
         LLP = COMITTEE.LLP.xt(response)
         name = COMITTEE.NAME.xt(response)
+        self.logger.info('Handling {} {}'.format(parl_id, ts))
 
         if LLP is not None:
             nrbr = 'Nationalrat'

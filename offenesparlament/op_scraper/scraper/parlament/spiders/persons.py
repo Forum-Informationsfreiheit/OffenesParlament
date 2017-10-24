@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import feedparser
 import urlparse
 import collections
-
-from django.core.urlresolvers import reverse
 
 from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
-from ansicolor import blue
 from ansicolor import yellow
 
 
@@ -71,7 +67,8 @@ class PersonsSpider(BaseSpider):
 #        'WP': 'ALLE',
 #        'listeId': '8',
 #        'R_WF': 'FR',
-#        'requestId': 'B19D9DFCF0', # apparently parliaments needs this to be present, maybe even valid
+#        'requestId': 'B19D9DFCF0',
+# apparently parliaments needs this to be present, maybe even valid
 #        'STEP': '2010'
 #    }
     name = "persons"
@@ -120,18 +117,24 @@ class PersonsSpider(BaseSpider):
         return urls
 
     def parse(self, response):
-        URLOPTIONS = collections.OrderedDict(
-            urlparse.parse_qsl(
-                urlparse.urlparse(
-                    response.xpath('''//a[starts-with(text(),'Alle anzeigen')]/@href''')[0].extract()
-                ).query)
-        )
-        URLOPTIONS['LISTE']=''
-        URLOPTIONS['letter']=''
-        new_url = '{}?{}'.format(self.BASE_URL,
-                                             urlencode(URLOPTIONS))
-        yield response.follow(new_url,
-                              self.parse_list)
+        try:
+            URLOPTIONS = collections.OrderedDict(
+                urlparse.parse_qsl(
+                    urlparse.urlparse(
+                        response.xpath('''//a[starts-with(text(),'Alle anzeigen')]/@href''')[0].extract()
+                    ).query)
+            )
+            URLOPTIONS['LISTE']=''
+            URLOPTIONS['letter']=''
+            new_url = '{}?{}'.format(self.BASE_URL,
+                                                urlencode(URLOPTIONS))
+            yield response.follow(new_url,
+                                self.parse_list)
+        except:
+            urloptions = response.url.split('?')[1]
+            opts = dict(urlparse.parse_qsl(urloptions))
+            if opts['GP'] not in ('KN','PN',):
+                raise
 
     def parse_list(self, response):
 
@@ -143,20 +146,19 @@ class PersonsSpider(BaseSpider):
 
         # which llp are we in?
         urloptions = response.url.split('?')[1]
+        opts = dict(urlparse.parse_qsl(urloptions))
 
-        llp_roman = [opt.split('=')[1]
-                     for opt in urloptions.split('&') if opt.split('=')[0] == 'GP']
-        llp_item = LegislativePeriod.objects.get(roman_numeral=llp_roman[0])
+        llp_roman = opts['GP']
+        llp_item = LegislativePeriod.objects.get(roman_numeral=llp_roman)
 
         # function string
-        function = [opt.split('=')[1]
-                    for opt in urloptions.split('&') if opt.split('=')[0] == 'NRBR']
-        function_str = self.RSS_TO_FUNCTION[function[0]]
+        function = opts['NRBR']
+        function_str = self.RSS_TO_FUNCTION[function]
         function_item, f_created = Function.objects.get_or_create(
             title=function_str)
 
         self.logger.info(
-            u"Scraping {} persons for LLP {}".format(len(persons), llp_roman))
+            u"Scraping {} persons for LLP {}, {}".format(len(persons), llp_roman, function))
 
         # Iterate all persons
         for p in persons:
@@ -181,10 +183,10 @@ class PersonsSpider(BaseSpider):
                 ))
                 continue
             if created_person:
-                self.logger.info(u"Created Person {}".format(
+                self.logger.debug(u"Created Person {}".format(
                     green(u'[{}]'.format(p['reversed_name']))))
             else:
-                self.logger.info(u"Updated Person {}".format(
+                self.logger.debug(u"Updated Person {}".format(
                     green(u"[{}]".format(p['reversed_name']))
                 ))
             for mandate in p['mandates']:
@@ -192,24 +194,22 @@ class PersonsSpider(BaseSpider):
                 state_item = self.get_state_item(p['electoral_state'])
                 # Create and append mandate
                 try:
-                    mandate_item, m_created = Mandate.objects.update_or_create(
+                    mandate_item, m_created = person_item.mandate_set.update_or_create(
                         function=function_item,
                         legislative_period=llp_item,
                         party=party_item,
-                        state=state_item)
-                except:
-                    self.logger.info(
-                        red(u"Error saving Mandate {} ({})".format(function_item, party_item)))
+                        state=state_item
+                    )
+                except Exception, e:
+                    self.logger.warning(
+                        red(u"Error saving Mandate {} ({}) / Person {}".format(function_item, party_item, person_item.pk)))
                     import ipdb
                     ipdb.set_trace()
-                if mandate_item not in person_item.mandates.all():
-                    changed = True
-                    person_item.mandates.add(mandate_item)
             if changed:
                 # In case we added/modified a mandate now,
                 latest_mandate_item = person_item.get_latest_mandate()
                 person_item.latest_mandate = latest_mandate_item
-                self.logger.info(
+                self.logger.debug(
                     cyan(u"Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
                 person_item.save()
 
@@ -254,7 +254,7 @@ class PersonsSpider(BaseSpider):
         if created:
             state_item.save()
 
-            self.logger.info(u"Created state {}: '{}'".format(
+            self.logger.debug(u"Created state {}: '{}'".format(
                 green(u'[{}]'.format(state_item.name)),
                 state_item.title))
 
@@ -283,12 +283,12 @@ class PersonsSpider(BaseSpider):
 
         ts = GENERIC.TIMESTAMP.xt(response)
         if not self.IGNORE_TIMESTAMP and not self.has_changes(person['parl_id'], person['source_link'], ts):
-            self.logger.info(
+            self.logger.debug(
                 green(u"Skipping Person Detail, no changes: {}".format(
                     full_name)))
             return
 
-        self.logger.info(u"Updating Person Detail {}".format(
+        self.logger.debug(u"Updating Person Detail {}".format(
             green(u"[{}]".format(person['reversed_name']))
         ))
 
@@ -317,44 +317,44 @@ class PersonsSpider(BaseSpider):
 
             mandates_detail = PERSON.DETAIL.MANDATES.xt(response)
             for mandate in mandates_detail:
-                if Party.objects.filter(short=mandate['party']):
-                    party = Party.objects.filter(
-                        short=mandate['party']).first()
-                elif Party.objects.filter(titles__contains=[mandate['party']]):
-                    party = Party.objects.filter(
-                        titles__contains=[mandate['party']]).first()
-                else:
-                    self.logger.warning(u"Can't find party {} for mandate".format(
-                        yellow(u"[{}]".format(mandate['party']))
-                    ))
-                    continue
-                mq = person_item.mandates.filter(party=party)
-
-                # try to extract LLP from function string
-                if "GP)" in mandate['function']:
-                    try:
-                        m_llp_roman = re.match(
-                            '^.*\((.*)\. GP\).*$', mandate['function']).group(1)
-                        m_llp = LegislativePeriod.objects.get(
-                            roman_numeral=m_llp_roman)
-                        mq = mq.filter(legislative_period=m_llp)
-                    except:
-                        self.logger.warning(u"Can't find llp in function string {}".format(
-                            yellow(u"[{}]".format(mandate['function']))
+                party = None
+                if mandate['party']:
+                    if Party.objects.filter(short=mandate['party']):
+                        party = Party.objects.filter(
+                            short=mandate['party']).first()
+                    elif Party.objects.filter(titles__contains=[mandate['party']]):
+                        party = Party.objects.filter(
+                            titles__contains=[mandate['party']]).first()
+                    else:
+                        self.logger.warning(u"{}: Can't find party {} for mandate".format(
+                            person_data['full_name'], yellow(u"[{}]".format(mandate['party']))
                         ))
+                        continue
 
-                # try to find existing mandate to add in dates
-                if mq.count() == 1:
-                    md = mq.first()
-                    md.start_date = mandate['start_date']
-                    if mandate['end_date']:
-                        md.end_date = mandate['end_date']
-                    md.save()
-                    self.logger.info(u"Augmented mandate {} with start-/end-dates: {} - {} ".format(
-                        green(u"{}".format(md)),
-                        md.start_date,
-                        md.end_date
-                    ))
+                mandate['party'] = party
+                mandate['legislative_period'] = LegislativePeriod.objects.get(
+                    roman_numeral=mandate['llp_roman']) if mandate['llp_roman'] else None
+                del mandate['llp']
+                del mandate['llp_roman']
+                mandate['function'],_ = Function.objects.update_or_create(title=mandate['function'])
+
+                def uocparse(mandat):
+                    r = {'defaults': {}}
+                    for k in mandat.keys():
+                        dict_to_append = r if k in (
+                            'person','function','party','legislative_period',
+                            ) else r['defaults']
+                        if dict_to_append==r and mandat[k]==None:
+                            dict_to_append[k+'__isnull']=True
+                        else:
+                            dict_to_append[k]=mandat[k]
+                    return r
+
+
+                self.logger.debug(uocparse(mandate))
+                mq = person_item.mandate_set.update_or_create(
+                    **uocparse(mandate))
+
             person_item.latest_mandate = person_item.get_latest_mandate()
 
             person_item.save()
@@ -362,8 +362,9 @@ class PersonsSpider(BaseSpider):
             person_item.slug
 
         except Exception as error:
-            self.logger.info(
+            self.logger.exception(
                 red(u"Error saving Person {}: \n\t{}".format(full_name, error)))
+            raise error
             #import ipdb
             # ipdb.set_trace()
             return
@@ -390,7 +391,7 @@ class PersonsSpider(BaseSpider):
                                 'active'] if 'active' in comittee else True,
                             defaults=comittee)
                         if created_comittee:
-                            self.logger.info(u"Created comittee {}".format(
+                            self.logger.debug(u"Created comittee {}".format(
                                 green(u"[{}]".format(comittee_item))
                             ))
 
@@ -402,7 +403,7 @@ class PersonsSpider(BaseSpider):
                         function_item, created_function = Function.objects.get_or_create(
                             **function_data)
                         if created_function:
-                            self.logger.info(u"Created function {}".format(
+                            self.logger.debug(u"Created function {}".format(
                                 green(u"[{}]".format(function_item))
                             ))
 
@@ -421,17 +422,17 @@ class PersonsSpider(BaseSpider):
                         )
 
                         if created_membership:
-                            self.logger.info(u"Created membership {}".format(
+                            self.logger.debug(u"Created membership {}".format(
                                 green(u"[{}]".format(membership_item))
                             ))
                     except Exception as error:
-                        self.logger.info(
+                        self.logger.warning(
                             red(u"Error adding Person's comittee membership {} {}: \n\t{}\n\t{}\n".format(full_name, person['source_link'], error, repr(comittee)))
                             )
 
 
         except Exception as error:
-            self.logger.info(
+            self.logger.warning(
                 red(u"Error adding Person's comittee memberships {}: \n\t{}".format(full_name, error)))
             #import ipdb
             #ipdb.set_trace()

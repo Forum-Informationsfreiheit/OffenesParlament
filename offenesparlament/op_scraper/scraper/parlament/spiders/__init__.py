@@ -1,4 +1,8 @@
+from logging.config import dictConfig
+from django.conf import settings
 import scrapy
+from scrapy.utils.project import get_project_settings
+
 
 import feedparser
 import roman
@@ -7,6 +11,7 @@ from ansicolor import red
 from ansicolor import cyan
 from ansicolor import green
 from ansicolor import blue
+from parlament.settings import BASE_HOST
 
 
 class BaseSpider(scrapy.Spider):
@@ -37,9 +42,12 @@ class BaseSpider(scrapy.Spider):
         if 'ignore_timestamp' in kw:
             self.IGNORE_TIMESTAMP = True
 
+        scrapy_settings = get_project_settings()
+
         # shut off annoying debug level core api messages
         import scrapy
-        scrapy.core.engine.logger.setLevel('INFO')
+        scrapy.core.engine.logger.setLevel(scrapy_settings.get('LOG_LEVEL','WARNING'))
+        self.logger.logger.setLevel(scrapy_settings.get('LOG_LEVEL','WARNING'))
 
     def print_debug(self):
         """
@@ -63,12 +71,23 @@ class BaseSpider(scrapy.Spider):
             url=self.BASE_URL,
             IGNORE_TIMESTAMP=self.IGNORE_TIMESTAMP,
         )
-        print message
+        self.logger.info(message)
 
     def get_urls(self):
         """
         Returns a list of URLs to scrape
         """
+
+        def unmangle_url(url):
+            from scrapy import Selector
+            if not '<a' in url:
+                u = url
+            else:
+                u = Selector(text=url).xpath('//a/@href').extract()[0]
+            if not '//' in u:
+                u='{}{}'.format(BASE_HOST,u)
+            return u
+
         urls = []
         if self.LLP:
             for i in self.LLP:
@@ -79,8 +98,11 @@ class BaseSpider(scrapy.Spider):
                 url_llp = "{}?{}".format(self.BASE_URL, url_options)
                 rss = feedparser.parse(url_llp)
 
-                print "GP {}: {} laws".format(
+                self.logger.info("GP {}: {} laws".format(
                     roman_numeral, len(rss['entries']))
-                urls = urls + [entry['link'] for entry in rss['entries']]
+                )
+                urls = urls + [unmangle_url(entry['link'])
+                               for entry in rss['entries']]
+
         self.TOTAL_COUNTER = len(urls)
         return urls

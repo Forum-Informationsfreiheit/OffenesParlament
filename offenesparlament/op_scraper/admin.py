@@ -27,7 +27,7 @@ class LawAdmin(BaseAdmin):
 
 @admin.register(Person)
 class PersonAdmin(BaseAdmin):
-    filter_horizontal = ('mandates',)
+    filter_horizontal = ()
     search_fields = ('parl_id', 'full_name')
 
 

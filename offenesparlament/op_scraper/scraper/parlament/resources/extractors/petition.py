@@ -143,6 +143,7 @@ class PETITION:
             raw_reference = response.xpath(cls.XPATH).extract()
             if len(raw_reference) > 0:
                 ref_url = raw_reference[0]
+                ref_url = ref_url.replace('/pls/portal/hi.link?pfad=','')
                 splitted_url = ref_url.split('/')
                 llp = u''
                 parl_id = u''

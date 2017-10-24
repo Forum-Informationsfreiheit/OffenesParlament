@@ -19,9 +19,8 @@ from configurations import Configuration
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARNING,
 )
-
 
 class BaseConfig(Configuration):
     STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
@@ -220,12 +219,14 @@ class Dev(BaseConfig):
     # http://stackoverflow.com/questions/22116493/run-a-scrapy-spider-in-a-celery-task
     CELERYD_MAX_TASKS_PER_CHILD = 1
 
+
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': True,
         'handlers': {
             'console': {
                 'class': 'logging.StreamHandler',
+                'level': 'WARNING',
             },
             'null': {
                 'level': 'INFO',
@@ -233,6 +234,11 @@ class Dev(BaseConfig):
             },
         },
         'loggers': {
+            '': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+                'propagate': False
+            },
             'django': {
                 'handlers': ['console'],
                 'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
@@ -245,7 +251,7 @@ class Dev(BaseConfig):
                 'handlers': ['null'],  # Quiet by default!
                 'propagate': False,
                 'level': 'INFO',
-            },
+            }
         },
     }
 

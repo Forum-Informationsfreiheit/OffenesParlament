@@ -121,7 +121,7 @@ class PetitionsSpider(BaseSpider):
             LLP = None
 
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
-            self.logger.info(
+            self.logger.debug(
                 green(u"[{} of {}] Skipping Petition, no changes: {}".format(
                     self.SCRAPED_COUNTER,
                     self.TOTAL_COUNTER,
@@ -153,7 +153,7 @@ class PetitionsSpider(BaseSpider):
             green(unicode(LLP)),
             blue(response.url)
         )
-        log.msg(logtext, level=log.INFO)
+        log.msg(logtext, level=log.INFO if self.SCRAPED_COUNTER%1000==0 else log.DEBUG)
 
         # Create and save Petition
         petition_item, petition_item_created = Petition.objects.update_or_create(
@@ -265,7 +265,7 @@ class PetitionsSpider(BaseSpider):
         for keyword in keywords:
             kw, created = Keyword.objects.get_or_create(title=keyword)
             if created:
-                log.msg(u"Created keyword {}".format(
+                self.logger.debug(u"Created keyword {}".format(
                     green(u'[{}]'.format(keyword))))
             keyword_items.append(kw)
 
@@ -296,7 +296,7 @@ class PetitionsSpider(BaseSpider):
         # Create category if we don't have it yet
         cat, created = Category.objects.get_or_create(title=category)
         if created:
-            log.msg(u"Created category {}".format(
+            self.logger.debug(u"Created category {}".format(
                 green(u'[{}]'.format(category))))
 
         return cat
@@ -352,7 +352,7 @@ class PetitionsSpider(BaseSpider):
             entity_item.email,
             'new' if created else 'updated')
 
-        log.msg(
+        self.logger.debug(
             u"Opinion: {} by {}".format(
                 magenta(opinion_item.parl_id),
                 entity_str
@@ -375,7 +375,7 @@ class PetitionsSpider(BaseSpider):
             phase_item, created = Phase.objects.get_or_create(
                 title=phase['title'])
             if created:
-                log.msg(u"Created Phase {}".format(
+                self.logger.debug(u"Created Phase {}".format(
                     green(u'[{}]'.format(phase_item.title))))
 
             for step in phase['steps']:
@@ -434,7 +434,7 @@ class PetitionsSpider(BaseSpider):
                             #             pq.count())
                             #     ))
                             continue
-        log.msg("Created {} statements, updated {} statements, skipped {} statemts".format(
+        self.logger.debug("Created {} statements, updated {} statements, skipped {} statemts".format(
             num_created,
             num_updated,
             num_skipped
@@ -451,7 +451,7 @@ class PetitionsSpider(BaseSpider):
         phase_item, created = Phase.objects.get_or_create(
             title='default_op')
         if created:
-            log.msg(u"Created Phase {}".format(
+            self.logger.debug(u"Created Phase {}".format(
                 green(u'[{}]'.format(phase_item.title))))
 
         steps = OPINION.STEPS.xt(response)
@@ -501,6 +501,7 @@ class PetitionsSpider(BaseSpider):
         reference = PETITION.REFERENCE.xt(response)
 
         if reference is not None:
+            print reference
             llp = LegislativePeriod.objects.get(
                 roman_numeral=reference[0])
             ref = Petition.objects.filter(
@@ -517,7 +518,7 @@ class PetitionsSpider(BaseSpider):
         petition = response.meta['petition_item']
 
         signatures = PETITION.SIGNATURES.xt(response)
-        log.msg(u"Creating or updating {} signatures".format(
+        log.info(u"Creating or updating {} signatures".format(
             green(u'{}'.format(len(signatures)))
         ))
 
@@ -526,11 +527,11 @@ class PetitionsSpider(BaseSpider):
         try:
             last_signature_date = petition.petition_signatures.latest(
                 'date').date
-            log.msg(u'Latest signature date saved: {}'.format(
+            self.logger.debug(u'Latest signature date saved: {}'.format(
                 green(u'{}'.format(last_signature_date))
             ))
         except:
-            log.msg(u'No latest signature date found')
+            log.warning(u'No latest signature date found')
 
         count_created = 0
         count_bulk_create = 0
@@ -559,7 +560,7 @@ class PetitionsSpider(BaseSpider):
 
         PetitionSignature.objects.bulk_create(signature_items)
 
-        log.msg(u"Created {} and bulk created {} signatures".format(
+        self.logger.debug(u"Created {} and bulk created {} signatures".format(
             green(u'{}'.format(count_created)),
             green(u'{}'.format(count_bulk_create))
         ))

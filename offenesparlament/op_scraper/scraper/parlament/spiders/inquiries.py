@@ -93,8 +93,9 @@ class InquiriesSpider(BaseSpider):
                     url_llp = "{}?{}".format(self.BASE_URL, url_options)
                     rss = feedparser.parse(url_llp)
 
-                    print "GP {}: {} inquiries from {}".format(
+                    self.logger.info("GP {}: {} inquiries from {}".format(
                         roman_numeral, len(rss['entries']), nrbr)
+                    )
                     urls = urls + [entry['link'] for entry in rss['entries']]
         self.TOTAL_COUNTER = len(urls)
         for url in urls:
@@ -119,7 +120,7 @@ class InquiriesSpider(BaseSpider):
             LLP = LegislativePeriod.objects.get(
                 roman_numeral=response.url.split('/')[-4])
         if not self.IGNORE_TIMESTAMP and not self.has_changes(parl_id, LLP, response.url, ts):
-            self.logger.info(
+            self.logger.debug(
                 green(u"[{} of {}] Skipping Inquiry, no changes: {}".format(
                     self.SCRAPED_COUNTER,
                     self.TOTAL_COUNTER,
@@ -130,7 +131,7 @@ class InquiriesSpider(BaseSpider):
         # category is created.
         cat, created = Category.objects.get_or_create(title=category)
         if created:
-            log.msg(u"Created category {}".format(
+            log.debug(u"Created category {}".format(
                 green(u'[{}]'.format(category))))
 
         # An inquiry can have multiple senders, but only a single recipient.
@@ -140,14 +141,14 @@ class InquiriesSpider(BaseSpider):
                 sender_objects.append(Person.objects.get(
                     parl_id=sender_object))
         except:
-            log.msg(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+            log.warning(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
                 INQUIRY.SENDER.xt(response), parl_id, LLP)))
             return
         try:
             receiver_object = Person.objects.get(
                 parl_id=INQUIRY.RECEIVER.xt(response))
         except:
-            log.msg(red(u'Receiver "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+            log.warning(red(u'Receiver "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
                 INQUIRY.RECEIVER.xt(response), parl_id, LLP)))
             return
 
@@ -208,7 +209,7 @@ class InquiriesSpider(BaseSpider):
             blue(response.url),
             green(u"{}".format(inquiry_item.keywords))
         )
-        log.msg(logtext, level=log.INFO)
+        log.msg(logtext, level=log.DEBUG if not self.SCRAPED_COUNTER%1000==0 else log.INFO)
 
         # log.msg(green("Open Callback requests: {}".format(
         #   len(callback_requests))), level=log.INFO)
@@ -240,7 +241,7 @@ class InquiriesSpider(BaseSpider):
         for keyword in keywords:
             kw, created = Keyword.objects.get_or_create(title=keyword)
             if created:
-                log.msg(u"Created keyword {}".format(
+                log.debug(u"Created keyword {}".format(
                     green(u'[{}]'.format(keyword))))
             keyword_items.append(kw)
 
@@ -290,7 +291,7 @@ class InquiriesSpider(BaseSpider):
         phase_item, created = Phase.objects.get_or_create(
             title='default_inqu')
         if created:
-            log.msg(u"Created Phase {}".format(
+            log.debug(u"Created Phase {}".format(
                 green(u'[{}]'.format(phase_item.title))))
 
         steps = INQUIRY.STEPS.xt(response)
@@ -329,7 +330,7 @@ class InquiriesSpider(BaseSpider):
             phase_item, created = Phase.objects.get_or_create(
                 title=phase['title'])
             if created:
-                log.msg(u"Created Phase {}".format(
+                log.debug(u"Created Phase {}".format(
                     green(u'[{}]'.format(phase_item.title))))
 
             # Create steps
@@ -345,7 +346,7 @@ class InquiriesSpider(BaseSpider):
                 )
                 step_item.save()
                 if created:
-                    log.msg(u"Created Step {}".format(
+                    log.debug(u"Created Step {}".format(
                         green(u'[{}]'.format(step_item.title))))
 
                 # Save statements for this step, if applicable
@@ -366,19 +367,19 @@ class InquiriesSpider(BaseSpider):
                                 step=step_item,
                                 defaults=st_data)
                             if st_created:
-                                log.msg(u"Created Statement by {} on {}".format(
+                                log.debug(u"Created Statement by {} on {}".format(
                                     green(
                                         u'[{}]'.format(person_item.full_name)),
                                     step_item.date))
                             else:
-                                log.msg(u"Updated Statement by {} on {}".format(
+                                log.debug(u"Updated Statement by {} on {}".format(
                                     green(
                                         u'[{}]'.format(person_item.full_name)),
                                     step_item.date))
                         else:
                             # We can't save statements if we can't find the
                             # Person
-                            log.msg(
+                            log.warning(
                                 red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
                                     green(
                                         u'[{}]'.format(stmnt['person_name'])),
@@ -407,14 +408,14 @@ class InquiriesSpider(BaseSpider):
         # category is created.
         cat, created = Category.objects.get_or_create(title=category)
         if created:
-            log.msg(u"Created category {}".format(
+            log.debug(u"Created category {}".format(
                 green(u'[{}]'.format(category))))
 
         try:
             sender_object = Person.objects.get(
                 parl_id=INQUIRY.RESPONSESENDER.xt(response))
         except Exception, e:
-            log.msg(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+            log.warning(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
                 INQUIRY.RESPONSESENDER.xt(response), parl_id, LLP)))
             return
 
@@ -454,7 +455,7 @@ class InquiriesSpider(BaseSpider):
             green(unicode(LLP)),
             blue(response.url)
         )
-        log.msg(logtext, level=log.INFO)
+        log.msg(logtext, level=log.DEBUG if self.SCRAPED_COUNTER!=0 else log.INFO)
 
         inquiry_item.response = inquiryresponse_item
         inquiry_item.status = 'response_received'

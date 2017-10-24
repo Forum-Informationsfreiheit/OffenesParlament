@@ -40,7 +40,7 @@
       <div class="person_info_section">
         <h3>Politische Mandate</h3>
         <ul>
-        {% for mand in person.mandates.all %}
+        {% for mand in person.mandate_set.all %}
         <li>
           {{ mand.function.title }}
           {% if mand.legislative_period %}

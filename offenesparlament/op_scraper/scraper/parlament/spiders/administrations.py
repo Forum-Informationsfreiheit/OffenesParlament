@@ -54,7 +54,7 @@ class AdministrationsSpider(PersonsSpider):
         self.cookies_seen = set()
         self.idlist = {}
 
-        self.print_debug()
+        #self.print_debug()
 
     def get_urls(self):
         """
@@ -90,10 +90,10 @@ class AdministrationsSpider(PersonsSpider):
                 defaults=person_data
             )
             if created_person:
-                self.logger.info(u"Created Person {}".format(
+                self.logger.debug(u"Created Person {}".format(
                     green(u'[{}]'.format(p['reversed_name']))))
             else:
-                self.logger.info(u"Updated Person {}".format(
+                self.logger.debug(u"Updated Person {}".format(
                     green(u"[{}]".format(p['reversed_name']))
                 ))
 
@@ -105,12 +105,13 @@ class AdministrationsSpider(PersonsSpider):
                 title=mandate['title'])
 
             if f_created:
-                self.logger.info(u"Created function {}".format(
+                self.logger.debug(u"Created function {}".format(
                     green(u'[{}]'.format(function_item.short))))
 
             # Create and append mandate
             try:
                 mandate_item, m_created = Mandate.objects.update_or_create(
+                    person=person_item,
                     function=function_item,
                     administration=administration_item)
                 # Let's try to find a matching LLP for this administration so we can
@@ -141,12 +142,11 @@ class AdministrationsSpider(PersonsSpider):
                     pass
 
             except:
-                self.logger.info(
+                self.logger.warning(
                     red("Error saving Mandate {} ({})".format(function_item, administration_item)))
                 import ipdb
                 ipdb.set_trace()
 
-            person_item.mandates.add(mandate_item)
             person_item.save()
 
             # First time we encounter a person, we scan her detail page too
@@ -176,7 +176,7 @@ class AdministrationsSpider(PersonsSpider):
 
         if created:
             admin_item.save()
-            self.logger.info(u"Created administration {}".format(
+            self.logger.debug(u"Created administration {}".format(
                 green(u'[{}]'.format(admin_item.title))))
 
         return admin_item

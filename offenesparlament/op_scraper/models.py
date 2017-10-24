@@ -571,6 +571,7 @@ class Mandate(models.Model):
     A political Mandate for a certain function, with a start and possibly an
     end date
     """
+    person = models.ForeignKey('Person')
     function = models.ForeignKey(Function)
     party = models.ForeignKey(Party, null=True, blank=True)
 
@@ -687,7 +688,6 @@ class Person(Timestamped, ParlIDMixIn):
     _slug = models.CharField(max_length=255, default="")
 
     # Relationsships
-    mandates = models.ManyToManyField(Mandate)
     latest_mandate = models.ForeignKey(
         Mandate, related_name='latest_mandate', null=True, blank=True,
         on_delete=models.SET_NULL)
@@ -708,7 +708,7 @@ class Person(Timestamped, ParlIDMixIn):
     def llps(self):
         return list(set([
             m.legislative_period
-            for m in self.mandates.order_by('-legislative_period__end_date')
+            for m in self.mandate_set.all().order_by('-legislative_period__end_date')
             if m.legislative_period]))
 
     @property
@@ -731,9 +731,9 @@ class Person(Timestamped, ParlIDMixIn):
         scraping, not during list display of persons!
         """
 
-        if self.mandates:
+        if self.mandate_set.count()>0:
             return max(
-                self.mandates.all(),
+                self.mandate_set.all(),
                 key=lambda m: m.latest_end_date() or datetime.date(3000, 1, 1))
         else:
             return None
@@ -767,7 +767,7 @@ class Person(Timestamped, ParlIDMixIn):
     # JSON for ES Index Generation
     def mandates_json(self):
         mandates = []
-        for mand in self.mandates.all():
+        for mand in self.mandate_set.all():
             mandates.append(mand._json())
         return json.dumps(mandates)
 

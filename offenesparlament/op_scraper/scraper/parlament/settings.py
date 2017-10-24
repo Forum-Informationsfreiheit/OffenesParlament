@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 # Scrapy settings for laws project
 #
 # For simplicity, this file contains only the most important settings by
@@ -15,7 +17,7 @@ NEWSPIDER_MODULE = 'parlament.spiders'
 
 BASE_HOST = "https://www.parlament.gv.at"
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = os.getenv('DJANGO_LOG_LEVEL', 'WARNING')
 LOG_ENABLED = False
 DOWNLOADER_STATS = False
 STATS_ENABLED = False
