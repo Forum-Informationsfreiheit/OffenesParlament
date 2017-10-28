@@ -41,6 +41,7 @@
   {% endif %}
   <p>Sie können neue Abos erstellen, indem Sie eine Suche durführen und sie dann abonnieren.</p>
 
+  {% if email %}
   <h1>Kommentierte Parlamentsarbeit von <span class="abo_email">{{ email }}</span></h1>
   {% if commentedcontents %}
     <table>
@@ -65,4 +66,5 @@
     </table>
   {% endif %}
   <p class="add_commentedcontent"><a href="{{commentedcontent_new}}">Kommentartext erstellen</a></p>
+  {% endif %}
 {% endblock %}

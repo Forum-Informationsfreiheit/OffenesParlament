@@ -3,6 +3,7 @@
 {% load django_bootstrap_breadcrumbs %}
 {% block breadcrumbs %}
   {{ block.super }}
+  {% breadcrumb "Inhalte verwalten" "list_subscriptions" %}
   {% breadcrumb "Inhalte kommentieren" "subscriptions" %}
 {% endblock %}
 
@@ -23,11 +24,11 @@
 
     {% if form %}
       <form method="post" enctype="multipart/form-data">
-        {%csrf_token%}
-        {{form.as_p}}
-        <input type="submit" value="{% if form.instance and form.instance.pk %}Speichern{% else %}Anlegen{% endif %}" />
+        <p>Diese Funktion dient dazu, die Arbeit des Parlaments in einen Kontext zu setzen und ihn zu kommentieren.</p>
+        <p>Dies können Sie als Person oder als Organisation – beispielsweise als NGO – nutzen.</p>
+
         {% if not form.instance or not form.instance.approved_at %}
-        <p>Die Inhalte werden erst nach Prüfung des OffenesParlament.at-Teams öffentlich einsehbar! Dies dauert üblicherweise 1-2 Tage.  </p>
+        <p>Die Inhalte werden allerdings erst nach Prüfung des OffenesParlament.at-Teams öffentlich einsehbar! Dies dauert üblicherweise 1-2 Tage.  </p>
         {% else %}
         <p>Die Inhalte wurden durch das OffenesParlament.at-Team geprüft und sind unter folgendem Link öffentlich einsehbar:<br />
         <a href="{{form.instance.get_absolute_url}}">
@@ -35,6 +36,9 @@
         </a>
         </p>
         {% endif %}
+        {%csrf_token%}
+        {{form.as_p}}
+        <input type="submit" value="{% if form.instance and form.instance.pk %}Speichern{% else %}Anlegen{% endif %}" />
     {% endif %}
   </div>
 {% endblock %}

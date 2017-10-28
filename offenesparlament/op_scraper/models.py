@@ -1166,7 +1166,10 @@ class CommentedContent(models.Model):
             verbose_name='Autorenbild')
 
     title = models.CharField(max_length=240, verbose_name='Titel')
-    body = models.TextField(verbose_name='Text', help_text='Überschriften und Formatierung im Markdown-Format, Links auf OffenesParlament.at werden verlinkt')
+    body = models.TextField(verbose_name='Text',
+            help_text=u'''Sie könnnen diesen Text Überschriften und sonstige Formatierung mittels
+            <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown-Format</a> formatieren.<br />
+            Links auf OffenesParlament.at werden in Kästen mit Informationen zum verlinkten Inhalt (beispielsweise Titel und Status) umgewandelt.''')
 
     admin_notification_sent = models.BooleanField(default=False)
 

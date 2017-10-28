@@ -314,6 +314,8 @@ ul.pagination {
       .homepage_search .search_bar {
         display: block;
         width: 100%; } }
+  .homepage_search p.homepage_search_infotext {
+    color: white; }
   .homepage_search .search_button {
     width: 20%;
     background-color: #f55f57;
@@ -1327,7 +1329,7 @@ ul.petitions_creators {
   width: 100%; }
 
 .kontext_form #id_body {
-  height: 600px; }
+  height: 400px; }
 
 #apibtn {
   position: absolute;
@@ -1340,7 +1342,7 @@ ul.petitions_creators {
     padding-left: 30px;
     color: #000;
     background-position-x: 0;
-    line-height: 20px;
+    line-height: 18px;
     padding-top: 0;
     padding-bottom: 0;
     background-position-y: -1px; }

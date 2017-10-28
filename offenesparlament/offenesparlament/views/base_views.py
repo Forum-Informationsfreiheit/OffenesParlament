@@ -94,7 +94,7 @@ def debate_list(request):
 def person_list_with_ggp(request, ggp):
     llp = _ensure_ggp_is_set(request, ggp)
     person_list = Person.objects \
-        .filter(mandates__legislative_period=llp) \
+        .filter(mandate__legislative_period=llp) \
         .order_by('reversed_name') \
         .distinct() \
         .select_related('latest_mandate__party')
@@ -160,10 +160,10 @@ def inquiry_detail(request, inq_id, ggp=None):
     inquiry_sender = inquiry.sender
     documents = inquiry.documents
     inquiry_response = inquiry.response
-    mandates_receiver = inquiry.receiver.mandates.order_by('-end_date')
+    mandates_receiver = inquiry.receiver.mandate_set.all().order_by('-end_date')
     # mandates_receiver_filtered = mandates_receiver.filter(legislative_period__in=LegislativePeriod.objects.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True)))
     # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=inquiry.first_date), Q(end_date__gte=inquiry.first_date) | Q(end_date__isnull=True))
-    
+
     first_date = inquiry.steps.order_by('date').first().date if inquiry.steps.count() else None
     last_date = inquiry.steps.order_by('date').last().date if inquiry.steps.count() else None
     receiver_mandate = mandates_receiver.first().function.title
