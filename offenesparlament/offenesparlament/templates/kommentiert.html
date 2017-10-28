@@ -1,5 +1,12 @@
 {% extends "base_content.html" %}
-  {% load staticfiles %}
+{% load staticfiles %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Kommentierte Parlamentsarbeit" "about" %}
+{% endblock %}
+
+{% block title %}Kommenteirte Parlamentsarbeit{% endblock %}
 
 {% block bodyclass %}kontext{% endblock %}
 
@@ -13,34 +20,16 @@
     <link rel="stylesheet" href="{% static 'css/kontext.css' %}">
 {% endblock %}
 
-{% block title %}Kommentierte Parlamentsarbeit: {{ commentedcontent.title }}{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
 {% block content %}
-
-  <div class="context_head">
-    <div class="context_by">
-      {% if commentedcontent.image %}<img src="{{commentedcontent.image.url}}" alt="" />
-      {% endif %}
-      <div>{{commentedcontent.created_by_name}}</div>
-    </div>
-    <div class="context_at">
-      {% if commentedcontent.approved_at %}
-      {{commentedcontent.approved_at|date}}
-      {% else %}
-      Noch nicht veröffentlicht
-      {% endif %}
-    </div>
-  </div>
-
-  <div class="kontext_content">
-    <h1>{{commentedcontent.title}}</h1>
-    {{commentedcontent.rendered_text|safe}}
-  </div>
+  <h1>Kommentierte Parlamentsarbeit</h1>
 
   <div class="about_kontext">
     <p><strong>»Parlamentsarbeit kommentiert«</strong> ermöglicht interessierten Bürgerinnen, NGOs und Parteien, die Arbeit des Parlaments direkt auf OffenesParlament.at zu kommentieren.</p>
     <p>Die Inhalte fallen unter die Zuständigkeit der Autorinnen und Autoren und werden nach Begutachtung durch das Team freigeschalten. Sachlichkeit und ein Bezug zur Arbeit des Parlaments sind Voraussetzungen für die Veröffentlichung.</p>
+    <p>Folgende Artikel wurden bisher veröffentlicht: </p>
+    <ul>{% for cc in commentedcontents %}
+      <li><strong><a href="{{cc.get_absolute_url}}">{{cc.title}}</a></strong>, von {{cc.created_by_name}}</li>
+      {%endfor%}</ul>
     <p>Wenn Sie selbst an dieser Stelle die Arbeit des Parlaments in Kontext setzen möchten, können Sie dies über die Schaltfläche »Abos &amp; Inhalte verwalten« in der Fußzeile tun.</p>
   </div>
 {% endblock %}

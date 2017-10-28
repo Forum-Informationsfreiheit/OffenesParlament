@@ -1163,7 +1163,7 @@ class CommentedContent(models.Model):
 
     image = models.ImageField(null=True,
             help_text='Wird auf 100pxx100px verkleinert und in einem Kreis dargestellt',
-            verbose_name='Autorenbild')
+            verbose_name='Autorenbild', blank=True)
 
     title = models.CharField(max_length=240, verbose_name='Titel')
     body = models.TextField(verbose_name='Text',
@@ -1222,6 +1222,10 @@ class CommentedContent(models.Model):
 
     def rendered_text(self):
         return type(self).sanitize_and_expand_text(self.body)
+
+    @classmethod
+    def published(cls):
+        return cls.objects.filter(approved_at__isnull=False)
 
 
 class Petition(Law):

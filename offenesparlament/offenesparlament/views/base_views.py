@@ -10,6 +10,7 @@ from op_scraper.models import Debate
 from op_scraper.models import DebateStatement
 from op_scraper.models import Comittee
 from op_scraper.models import ComitteeMeeting
+from op_scraper.models import CommentedContent
 from django.db.models import Count, Max, Min, Q
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.urlresolvers import reverse
@@ -33,6 +34,11 @@ def about(request):
 
 def docs(request):
     return render(request, 'docs.html')
+
+def kommentiert(request):
+    return render(request, 'kommentiert.html',
+            {'commentedcontents': CommentedContent.published()})
+
 
 @ensure_csrf_cookie
 def generic_search_view(request, query):

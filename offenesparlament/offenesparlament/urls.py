@@ -104,6 +104,9 @@ urlpatterns = patterns(
     url(r'^api/', include(router.urls, namespace='op_api')),
     # url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
 
+    url(r'^kommentiert/?$',
+        base_views.kommentiert,
+        name='commentedcontent_index'),
     url(r'^abos/kommentiert/new/?$',
         commentedcontent.CommentedContentCreate.as_view(),
         name='commentedcontent_create'),
@@ -117,7 +120,7 @@ urlpatterns = patterns(
         commentedcontent.preview,
         name='commentedcontent_preview'),
 
-    url(r'^kommentiert/(?P<pk>.*)/?$',
+    url(r'^kommentiert/(?P<pk>[^/]*)/?$',
         commentedcontent.view,
         name='commentedcontent_view'),
 

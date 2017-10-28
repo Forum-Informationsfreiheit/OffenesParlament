@@ -74,6 +74,6 @@ def preview(request):
     return HttpResponse(text, mimetype='text/html')
 
 def view(request, pk):
-    cc = get_object_or_404(CommentedContent, pk=pk, approved_by__isnull=False)
+    cc = get_object_or_404(CommentedContent, pk=pk, approved_at__isnull=False)
     return render(request, 'op_scraper/commentedcontent_detail.html', {'commentedcontent': cc})
 

@@ -33,7 +33,7 @@ class BaseConfig(Configuration):
     MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
     MEDIA_URL= '/media/'
 
-    ANALYTICS_CODE = 'OHAI'
+    ANALYTICS_CODE = '<!-- analytics here -->'
 
 
 
