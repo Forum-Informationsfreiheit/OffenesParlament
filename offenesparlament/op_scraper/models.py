@@ -436,6 +436,7 @@ class Law(Timestamped, ParlIDMixIn):
 
     class Meta:
         unique_together = ("parl_id", "legislative_period")
+        select_on_save = True
 
     @property
     def short_title(self):
