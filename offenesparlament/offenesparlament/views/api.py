@@ -761,10 +761,10 @@ class PersonSerializer(DynamicFieldsModelSerializer):
     Bundesrat, or be an appointed official for an administration.
     """
 
-    mandates = MandateSerializer(
-        many=True
-        #,fields=('pk',)
-    )
+    #mandate_set = MandateSerializer(
+    #    many=True
+    #    #,fields=('pk',)
+    #)
     latest_mandate = MandateSerializer()
     debate_statements = DebateStatementSerializer(many=True)
 
@@ -786,7 +786,7 @@ class PersonSerializer(DynamicFieldsModelSerializer):
             'deathplace',
             'occupation',
             '_slug',
-            'mandates',
+            #'mandates',
             'latest_mandate',
             'debate_statements',
             'api_url'
