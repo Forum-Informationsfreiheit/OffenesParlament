@@ -131,7 +131,7 @@ class LawsInitiativesSpider(BaseSpider):
             green(unicode(LLP)),
             blue(response.url)
         )
-        (self.logger.debug if self.SCRAPED_COUNTER%1000!=0 else self.logger.info)(logtext, level='DEBUG' if self.SCRAPED_COUNTER%1000!=0 else 'INFO')
+        (self.logger.debug if self.SCRAPED_COUNTER%1000!=0 else self.logger.info)(logtext)
 
         response.meta['law_item'] = law_item
 
