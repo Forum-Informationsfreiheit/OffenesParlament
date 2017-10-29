@@ -370,7 +370,7 @@ class SearchDiffer(JsonDiffer):
         changes = {
                     'ui_url': self.content.ui_url + ('?' if '?' not in self.content.ui_url else '&') + ui_url_params[1:],
                     'title': self.content.title,
-                    'messages': [new_msg,changed_msg]
+                    'messages': [x for x in [new_msg,changed_msg] if x!=None],
                 }
         c = Context(changes)
         snippet = loader.get_template(self.SNIPPET_TEMPLATE_FILE).render(c, None)
