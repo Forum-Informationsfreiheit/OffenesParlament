@@ -1074,7 +1074,7 @@ class SubscribedContent(models.Model):
 
     def store_latest_content(self, content):
         from elasticsearch import Elasticsearch
-        es = Elasticsearch()
+        es = Elasticsearch(retry_on_timeout=True)
 
         for content_item in content:
             content_id_hash = self._hash_content(content_item)
@@ -1082,7 +1082,7 @@ class SubscribedContent(models.Model):
 
     def retrieve_latest_content(self):
         from elasticsearch import Elasticsearch
-        es = Elasticsearch()
+        es = Elasticsearch(retry_on_timeout=True)
 
         content = []
 
@@ -1108,7 +1108,7 @@ class SubscribedContent(models.Model):
             return
 
         from elasticsearch import Elasticsearch
-        es = Elasticsearch()
+        es = Elasticsearch(retry_on_timeout=True)
         hashes = json.loads(self.latest_content_hashes).values()
         for content_id_hash in hashes:
             if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
