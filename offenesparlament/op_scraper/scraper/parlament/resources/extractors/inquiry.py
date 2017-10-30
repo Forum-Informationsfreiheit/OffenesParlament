@@ -242,7 +242,7 @@ class INQUIRY:
                 XPATH = "//td[3]//a/@href"
 
     class STEPS(MultiExtractor):
-        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr'
+        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[not(contains(@class, "close")) and not(contains(@class, "historyHeader"))]'
 
         @classmethod
         def xt(cls, response):
