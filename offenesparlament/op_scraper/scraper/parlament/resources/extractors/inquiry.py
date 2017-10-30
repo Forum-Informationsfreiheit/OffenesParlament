@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class INQUIRY:
 
     class KEYWORDS(MultiExtractor):
-        XPATH = '//*[@id="schlagwortBox"]/ul//li/a/text()'
+        XPATH = '//*[@id="schlagwortBoxintern"]//ul//li/a/text()'
 
     class DOCS(MultiExtractor):
         LI_XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/div/ul/li'
@@ -228,7 +228,7 @@ class INQUIRY:
                         title = {
                             'text': u'Wortmeldungen in der Debatte',
                             'statements': statements
-                        }                    
+                        }
                     else:
                         text = _clean(
                             remove_tags(
@@ -271,7 +271,7 @@ class INQUIRY:
 
         class DATE(SingleExtractor):
             XPATH = "//td[1]/text()"
-        
+
         class TITLE(SingleExtractor):
             XPATH = "//td[2]/text()"
             XPATH_LINK_TEXT = "//td[2]/a/text()"

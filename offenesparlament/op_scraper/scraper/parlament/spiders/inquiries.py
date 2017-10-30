@@ -70,6 +70,7 @@ class InquiriesSpider(BaseSpider):
 
         self.cookies_seen = set()
         self.idlist = {}
+        self.url_override = kw.get('url', None)
 
     def start_requests(self):
         """
@@ -80,9 +81,9 @@ class InquiriesSpider(BaseSpider):
         # suitable testing surface for new functions.
         # urls = ["https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00019/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JPR/JPR_00016/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06954/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/M/M_00178/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/JEU/JEU_00003/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XXV/J/J_06758/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03089/index.shtml",
         #         "https://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_03091/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/BR/J-BR/J-BR_01155/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06110/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_06651/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04024/index.shtml", "http://www.parlament.gv.at/PAKT/VHG/XX/J/J_04025/index.shtml", "https://www.parlament.gv.at/PAKT/VHG/XX/M/M_00178/index.shtml"]
-        urls = []
+        urls = [] if not self.url_override else [self.url_override]
 
-        if self.LLP:
+        if self.LLP and not self.url_override:
             for i in self.LLP:
                 for nrbr in ['NR', 'BR']:
                     roman_numeral = roman.toRoman(i)
@@ -233,7 +234,6 @@ class InquiriesSpider(BaseSpider):
         return False
 
     def parse_keywords(self, response):
-
         keywords = INQUIRY.KEYWORDS.xt(response)
 
         # Create all keywords we don't yet have in the DB
@@ -241,8 +241,8 @@ class InquiriesSpider(BaseSpider):
         for keyword in keywords:
             kw, created = Keyword.objects.get_or_create(title=keyword)
             if created:
-                log.debug(u"Created keyword {}".format(
-                    green(u'[{}]'.format(keyword))))
+                log.msg(u"Created keyword {}".format(
+                    green(u'[{}]'.format(keyword))),level=log.DEBUG)
             keyword_items.append(kw)
 
         return keyword_items
@@ -291,8 +291,8 @@ class InquiriesSpider(BaseSpider):
         phase_item, created = Phase.objects.get_or_create(
             title='default_inqu')
         if created:
-            log.debug(u"Created Phase {}".format(
-                green(u'[{}]'.format(phase_item.title))))
+            log.msg(u"Created Phase {}".format(
+                green(u'[{}]'.format(phase_item.title))),level=log.DEBUG)
 
         steps = INQUIRY.STEPS.xt(response)
 
@@ -330,8 +330,8 @@ class InquiriesSpider(BaseSpider):
             phase_item, created = Phase.objects.get_or_create(
                 title=phase['title'])
             if created:
-                log.debug(u"Created Phase {}".format(
-                    green(u'[{}]'.format(phase_item.title))))
+                log.msg(u"Created Phase {}".format(
+                    green(u'[{}]'.format(phase_item.title))),level=log.DEBUG)
 
             # Create steps
             for step in phase['steps']:
@@ -346,8 +346,8 @@ class InquiriesSpider(BaseSpider):
                 )
                 step_item.save()
                 if created:
-                    log.debug(u"Created Step {}".format(
-                        green(u'[{}]'.format(step_item.title))))
+                    log.msg(u"Created Step {}".format(
+                        green(u'[{}]'.format(step_item.title))),level=log.DEBUG)
 
                 # Save statements for this step, if applicable
                 if 'statements' in step['title']:
@@ -367,15 +367,15 @@ class InquiriesSpider(BaseSpider):
                                 step=step_item,
                                 defaults=st_data)
                             if st_created:
-                                log.debug(u"Created Statement by {} on {}".format(
+                                log.msg(u"Created Statement by {} on {}".format(
                                     green(
                                         u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
+                                    step_item.date),level=log.DEBUG)
                             else:
-                                log.debug(u"Updated Statement by {} on {}".format(
+                                log.msg(u"Updated Statement by {} on {}".format(
                                     green(
                                         u'[{}]'.format(person_item.full_name)),
-                                    step_item.date))
+                                    step_item.date),level=log.DEBUG)
                         else:
                             # We can't save statements if we can't find the
                             # Person
@@ -408,8 +408,8 @@ class InquiriesSpider(BaseSpider):
         # category is created.
         cat, created = Category.objects.get_or_create(title=category)
         if created:
-            log.debug(u"Created category {}".format(
-                green(u'[{}]'.format(category))))
+            log.msg(u"Created category {}".format(
+                green(u'[{}]'.format(category))),level=log.DEBUG)
 
         try:
             sender_object = Person.objects.get(
