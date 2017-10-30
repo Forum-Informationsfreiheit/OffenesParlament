@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from op_scraper.models import SubscribedContent
+import haystack
 
 class Command(BaseCommand):
     help = 'Resets all subscribed content hashes'
