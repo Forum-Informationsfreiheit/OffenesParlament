@@ -518,9 +518,9 @@ class PetitionsSpider(BaseSpider):
         petition = response.meta['petition_item']
 
         signatures = PETITION.SIGNATURES.xt(response)
-        log.info(u"Creating or updating {} signatures".format(
+        log.msg(u"Creating or updating {} signatures".format(
             green(u'{}'.format(len(signatures)))
-        ))
+        ),level=log.INFO)
 
         # find latest saved signature date
         last_signature_date = datetime.date.fromtimestamp(0)
