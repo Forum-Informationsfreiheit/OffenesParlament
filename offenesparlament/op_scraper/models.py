@@ -1041,11 +1041,11 @@ class SubscribedContent(models.Model):
         try:
             response = c.get(self.url)
             content = json.loads(response.content)['result']
-        except:
+        except Exception, e:
             logger.error(
-                "Couldn't get or deserialize SubscribedContent ES response for url {}: {}".format(
-                    self.url,
-                    response.content
+                "Couldn't get or deserialize SubscribedContent ES response for url {} ({}): {}".format(
+                    self.url, response.content if 'response' in locals() else '-',
+                    e
                     )
                 )
 
