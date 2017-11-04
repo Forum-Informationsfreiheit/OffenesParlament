@@ -153,7 +153,7 @@ class JsonDiffer(object):
         cur_dict = dict((item['parl_id'], item) for item in self.cur_content)
 
         for parl_id in changed_items:
-            old = old_dict[parl_id]
+            old = old_dict.get(parl_id, {})
             new = cur_dict[parl_id]
 
             diff_keys = self.diff_dicts(old, new)
