@@ -1041,15 +1041,15 @@ class SubscribedContent(models.Model):
         try:
             response = c.get(self.url)
             content = json.loads(response.content)['result']
+            return content
         except Exception, e:
             logger.error(
                 "Couldn't get or deserialize SubscribedContent ES response for url {} ({}): {}".format(
-                    self.url, response.content if 'response' in locals() else '-',
-                    e
+                    self.url, response.content if 'response' in locals() else '-'
                     )
                 )
+        return None
 
-        return content
 
     def generate_content_hashes(self, content=None):
         """
@@ -1122,6 +1122,9 @@ class SubscribedContent(models.Model):
         self.latest_content_hashes = self.generate_content_hashes()
         self.store_latest_content(self.get_content())
         self.save()
+
+    def __unicode__(self):
+        return u'<SubscribedContent: pk={}>'.format(self.pk)
 
 
 class Subscription(models.Model):
