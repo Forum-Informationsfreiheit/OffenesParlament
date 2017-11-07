@@ -435,7 +435,7 @@ ul.pagination {
       background-repeat: no-repeat;
       padding: 0 0 0 37px; }
     .projectintro .projectintro_item a, .projectintro .projectintro_item a:active, .projectintro .projectintro_item a:focus, .projectintro .projectintro_item a:visited, .projectintro .projectintro_item_inverse a, .projectintro .projectintro_item_inverse a:active, .projectintro .projectintro_item_inverse a:focus, .projectintro .projectintro_item_inverse a:visited {
-      color: #f55f57;
+      color: inherit;
       text-decoration: underline; }
       .projectintro .projectintro_item a:hover, .projectintro .projectintro_item a:active:hover, .projectintro .projectintro_item a:focus:hover, .projectintro .projectintro_item a:visited:hover, .projectintro .projectintro_item_inverse a:hover, .projectintro .projectintro_item_inverse a:active:hover, .projectintro .projectintro_item_inverse a:focus:hover, .projectintro .projectintro_item_inverse a:visited:hover {
         text-decoration: none; }
