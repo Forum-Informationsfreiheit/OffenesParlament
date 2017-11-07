@@ -980,7 +980,7 @@ class Verification(models.Model):
         self.verification_hash = uuid.uuid4().hex
 
     def save(self, *args, **kwargs):
-        if self.verification_hash==None:
+        if not self.verification_hash:
             self.regen_verification_hash()
         super(Verification,self).save(*args,**kwargs)
 
