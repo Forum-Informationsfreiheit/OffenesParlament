@@ -18,13 +18,10 @@ FIELD_BLACKLIST = ['text', 'ts']
 
 
 class JsonDiffer(object):
-
     FIELD_MESSAGES = {}
-
-    changes = {}
-    current_content = {}
-
     def __init__(self, _content):
+        self.changes = {}
+        self.current_content = {}
         self.content = _content
         self.old_content = _content.retrieve_latest_content()
         self.cur_content = _content.get_content()
@@ -316,8 +313,6 @@ class InquiryDiffer(LawDiffer):
         return fm
 
 class SearchDiffer(JsonDiffer):
-    new = []
-    deleted = []
 
     SNIPPET_TEMPLATE_FILE = 'subscription/emails/snippets/search_changes.email'
 
@@ -325,6 +320,11 @@ class SearchDiffer(JsonDiffer):
         'new': SEARCH.NEW,
         'changed': SEARCH.CHANGED,
         }
+
+    def __init__(self,*args,**kwargs):
+        super(SearchDiffer,self).__init__(*args,**kwargs)
+        self.new = []
+        self.deleted = []
 
     def collect_new(self):
         self.new = []
@@ -355,7 +355,6 @@ class SearchDiffer(JsonDiffer):
         return self.deleted
 
     def render_snippets(self):
-
         new = self.collect_new()
 
         new_msg = self.SEARCH_MESSAGES['new'].msg(new)
