@@ -32,6 +32,8 @@ from op_scraper.models import LegislativePeriod
 from op_scraper.models import Comittee
 from op_scraper.models import ComitteeMembership
 
+from django.db.models import Q
+
 import pytz
 
 import re
@@ -218,12 +220,20 @@ class PersonsSpider(BaseSpider):
                 state_item = self.get_state_item(p['electoral_state'])
                 # Create and append mandate
                 try:
-                    mandate_item, m_created = person_item.mandate_set.update_or_create(
-                        function=function_item,
+                    mandate_items = person_item.mandate_set.filter(
+                        Q(function__title__contains='Nationalrat')
+                        ).filter(
                         legislative_period=llp_item,
-                        party=party_item,
-                        state=state_item
+                        party=party_item
                     )
+                    if not mandate_items:
+                        mandate_items = [person_item.mandate_set.create(
+                            function=function_item,
+                            legislative_period=llp_item,
+                            party=party_item,
+                            state=state_item
+                        )]
+                    mandate_item = mandate_items[0]
                 except Exception, e:
                     logger.warning(
                         red(u"Error saving Mandate {} ({}) / Person {}".format(function_item, party_item, person_item.pk)))
@@ -362,8 +372,8 @@ class PersonsSpider(BaseSpider):
                 del mandate['llp_roman']
                 mandate['function'],_ = Function.objects.update_or_create(title=mandate['function'])
 
-                def uocparse(mandat):
-                    r = {'defaults': {}}
+                def uocparse(mandat, defaults=None):
+                    r = {'defaults': {} if not defaults else defaults}
                     for k in mandat.keys():
                         dict_to_append = r if k in (
                             'person','function','party','legislative_period',
@@ -374,10 +384,21 @@ class PersonsSpider(BaseSpider):
                             dict_to_append[k]=mandat[k]
                     return r
 
+                ms = Mandate.objects.all()
+                mandate['person'] = person_item
+                nrbr = False
+                ftmp = None
+                if 'Abgeordnet' in mandate['function'].title and 'Nationalrat' in mandate['function'].title:
+                    nrbr = True
+                    ms = ms.filter(
+                        Q(function__title__contains='Nationalrat')).filter(
+                        Q(function__title__contains='Abgeordnet'))
+                    ftmp = mandate['function']
+                    del mandate['function']
 
-                logger.debug(uocparse(mandate))
-                mq = person_item.mandate_set.update_or_create(
-                    **uocparse(mandate))
+
+                p = uocparse(mandate, {} if not nrbr else {'function': ftmp})
+                mq = ms.update_or_create(**p)
 
             person_item.latest_mandate = person_item.get_latest_mandate()
 

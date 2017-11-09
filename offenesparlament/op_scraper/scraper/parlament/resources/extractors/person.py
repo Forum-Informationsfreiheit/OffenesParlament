@@ -50,6 +50,10 @@ class PERSON:
                     llp_raw = re.match(
                         '^.*\((.*)\. GP\).*$', function
                         )
+                    function = re.sub(
+                        '\((.*)\. GP\)','', function
+                        ).strip()
+
                     m_llp_roman_begin = \
                         m_llp_roman_end = \
                             llp_raw.group(1) if llp_raw else ''
