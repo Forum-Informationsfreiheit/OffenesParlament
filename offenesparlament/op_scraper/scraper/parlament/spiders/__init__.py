@@ -21,7 +21,7 @@ class BaseSpider(scrapy.Spider):
     """
 
     # Law Periods/Gesetzgebungsperioden to scrape
-    LLP = [20, 21, 22, 23, 24, 25]
+    LLP = [20, 21, 22, 23, 24, 25, 26]
 
     # Basic URL after host to scrape (must be rss)
     BASE_URL = ""
