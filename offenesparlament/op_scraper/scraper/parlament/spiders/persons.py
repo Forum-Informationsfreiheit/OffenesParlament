@@ -36,6 +36,11 @@ import pytz
 
 import re
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 class PersonsSpider(BaseSpider):
     BASE_URL = "{}/{}".format(BASE_HOST, "WWER/PARL/filterRearrange.psp")
@@ -114,33 +119,52 @@ class PersonsSpider(BaseSpider):
                 if not llp.number in self.LLP:
                     self.LLP.append(llp.number)
 
+        logger.info(u"parsing urls: {}".format(
+            ','.join(urls)
+        ))
         return urls
 
     def parse(self, response):
+        all_link_followed = False
         try:
-            URLOPTIONS = collections.OrderedDict(
-                urlparse.parse_qsl(
-                    urlparse.urlparse(
-                        response.xpath('''//a[starts-with(text(),'Alle anzeigen')]/@href''')[0].extract()
-                    ).query)
-            )
-            URLOPTIONS['LISTE']=''
-            URLOPTIONS['letter']=''
-            new_url = '{}?{}'.format(self.BASE_URL,
-                                                urlencode(URLOPTIONS))
-            yield response.follow(new_url,
-                                self.parse_list)
+            all_links = response.xpath('''//a[starts-with(text(),'Alle anzeigen')]/@href''')
+            if len(all_links)>0:
+                URLOPTIONS = collections.OrderedDict(
+                    urlparse.parse_qsl(
+                        urlparse.urlparse(
+                            all_links[0].extract()
+                        ).query)
+                )
+                URLOPTIONS['LISTE']=''
+                URLOPTIONS['letter']=''
+                new_url = '{}?{}'.format(self.BASE_URL,
+                                                    urlencode(URLOPTIONS))
+                all_link_followed = True
+                logger.debug(u"following show all link: {} -> {}".format(
+                    green(u'[{}]'.format(new_url)), response.url))
+
+                yield response.follow(new_url,
+                                    self.parse_list)
         except:
-            urloptions = response.url.split('?')[1]
-            opts = dict(urlparse.parse_qsl(urloptions))
             if opts['GP'] not in ('KN','PN',):
                 raise
+
+        if not all_link_followed:
+            urloptions = response.url.split('?')[1]
+            opts = dict(urlparse.parse_qsl(urloptions))
+            if not opts['GP'] in ('KN','PN',):
+                logger.debug(u"no show all link, parsing list directly: {} -> {}".format(
+                    green(u'[{}]'.format(new_url)), response.url))
+                for x in self.parse_list(response):
+                    yield x
 
     def parse_list(self, response):
 
         # rss = feedparser.parse(response.url)
 
         persons = PERSON.LIST.xt(response)
+        logger.info(u"parsing list: {}, {} persons".format(
+            green(u'[{}]'.format(response.url)), len(persons)))
 
         callback_requests = []
 
@@ -157,7 +181,7 @@ class PersonsSpider(BaseSpider):
         function_item, f_created = Function.objects.get_or_create(
             title=function_str)
 
-        self.logger.info(
+        logger.info(
             u"Scraping {} persons for LLP {}, {}".format(len(persons), llp_roman, function))
 
         # Iterate all persons
@@ -177,16 +201,16 @@ class PersonsSpider(BaseSpider):
                     parl_id=parl_id,
                     defaults=person_data)
             except Exception as e:
-                self.logger.warning("Error saving Person {}: {}".format(
+                logger.warning("Error saving Person {}: {}".format(
                     green(u'[{}]'.format(p['reversed_name'])),
                     e
                 ))
                 continue
             if created_person:
-                self.logger.debug(u"Created Person {}".format(
+                logger.debug(u"Created Person {}".format(
                     green(u'[{}]'.format(p['reversed_name']))))
             else:
-                self.logger.debug(u"Updated Person {}".format(
+                logger.debug(u"Updated Person {}".format(
                     green(u"[{}]".format(p['reversed_name']))
                 ))
             for mandate in p['mandates']:
@@ -201,7 +225,7 @@ class PersonsSpider(BaseSpider):
                         state=state_item
                     )
                 except Exception, e:
-                    self.logger.warning(
+                    logger.warning(
                         red(u"Error saving Mandate {} ({}) / Person {}".format(function_item, party_item, person_item.pk)))
                     import ipdb
                     ipdb.set_trace()
@@ -209,7 +233,7 @@ class PersonsSpider(BaseSpider):
                 # In case we added/modified a mandate now,
                 latest_mandate_item = person_item.get_latest_mandate()
                 person_item.latest_mandate = latest_mandate_item
-                self.logger.debug(
+                logger.debug(
                     cyan(u"Latest mandate for {} is now {}".format(person_item, latest_mandate_item)))
                 person_item.save()
 
@@ -240,7 +264,7 @@ class PersonsSpider(BaseSpider):
             party_item.save()
 
         if created:
-            self.logger.info(u"Created party {}".format(
+            logger.info(u"Created party {}".format(
                 green(u'[{}]: {}'.format(party_item.short, party_item.titles))))
 
         return party_item
@@ -254,7 +278,7 @@ class PersonsSpider(BaseSpider):
         if created:
             state_item.save()
 
-            self.logger.debug(u"Created state {}: '{}'".format(
+            logger.debug(u"Created state {}: '{}'".format(
                 green(u'[{}]'.format(state_item.name)),
                 state_item.title))
 
@@ -283,12 +307,12 @@ class PersonsSpider(BaseSpider):
 
         ts = GENERIC.TIMESTAMP.xt(response)
         if not self.IGNORE_TIMESTAMP and not self.has_changes(person['parl_id'], person['source_link'], ts):
-            self.logger.debug(
+            logger.debug(
                 green(u"Skipping Person Detail, no changes: {}".format(
                     full_name)))
             return
 
-        self.logger.debug(u"Updating Person Detail {}".format(
+        logger.debug(u"Updating Person Detail {}".format(
             green(u"[{}]".format(person['reversed_name']))
         ))
 
@@ -326,7 +350,7 @@ class PersonsSpider(BaseSpider):
                         party = Party.objects.filter(
                             titles__contains=[mandate['party']]).first()
                     else:
-                        self.logger.warning(u"{}: Can't find party {} for mandate".format(
+                        logger.warning(u"{}: Can't find party {} for mandate".format(
                             person_data['full_name'], yellow(u"[{}]".format(mandate['party']))
                         ))
                         continue
@@ -351,7 +375,7 @@ class PersonsSpider(BaseSpider):
                     return r
 
 
-                self.logger.debug(uocparse(mandate))
+                logger.debug(uocparse(mandate))
                 mq = person_item.mandate_set.update_or_create(
                     **uocparse(mandate))
 
@@ -362,7 +386,7 @@ class PersonsSpider(BaseSpider):
             person_item.slug
 
         except Exception as error:
-            self.logger.exception(
+            logger.exception(
                 red(u"Error saving Person {}: \n\t{}".format(full_name, error)))
             raise error
             #import ipdb
@@ -391,7 +415,7 @@ class PersonsSpider(BaseSpider):
                                 'active'] if 'active' in comittee else True,
                             defaults=comittee)
                         if created_comittee:
-                            self.logger.debug(u"Created comittee {}".format(
+                            logger.debug(u"Created comittee {}".format(
                                 green(u"[{}]".format(comittee_item))
                             ))
 
@@ -403,7 +427,7 @@ class PersonsSpider(BaseSpider):
                         function_item, created_function = Function.objects.get_or_create(
                             **function_data)
                         if created_function:
-                            self.logger.debug(u"Created function {}".format(
+                            logger.debug(u"Created function {}".format(
                                 green(u"[{}]".format(function_item))
                             ))
 
@@ -422,17 +446,17 @@ class PersonsSpider(BaseSpider):
                         )
 
                         if created_membership:
-                            self.logger.debug(u"Created membership {}".format(
+                            logger.debug(u"Created membership {}".format(
                                 green(u"[{}]".format(membership_item))
                             ))
                     except Exception as error:
-                        self.logger.warning(
+                        logger.warning(
                             red(u"Error adding Person's comittee membership {} {}: \n\t{}\n\t{}\n".format(full_name, person['source_link'], error, repr(comittee)))
                             )
 
 
         except Exception as error:
-            self.logger.warning(
+            logger.warning(
                 red(u"Error adding Person's comittee memberships {}: \n\t{}".format(full_name, error)))
             #import ipdb
             #ipdb.set_trace()

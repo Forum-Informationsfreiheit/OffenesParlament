@@ -54,9 +54,6 @@ class PERSON:
                         m_llp_roman_end = \
                             llp_raw.group(1) if llp_raw else ''
 
-                    logger.debug(function)
-                    logger.debug(m_llp_roman_begin)
-
                     if u'–' in m_llp_roman_begin:
                         m_llp_roman_begin,m_llp_roman_end = m_llp_roman_begin.split(u'–')
 
@@ -64,7 +61,6 @@ class PERSON:
                                     roman.fromRoman(m_llp_roman_end.strip('. '))+1
                                     ) if m_llp_roman_begin else [None]:
                         llp_roman = roman.toRoman(llp) if llp else None
-                        logger.debug(llp)
 
                         # Start Date
                         try:
