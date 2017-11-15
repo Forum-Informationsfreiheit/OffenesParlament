@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
+import re
 
 
 from ansicolor import red
@@ -65,6 +66,11 @@ class PreLawsSpider(LawsInitiativesSpider):
 
         self.cookies_seen = set()
         self.idlist = {}
+
+
+    def opinion_url_to_parl_id(self, url):
+	logger.debug('extracting parl id from {}'.format(url))
+	return ':'.join(re.findall('VHG/([^/]+)/SNME/([^/]+)/',url)[0])
 
     def parse(self, response):
         logger.debug(response.url)
@@ -133,6 +139,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         if opinions:
             skipped_ops = 0
             for op in opinions:
+                op['parl_id'] = self.opinion_url_to_parl_id(op['url'])
                 if law_item.opinions.filter(parl_id=op['parl_id']).exists():
                     skipped_ops += 1
                     continue
@@ -204,7 +211,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         """
         op_data = response.meta['op_data']
 
-        parl_id = LAW.PARL_ID.xt(response)
+        parl_id = self.opinion_url_to_parl_id(response.url)
 
         description = LAW.DESCRIPTION.xt(response)
         docs = self.parse_docs(response)
