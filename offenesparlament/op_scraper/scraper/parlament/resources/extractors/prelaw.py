@@ -62,25 +62,19 @@ class PRELAW:
             for raw_op in raw_ops[1:]:
                 op_sel = Selector(text=raw_op)
 
-                date = op_sel.xpath('//td[1]/text()').extract()
-                date = date[0]
+                date = op_sel.xpath('//td[1]').xpath("normalize-space()").extract()[0]
 
                 url = op_sel.xpath('//td[2]/a/@href').extract()[0]
                 parl_id = u"({})".format(
-                    op_sel.xpath('//td[2]/a/text()').extract()[0])
+                    op_sel.xpath('//td[3]/a').xpath('normalize-space()').extract()[0])
 
-                title = op_sel.xpath('//td[3]/text()').extract()[0]
+                title = op_sel.xpath('//td[2]').xpath('normalize-space()').extract()[0]
                 if title:
                     title = _clean(title).replace("*", ", ")
                 else:
                     title = None
 
-                email = op_sel.xpath('//td[3]/a/@href').extract()
-                if email:
-                    email = email[0].replace('mailto:', '')
-                    title = op_sel.xpath('//td[3]/a/text()').extract()[0]
-                else:
-                    email = None
+                email = None
 
                 try:
                     date = datetime.datetime.strptime(
