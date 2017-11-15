@@ -133,7 +133,7 @@ class PreLawsSpider(LawsInitiativesSpider):
         if opinions:
             skipped_ops = 0
             for op in opinions:
-                if Opinion.objects.filter(parl_id=op['parl_id']).exists():
+                if law_item.opinions.filter(parl_id=op['parl_id']).exists():
                     skipped_ops += 1
                     continue
                 post_req = scrapy.Request("{}/{}".format(BASE_HOST, op['url']),
