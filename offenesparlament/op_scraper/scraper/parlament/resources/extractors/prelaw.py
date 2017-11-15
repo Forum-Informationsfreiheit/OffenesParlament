@@ -30,12 +30,12 @@ class PRELAW:
             return remove_tags(description, 'p')
 
     class STEPS(MultiExtractor):
-        XPATH = '//table'
+        XPATH = "//table[contains(@class,'tabelleHistorie')]"
 
         @classmethod
         def xt(cls, response):
             steps = []
-            raw_table = response.xpath('//table')[1]
+            raw_table = response.xpath(cls.XPATH)[0]
             raw_steps = Selector(text=raw_table.extract()).xpath('//tr')[1:] # ignore header
             for index, step in enumerate(raw_steps, start=1):
                 step_selector = Selector(text=step.extract())
@@ -53,7 +53,7 @@ class PRELAW:
             return steps
 
     class OPINIONS(MultiExtractor):
-        XPATH = '//*[@id="content"]/div[3]/div[2]/div[2]/table//tr'
+        XPATH = "//div[contains(@class,'filterListe')]//table[contains(@class,'filter')]//tr"
 
         @classmethod
         def xt(cls, response):
