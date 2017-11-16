@@ -1099,8 +1099,9 @@ class SubscribedContent(models.Model):
                 res = es.get(index="archive", doc_type="modelresult", id=content_id_hash)
                 content.append(res['_source'])
             except Exception, e:
-                from raven.contrib.django.raven_compat.models import client
-                client.captureException()
+                #from raven.contrib.django.raven_compat.models import client
+                #client.captureException()
+                pass
         return content
 
     def clear_latest_content(self):
