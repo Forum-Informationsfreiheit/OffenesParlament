@@ -361,7 +361,7 @@ class SearchDiffer(JsonDiffer):
         changed_msg = self.SEARCH_MESSAGES['changed'].msg(self.changes)
 
         # create ui_url_param to mark all the parl_ids that are new or have changes
-        mark_ids = set(self.changes.keys() + self.new)
+        mark_ids = list(set(self.changes.keys() + self.new))
         ui_url_params = u"&mark_id=".join(['']+mark_ids) # start with &mark_id=
 
         if not new_msg and not changed_msg:
