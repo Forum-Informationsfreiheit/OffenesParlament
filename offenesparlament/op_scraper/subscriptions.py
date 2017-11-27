@@ -68,10 +68,10 @@ class JsonDiffer(object):
     def diff_dicts(cls, dict1, dict2):
         # Collect all keys in dict1 that aren't equal to dict2 or are not in dict2 at all
         dict1_diff_keys = [
-                key for key in dict1.keys() if dict1[key] != dict2[key] or key not in dict2]
+                key for key in dict1.keys() if dict1.get(key,None) != dict2.get(key,None) or key not in dict2]
         # Collect all keys in dict2 that aren't equal to dict1 or are not in dict1 at all
         dict2_diff_keys = [
-            key for key in dict2.keys() if dict1[key] != dict2[key] or key not in dict1]
+            key for key in dict2.keys() if dict1.get(key,None) != dict2.get(key,None) or key not in dict1]
         diff_keys = set(dict1_diff_keys + dict2_diff_keys)
 
         return diff_keys
@@ -361,8 +361,8 @@ class SearchDiffer(JsonDiffer):
         changed_msg = self.SEARCH_MESSAGES['changed'].msg(self.changes)
 
         # create ui_url_param to mark all the parl_ids that are new or have changes
-        mark_ids = set(self.changes.keys() + self.new)
-        ui_url_params = u"&mark_id=".join(mark_ids)
+        mark_ids = list(set(self.changes.keys() + self.new))
+        ui_url_params = u"&mark_id=".join(['']+mark_ids) # start with &mark_id=
 
         if not new_msg and not changed_msg:
             return None
