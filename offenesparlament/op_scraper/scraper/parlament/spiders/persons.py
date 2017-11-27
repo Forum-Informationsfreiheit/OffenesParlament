@@ -388,10 +388,10 @@ class PersonsSpider(BaseSpider):
                 mandate['person'] = person_item
                 nrbr = False
                 ftmp = None
-                if 'Abgeordnet' in mandate['function'].title and 'Nationalrat' in mandate['function'].title:
+                if 'Abgeordnet' in mandate['function'].title and ('Nationalrat' in mandate['function'].title or 'Bundesrat' in mandate['function'].title):
                     nrbr = True
                     ms = ms.filter(
-                        Q(function__title__contains='Nationalrat')).filter(
+                        Q(function__title__contains='Nationalrat') | Q(function__title__contains='Bundesrat')).filter(
                         Q(function__title__contains='Abgeordnet'))
                     ftmp = mandate['function']
                     del mandate['function']

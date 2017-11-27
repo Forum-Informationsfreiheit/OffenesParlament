@@ -46,7 +46,7 @@ class PERSON:
                             'div'))
 
                     function = mandate.split(u'<br>')[0].split(',')[0]
-                    party = mandate.split(u'<br>')[0].split(',')[1]
+                    party = mandate.split(u'<br>')[0].split(',')[1] if ',' in mandate.split(u'<br />')[0] else ''
                     llp_raw = re.match(
                         '^.*\((.*)\. GP\).*$', function
                         )
