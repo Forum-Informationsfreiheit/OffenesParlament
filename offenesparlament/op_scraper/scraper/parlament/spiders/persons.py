@@ -51,7 +51,7 @@ class PersonsSpider(BaseSpider):
 
     RSS_TO_FUNCTION = {
         'NR': 'Abgeordnete(r) zum Nationalrat',
-        'BR': 'Abgeordnete(r) zum Bundesrat'
+        'BR': 'Mitglied des Bundesrates'
     }
 
 #    URLOPTIONS_NR = {
@@ -388,11 +388,10 @@ class PersonsSpider(BaseSpider):
                 mandate['person'] = person_item
                 nrbr = False
                 ftmp = None
-                if 'Abgeordnet' in mandate['function'].title and ('Nationalrat' in mandate['function'].title or 'Bundesrat' in mandate['function'].title):
+                if ('Abgeordnet' in mandate['function'].title and 'Nationalrat' in mandate['function'].title) or ('Mitglied' in mandate['function'].title and 'Bundesrat' in mandate['function'].title):
                     nrbr = True
                     ms = ms.filter(
-                        Q(function__title__contains='Nationalrat') | Q(function__title__contains='Bundesrat')).filter(
-                        Q(function__title__contains='Abgeordnet'))
+                        (Q(function__title__contains='Abgeordnet') & Q(function__title__contains='Nationalrat')) | (Q(function__title__contains='Bundesrat') & Q(function__title__contains='Mitglied')))
                     ftmp = mandate['function']
                     del mandate['function']
 
