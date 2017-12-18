@@ -205,8 +205,8 @@ class PERSON:
 
         @classmethod
         def msg(cls, changed_content):
-            old = changed_content['old']
-            new = changed_content['new']
+            old = changed_content.get('D',[])
+            new = changed_content.get('N',[])
             new_cms = [cm for cm in new if cm not in old]
             cm_changes = u""
             for cm in new_cms:
