@@ -1045,7 +1045,7 @@ class SubscribedContent(models.Model):
         except Exception, e:
             logger.error(
                 "Couldn't get or deserialize SubscribedContent ES response for url {} ({}): {}".format(
-                    self.url, response.content if 'response' in locals() else '-'
+                    self.url, response.content if 'response' in locals() else '-', e
                     )
                 )
         return None
