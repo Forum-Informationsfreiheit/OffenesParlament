@@ -1085,6 +1085,7 @@ class SubscribedContent(models.Model):
         es = Elasticsearch(retry_on_timeout=True)
 
         content = []
+        hashes = []
 
         try:
             hashes = json.loads(self.latest_content_hashes).values()
