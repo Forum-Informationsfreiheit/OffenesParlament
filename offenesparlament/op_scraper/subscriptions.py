@@ -242,7 +242,7 @@ class PersonDiffer(JsonDiffer):
                     'category': item_category,
                     'messages': messages,
                     'item': self.current_content[parl_id],
-                    'short_css_class':   person.party.short_css_class
+                    'short_css_class':   person.party.short_css_class if person.party else None
                 }
             c = Context(change_item)
             snippets.append(
