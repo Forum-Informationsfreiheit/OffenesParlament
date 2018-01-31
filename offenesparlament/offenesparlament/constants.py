@@ -31,7 +31,7 @@ class EmailController():
     # Get an instance of a logger
     logger = logging.getLogger("EmailController")
 
-    sender = 'OffenesParlament <op@offenesparlament.at>'
+    sender = u'OffenesParlament <op@offenesparlament.at>'
     fail_silently = False
 
     @classmethod
@@ -76,31 +76,31 @@ class EmailController():
 
 class EMAIL:
     class VERIFY_SUBSCRIPTION(EmailController):
-        template_file = 'subscription/emails/verify_subscription.email'
-        subject = 'OffenesParlament.at - Abo bestätigen'
+        template_file = u'subscription/emails/verify_subscription.email'
+        subject = u'OffenesParlament.at - Abo bestätigen'
 
     class SUBSCRIPTION_LIST(EmailController):
-        template_file = 'subscription/emails/subscription_list.email'
-        subject = 'OffenesParlament.at - Abos und Inhalte verwalten: Login'
+        template_file = u'subscription/emails/subscription_list.email'
+        subject = u'OffenesParlament.at - Abos und Inhalte verwalten: Login'
 
     class SUBSCRIPTION_CHANGES(EmailController):
-        template_file = 'subscription/emails/subscription_changes.email'
-        subject = 'Neuigkeiten von OffenesParlament'
+        template_file = u'subscription/emails/subscription_changes.email'
+        subject = u'Neuigkeiten von OffenesParlament'
 
 
 class MESSAGES:
 
     class EMAIL:
-        ALREADY_VERIFIED = "Dieses Abo ist bereits bestätigt. Sie erhalten bei Neuigkeiten zum Thema ein E-Mail."
-        ALREADY_SUBSCRIBED = "Diese Seite ist bereits für diese E-Mail-Adresse abonniert!"
-        SUCCESSFULLY_SUBSCRIBED = "Ihr Abo ist somit bestätigt und aktiv. Sie erhalten ab jetzt bei Neuigkeiten zum Thema ein E-Mail."
-        OOPS = "Ups, da ist was schiefgelaufen - konnte das Abo für {} nicht finden oder nicht eindeutig zuordnen!"
-        ERROR_SENDING_EMAIL = "Fehler beim Senden des E-Mails an '{}'."
-        EMAIL_NOT_FOUND = "Falls wir Abos unter der E-Mail-Adresse '{}' in der Datenbank finden konnten, haben Sie soeben ein Login-E-Mail erhalten."
-        SUBSCRIPTION_LINK_SENT = "Ein Login-Link wurde soeben an '{}' gesendet (falls wir ein Abo unter dieser Adresse in unserer Datenbank gefunden haben)."
-        SUBSCRIPTION_DELETED = "Das Abo '{}' wurde gelöscht."
-        VERIFICATION_SENT = "Ein Bestätigungslink wurde soeben an '{}' gesendet."
-        VERIFICATION_HASH_WRONG = "Der Authentifizierungscode ist falsch. Bitte gehen Sie zu 'Abos verwalten' und loggen Sie sich ein."
+        ALREADY_VERIFIED = u"Dieses Abo ist bereits bestätigt. Sie erhalten bei Neuigkeiten zum Thema ein E-Mail."
+        ALREADY_SUBSCRIBED = u"Diese Seite ist bereits für diese E-Mail-Adresse abonniert!"
+        SUCCESSFULLY_SUBSCRIBED = u"Ihr Abo ist somit bestätigt und aktiv. Sie erhalten ab jetzt bei Neuigkeiten zum Thema ein E-Mail."
+        OOPS = u"Ups, da ist was schiefgelaufen - konnte das Abo für {} nicht finden oder nicht eindeutig zuordnen!"
+        ERROR_SENDING_EMAIL = u"Fehler beim Senden des E-Mails an '{}'."
+        EMAIL_NOT_FOUND = u"Falls wir Abos unter der E-Mail-Adresse '{}' in der Datenbank finden konnten, haben Sie soeben ein Login-E-Mail erhalten."
+        SUBSCRIPTION_LINK_SENT = u"Ein Login-Link wurde soeben an '{}' gesendet (falls wir ein Abo unter dieser Adresse in unserer Datenbank gefunden haben)."
+        SUBSCRIPTION_DELETED = u"Das Abo '{}' wurde gelöscht."
+        VERIFICATION_SENT = u"Ein Bestätigungslink wurde soeben an '{}' gesendet."
+        VERIFICATION_HASH_WRONG = u"Der Authentifizierungscode ist falsch. Bitte gehen Sie zu 'Abos verwalten' und loggen Sie sich ein."
 
 
 class ChangeMessageGenerator:
