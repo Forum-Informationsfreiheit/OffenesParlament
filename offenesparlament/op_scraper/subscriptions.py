@@ -434,9 +434,9 @@ def check_subscriptions():
 def process_emails(emails_to_changesets, change_snippets):
 
     logger.info(
-        "Preparing to send {} emails".format(len(emails_to_changesets)))
+        u"Preparing to send {} emails".format(len(emails_to_changesets)))
     for email in emails_to_changesets.keys():
-        logger.info("Sending email to {}".format(email))
+        logger.info(u"Sending email to {}".format(email))
 
         # changed_content
         changed_items = {
