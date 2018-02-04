@@ -25,7 +25,7 @@ class PERSON:
             XPATH = '//*[@id="inhalt"]/text()'
 
         class PHOTO_URL(SingleExtractor):
-            XPATH = "//div[contains(concat(' ', normalize-space(@class), ' '), ' teaserPortraitLarge ')]/a/img/@src"
+            XPATH = "//div[contains(concat(' ', normalize-space(@class), ' '), ' teaserPortraitLarge ')]//img/@src"
 
         class PHOTO_COPYRIGHT(SingleExtractor):
             XPATH = "//div[contains(concat(' ', normalize-space(@class), ' '), ' teaserPortraitLarge ')]/a/span/@title"
