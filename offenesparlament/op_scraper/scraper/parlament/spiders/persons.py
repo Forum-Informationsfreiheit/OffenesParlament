@@ -416,9 +416,7 @@ class PersonsSpider(BaseSpider):
                 try:
                     mq = ms.update_or_create(**p)
                 except Exception, e:
-                    print e
-                    import pdb
-                    pdb.set_trace()
+                    logger.exception(red(u'Error Mandate update_or_create\n{}'.format(e)))
 
             person_item.latest_mandate = person_item.get_latest_mandate()
 
