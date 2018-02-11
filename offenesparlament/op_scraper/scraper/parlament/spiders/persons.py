@@ -221,7 +221,7 @@ class PersonsSpider(BaseSpider):
                 # Create and append mandate
                 try:
                     mandate_items = person_item.mandate_set.filter(
-                        Q(function__title__contains='Nationalrat')
+                        Q(function__title__contains='Nationalrat') if 'Nationalrat' in function_item.title else Q(function__title__contains='Bundesrat')
                         ).filter(
                         legislative_period=llp_item,
                         party=party_item
@@ -312,7 +312,9 @@ class PersonsSpider(BaseSpider):
         """
         Parse a persons detail page
         """
-        person = response.meta['person']
+        person = response.meta.get('person',None)
+        if not person:
+            person = Person.objects.get(parl_id=[x for x in response.url.split('/') if 'PAD' in x][0]).__dict__
         full_name = PERSON.DETAIL.FULL_NAME.xt(response)
 
         ts = GENERIC.TIMESTAMP.xt(response)
@@ -370,7 +372,7 @@ class PersonsSpider(BaseSpider):
                     roman_numeral=mandate['llp_roman']) if mandate['llp_roman'] else None
                 del mandate['llp']
                 del mandate['llp_roman']
-                mandate['function'],_ = Function.objects.update_or_create(title=mandate['function'])
+                mandate['function'],_ = Function.objects.update_or_create(title=mandate['function'].strip())
 
                 def uocparse(mandat, defaults=None):
                     r = {'defaults': {} if not defaults else defaults}
@@ -388,16 +390,35 @@ class PersonsSpider(BaseSpider):
                 mandate['person'] = person_item
                 nrbr = False
                 ftmp = None
-                if ('Abgeordnet' in mandate['function'].title and 'Nationalrat' in mandate['function'].title) or ('Mitglied' in mandate['function'].title and 'Bundesrat' in mandate['function'].title):
+                nr = ('Abgeordnet' in mandate['function'].title and 'Nationalrat' in mandate['function'].title)
+                br = ('Mitglied' in mandate['function'].title and 'Bundesrat' in mandate['function'].title)
+                if nr or br:
                     nrbr = True
-                    ms = ms.filter(
-                        (Q(function__title__contains='Abgeordnet') & Q(function__title__contains='Nationalrat')) | (Q(function__title__contains='Bundesrat') & Q(function__title__contains='Mitglied')))
-                    ftmp = mandate['function']
-                    del mandate['function']
+                    ms = person_item.mandate_set.filter(
+                        (Q(function__title__contains='Abgeordnet') & Q(function__title__contains='Nationalrat'))
+                        if nr else
+                        (Q(function__title__contains='Bundesrat') & Q(function__title__contains='Mitglied')))
+                    if ms and ms[0].function:
+                        ftmp = ms[0].function
+                        mandate['function'] = ftmp
+                    if br:
+                        del mandate['legislative_period']
+                    #del mandate['function']
 
 
-                p = uocparse(mandate, {} if not nrbr else {'function': ftmp})
-                mq = ms.update_or_create(**p)
+                p = uocparse(mandate, {} if not nrbr or not ftmp else {'function': ftmp})
+                if br and ms:
+                    p2 = dict(p)
+                    del p2['defaults']
+                    ms = ms.filter(**p2)
+                    if ms:
+                        ms = ms.filter(pk=ms[0].pk)
+                try:
+                    mq = ms.update_or_create(**p)
+                except Exception, e:
+                    print e
+                    import pdb
+                    pdb.set_trace()
 
             person_item.latest_mandate = person_item.get_latest_mandate()
 
