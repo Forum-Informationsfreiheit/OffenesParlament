@@ -1076,9 +1076,10 @@ class SubscribedContent(models.Model):
         from elasticsearch import Elasticsearch
         es = Elasticsearch(retry_on_timeout=True)
 
-        for content_item in content:
-            content_id_hash = self._hash_content(content_item)
-            es.index(index="archive", doc_type='modelresult', id=content_id_hash, body=content_item)
+        if content:
+            for content_item in content:
+                content_id_hash = self._hash_content(content_item)
+                es.index(index="archive", doc_type='modelresult', id=content_id_hash, body=content_item)
 
     def retrieve_latest_content(self):
         from elasticsearch import Elasticsearch
