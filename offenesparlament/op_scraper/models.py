@@ -1061,8 +1061,9 @@ class SubscribedContent(models.Model):
             content = self.get_content()
 
         content_hashes = {}
-        for res in content:
-            content_hashes[res['parl_id']] = self._hash_content(res)
+        if content:
+            for res in content:
+                content_hashes[res['parl_id']] = self._hash_content(res)
         return json.dumps(content_hashes)
 
     def _hash_content(self, content):
