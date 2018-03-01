@@ -146,12 +146,12 @@ class JsonDiffer(object):
             if parl_id in self.cur_hashes.keys()
             and self.cur_hashes[parl_id] != self.old_hashes[parl_id]]
 
-        old_dict = dict((item['parl_id'], item) for item in self.old_content)
-        cur_dict = dict((item['parl_id'], item) for item in self.cur_content)
+        old_dict = dict((item['parl_id'], item) for item in self.old_content) if self.old_content else {}
+        cur_dict = dict((item['parl_id'], item) for item in self.cur_content) if self.cur_content else {}
 
         for parl_id in changed_items:
             old = old_dict.get(parl_id, {})
-            new = cur_dict[parl_id]
+            new = cur_dict.get(parl_id, {})
 
             diff_keys = self.diff_dicts(old, new)
 
