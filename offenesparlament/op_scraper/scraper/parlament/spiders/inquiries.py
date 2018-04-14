@@ -379,7 +379,7 @@ class InquiriesSpider(BaseSpider):
                         else:
                             # We can't save statements if we can't find the
                             # Person
-                            log.warning(
+                            self.logger.warning(
                                 red(u"Skipping Statement by {}: Person with source_link {} does{} exist{}").format(
                                     green(
                                         u'[{}]'.format(stmnt['person_name'])),
@@ -415,7 +415,7 @@ class InquiriesSpider(BaseSpider):
             sender_object = Person.objects.get(
                 parl_id=INQUIRY.RESPONSESENDER.xt(response))
         except Exception, e:
-            log.warning(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
+            self.logger.warning(red(u'Sender "{}" was not found in database, skipping Inquiry {} in LLP {}'.format(
                 INQUIRY.RESPONSESENDER.xt(response), parl_id, LLP)))
             return
 

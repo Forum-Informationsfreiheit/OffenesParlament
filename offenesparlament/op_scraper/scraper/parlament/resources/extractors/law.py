@@ -61,7 +61,7 @@ class LAW:
             return docs
 
     class STATUS(SingleExtractor):
-        XPATH = '//*[@id="content"]/div[3]/div[2]/div[1]/div[1]/p'
+        XPATH = '//*[@id="content"]//div[contains(@class, "status")]/p'
 
         @classmethod
         def xt(cls, response):

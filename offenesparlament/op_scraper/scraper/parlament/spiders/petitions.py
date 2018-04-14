@@ -153,7 +153,7 @@ class PetitionsSpider(BaseSpider):
             green(unicode(LLP)),
             blue(response.url)
         )
-        log.msg(logtext, level=log.INFO if self.SCRAPED_COUNTER%1000==0 else log.DEBUG)
+        self.logger.msg(logtext, level=log.INFO if self.SCRAPED_COUNTER%1000==0 else log.DEBUG)
 
         # Create and save Petition
         petition_item, petition_item_created = Petition.objects.update_or_create(
@@ -531,7 +531,7 @@ class PetitionsSpider(BaseSpider):
                 green(u'{}'.format(last_signature_date))
             ))
         except:
-            log.warning(u'No latest signature date found')
+            self.logger.warning(u'No latest signature date found')
 
         count_created = 0
         count_bulk_create = 0

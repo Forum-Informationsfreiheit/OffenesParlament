@@ -148,6 +148,8 @@ class PersonsSpider(BaseSpider):
                 yield response.follow(new_url,
                                     self.parse_list)
         except:
+            urloptions = response.url.split('?')[1]
+            opts = dict(urlparse.parse_qsl(urloptions))
             if opts['GP'] not in ('KN','PN',):
                 raise
 
