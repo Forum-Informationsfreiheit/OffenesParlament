@@ -237,7 +237,7 @@ def _person_fixtures():
 
     mandates = []
     for p in persons:
-        mandates += (p.mandates.all())
+        mandates += (p.mandate_set.all())
     
     debate_statements = []
     for p in persons:

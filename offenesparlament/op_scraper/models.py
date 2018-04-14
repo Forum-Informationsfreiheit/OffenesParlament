@@ -957,7 +957,7 @@ class Statement(models.Model):
             "date": self.step.date.isoformat(),
             "law": self.step.law.title if self.step.law else None,
             "law_id": self.step.law.id if self.step.law else None,
-            "law_category": self.step.law.category.title if self.step.law else None,
+            "law_category": self.step.law.category.title if self.step.law and self.step.law.category else None,
             "law_slug": self.step.law.slug if self.step.law else None,
             "protocol_url": self.protocol_url,
         }
