@@ -116,12 +116,16 @@ class PersonSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
         for attr in changes:
             person.__setattr__(attr, changes[attr])
 
+        #import pdb
+        #pdb.set_trace()
         changed_mandate = person.mandate_set.all().first()
         changed_mandate.end_date = datetime.date(2026,1,1)
         changed_mandate.start_date = datetime.date(2000,1,1)
         changed_mandate.save()
         new_mandate = Mandate.objects.filter(~Q(party__short = person.party.short)).all()[0]
-        person.mandates = [new_mandate, changed_mandate]
+        new_mandate.pk = None
+        new_mandate.person = person
+        new_mandate.save()
         person.latest_mandates = new_mandate
         person.save()
 
@@ -261,8 +265,12 @@ class PersonsSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
             person.full_name = u"{}2".format(person.full_name)
             person.parl_id = u"{}2".format(person.parl_id)
             person.save()
-            person.mandates = Person.objects.get(parl_id=parl_id).mandate_set.all()
-            person.save()
+            mandates_to_copy = Person.objects.get(parl_id=parl_id).mandate_set.all()
+            for m in mandates_to_copy:
+                m.person = person
+                m.pk = None
+                m.save()
+            assert(person.mandate_set.all().count() == mandates_to_copy.count())
 
         person = Person.objects.get(parl_id=parl_ids[-1])
         person.full_name = u"{}2".format(person.full_name)
@@ -397,8 +405,10 @@ class JsonDifferPersonTestCase(BasePersonSubscriptionsTestCase):
         changed_mandate.start_date = datetime.date(2000,1,1)
         changed_mandate.save()
         new_mandate = Mandate.objects.filter(~Q(party__short = person.party.short)).all()[0]
-        person.mandates = [new_mandate, changed_mandate]
-        person.latest_mandates = new_mandate
+        new_mandate.pk = None
+        new_mandate.person = person
+        new_mandate.save()
+        person.latest_mandate = new_mandate
         person.save()
 
         new_statement = DebateStatement.objects.filter(~Q(person_id = person.pk)).first()

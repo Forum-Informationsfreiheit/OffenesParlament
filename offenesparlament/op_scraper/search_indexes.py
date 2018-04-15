@@ -281,6 +281,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     # Related, aggregated and Multi - Value Fields
     'api_url',
     opinions = indexes.CharField()
+    steps = indexes.CharField()
     documents = indexes.CharField()
     keywords = indexes.MultiValueField(
         model_attr='keyword_titles', faceted=True)

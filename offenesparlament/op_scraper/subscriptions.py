@@ -127,7 +127,7 @@ class JsonDiffer(object):
                             self._disp(old[key]) if key in old else "",
                             self._disp(new[key]) if key in new else ""
                             ])
-                    print tabulate(diff_arr, headers=['key','old value', 'new value'], tablefmt="fancy_grid")
+                    print tabulate(diff_arr, headers=['key','old value', 'new value'], tablefmt="fancy_grid").encode('utf-8')
                 else:
                     logger.info("[{}] No Changes (hash equal)".format(parl_id))
             else:
@@ -400,6 +400,12 @@ def check_subscriptions():
         if not differ.has_changes or not differ.collect_changesets():
             logger.info(u"No changes for {}".format(content.title))
             continue
+
+        if settings.DEBUG_SUBSCRIPTIONS:
+            differ.print_changesets()
+            from django.utils.text import slugify
+            with open(slugify(content.url),'w') as f:
+                json.dump(differ.changes, f)
 
         snippet = differ.render_snippets()
         if snippet is None:

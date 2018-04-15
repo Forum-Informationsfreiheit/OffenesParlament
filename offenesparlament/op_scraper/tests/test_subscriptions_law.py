@@ -103,8 +103,10 @@ class LawSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
 
         new_steps = []
         [new_steps.append(ph.step_set.first()) for ph in Phase.objects.all()[:5]]
-        law.steps = new_steps
-
+        for new_step in new_steps:
+            new_step.pk = None
+            new_step.law = law
+            new_step.save()
         law.save()
         call_command('rebuild_index', verbosity=0, interactive=False)
 
