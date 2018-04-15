@@ -25,6 +25,7 @@ logging.basicConfig(
 class BaseConfig(Configuration):
     STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
     DEBUG_SUBSCRIPTIONS = True
+    OUTPUT_SUBSCRIPTIONS = True
     BLEACH_ALLOWED_TAGS = ['h2', 'h3', 'p', 'b', 'i', 'strong', 'a']
     BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style']
     BLEACH_ALLOWED_STYLES = []
@@ -368,6 +369,7 @@ class ProductionBase(BaseConfig):
     ALLOWED_HOSTS = ['*']
     BROKER_URL = 'amqp://production_user_rabbitmq:supersecretpw@rabbitmq_vhost:5672//'
     DEBUG_SUBSCRIPTIONS = False
+    OUTPUT_SUBSCRIPTIONS = False
 
     LOGGING = {
         'version': 1,

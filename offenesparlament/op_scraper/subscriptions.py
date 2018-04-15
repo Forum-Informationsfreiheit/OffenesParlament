@@ -1,3 +1,5 @@
+import os
+
 from op_scraper.models import *
 from django.conf import settings
 from django.template import loader, Context
@@ -403,9 +405,19 @@ def check_subscriptions():
 
         if settings.DEBUG_SUBSCRIPTIONS:
             differ.print_changesets()
+
+        if settings.OUTPUT_SUBSCRIPTIONS:
             from django.utils.text import slugify
-            with open(slugify(content.url),'w') as f:
-                json.dump(differ.changes, f)
+            fn = os.path.join(
+                    settings.PROJECT_PATH,
+                    '..',
+                    'diffs',
+                    str(datetime.date.today())+slugify(content.url)+'.json')
+            try:
+                with open(fn,'w') as f:
+                    json.dump(differ.changes, f)
+            except Exception, e:
+                logger.warning('could not write to '+fn)
 
         snippet = differ.render_snippets()
         if snippet is None:
