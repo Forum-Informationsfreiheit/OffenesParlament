@@ -23,6 +23,8 @@ logging.basicConfig(
 )
 
 class BaseConfig(Configuration):
+    PROJECT_PATH = PROJECT_PATH
+
     STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
     DEBUG_SUBSCRIPTIONS = True
     OUTPUT_SUBSCRIPTIONS = True
