@@ -226,7 +226,7 @@ def subscribe(request):
     if created_content:
         content.reset_content_hashes()
 
-    if not Subscription.objects.filter(user=user, content=content).exists():
+    if not Subscription.objects.filter(user=user, content=content).exists() and email.strip():
         verification_item = Verification.objects.create()
         verification_url = request.build_absolute_uri(
             reverse(
@@ -258,6 +258,6 @@ def subscribe(request):
             message = MESSAGES.EMAIL.ERROR_SENDING_EMAIL.format(
                 email)
     else:
-        message = MESSAGES.EMAIL.ALREADY_SUBSCRIBED
+        message = MESSAGES.EMAIL.ALREADY_SUBSCRIBED if email.strip() else MESSAGES.EMAIL.OOPS.format(email)
 
     return HttpResponse(message)
