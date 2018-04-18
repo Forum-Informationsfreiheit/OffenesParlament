@@ -1107,16 +1107,25 @@ class SubscribedContent(models.Model):
                 pass
         return content
 
-    def clear_latest_content(self):
+    def clear_latest_content(self, depth=0):
         if not self.latest_content_hashes:
             return
 
         from elasticsearch import Elasticsearch
-        es = Elasticsearch(retry_on_timeout=True)
-        hashes = json.loads(self.latest_content_hashes).values()
-        for content_id_hash in hashes:
-            if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
-                es.delete(index="archive", doc_type="modelresult", id=content_id_hash)
+        import elasticsearch
+        try:
+            es = Elasticsearch(retry_on_timeout=True)
+            hashes = json.loads(self.latest_content_hashes).values()
+            for content_id_hash in hashes:
+                if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
+                    es.delete(index="archive", doc_type="modelresult", id=content_id_hash)
+        except elasticsearch.exceptions.TransportError, e:
+            if depth<3:
+                import time
+                time.sleep(0.5)
+                self.clear_latest_content(depth=depth+1)
+            else:
+                raise e
 
     def reset_content_hashes(self):
         """
