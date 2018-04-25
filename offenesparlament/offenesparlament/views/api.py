@@ -354,6 +354,14 @@ class AdministrationViewSet(PaginatedFilteredViewSet):
 ### MODEL: DebateStatement ###
 
 
+class DebatePersonSerializer(DynamicFieldsModelSerializer):
+    api_url = serializers.HyperlinkedIdentityField(
+        view_name="op_api:Person-detail")
+
+    class Meta:
+        model = Person
+        fields = ('pk','parl_id','full_name','api_url',)
+
 class DebateStatementSerializer(DynamicFieldsModelSerializer):
     """
     A debate statement is part of a debate should usually contain speech by
@@ -363,6 +371,7 @@ class DebateStatementSerializer(DynamicFieldsModelSerializer):
     debate_id = serializers.IntegerField(read_only=True)
     api_url = serializers.HyperlinkedIdentityField(
         view_name="op_api:DebateStatement-detail")
+    person = DebatePersonSerializer()
 
     class Meta:
         model = DebateStatement
@@ -383,7 +392,8 @@ class DebateStatementSerializer(DynamicFieldsModelSerializer):
             'annotated_text',
             'speaker_name',
             'debate_id',
-            'api_url'
+            'api_url',
+            'person',
         )
 
 
