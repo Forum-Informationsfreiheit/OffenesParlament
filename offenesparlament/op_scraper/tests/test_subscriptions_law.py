@@ -255,8 +255,8 @@ class LawsSubscriptionsTestCase(BaseLawSubscriptionsTestCase):
 
         html_text = alts[0][0]
 
-        assert "2 neue Ergebnisse</li>" in html_text
-        assert "ndertes Ergebnis</li>" in html_text
+        assert "2 neue Ergebnisse:" in html_text
+        assert "ndertes Ergebnis:" in html_text
 
     def test_create_laws_search_subscription(self):
         """
