@@ -78,6 +78,7 @@ class ArchiveIndexMixin(object):
 class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
         'all': [
+            'index_name',
             'text',
             'category',
             'ts',
@@ -106,6 +107,7 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'comittee_memberships'
         ],
         'list': [
+            'index_name',
             'text',
             'category',
             'ts',
@@ -127,6 +129,8 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'llps_numeric'
         ],
     }
+
+    index_name = indexes.CharField()
 
     text = indexes.CharField(document=True, use_template=True)
     ts = indexes.DateTimeField(model_attr='ts', faceted=True, default=datetime.datetime(1970, 1, 1, 0, 0))
@@ -164,6 +168,9 @@ class PersonIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     # Static items
     category = indexes.CharField(faceted=True, null=True)
     api_url = indexes.CharField()
+
+    def prepare_index_name(self, obj):
+        return 'person'
 
     def prepare_api_url(self, obj):
         return obj.api_slug()
@@ -225,6 +232,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     FIELDSETS = {
         'all': [
+            'index_name',
             'text',
             'parl_id',
             'ts',
@@ -242,6 +250,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'response_id',
         ],
         'list': [
+            'index_name',
             'text',
             'parl_id',
             'ts',
@@ -260,6 +269,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         ],
     }
 
+    index_name = indexes.CharField()
     text = indexes.CharField(document=True, use_template=True)
     parl_id = indexes.CharField(model_attr='parl_id')
     source_link = indexes.CharField(model_attr='source_link')
@@ -294,6 +304,9 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     #     return self.get_model().objects\
     #         .filter(inquiry__isnull=False)\
     #         .filter(inquiryresponse__isnull=False)
+
+    def prepare_index_name(self, obj):
+        return 'law'
 
     def prepare_api_url(self, obj):
         return obj.api_slug()
@@ -330,6 +343,7 @@ class LawIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
     FIELDSETS = {
         'all': [
+            'index_name',
             'text',
             'parl_id',
             'category',
@@ -344,6 +358,7 @@ class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
             'internal_link'
         ],
         'list': [
+            'index_name',
             'parl_id',
             'category',
             'date',
@@ -357,6 +372,7 @@ class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
         ],
     }
 
+    index_name = indexes.CharField()
     text = indexes.CharField(document=True, use_template=True)
 
     parl_id = indexes.CharField(model_attr='parl_id')
@@ -378,6 +394,9 @@ class DebateIndex(BaseIndex, indexes.SearchIndex, indexes.Indexable):
 
     # Static items
     category = indexes.CharField(faceted=True, null=True)
+
+    def prepare_index_name(self, obj):
+        return 'debate'
 
     def prepare_category(self, obj):
         try:
@@ -406,3 +425,4 @@ class LawIndexArchive(ArchiveIndexMixin, LawIndex):
 
 class DebateIndexArchive(ArchiveIndexMixin, DebateIndex):
     pass
+

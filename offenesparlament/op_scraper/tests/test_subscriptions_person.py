@@ -272,6 +272,14 @@ class PersonsSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
                 m.save()
             assert(person.mandate_set.all().count() == mandates_to_copy.count())
 
+            exclude_ids = [x.parl_id.replace('asdf','') for x in
+                    Inquiry.objects.filter(parl_id__contains='asdf')]
+            inquiry_to_copy = Inquiry.objects.exclude(parl_id__in=exclude_ids)[0]
+            inquiry_to_copy.pk = inquiry_to_copy.id = None
+            inquiry_to_copy.parl_id+='asdf'
+            inquiry_to_copy.save()
+            inquiry_to_copy.sender.add(person)
+
         person = Person.objects.get(parl_id=parl_ids[-1])
         person.full_name = u"{}2".format(person.full_name)
         person.save()
@@ -288,8 +296,8 @@ class PersonsSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
 
         html_text = alts[0][0]
 
-        assert "2 neue Ergebnisse</li>" in html_text
-        assert "nderte Ergebnisse</li>" in html_text
+        assert "2 neue Ergebnisse:" in html_text
+        assert "nderte Ergebnisse:" in html_text
 
     def test_create_persons_search_subscription(self):
         """
