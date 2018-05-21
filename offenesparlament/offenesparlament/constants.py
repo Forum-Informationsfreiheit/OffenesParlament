@@ -378,7 +378,7 @@ class SEARCH:
                     u"s" if len(new) == 1 else "",
                     u"se" if len(new) > 1 else ""
                     ,
-                    '<ul>{}</ul>'.format(''.join(['<li><a href="{}">{}</a></li>'.format(
+                    u'<ul>{}</ul>'.format(u''.join([u'<li><a href="{}">{}</a></li>'.format(
                         settings.SITE_BASE_URL+x['internal_link'],
                         x.get('full_name',x.get('title'))) for x in new]))
                     )
@@ -397,8 +397,8 @@ class SEARCH:
                     len(changed) if len(changed) > 1 else u"ein",
                     u"" if len(changed) > 1 else "s",
                     u"" if len(changed) == 1 else "se",
-                    '<ul>{}</ul>'.format(
-                        ''.join(['<li>{}</li>'.format(x) for x in changed])
+                    u'<ul>{}</ul>'.format(
+                        u''.join([u'<li>{}</li>'.format(x) for x in changed])
                         )
                     )
                 )
