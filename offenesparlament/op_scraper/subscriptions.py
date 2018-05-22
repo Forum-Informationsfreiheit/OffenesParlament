@@ -397,6 +397,7 @@ class SearchDiffer(JsonDiffer):
             # ignore debate changes for now
 
 
+            snippet = None
 
             #import pdb
             #pdb.set_trace()
