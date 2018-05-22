@@ -392,7 +392,6 @@ class SearchDiffer(JsonDiffer):
                     cur_hashes={k:v for k,v in self.cur_hashes.iteritems() if k==ck}
                     ) if cd else None
 
-            cd.has_changes=True if cd else None
 
             #if not cd and index_name=='debate':
             # ignore debate changes for now
@@ -402,6 +401,7 @@ class SearchDiffer(JsonDiffer):
             #import pdb
             #pdb.set_trace()
             if cd:
+                cd.has_changes=True
                 cd.collect_changesets()
                 snippet = cd.render_snippets()
             if snippet:
