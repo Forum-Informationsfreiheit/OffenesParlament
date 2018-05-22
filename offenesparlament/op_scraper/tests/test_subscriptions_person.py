@@ -163,7 +163,7 @@ class PersonSubscriptionsTestCase(BasePersonSubscriptionsTestCase):
 
         assert "Barbara Streisand</a>" in html_text
 
-        assert u"hat einen neuen Redeeintr" in html_text
+        assert u"hat einen neuen Redebeitr" in html_text
         assert u"ist verstorben am: 20. 06. 2000</li>" in html_text
         assert u"hat eine neue parlamentarische Anfrage erhalten</li>" in html_text
         assert u"hat ein neues und ein ge" in html_text
