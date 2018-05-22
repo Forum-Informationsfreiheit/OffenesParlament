@@ -383,19 +383,27 @@ class SearchDiffer(JsonDiffer):
         change_sections = []
 
         for ck in self.changes.keys():
-            cd = CATEGORY_DIFFERS[cur_dict[ck]['index_name']](
+            index_name = cur_dict[ck]['index_name']
+            cd = CATEGORY_DIFFERS.get(index_name)
+            cd = cd(
                     old_content=[v for v in self.old_content if v['parl_id']==ck],
                     cur_content=[v for v in self.cur_content if v['parl_id']==ck],
                     old_hashes={k:v for k,v in self.old_hashes.iteritems() if k==ck},
                     cur_hashes={k:v for k,v in self.cur_hashes.iteritems() if k==ck}
-                    )
-            cd.has_changes=True
+                    ) if cd else None
+
+            cd.has_changes=True if cd else None
+
+            #if not cd and index_name=='debate':
+            # ignore debate changes for now
+
 
 
             #import pdb
             #pdb.set_trace()
-            cd.collect_changesets()
-            snippet = cd.render_snippets()
+            if cd:
+                cd.collect_changesets()
+                snippet = cd.render_snippets()
             if snippet:
                 change_sections.append(snippet)
 

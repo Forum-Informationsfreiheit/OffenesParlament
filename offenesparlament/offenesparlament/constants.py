@@ -272,7 +272,7 @@ class PERSON:
                 return None
 
     class DEBATE_STATEMENTS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat {}{}{} Redeeinträg(e)"
+        MESSAGE_TEMPLATE = u"hat {}{}{} Redebeiträg(e)"
         MESSAGE_NEW = u"{} neue{}"
         MESSAGE_CHANGED = u"{} geänderte{}"
 
