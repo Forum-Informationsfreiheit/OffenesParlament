@@ -36,7 +36,10 @@ class ESViewSet(viewsets.ReadOnlyModelViewSet):
         # Create new queryset
         qs = SearchQuerySet()
         qs = qs.models(self.model)
+
+
         result_list = []
+
 
         for sr in qs.values(*self.fields)[lower:upper]:
             result_list.append(sr)
@@ -70,20 +73,28 @@ class PaginatedFilteredViewSet(viewsets.ReadOnlyModelViewSet):
         limit = int(request.GET['limit']) if 'limit' in request.GET else 100
         offset = int(request.GET['offset']) if 'offset' in request.GET else 0
 
+        qs = self.queryset
+
+        filters = {k:v for k,v in request.GET.iteritems() if k not in ('limit','offset',)}
+        if filters:
+            qs = qs.filter(**filters)
+
         lower = offset
         upper = offset + limit
         if self.list_serializer_class is None:
             self.list_serializer_class = self.serializer_class
 
+        qs = qs[lower:upper]
+
         serializer = self.list_serializer_class(
-            self.queryset[lower:upper],
+            qs,
             many=True,
             context={'request': request})
 
         result_list = serializer.data
 
         self.paginate_queryset(result_list)
-        self.paginator.count = self.queryset.count()
+        self.paginator.count = qs.count()
         self.paginator.display_page_controls = True
 
         return self.get_paginated_response(result_list)
