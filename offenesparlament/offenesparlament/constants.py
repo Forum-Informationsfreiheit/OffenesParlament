@@ -7,6 +7,8 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.template import loader, Context
 
+from django.conf import settings
+
 from datetime import datetime
 
 from op_scraper.models import User
@@ -270,7 +272,7 @@ class PERSON:
                 return None
 
     class DEBATE_STATEMENTS(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"hat {}{}{} Redeeinträg(e)"
+        MESSAGE_TEMPLATE = u"hat {}{}{} Redebeiträg(e)"
         MESSAGE_NEW = u"{} neue{}"
         MESSAGE_CHANGED = u"{} geänderte{}"
 
@@ -363,7 +365,7 @@ class PERSON:
 
 class SEARCH:
     class NEW(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"{} neue{} Ergebnis{}"
+        MESSAGE_TEMPLATE = u"{} neue{} Ergebnis{}:{}"
 
         @classmethod
         def msg(cls, new):
@@ -375,11 +377,15 @@ class SEARCH:
                     len(new) if len(new) > 1 else "ein ",
                     u"s" if len(new) == 1 else "",
                     u"se" if len(new) > 1 else ""
+                    ,
+                    u'<ul>{}</ul>'.format(u''.join([u'<li><a href="{}">{}</a></li>'.format(
+                        settings.SITE_BASE_URL+x['internal_link'],
+                        x.get('full_name',x.get('title'))) for x in new]))
                     )
                 )
 
     class CHANGED(ChangeMessageGenerator):
-        MESSAGE_TEMPLATE = u"{} geänderte{} Ergebnis{}"
+        MESSAGE_TEMPLATE = u"{} geänderte{} Ergebnis{}:{}"
 
         @classmethod
         def msg(cls, changed):
@@ -390,7 +396,10 @@ class SEARCH:
                 cls.MESSAGE_TEMPLATE.format(
                     len(changed) if len(changed) > 1 else u"ein",
                     u"" if len(changed) > 1 else "s",
-                    u"" if len(changed) == 1 else "se"
+                    u"" if len(changed) == 1 else "se",
+                    u'<ul>{}</ul>'.format(
+                        u''.join([u'<li>{}</li>'.format(x) for x in changed])
+                        )
                     )
                 )
 

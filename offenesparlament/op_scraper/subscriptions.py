@@ -16,18 +16,25 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger('op_scraper.subscriptions.diff')
 
-FIELD_BLACKLIST = ['text', 'ts']
+FIELD_BLACKLIST = ['text', 'ts', 'internal_link', 'index_name']
 
 
 class JsonDiffer(object):
     FIELD_MESSAGES = {}
-    def __init__(self, _content):
+    def __init__(self, _content=None, old_content=None, cur_content=None,
+                old_hashes=None, cur_hashes=None):
         self.changes = {}
         self.current_content = {}
         self.content = _content
-        self.old_content = _content.retrieve_latest_content()
-        self.cur_content = _content.get_content()
-        self.parse_content()
+        self.old_content = _content.retrieve_latest_content() if _content else old_content
+        self.cur_content = _content.get_content() if _content else cur_content
+        if cur_content:
+            self.current_content = cur_content
+        if _content:
+            self.parse_content()
+        else:
+            self.old_hashes = old_hashes
+            self.cur_hashes = cur_hashes
 
     def _disp(self,string):
         try:
@@ -236,11 +243,16 @@ class PersonDiffer(JsonDiffer):
                 continue
 
             # create ui_url_param to mark all the fields that are new or have changes
-            ui_url_params = u"&mark_fields=".join(changeset.keys())
+            url = (self.content.ui_url if self.content else
+                        settings.SITE_BASE_URL + self.current_content[parl_id]['internal_link']
+                        )
+            ui_url_params = u"&mark_fields=".join(['']+changeset.keys())
+            if not '?' in url:
+                ui_url_params = '?'+ui_url_params[1:]
 
             change_item = {
                     'parl_id': parl_id,
-                    'ui_url': self.content.ui_url + ('?' if not '?' in self.content.ui_url else '&') + ui_url_params[1:],
+                    'ui_url': url + ui_url_params,
                     'category': item_category,
                     'messages': messages,
                     'item': self.current_content[parl_id],
@@ -290,11 +302,16 @@ class LawDiffer(JsonDiffer):
                 continue
 
             # create ui_url_param to mark all the fields that are new or have changes
-            ui_url_params = u"?mark_fields=" + u"&mark_fields=".join(changeset.keys())
+            url = (self.content.ui_url if self.content else 
+                        settings.SITE_BASE_URL + self.current_content[parl_id]['internal_link']
+                        )
+            ui_url_params = u"&mark_fields=".join(['']+changeset.keys())
+            if not '?' in url:
+                ui_url_params='?'+ui_url_params[1:]
 
             change_item = {
                     'parl_id': parl_id,
-                    'ui_url': self.content.ui_url + ui_url_params,
+                    'ui_url': url + ui_url_params,
                     'category': item_category,
                     'messages': messages,
                     'item': self.current_content[parl_id]
@@ -359,17 +376,56 @@ class SearchDiffer(JsonDiffer):
     def render_snippets(self):
         new = self.collect_new()
 
-        new_msg = self.SEARCH_MESSAGES['new'].msg(new)
-        changed_msg = self.SEARCH_MESSAGES['changed'].msg(self.changes)
+        new_msg = self.SEARCH_MESSAGES['new'].msg([x for x in self.cur_content if x['parl_id'] in new])
+
+        cur_dict = dict((item['parl_id'], item) for item in self.cur_content)
+
+        change_sections = []
+
+        for ck in self.changes.keys():
+            index_name = cur_dict[ck]['index_name']
+            cd = CATEGORY_DIFFERS.get(index_name)
+            cd = cd(
+                    old_content=[v for v in self.old_content if v['parl_id']==ck],
+                    cur_content=[v for v in self.cur_content if v['parl_id']==ck],
+                    old_hashes={k:v for k,v in self.old_hashes.iteritems() if k==ck},
+                    cur_hashes={k:v for k,v in self.cur_hashes.iteritems() if k==ck}
+                    ) if cd else None
+
+
+            #if not cd and index_name=='debate':
+            # ignore debate changes for now
+
+
+            snippet = None
+
+            #import pdb
+            #pdb.set_trace()
+            if cd:
+                cd.has_changes=True
+                cd.collect_changesets()
+                snippet = cd.render_snippets()
+            if snippet:
+                change_sections.append(snippet)
+
+
+        #changed_msg = self.SEARCH_MESSAGES['changed'].msg(self.changes)
+        changed_msg = self.SEARCH_MESSAGES['changed'].msg(change_sections)
 
         # create ui_url_param to mark all the parl_ids that are new or have changes
         mark_ids = list(set(self.changes.keys() + self.new))
+
+        url = (self.content.ui_url if self.content else 
+                        settings.SITE_BASE_URL + self.current_content[parl_id]['internal_link']
+                        )
         ui_url_params = u"&mark_id=".join(['']+mark_ids) # start with &mark_id=
+        if not '?' in url:
+            ui_url_params[0] = '?'
 
         if not new_msg and not changed_msg:
             return None
         changes = {
-                    'ui_url': self.content.ui_url + ('?' if '?' not in self.content.ui_url else '&') + ui_url_params[1:],
+                    'ui_url': url + ui_url_params,
                     'title': self.content.title,
                     'messages': [x for x in [new_msg,changed_msg] if x!=None],
                 }

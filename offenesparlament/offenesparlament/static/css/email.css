@@ -108,12 +108,14 @@ ul,
 ol {
   font-size: 18px;
   font-weight: normal;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  list-style-type: none; }
 
 ul li,
 ol li {
   margin-left: 25px;
-  list-style-position: outside; }
+  list-style-position: outside;
+  list-style-type: none; }
 
 /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
 .container {

@@ -24,6 +24,7 @@ logging.basicConfig(
 
 class BaseConfig(Configuration):
     PROJECT_PATH = PROJECT_PATH
+    SITE_BASE_URL = 'https://offenesparlament.at'
 
     STATICFILES_DIRS = (os.path.join(PROJECT_PATH, 'static'), )
     DEBUG_SUBSCRIPTIONS = True
