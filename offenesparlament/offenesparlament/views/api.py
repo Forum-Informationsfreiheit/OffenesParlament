@@ -75,7 +75,7 @@ class PaginatedFilteredViewSet(viewsets.ReadOnlyModelViewSet):
 
         qs = self.queryset
 
-        filters = {k:v for k,v in request.GET.iteritems() if k not in ('limit','offset',)}
+        filters = {k:v for k,v in request.GET.iteritems() if k not in ('limit','offset','format',)}
         if filters:
             qs = qs.filter(**filters)
 
