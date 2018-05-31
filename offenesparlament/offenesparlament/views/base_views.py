@@ -181,7 +181,7 @@ def inquiry_detail(request, inq_id, ggp=None):
                 receiver_mandate = mandate.function.title
                 break
         # mandates_receiver_filtered = mandates_receiver.filter(Q(start_date__lte=first_date), Q(end_date__gte=last_date) | Q(end_date__isnull=True))
-    url_params = {'parl_id': inquiry.parl_id}
+    url_params = {'parl_id': inquiry.parl_id, 'llp_numeric': inquiry.legislative_period.number}
     subscription_url = '/gesetze/search?{}'.format(
         urllib.urlencode(url_params))
 
