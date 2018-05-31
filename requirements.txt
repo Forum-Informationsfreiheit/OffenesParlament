@@ -45,3 +45,4 @@ django-filter==1.0.4
 Pillow
 django-bleach
 tabulate
+html-sanitizer
