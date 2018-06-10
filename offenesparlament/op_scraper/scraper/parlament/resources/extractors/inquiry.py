@@ -242,7 +242,7 @@ class INQUIRY:
                 XPATH = "//td[3]//a/@href"
 
     class STEPS(MultiExtractor):
-        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[not(contains(@class, "close")) and not(contains(@class, "historyHeader"))]'
+        XPATH = '//*[contains(@class,"contentBlock")]/*[@class="reiterBlock"]/table/tbody/tr[not(contains(@class, "close")) and not(contains(@class, "historyHeader"))]'
 
         @classmethod
         def xt(cls, response):
@@ -289,11 +289,11 @@ class INQUIRY:
             XPATH = "//td[3]/a/@href"
 
     class RESPONSE_LINK(SingleExtractor):
-        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]'
+        XPATH = '//*[contains(@class,"contentBlock")]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]/a/@href'
 
         @classmethod
         def xt(cls, response):
-            response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]/a/@href').extract()
+            response_link = response.xpath(cls.XPATH).extract()
             if not response_link:
                 return 0
             else:
