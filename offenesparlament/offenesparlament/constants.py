@@ -148,7 +148,7 @@ class LAW:
                 steps_messages = u""
                 for st in changed_content['N']:
                     steps_messages += u"\t<li>{}{} am {}</li>\n".format(
-                                st['phase']+': ' if st['phase'] is not 'default_inqu' else '',
+                                st['phase']+': ' if st['phase'] != 'default_inqu' else '',
                                 sanitizer.sanitize(st['title']),
                                 st['date']
                             )
