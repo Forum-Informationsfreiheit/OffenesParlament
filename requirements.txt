@@ -46,3 +46,4 @@ Pillow
 django-bleach
 tabulate
 html-sanitizer
+lxml
