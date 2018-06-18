@@ -25,8 +25,8 @@ class ESViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = LargeResultsSetPagination
 
     def list(self, request):
-        limit = int(request.GET['limit']) if 'limit' in request.GET else 100
-        offset = int(request.GET['offset']) if 'offset' in request.GET else 0
+        limit = int(request.GET['limit']) if 'limit' in request.GET and request.GET['limit'].isdigit() else 100
+        offset = int(request.GET['offset']) if 'offset' in request.GET and request.GET['offset'].isdigit() else 0
 
         lower = offset
         upper = offset + limit
@@ -70,8 +70,8 @@ class PaginatedFilteredViewSet(viewsets.ReadOnlyModelViewSet):
     list_serializer_class = None
 
     def list(self, request):
-        limit = int(request.GET['limit']) if 'limit' in request.GET else 100
-        offset = int(request.GET['offset']) if 'offset' in request.GET else 0
+        limit = int(request.GET['limit']) if 'limit' in request.GET and request.GET['limit'].isdigit() else 100
+        offset = int(request.GET['offset']) if 'offset' in request.GET and request.GET['offset'].isdigit() else 0
 
         qs = self.queryset
 
