@@ -24,6 +24,9 @@ eval "$CMD scrape crawl inquiries -a llp=26"
 eval "$CMD scrape crawl petitions -a llp=26"
 eval "$CMD scrape crawl statement -a llp=26"
 
+eval "$CMD censor_data"
+
+
 # run es update
 eval "$CMD update_index op_scraper.Debate -b 25"
 eval "$CMD update_index op_scraper.Law -b 1000"
