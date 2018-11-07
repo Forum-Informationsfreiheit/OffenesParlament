@@ -10,4 +10,5 @@ class Command(BaseCommand):
         self.execute()
 
     def handle(self, *args, **options):
+        Inquiry.objects.filter(_slug='/gesetze/XXIV/J_11480/').delete()
         Inquiry.objects.filter(_slug='/gesetze/XXIV/J_11481/').delete()
