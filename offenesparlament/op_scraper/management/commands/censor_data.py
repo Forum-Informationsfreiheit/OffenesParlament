@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# myapp/management/commands/scrapy.py
 
 from __future__ import absolute_import
 from django.core.management.base import BaseCommand

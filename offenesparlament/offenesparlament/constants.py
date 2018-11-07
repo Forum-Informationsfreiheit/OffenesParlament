@@ -14,6 +14,7 @@ from datetime import datetime
 from op_scraper.models import User
 
 import html2text
+from html_sanitizer import Sanitizer
 
 # import the logging library
 import logging
@@ -24,6 +25,15 @@ logger = logging.getLogger(__name__)
 # Limit results for ElasticSearch to this number by Default
 ES_DEFAULT_LIMIT = 50
 
+
+sanitizer = Sanitizer({
+    'tags': {'a',},
+    'attributes': {
+        'a': ('href', 'name', 'target', 'title', 'id'),
+    },
+    'empty': set(),
+    'separate': {'a',},
+})
 
 class EmailController():
 
@@ -137,9 +147,9 @@ class LAW:
             if new:
                 steps_messages = u""
                 for st in changed_content['N']:
-                    steps_messages += u"\t<li>{}: {} am {}</li>\n".format(
-                                st['phase'],
-                                st['title'],
+                    steps_messages += u"\t<li>{}{} am {}</li>\n".format(
+                                st['phase']+': ' if st['phase'] != 'default_inqu' else '',
+                                sanitizer.sanitize(st['title']),
                                 st['date']
                             )
 
@@ -378,9 +388,14 @@ class SEARCH:
                     u"s" if len(new) == 1 else "",
                     u"se" if len(new) > 1 else ""
                     ,
-                    u'<ul>{}</ul>'.format(u''.join([u'<li><a href="{}">{}</a></li>'.format(
+                    u'<ul>{}</ul>'.format(u''.join(
+                        [
+                        u'<li><a href="{}">{}</a></li>'.format(
                         settings.SITE_BASE_URL+x['internal_link'],
-                        x.get('full_name',x.get('title'))) for x in new]))
+                        sanitizer.sanitize(x.get('full_name',x.get('title'))))
+                        for x in new
+                        ])
+                        )
                     )
                 )
 

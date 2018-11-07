@@ -12,6 +12,7 @@ from parlament.settings import BASE_HOST
 import logging
 from scrapy import log
 from ansicolor import green
+import lxml
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -149,7 +150,7 @@ class INQUIRY:
                         str(index).zfill(3))
                     step_selector = Selector(text=raw_step.extract())
 
-                    title = INQUIRY.PHASES.STEPS.TITLE.xt(step_selector)
+                    title = INQUIRY.PHASES.STEPS.TITLE.xt(step_selector, request.url)
                     date_str = INQUIRY.PHASES.STEPS.DATE.xt(step_selector)
                     date = datetime.datetime.strptime(
                         date_str, "%d.%m.%Y").date()
@@ -181,6 +182,7 @@ class INQUIRY:
 
                 @classmethod
                 def xt(cls, step_selector):
+
                     title_selector = step_selector.xpath('//td[2]')[0]
 
                     # we have wortmeldungen!
@@ -242,7 +244,7 @@ class INQUIRY:
                 XPATH = "//td[3]//a/@href"
 
     class STEPS(MultiExtractor):
-        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr[not(contains(@class, "close")) and not(contains(@class, "historyHeader"))]'
+        XPATH = '//*[contains(@class,"contentBlock")]/*[@class="reiterBlock"]/table/tbody/tr[not(contains(@class, "close")) and not(contains(@class, "historyHeader"))]'
 
         @classmethod
         def xt(cls, response):
@@ -250,7 +252,7 @@ class INQUIRY:
             raw_steps = response.xpath(cls.XPATH)
             for index, step in enumerate(raw_steps, start=1):
                 step_selector = Selector(text=step.extract())
-                title = INQUIRY.STEPS.TITLE.xt(step_selector)
+                title = INQUIRY.STEPS.TITLE.xt(step_selector, response.url)
                 date_str = INQUIRY.STEPS.DATE.xt(step_selector).strip()
                 date = datetime.datetime.strptime(
                     date_str, "%d.%m.%Y").date()
@@ -278,10 +280,15 @@ class INQUIRY:
             XPATH_LINK = "//td[2]/a/@href"
 
             @classmethod
-            def xt(cls, step_selector):
+            def xt(cls, step_selector, base_url):
                 title_selector = step_selector.xpath('//td[2]')[0].extract()
                 #full_title = re.sub('<[^>]*>', '', title_selector).strip()
                 full_title = title_selector.strip()
+
+                ht = lxml.html.fromstring(full_title)
+                ht.make_links_absolute(base_url)
+                full_title = lxml.html.tostring(ht)
+
                 return full_title
 
 
@@ -289,11 +296,11 @@ class INQUIRY:
             XPATH = "//td[3]/a/@href"
 
     class RESPONSE_LINK(SingleExtractor):
-        XPATH = '//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]'
+        XPATH = '//*[contains(@class,"contentBlock")]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]/a/@href'
 
         @classmethod
         def xt(cls, response):
-            response_link = response.xpath('//*[@class="contentBlock"]/*[@class="reiterBlock"]/table/tbody/tr/*[text()[contains(.,"Schriftliche Beantwortung")]]/a/@href').extract()
+            response_link = response.xpath(cls.XPATH).extract()
             if not response_link:
                 return 0
             else:

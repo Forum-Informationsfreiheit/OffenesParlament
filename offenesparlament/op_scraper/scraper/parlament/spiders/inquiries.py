@@ -114,6 +114,8 @@ class InquiriesSpider(BaseSpider):
         callback_requests = []
         ts = GENERIC.TIMESTAMP.xt(response)
 
+
+
         # Inquiries from Bundesrat don't have an LLP => set None
         if("BR" in category):
             LLP = None
@@ -180,6 +182,7 @@ class InquiriesSpider(BaseSpider):
         # Dringliche / Urgent inquiries have a different structure for steps
         # and history. This case distinction accomodates these different
         # structures.
+
         if any("Dringliche" in '{}'.format(s) for s in inquiry_item.keywords.all()):
             if response.xpath('//h2[@id="tab-ParlamentarischesVerfahren"]'):
                 self.parse_parliament_steps(response)
