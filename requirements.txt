@@ -47,3 +47,4 @@ django-bleach
 tabulate
 html-sanitizer
 lxml
+phonenumbers
