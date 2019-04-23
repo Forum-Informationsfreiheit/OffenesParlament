@@ -29,7 +29,7 @@ ES_DEFAULT_LIMIT = 50
 sanitizer = Sanitizer({
     'tags': {'a',},
     'attributes': {
-        'a': ('href', 'name', 'target', 'title', 'id'),
+        'a': ('href', 'name', 'target', 'title', 'id', 'rel',),
     },
     'empty': set(),
     'separate': {'a',},
