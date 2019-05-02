@@ -26,7 +26,7 @@ eval "$CMD scrape crawl statement -a ignore_timestamp=1"
 
 # run es update
 eval "$CMD update_index op_scraper.Debate -b 25"
-eval "$CMD update_index op_scraper.Law -b 1000"
-eval "$CMD update_index op_scraper.Person"
+eval "$CMD update_index op_scraper.Law -b 500"
+eval "$CMD update_index op_scraper.Person -b 500"
 
 eval "$CMD reset_all_content_hashes"

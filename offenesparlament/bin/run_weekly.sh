@@ -30,6 +30,6 @@ eval "$CMD censor_data"
 # run es update
 eval "$CMD update_index op_scraper.Debate -b 25"
 eval "$CMD update_index op_scraper.Law -b 500"
-eval "$CMD update_index op_scraper.Person"
+eval "$CMD update_index op_scraper.Person -b 500"
 
 eval "$CMD check_subscriptions"
