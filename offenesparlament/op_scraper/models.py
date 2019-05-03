@@ -1122,7 +1122,7 @@ class SubscribedContent(models.Model):
         except elasticsearch.exceptions.TransportError, e:
             if depth<3:
                 import time
-                time.sleep(0.5)
+                time.sleep(0.5 + 0 if depth==0 else 2**depth)
                 self.clear_latest_content(depth=depth+1)
             else:
                 raise e
