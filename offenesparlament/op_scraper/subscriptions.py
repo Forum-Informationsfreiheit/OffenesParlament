@@ -302,7 +302,7 @@ class LawDiffer(JsonDiffer):
                 continue
 
             # create ui_url_param to mark all the fields that are new or have changes
-            url = (self.content.ui_url if self.content else 
+            url = (self.content.ui_url if self.content else
                         settings.SITE_BASE_URL + self.current_content[parl_id]['internal_link']
                         )
             ui_url_params = u"&mark_fields=".join(['']+changeset.keys())
@@ -415,7 +415,7 @@ class SearchDiffer(JsonDiffer):
         # create ui_url_param to mark all the parl_ids that are new or have changes
         mark_ids = list(set(self.changes.keys() + self.new))
 
-        url = (self.content.ui_url if self.content else 
+        url = (self.content.ui_url if self.content else
                         settings.SITE_BASE_URL + self.current_content[parl_id]['internal_link']
                         )
         ui_url_params = u"&mark_id=".join(['']+mark_ids) # start with &mark_id=
@@ -495,8 +495,6 @@ def check_subscriptions():
                 emails_to_changesets[email] = []
             emails_to_changesets[email].append(content.id)
 
-    process_emails(emails_to_changesets, change_snippets)
-
     # Reset the content hashes for all SubscribedContent items we just
     # processed
     if settings.DEBUG_SUBSCRIPTIONS:
@@ -504,6 +502,8 @@ def check_subscriptions():
     else:
         for content in SubscribedContent.objects.all():
             content.reset_content_hashes()
+
+    process_emails(emails_to_changesets, change_snippets)
 
 def process_emails(emails_to_changesets, change_snippets):
 
