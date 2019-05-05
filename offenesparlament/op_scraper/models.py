@@ -1120,7 +1120,7 @@ class SubscribedContent(models.Model):
                 if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
                     es.delete(index="archive", doc_type="modelresult", id=content_id_hash)
         except elasticsearch.exceptions.TransportError, e:
-            if depth<3:
+            if depth<4:
                 import time
                 time.sleep(0.5 + 0 if depth==0 else 4**depth)
                 self.clear_latest_content(depth=depth+1)
