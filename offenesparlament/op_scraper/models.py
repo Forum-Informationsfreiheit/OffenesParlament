@@ -1074,17 +1074,21 @@ class SubscribedContent(models.Model):
         return hashed
 
     def store_latest_content(self, content):
+        HS = settings.HAYSTACK_CONNECTIONS['archive']
+        INDEX = HS.get('INDEX_NAME', 'archive')
         from elasticsearch import Elasticsearch
-        es = Elasticsearch(retry_on_timeout=True)
+        es = Elasticsearch(HS['URL'], retry_on_timeout=True)
 
         if content:
             for content_item in content:
                 content_id_hash = self._hash_content(content_item)
-                es.index(index="archive", doc_type='modelresult', id=content_id_hash, body=content_item)
+                es.index(index=INDEX, doc_type='modelresult', id=content_id_hash, body=content_item)
 
     def retrieve_latest_content(self):
+        HS = settings.HAYSTACK_CONNECTIONS['archive']
+        INDEX = HS.get('INDEX_NAME', 'archive')
         from elasticsearch import Elasticsearch
-        es = Elasticsearch(retry_on_timeout=True)
+        es = Elasticsearch(HS['URL'], retry_on_timeout=True)
 
         content = []
         hashes = []
@@ -1114,11 +1118,13 @@ class SubscribedContent(models.Model):
         from elasticsearch import Elasticsearch
         import elasticsearch
         try:
-            es = Elasticsearch(retry_on_timeout=True)
+            HS = settings.HAYSTACK_CONNECTIONS['archive']
+            es = Elasticsearch(HS['URL'], retry_on_timeout=True)
             hashes = json.loads(self.latest_content_hashes).values()
+            INDEX = HS.get('INDEX_NAME', 'archive')
             for content_id_hash in hashes:
-                if es.exists(index="archive", doc_type="modelresult", id=content_id_hash):
-                    es.delete(index="archive", doc_type="modelresult", id=content_id_hash)
+                if es.exists(index=INDEX, doc_type="modelresult", id=content_id_hash):
+                    es.delete(index=INDEX, doc_type="modelresult", id=content_id_hash)
         except elasticsearch.exceptions.TransportError, e:
             if depth<4:
                 import time
