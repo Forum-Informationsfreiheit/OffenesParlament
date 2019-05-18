@@ -803,7 +803,7 @@ class Person(Timestamped, ParlIDMixIn):
     def debate_statements_json(self):
         debate_statements = []
         for st in self.debate_statements.all():
-            debate_statements.append(st._json())
+            debate_statements.append(st._person_json())
         return json.dumps(debate_statements)
 
     def inquiries_sent_json(self):
@@ -1488,6 +1488,25 @@ class DebateStatement(models.Model):
                 'speaker_role': self.speaker_role,
                 'full_text': self.full_text,
                 'annotated_text': self.annotated_text,
+                'text_type': self.text_type,
+                'datetime': self.date.isoformat(),
+                'debate_title': self.debate.title,
+                'debate_date': self.debate.date.date().isoformat(),
+                'debate_type': self.debate.debate_type,
+                'debate_llp': self.debate.llp.facet_repr,
+                'debate_protocol_url': self.debate.protocol_url,
+                'debate_detail_url': self.debate.detail_url,
+        }
+
+        return statement
+
+    def _person_json(self):
+        statement = {
+                'id': self.id,
+                'pk': self.pk,
+                #'speaker_role': self.speaker_role,
+                #'full_text': self.full_text,
+                #'annotated_text': self.annotated_text,
                 'text_type': self.text_type,
                 'datetime': self.date.isoformat(),
                 'debate_title': self.debate.title,
