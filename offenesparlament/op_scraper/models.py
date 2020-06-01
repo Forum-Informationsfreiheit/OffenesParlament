@@ -1333,6 +1333,32 @@ class PetitionSignature(models.Model):
         return u'Unterschrift von {} ({}-{}) am {} für {}'\
             .format(self.full_name, self.postal_code, self.location, self.date, self.petition)
 
+        
+class LobbyRegisterEntry(models.Model):
+    """
+    Representation of an entry in the Austrian lobby register
+    http://www.lobbyreg.justiz.gv.at/
+    """
+    register_number = models.CharField(max_length=20)
+    commercial_register_number = models.CharField(max_length=20)
+    name = models.TextField()
+    register_class = models.CharField(max_length=2)
+    last_change = models.CharField(max_length=20)
+    
+    last_seen = models.DateTimeField(auto_now=True)
+ 
+
+class LobbyRegisterPerson(models.Model):
+    """
+    Lobbyist mentioned in the Austrian lobby register
+    """
+    name = models.TextField()
+    
+    last_seen = models.DateTimeField(auto_now=True)
+    
+    # Relationships
+    entry = models.ForeignKey(LobbyRegisterEntry)
+    
 
 class Debate(models.Model):
 
